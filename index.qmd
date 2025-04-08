@@ -350,7 +350,7 @@ html, body {
 
 <div id="marriage" class="tab-content">
   <iframe 
-    src="https://idd-ucla.shinyapps.io/page_3_grid_app-1/"
+    src="https://idd-ucla.shinyapps.io/page_3_grid_app"
     width="100%" 
     style="border: none; height: 850px;" 
     id="embedded-app">
