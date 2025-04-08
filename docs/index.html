@@ -165,12 +165,11 @@ html, body {
   padding: 0;
 }
 
-/* Individual Tab Buttons */
+/* Tab Button Reset - Complete border removal */
 .navbar .tab-button {
+  border: none !important;
   background-color: #2774AE;
   color: white;
-  border: 1px solid #2774AE;
-  border-top: none !important;
   padding: 6px 10px;
   font-size: 14px;
   cursor: pointer;
@@ -179,19 +178,25 @@ html, body {
   border-radius: 0;
   outline: none !important;
   box-shadow: none !important;
+  position: relative; /* For pseudo-element positioning */
 }
 
-/* Active Tab */
+/* Active Tab - Using pseudo-element for underline */
 .navbar .tab-button.active {
   background-color: #4a8bc9;
   font-weight: bold;
-  color: white;
-  border: 1px solid #2774AE;
-  border-top: none !important;
-  border-bottom: 2px solid white;
-  outline: none !important;
-  box-shadow: none !important;
-  margin-top: 0 !important;
+  position: relative;
+}
+
+/* Create bottom border with pseudo-element instead */
+.navbar .tab-button.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: white;
 }
 
 /* Hover Effect */
@@ -292,7 +297,7 @@ html, body {
   position: absolute;
   width: 100%;
   background-color: #2774AE;
-  padding: 5px 20px;
+  padding: 1px 10px; /* Reduced vertical padding further */
   z-index: 100;
   text-align: center;
   visibility: visible;
@@ -312,34 +317,39 @@ html, body {
 
 /* Sub-Tabs */
 .sub-tab {
-  font-size: 12px;
-  padding: 5px 10px;
+  border: none !important;
   background-color: #2774AE;
   color: white;
-  border: 1px solid #2774AE;
-  border-radius: 0;
-  margin: 0;
+  padding: 3px 10px;
+  font-size: 12px;
   cursor: pointer;
-  outline: none;
-  box-shadow: none;
-  transition: all 0.3s ease;
+  margin: 0;
+  outline: none !important;
+  box-shadow: none !important;
+  position: relative;
+  line-height: 1.2;
+}
+
+.sub-tab.active {
+  background-color: #4a8bc9;
+  font-weight: bold;
+  position: relative;
+}
+
+.sub-tab.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: white;
 }
 
 /* Hover Sub-Tab */
 .sub-tab:hover {
   background-color: #5fa4e0;
   color: white;
-}
-
-/* Active Sub-Tab */
-.sub-tab.active {
-  background-color: #4a8bc9;
-  font-weight: bold;
-  color: white;
-  border-bottom: 2px solid white;
-  border-top: none !important;
-  box-shadow: none !important;
-  margin-top: 0 !important;
 }
 
 /* Responsive Styling */
