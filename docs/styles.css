@@ -10,3 +10,8 @@ body {
   margin-top: 0 !important;
   padding-top: 0 !important;
 }
+
+/* Hide the title at the top of the content */
+#title-block-header {
+  display: none !important;
+}
