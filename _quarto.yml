@@ -5,13 +5,9 @@ project:
 website:
   title: ""
   navbar:
-  left: []
+    left: []
 
-format:
-  html:
-    theme: cosmo
-    css: styles.css
-    toc: true
+format: html
 
 editor: visual
 
