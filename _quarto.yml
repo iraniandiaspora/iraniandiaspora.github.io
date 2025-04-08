@@ -7,7 +7,10 @@ website:
   navbar:
     left: []
 
-format: html
+format:
+  html:
+    theme: cosmo
+    css: styles.css
 
 editor: visual
 
