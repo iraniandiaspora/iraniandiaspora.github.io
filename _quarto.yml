@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 website:
-  title: "Iranian Diaspora Dashboard"
+  title: ""
   navbar:
     left: []
 
