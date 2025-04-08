@@ -1,3 +1,12 @@
-.navbar, .quarto-search {
+/* Hide the entire navbar area including the container */
+.navbar, 
+.quarto-search, 
+#quarto-header {
   display: none !important;
+}
+
+/* Remove any leftover margin/padding at top */
+body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
 }
