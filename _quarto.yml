@@ -3,12 +3,9 @@ project:
   output-dir: docs
 
 website:
-  title: "iraniandiaspora.github.io"
+  title: ""
   navbar:
-    left:
-      - href: index.qmd
-        text: Home
-      - about.qmd
+  left: []
 
 format:
   html:
