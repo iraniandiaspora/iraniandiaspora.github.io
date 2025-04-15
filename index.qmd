@@ -292,7 +292,7 @@ html, body {
 <div class="header-container">
   <!-- Combined Header with Title and Navigation -->
   <div class="header">
-    <a href="#" class="header-title">Iranian Diaspora Dashboard</a>
+    <a href="/" class="header-title">Iranian Diaspora Dashboard</a>
     
     <!-- Main Navigation Bar -->
     <nav class="navbar">
