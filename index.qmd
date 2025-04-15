@@ -413,9 +413,10 @@ html, body {
 </div>
 
 <footer class="footer">
-  <img src="CNES_logo.png" alt="Logo" class="footer-logo">
+  <a href="https://www.international.ucla.edu/cnes/home" target="_blank" rel="noopener">
+    <img src="CNES_logo.png" alt="Logo" style="height: 40px;">
+  </a>
 </footer>
-
 
 <script>
 document.addEventListener("DOMContentLoaded", function () {
