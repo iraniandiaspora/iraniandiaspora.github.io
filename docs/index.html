@@ -429,22 +429,22 @@ html, body {
 </div>
 <!-- Global -->
 <div id="global" class="tab-content">
-<p><iframe data-src="https://idd-ucla.shinyapps.io/page_6_grid_app/" width="100%" style="border: none; height: 850px;"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/page_6_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
 </div>
 <div id="population" class="tab-content">
-<p><iframe data-src="https://idd-ucla.shinyapps.io/page_1_grid_app/" width="100%" style="border: none; height: 850px;"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/page_1_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
 </div>
 <div id="immigration" class="tab-content">
-<p><iframe data-src="https://idd-ucla.shinyapps.io/page_2_grid_app/" width="100%" style="border: none; height: 850px;"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/page_2_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
 </div>
 <div id="marriage" class="tab-content">
-<p><iframe data-src="https://idd-ucla.shinyapps.io/page_3_grid_app" width="100%" style="border: none; height: 850px;"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/page_3_grid_app" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
 </div>
 <div id="education" class="tab-content">
-<p><iframe data-src="https://idd-ucla.shinyapps.io/page_4_grid_app/" width="100%" style="border: none; height: 850px;"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/page_4_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
 </div>
 <div id="work" class="tab-content">
-<p><iframe data-src="https://idd-ucla.shinyapps.io/page_5_grid_app/" width="100%" style="border: none; height: 850px;"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/page_5_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
 </div>
 <!-- About -->
 <div id="about" class="tab-content" style="position: relative; font-size: 1em; min-height: 300px;">
@@ -460,7 +460,7 @@ The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded 
 <section id="an-international-bibliography-of-the-iranian-diaspora-compiled-by-h.e.-chehabi-and-amir-sayadabdi" class="level1">
 <h1><span style="text-align: center; display: block; font-size: 20px;">An International Bibliography of the Iranian Diaspora<br>Compiled by H.E. Chehabi and Amir Sayadabdi</span></h1>
 <div style="width: 100%; height: 600px;">
-<p><iframe data-src="https://idd-ucla.shinyapps.io/idd_bib/" width="100%" height="600" style="border: none;"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/idd_bib/" width="100%" height="600" style="border: none;"> </iframe></p>
 </div>
 </section>
 </div>
@@ -479,60 +479,47 @@ document.addEventListener("DOMContentLoaded", function () {
     if (globalContent) {
         globalContent.classList.add("active");
         globalContent.style.display = "block";
-        
-        // Load the iframe for the initially visible Global tab
-        const iframe = globalContent.querySelector('iframe');
-        if (iframe && !iframe.src && iframe.dataset.src) {
-            iframe.src = iframe.dataset.src;
-        }
     }
-    
+
     // Hide all submenus by default
     document.querySelectorAll('.submenu').forEach(menu => {
         menu.style.display = "none";
     });
 });
-
 function showTab(tabName, element) {
     // Deactivate all main tabs
     document.querySelectorAll('.tab-button:not(.sub-tab)').forEach(button => {
         button.classList.remove("active");
     });
-    
+
     // Activate the clicked main tab
     if (element) {
         element.classList.add("active");
     }
-    
+
     // Hide all tab content
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove("active");
         tab.style.display = 'none';
     });
-    
+
     // Show the selected tab content
     let selectedTab = document.getElementById(tabName);
     if (selectedTab) {
         selectedTab.classList.add("active");
         selectedTab.style.display = "block";
-        
-        // Load iframe if this tab has one and it hasn't been loaded yet
-        const iframe = selectedTab.querySelector('iframe');
-        if (iframe && !iframe.src && iframe.dataset.src) {
-            iframe.src = iframe.dataset.src;
-        }
     }
-    
+
     // Hide all submenus by default
     document.querySelectorAll('.submenu').forEach(menu => {
         menu.style.display = "none";
     });
-    
+
     // Show the United States submenu ONLY when clicking "United States"
     let unitedStatesSubmenu = document.getElementById("united-states-submenu");
     if (tabName === "united-states") {
         unitedStatesSubmenu.style.display = "block";
-        
+
         // Auto-select "Defining the Population" sub-tab when selecting United States
         let definingPopulationTab = document.querySelector(".sub-tab[data-tab='population']");
         if (definingPopulationTab) {
@@ -546,38 +533,32 @@ function showTab(tabName, element) {
         });
     }
 }
-
 function showSubTab(subTabId, element) {
     // Deactivate all sub-tabs
     document.querySelectorAll(".sub-tab").forEach(tab => {
         tab.classList.remove("active");
     });
-    
+
     // Activate the clicked sub-tab
     if (element) {
         element.classList.add("active");
     }
-    
+
     // Hide all sub-tab content
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove("active");
         tab.style.display = 'none';
     });
-    
+
     // Show the selected sub-tab content
     let subTabContent = document.getElementById(subTabId);
     if (subTabContent) {
         subTabContent.classList.add("active");
         subTabContent.style.display = "block";
-        
-        // Load iframe if this subtab has one and it hasn't been loaded yet
-        const iframe = subTabContent.querySelector('iframe');
-        if (iframe && !iframe.src && iframe.dataset.src) {
-            iframe.src = iframe.dataset.src;
-        }
     }
 }
 </script>
+
 
 
 
