@@ -427,47 +427,48 @@ html, body {
 
 
 </div>
-<!-- Global -->
+<!-- Global (loads immediately as default tab) -->
 <div id="global" class="tab-content">
-<p><iframe src="https://idd-ucla.shinyapps.io/page_6_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
+<p><iframe src="https://idd-ucla.shinyapps.io/page_6_grid_app/" width="100%" style="border: none; height: 850px;" id="global-iframe"> </iframe></p>
 </div>
+<!-- Population (lazy loaded) -->
 <div id="population" class="tab-content">
-<p><iframe src="https://idd-ucla.shinyapps.io/page_1_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
+<p><iframe data-src="https://idd-ucla.shinyapps.io/page_1_grid_app/" width="100%" style="border: none; height: 850px;" id="population-iframe"> </iframe></p>
 </div>
+<!-- Immigration (lazy loaded) -->
 <div id="immigration" class="tab-content">
-<p><iframe src="https://idd-ucla.shinyapps.io/page_2_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
+<p><iframe data-src="https://idd-ucla.shinyapps.io/page_2_grid_app/" width="100%" style="border: none; height: 850px;" id="immigration-iframe"> </iframe></p>
 </div>
+<!-- Marriage (lazy loaded) -->
 <div id="marriage" class="tab-content">
-<p><iframe src="https://idd-ucla.shinyapps.io/page_3_grid_app" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
+<p><iframe data-src="https://idd-ucla.shinyapps.io/page_3_grid_app" width="100%" style="border: none; height: 850px;" id="marriage-iframe"> </iframe></p>
 </div>
+<!-- Education (lazy loaded) -->
 <div id="education" class="tab-content">
-<p><iframe src="https://idd-ucla.shinyapps.io/page_4_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
+<p><iframe data-src="https://idd-ucla.shinyapps.io/page_4_grid_app/" width="100%" style="border: none; height: 850px;" id="education-iframe"> </iframe></p>
 </div>
+<!-- Work (lazy loaded) -->
 <div id="work" class="tab-content">
-<p><iframe src="https://idd-ucla.shinyapps.io/page_5_grid_app/" width="100%" style="border: none; height: 850px;" id="embedded-app"> </iframe></p>
+<p><iframe data-src="https://idd-ucla.shinyapps.io/page_5_grid_app/" width="100%" style="border: none; height: 850px;" id="work-iframe"> </iframe></p>
 </div>
-<!-- About -->
-<div id="about" class="tab-content" style="position: relative; font-size: 1em; min-height: 300px;">
-<div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70%;">
-The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded by the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the UCLA Center for Near Eastern Studies (CNES). It was created by Roxanne Corbeil, Kevan Harris, and Gilad Wenig. For any inquiries or assistance, please contact <a href="mailto:cnes@international.ucla.edu">cnes@international.ucla.edu</a>.
-</div>
-</div>
-<!-- Bibliography -->
+<!-- Bibliography (lazy loaded) -->
 <div id="bibliography" class="tab-content">
-<section id="section" class="level1">
-<h1></h1>
-</section>
-<section id="an-international-bibliography-of-the-iranian-diaspora-compiled-by-h.e.-chehabi-and-amir-sayadabdi" class="level1">
-<h1><span style="text-align: center; display: block; font-size: 20px;">An International Bibliography of the Iranian Diaspora<br>Compiled by H.E. Chehabi and Amir Sayadabdi</span></h1>
+<span style="text-align: center; display: block; font-size: 20px;"> An International Bibliography of the Iranian Diaspora<br> Compiled by H.E. Chehabi and Amir Sayadabdi </span>
 <div style="width: 100%; height: 600px;">
-<p><iframe src="https://idd-ucla.shinyapps.io/idd_bib/" width="100%" height="600" style="border: none;"> </iframe></p>
+<pre><code>&lt;iframe 
+  data-src="https://idd-ucla.shinyapps.io/idd_bib/"
+  width="100%" 
+  height="600" 
+  style="border: none;"
+  id="bibliography-iframe"&gt;
+&lt;/iframe&gt;</code></pre>
 </div>
-</section>
 </div>
-<footer class="footer">
-<a href="https://www.international.ucla.edu/cnes/home" target="_blank" rel="noopener"> <img src="CNES_logo.png" alt="Logo" style="height: 40px;"> </a>
-</footer>
+<!-- Updated JavaScript with lazy loading -->
 <script>
+// Track which iframes have been loaded
+let loadedIframes = new Set(['global']); // Global is loaded by default
+
 document.addEventListener("DOMContentLoaded", function () {
     // Default: Activate the Global main tab
     let globalTab = document.querySelector(".tab-button:first-child");
@@ -486,79 +487,117 @@ document.addEventListener("DOMContentLoaded", function () {
         menu.style.display = "none";
     });
 });
+
+function loadIframe(tabName) {
+    // Skip if already loaded
+    if (loadedIframes.has(tabName)) return;
+    
+    // Find the iframe
+    let iframe = document.querySelector(`#${tabName} iframe, #${tabName} div iframe`);
+    if (iframe && iframe.dataset.src) {
+        // Show loading message
+        iframe.style.opacity = '0.5';
+        iframe.parentElement.style.position = 'relative';
+        
+        // Create loading indicator
+        let loader = document.createElement('div');
+        loader.innerHTML = 'Loading...';
+        loader.style.cssText = `
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 24px;
+            color: #2774AE;
+            z-index: 10;
+        `;
+        iframe.parentElement.appendChild(loader);
+        
+        // Load the iframe
+        iframe.src = iframe.dataset.src;
+        delete iframe.dataset.src;
+        
+        // Remove loader when iframe loads
+        iframe.onload = function() {
+            iframe.style.opacity = '1';
+            if (loader.parentElement) {
+                loader.remove();
+            }
+        };
+        
+        // Mark as loaded
+        loadedIframes.add(tabName);
+    }
+}
+
 function showTab(tabName, element) {
-    // Deactivate all main tabs
+    // Existing tab switching code...
     document.querySelectorAll('.tab-button:not(.sub-tab)').forEach(button => {
         button.classList.remove("active");
     });
 
-    // Activate the clicked main tab
     if (element) {
         element.classList.add("active");
     }
 
-    // Hide all tab content
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove("active");
         tab.style.display = 'none';
     });
 
-    // Show the selected tab content
     let selectedTab = document.getElementById(tabName);
     if (selectedTab) {
         selectedTab.classList.add("active");
         selectedTab.style.display = "block";
+        
+        // Load iframe if not already loaded
+        loadIframe(tabName);
     }
 
-    // Hide all submenus by default
     document.querySelectorAll('.submenu').forEach(menu => {
         menu.style.display = "none";
     });
 
-    // Show the United States submenu ONLY when clicking "United States"
     let unitedStatesSubmenu = document.getElementById("united-states-submenu");
     if (tabName === "united-states") {
         unitedStatesSubmenu.style.display = "block";
-
-        // Auto-select "Defining the Population" sub-tab when selecting United States
+        
         let definingPopulationTab = document.querySelector(".sub-tab[data-tab='population']");
         if (definingPopulationTab) {
             definingPopulationTab.classList.add("active");
             showSubTab("population", definingPopulationTab);
         }
     } else {
-        // Remove active styles from all sub-tabs when leaving United States
         document.querySelectorAll(".sub-tab").forEach(subtab => {
             subtab.classList.remove("active");
         });
     }
 }
+
 function showSubTab(subTabId, element) {
-    // Deactivate all sub-tabs
     document.querySelectorAll(".sub-tab").forEach(tab => {
         tab.classList.remove("active");
     });
 
-    // Activate the clicked sub-tab
     if (element) {
         element.classList.add("active");
     }
 
-    // Hide all sub-tab content
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove("active");
         tab.style.display = 'none';
     });
 
-    // Show the selected sub-tab content
     let subTabContent = document.getElementById(subTabId);
     if (subTabContent) {
         subTabContent.classList.add("active");
         subTabContent.style.display = "block";
+        
+        // Load iframe if not already loaded
+        loadIframe(subTabId);
     }
 }
 </script>
-
 
 
 
