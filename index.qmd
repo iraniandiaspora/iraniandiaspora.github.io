@@ -256,10 +256,10 @@ html, body {
 
 <!-- Canada -->
 <div id="canada" class="tab-content">
-  <iframe 
+  <iframe
     id="iframe-canada"
-    src="https://idd-ucla.shinyapps.io/canada_grid_app/"
-    width="100%" 
+    src="https://idd-ucla.shinyapps.io/canada_grid_app/?v=20250827"
+    width="100%"
     style="border:none; height:850px;">
   </iframe>
 </div>
