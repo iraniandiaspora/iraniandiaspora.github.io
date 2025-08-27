@@ -1,6 +1,5 @@
 ---
 title: "Iranian Diaspora Dashboard"
-
 format:
   html:
     page-layout: full
@@ -65,7 +64,7 @@ html, body {
   padding: 0;
 }
 
-/* Tab Button Reset - Complete border removal */
+/* Tab Button Reset */
 .navbar .tab-button {
   border: none !important;
   background-color: #2774AE;
@@ -78,105 +77,26 @@ html, body {
   border-radius: 0;
   outline: none !important;
   box-shadow: none !important;
-  position: relative; /* For pseudo-element positioning */
-}
-
-/* Active Tab - Using pseudo-element for underline */
-.navbar .tab-button.active {
-  background-color: #4a8bc9;
-  font-weight: bold;
   position: relative;
 }
 
-/* Create bottom border with pseudo-element instead */
+/* Active Main Tab */
+.navbar .tab-button.active {
+  background-color: #4a8bc9;
+  font-weight: bold;
+}
 .navbar .tab-button.active::after {
   content: "";
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
+  bottom: 0; left: 0;
+  width: 100%; height: 2px;
   background-color: white;
 }
 
-/* Hover Effect */
-.navbar .tab-button:hover {
-  background-color: #5fa4e0;
-  color: white;
-}
+/* Hover */
+.navbar .tab-button:hover { background-color: #5fa4e0; color: white; }
 
-/* Footer Styling */
-.footer {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #2774AE;
-  color: white;
-  padding: 5px 20px;
-  width: 100%;
-  height: 50px;
-  box-sizing: border-box;
-  border: none;
-}
-
-/* Footer Logo Container */
-.footer-left {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-/* Footer Logo */
-.footer-logo {
-  max-height: 40px;
-  height: auto;
-}
-
-/* Footer Text */
-.footer-text {
-  color: white;
-  font-size: 14px;
-}
-
-/* Footer Links */
-.footer-links {
-  display: flex;
-  gap: 15px;
-}
-
-/* Footer Link Styles */
-.footer-link {
-  color: white;
-  text-decoration: none;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.footer-link:hover {
-  color: #e0e0e0;
-  text-decoration: underline;
-}
-
-/* Dropdown Menu */
-.dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  background-color: white;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  border-radius: 5px;
-  z-index: 1000;
-  width: 200px;
-}
-
-/* Show Dropdown on Hover */
-.tab-button:hover .dropdown-menu {
-  display: block;
-}
-
-/* Tab Content */
+/* Tab Content (hidden by default) */
 .tab-content {
   display: none;
   background-color: #FAFAFA !important;
@@ -186,36 +106,26 @@ html, body {
   color: #333;
   margin-top: 0;
 }
+.tab-content.active { display: block; }
 
-/* Show Active Tab */
-.tab-content.active {
-  display: block;
-}
-
-/* Submenu */
+/* Submenu (US only) */
 .submenu {
   position: absolute;
   width: 100%;
   background-color: #2774AE;
-  padding: 1px 10px; /* Reduced vertical padding further */
+  padding: 1px 10px;
   z-index: 100;
   text-align: center;
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.3s ease-in-out;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   box-sizing: border-box;
+  display: none; /* hidden until US tab is active */
 }
-
-/* Submenu Wrapper */
 .submenu-wrapper {
   max-width: 100%;
   margin: 0 auto;
   display: flex;
   justify-content: center;
 }
-
-/* Sub-Tabs */
 .sub-tab {
   border: none !important;
   background-color: #2774AE;
@@ -229,72 +139,42 @@ html, body {
   position: relative;
   line-height: 1.2;
 }
-
 .sub-tab.active {
   background-color: #4a8bc9;
   font-weight: bold;
-  position: relative;
 }
-
 .sub-tab.active::after {
   content: "";
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
+  bottom: 0; left: 0;
+  width: 100%; height: 2px;
   background-color: white;
 }
+.sub-tab:hover { background-color: #5fa4e0; color: white; }
 
-/* Hover Sub-Tab */
-.sub-tab:hover {
-  background-color: #5fa4e0;
-  color: white;
+/* Footer */
+.footer {
+  display: flex; justify-content: center; align-items: center;
+  background-color: #2774AE; color: white;
+  padding: 5px 20px; width: 100%; height: 50px; box-sizing: border-box;
+  border: none;
 }
 
-/* Responsive Styling */
+/* Responsive */
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    height: auto;
-    padding: 5px;
-  }
-
-  .navbar {
-    margin-top: 5px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
-
-  .header-title {
-    margin-bottom: 5px;
-  }
-
-  .footer {
-    flex-direction: column;
-    height: auto;
-    padding: 10px 20px;
-  }
-
-  .footer-links {
-    margin-top: 10px;
-  }
+  .header { flex-direction: column; height: auto; padding: 5px; }
+  .navbar { margin-top: 5px; flex-wrap: wrap; justify-content: center; }
+  .header-title { margin-bottom: 5px; }
+  .footer { flex-direction: column; height: auto; padding: 10px 20px; }
 }
-
-#about.tab-content {
-  font-size: 1em;
-}
+#about.tab-content { font-size: 1em; }
 </style>
-
 
 ```{=html}
 <!-- Header Container -->
 <div class="header-container">
-  <!-- Combined Header with Title and Navigation -->
   <div class="header">
     <a href="/" class="header-title">Iranian Diaspora Dashboard</a>
-    
-    <!-- Main Navigation Bar -->
     <nav class="navbar">
       <button class="tab-button" onclick="showTab('global', this)">Global</button>
       <button class="tab-button" onclick="showTab('united-states', this)">United States</button>
@@ -305,114 +185,111 @@ html, body {
     </nav>
   </div>
 
-  <!-- United States Submenu - Now with matching width -->
-<div id="united-states-submenu" class="submenu" style="display: none;">
-  <div class="submenu-wrapper">
-    <button class="tab-button sub-tab" data-tab="population" onclick="showSubTab('population', this)">Defining the Population</button>
-    <button class="tab-button sub-tab" data-tab="immigration" onclick="showSubTab('immigration', this)">Immigration & Citizenship</button>
-    <button class="tab-button sub-tab" data-tab="marriage" onclick="showSubTab('marriage', this)">Marriage</button>
-    <button class="tab-button sub-tab" data-tab="education" onclick="showSubTab('education', this)">Education</button>
-    <button class="tab-button sub-tab" data-tab="work" onclick="showSubTab('work', this)">Work</button>
+  <!-- United States Submenu -->
+  <div id="united-states-submenu" class="submenu">
+    <div class="submenu-wrapper">
+      <button class="tab-button sub-tab" data-tab="population"  onclick="showSubTab('population', this)">Defining the Population</button>
+      <button class="tab-button sub-tab" data-tab="immigration" onclick="showSubTab('immigration', this)">Immigration & Citizenship</button>
+      <button class="tab-button sub-tab" data-tab="marriage"    onclick="showSubTab('marriage', this)">Marriage</button>
+      <button class="tab-button sub-tab" data-tab="education"   onclick="showSubTab('education', this)">Education</button>
+      <button class="tab-button sub-tab" data-tab="work"        onclick="showSubTab('work', this)">Work</button>
+    </div>
   </div>
-</div>
-
-<!-- Europe Content -->
-<div id="europe" class="tab-content">
-    <h2>Coming Soon</h2>
-    <p>This section is under construction. Stay tuned!</p>
-</div>
-
-
 </div>
 ```
 
 <!-- Global -->
 <div id="global" class="tab-content">
   <iframe 
+    id="iframe-global"
     src="https://idd-ucla.shinyapps.io/page_6_grid_app/"
     width="100%" 
-    style="border: none; height: 850px;"
-    id="embedded-app">
+    style="border:none; height:850px;">
   </iframe>
 </div>
 
-<div id="population" class="tab-content"> 
+<!-- United States sub-tabs -->
+<div id="population" class="tab-content">
   <iframe 
+    id="iframe-us-population"
     src="https://idd-ucla.shinyapps.io/page_1_grid_app/" 
     width="100%" 
-    style="border: none; height: 850px;"
-    id="embedded-app">
+    style="border:none; height:850px;">
   </iframe>
 </div>
-
 
 <div id="immigration" class="tab-content">
   <iframe 
+    id="iframe-us-immigration"
     src="https://idd-ucla.shinyapps.io/page_2_grid_app/" 
     width="100%" 
-    style="border: none; height: 850px;"
-    id="embedded-app">
+    style="border:none; height:850px;">
   </iframe>
 </div>
 
 <div id="marriage" class="tab-content">
   <iframe 
+    id="iframe-us-marriage"
     src="https://idd-ucla.shinyapps.io/page_3_grid_app"
     width="100%" 
-    style="border: none; height: 850px;"
-    id="embedded-app">
+    style="border:none; height:850px;">
   </iframe>
 </div>
 
 <div id="education" class="tab-content">
   <iframe 
+    id="iframe-us-education"
     src="https://idd-ucla.shinyapps.io/page_4_grid_app/"
     width="100%" 
-    style="border: none; height: 850px;"
-    id="embedded-app">
+    style="border:none; height:850px;">
   </iframe>
 </div>
 
 <div id="work" class="tab-content">
   <iframe 
+    id="iframe-us-work"
     src="https://idd-ucla.shinyapps.io/page_5_grid_app/"
     width="100%" 
-    style="border: none; height: 850px;"
-    id="embedded-app">
+    style="border:none; height:850px;">
   </iframe>
 </div>
 
-
+<!-- Canada -->
 <div id="canada" class="tab-content">
   <iframe 
+    id="iframe-canada"
     src="https://idd-ucla.shinyapps.io/canada_grid_app/"
     width="100%" 
-    style="border: none; height: 850px;"
-    id="embedded-app">
+    style="border:none; height:850px;">
   </iframe>
+</div>
+
+<!-- Europe -->
+<div id="europe" class="tab-content">
+  <h2>Coming Soon</h2>
+  <p>This section is under construction. Stay tuned!</p>
 </div>
 
 <!-- About -->
-<div id="about" class="tab-content" style="position: relative; font-size: 1em; min-height: 300px;">
-  <div style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 70%;">
-  The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded by the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the UCLA Center for Near Eastern Studies (CNES). It was created by Roxanne Corbeil, Kevan Harris, and Gilad Wenig. For any inquiries or assistance, please contact <a href='mailto:cnes@international.ucla.edu'>cnes@international.ucla.edu</a>.
+<div id="about" class="tab-content" style="position:relative; font-size:1em; min-height:300px;">
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:70%;">
+    The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded by the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the UCLA Center for Near Eastern Studies (CNES). It was created by Roxanne Corbeil, Kevan Harris, and Gilad Wenig. For any inquiries or assistance, please contact <a href='mailto:cnes@international.ucla.edu'>cnes@international.ucla.edu</a>.
   </div>
 </div>
 
-
 <!-- Bibliography -->
 <div id="bibliography" class="tab-content">
-#
-# <span style="text-align: center; display: block; font-size: 20px;">An International Bibliography of the Iranian Diaspora<br>Compiled by H.E. Chehabi and Amir Sayadabdi</span>
-
-<iframe 
-  src="https://idd-ucla.shinyapps.io/idd_bib/" 
-  width="100%" 
-  height="600" 
-  style="border: none;"
-  sandbox="allow-scripts allow-same-origin allow-forms allow-popups">
-</iframe>
-
+  <span style="text-align:center; display:block; font-size:20px;">
+    An International Bibliography of the Iranian Diaspora<br>Compiled by H.E. Chehabi and Amir Sayadabdi
+  </span>
+  <iframe 
+    id="iframe-bibliography"
+    src="https://idd-ucla.shinyapps.io/idd_bib/" 
+    width="100%" 
+    height="600" 
+    style="border:none;"
+    sandbox="allow-scripts allow-same-origin allow-forms allow-popups">
+  </iframe>
 </div>
 
 <footer class="footer">
@@ -422,94 +299,62 @@ html, body {
 </footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", function () {
-    // Default: Activate the Global main tab
-    let globalTab = document.querySelector(".tab-button:first-child");
-    if (globalTab) {
-        globalTab.classList.add("active");
-    }
-    // Default: Show "Global" tab content
-    let globalContent = document.getElementById("global");
-    if (globalContent) {
-        globalContent.classList.add("active");
-        globalContent.style.display = "block";
-    }
-
-    // Hide all submenus by default
-    document.querySelectorAll('.submenu').forEach(menu => {
-        menu.style.display = "none";
-    });
-});
+/* Main tab controller */
 function showTab(tabName, element) {
-    // Deactivate all main tabs
-    document.querySelectorAll('.tab-button:not(.sub-tab)').forEach(button => {
-        button.classList.remove("active");
-    });
+  // Deactivate main buttons
+  document.querySelectorAll('.navbar .tab-button').forEach(btn => btn.classList.remove('active'));
+  if (element) element.classList.add('active');
 
-    // Activate the clicked main tab
-    if (element) {
-        element.classList.add("active");
+  // Hide all tab contents
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+    tab.style.display = 'none';
+  });
+
+  // Show the selected tab content
+  const selected = document.getElementById(tabName);
+  if (selected) {
+    selected.classList.add('active');
+    selected.style.display = 'block';
+  }
+
+  // Submenu visibility
+  const usMenu = document.getElementById('united-states-submenu');
+  if (tabName === 'united-states') {
+    usMenu.style.display = 'block';
+    // Auto-open "Defining the Population"
+    const popBtn = document.querySelector('.sub-tab[data-tab="population"]');
+    if (popBtn) {
+      popBtn.classList.add('active');
+      showSubTab('population', popBtn);
     }
-
-    // Hide all tab content
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove("active");
-        tab.style.display = 'none';
-    });
-
-    // Show the selected tab content
-    let selectedTab = document.getElementById(tabName);
-    if (selectedTab) {
-        selectedTab.classList.add("active");
-        selectedTab.style.display = "block";
-    }
-
-    // Hide all submenus by default
-    document.querySelectorAll('.submenu').forEach(menu => {
-        menu.style.display = "none";
-    });
-
-    // Show the United States submenu ONLY when clicking "United States"
-    let unitedStatesSubmenu = document.getElementById("united-states-submenu");
-    if (tabName === "united-states") {
-        unitedStatesSubmenu.style.display = "block";
-
-        // Auto-select "Defining the Population" sub-tab when selecting United States
-        let definingPopulationTab = document.querySelector(".sub-tab[data-tab='population']");
-        if (definingPopulationTab) {
-            definingPopulationTab.classList.add("active");
-            showSubTab("population", definingPopulationTab);
-        }
-    } else {
-        // Remove active styles from all sub-tabs when leaving United States
-        document.querySelectorAll(".sub-tab").forEach(subtab => {
-            subtab.classList.remove("active");
-        });
-    }
+  } else {
+    usMenu.style.display = 'none';
+    document.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
+  }
 }
+
+/* United States sub-tab controller */
 function showSubTab(subTabId, element) {
-    // Deactivate all sub-tabs
-    document.querySelectorAll(".sub-tab").forEach(tab => {
-        tab.classList.remove("active");
-    });
+  // Activate clicked sub-tab
+  document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+  if (element) element.classList.add('active');
 
-    // Activate the clicked sub-tab
-    if (element) {
-        element.classList.add("active");
-    }
-
-    // Hide all sub-tab content
-    document.querySelectorAll('.tab-content').forEach(tab => {
-        tab.classList.remove("active");
-        tab.style.display = 'none';
-    });
-
-    // Show the selected sub-tab content
-    let subTabContent = document.getElementById(subTabId);
-    if (subTabContent) {
-        subTabContent.classList.add("active");
-        subTabContent.style.display = "block";
-    }
+  // Hide all content then show the chosen sub-tab content
+  document.querySelectorAll('.tab-content').forEach(tab => {
+    tab.classList.remove('active');
+    tab.style.display = 'none';
+  });
+  const content = document.getElementById(subTabId);
+  if (content) {
+    content.classList.add('active');
+    content.style.display = 'block';
+  }
 }
-</script>
+
+/* Default on load: United States -> Defining the Population */
+document.addEventListener('DOMContentLoaded', () => {
+  const usBtn = document.querySelector('.navbar .tab-button[onclick*="united-states"]');
+  showTab('united-states', usBtn);
+});
 </script>
