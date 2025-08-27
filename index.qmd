@@ -316,12 +316,6 @@ html, body {
   </div>
 </div>
 
-<!-- Tab Content Below Header -->
-<div id="canada" class="tab-content">
-  <h2>Coming Soon</h2>
-  <p>This section is under construction. Stay tuned!</p>
-</div>
-
 <!-- Europe Content -->
 <div id="europe" class="tab-content">
     <h2>Coming Soon</h2>
@@ -382,6 +376,16 @@ html, body {
 <div id="work" class="tab-content">
   <iframe 
     src="https://idd-ucla.shinyapps.io/page_5_grid_app/"
+    width="100%" 
+    style="border: none; height: 850px;"
+    id="embedded-app">
+  </iframe>
+</div>
+
+
+<div id="canada" class="tab-content">
+  <iframe 
+    src="https://idd-ucla.shinyapps.io/canada_grid_app/"
     width="100%" 
     style="border: none; height: 850px;"
     id="embedded-app">
