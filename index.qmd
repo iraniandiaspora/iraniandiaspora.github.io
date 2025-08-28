@@ -108,7 +108,7 @@ html, body {
 }
 .tab-content.active { display: block; }
 
-/* Submenu (US only) */
+/* Submenus (US & Canada) */
 .submenu {
   position: absolute;
   width: 100%;
@@ -118,7 +118,7 @@ html, body {
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   box-sizing: border-box;
-  display: none; /* hidden until US tab is active */
+  display: none; /* hidden until parent tab is active */
 }
 .submenu-wrapper {
   max-width: 100%;
@@ -195,6 +195,14 @@ html, body {
       <button class="tab-button sub-tab" data-tab="work"        onclick="showSubTab('work', this)">Work</button>
     </div>
   </div>
+
+  <!-- Canada Submenu (only two items as requested) -->
+  <div id="canada-submenu" class="submenu">
+    <div class="submenu-wrapper">
+      <button class="tab-button sub-tab" data-tab="canada-population" onclick="showSubTab('canada-population', this)">Defining the Population</button>
+      <button class="tab-button sub-tab" data-tab="canada-immigration" onclick="showSubTab('canada-immigration', this)">Immigration & Citizenship</button>
+    </div>
+  </div>
 </div>
 ```
 
@@ -254,11 +262,20 @@ html, body {
   </iframe>
 </div>
 
-<!-- Canada -->
-<div id="canada" class="tab-content">
+<!-- Canada sub-tabs -->
+<div id="canada-population" class="tab-content">
   <iframe
-    id="iframe-canada"
-    src="https://idd-ucla.shinyapps.io/canada_grid_app/?v=20250827"
+    id="iframe-canada-population"
+    src="https://idd-ucla.shinyapps.io/canada_grid_app/"
+    width="100%"
+    style="border:none; height:850px;">
+  </iframe>
+</div>
+
+<div id="canada-immigration" class="tab-content">
+  <iframe
+    id="iframe-canada-immigration"
+    src="https://idd-ucla.shinyapps.io/canada_page_2_grid_app/"
     width="100%"
     style="border:none; height:850px;">
   </iframe>
@@ -311,7 +328,7 @@ function showTab(tabName, element) {
     tab.style.display = 'none';
   });
 
-  // Show the selected tab content
+  // Show the selected tab content (if it exists)
   const selected = document.getElementById(tabName);
   if (selected) {
     selected.classList.add('active');
@@ -320,21 +337,36 @@ function showTab(tabName, element) {
 
   // Submenu visibility
   const usMenu = document.getElementById('united-states-submenu');
+  const caMenu = document.getElementById('canada-submenu');
+
   if (tabName === 'united-states') {
-    usMenu.style.display = 'block';
-    // Auto-open "Defining the Population"
-    const popBtn = document.querySelector('.sub-tab[data-tab="population"]');
-    if (popBtn) {
-      popBtn.classList.add('active');
-      showSubTab('population', popBtn);
+    if (usMenu) usMenu.style.display = 'block';
+    if (caMenu) caMenu.style.display = 'none';
+
+    // Auto-open U.S. "Defining the Population"
+    const popBtnUS = document.querySelector('.sub-tab[data-tab="population"]');
+    if (popBtnUS) {
+      popBtnUS.classList.add('active');
+      showSubTab('population', popBtnUS);
+    }
+  } else if (tabName === 'canada') {
+    if (caMenu) caMenu.style.display = 'block';
+    if (usMenu) usMenu.style.display = 'none';
+
+    // Auto-open Canada "Defining the Population"
+    const popBtnCA = document.querySelector('.sub-tab[data-tab="canada-population"]');
+    if (popBtnCA) {
+      popBtnCA.classList.add('active');
+      showSubTab('canada-population', popBtnCA);
     }
   } else {
-    usMenu.style.display = 'none';
+    if (usMenu) usMenu.style.display = 'none';
+    if (caMenu) caMenu.style.display = 'none';
     document.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
   }
 }
 
-/* United States sub-tab controller */
+/* Sub-tab controller (works for both US and Canada) */
 function showSubTab(subTabId, element) {
   // Activate clicked sub-tab
   document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
