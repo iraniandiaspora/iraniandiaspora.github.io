@@ -153,10 +153,12 @@ html, body {
 
 /* Taller iframes so bottom cards show */
 .tab-content iframe {
-  height: 950px !important;
+  min-height: 850px;
+  max-height: 1000px;
   width: 100%;
   border: none;
 }
+
 
 /* Footer */
 .footer {
