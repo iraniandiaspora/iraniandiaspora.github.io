@@ -93,7 +93,9 @@ html, body {
 }
 .navbar .tab-button:hover { background-color: #5fa4e0; color: white; }
 
-/* Tab Content (hidden by default) */
+/* --- Consistent pane + iframe heights --- */
+/* Pane padding: 15px top + 40px bottom = 55px */
+/* 1020 (iframe) + 55 (padding) = 1075 */
 .tab-content {
   display: none;
   background-color: #FAFAFA !important;
@@ -102,13 +104,19 @@ html, body {
   font-size: 20px;
   color: #333;
   margin-top: 0;
-  min-height: calc(100vh - 140px); /* keep a tall viewport for first screen */
+  min-height: 1075px;  /* consistent pane height */
 }
 .tab-content.active { display: block; }
 
+.tab-content iframe {
+  height: 1020px !important;  /* consistent iframe height */
+  width: 100%;
+  border: none;
+}
+
 /* Submenus (US & Canada) now in normal flow (no overlay) */
 .submenu {
-  position: relative;  /* was absolute; or sticky */
+  position: relative;
   width: 100%;
   background-color: #2774AE;
   padding: 1px 10px;
@@ -150,31 +158,6 @@ html, body {
   background-color: white;
 }
 .sub-tab:hover { background-color: #5fa4e0; color: white; }
-
-/* sensible global default */
-.tab-content iframe {
-  height: 1020px !important;   /* start here; adjust as needed */
-  width: 100%;
-  border: none;
-}
-
-/* bump only the pages that still show an interior scroll */
-#iframe-us-population,
-#iframe-us-immigration {
-  height: 1020px !important;   /* +60px over global */
-}
-
-#iframe-us-marriage,
-#iframe-us-education,
-#iframe-us-work {
-  height: 1020px !important;   /* small bump */
-}
-
-#iframe-canada-population,
-#iframe-canada-immigration {
-  height: 1020px !important;   /* a touch shorter if they fit */
-}
-
 
 /* Footer */
 .footer {
@@ -283,7 +266,7 @@ html, body {
   <span style="text-align:center; display:block; font-size:20px;">
     An International Bibliography of the Iranian Diaspora<br>Compiled by H.E. Chehabi and Amir Sayadabdi
   </span>
-  <iframe id="iframe-bibliography" src="https://idd-ucla.shinyapps.io/idd_bib/" height="700" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  <iframe id="iframe-bibliography" src="https://idd-ucla.shinyapps.io/idd_bib/" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
 </div>
 
 <footer class="footer">
