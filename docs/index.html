@@ -126,15 +126,15 @@ html, body {
   font-family: "Montserrat", serif;
   margin: 0;
   padding: 0;
+  height: 100%;
 }
 
-/* Header Container */
+/* Header Container (non-sticky to avoid overlay issues) */
 .header-container {
   background-color: #2774AE;
   width: 100%;
   box-sizing: border-box;
   position: relative;
-  z-index: 150;
 }
 
 /* Compact Header with Combined Navigation */
@@ -147,11 +147,6 @@ html, body {
   background-color: #2774AE;
   width: 100%;
   box-sizing: border-box;
-
-  /* keep visible */
-  position: sticky;
-  top: 0;
-  z-index: 160;
 }
 
 /* Title Styling */
@@ -208,21 +203,22 @@ html, body {
   font-size: 20px;
   color: #333;
   margin-top: 0;
+  min-height: calc(100vh - 140px); /* keep a tall viewport for first screen */
 }
 .tab-content.active { display: block; }
 
-/* Submenus (US & Canada) */
+/* Submenus (US & Canada) now in normal flow (no overlay) */
 .submenu {
-  position: sticky;
-  top: 50px;
+  position: relative;  /* was absolute; or sticky */
   width: 100%;
   background-color: #2774AE;
   padding: 1px 10px;
-  z-index: 155;
+  z-index: 1;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   box-sizing: border-box;
-  display: none;
+  display: none; /* hidden until parent tab is active */
+  margin: 0 0 6px 0; /* add space below so content doesn't tuck under */
 }
 .submenu-wrapper {
   max-width: 100%;
@@ -256,9 +252,9 @@ html, body {
 }
 .sub-tab:hover { background-color: #5fa4e0; color: white; }
 
-/* Taller iframes */
+/* Taller iframes so bottom cards show */
 .tab-content iframe {
-  height: 1050px !important;
+  height: 1200px !important; /* increase from 850 */
   width: 100%;
   border: none;
 }
@@ -277,7 +273,6 @@ html, body {
   .navbar { margin-top: 5px; flex-wrap: wrap; justify-content: center; }
   .header-title { margin-bottom: 5px; }
   .footer { flex-direction: column; height: auto; padding: 10px 20px; }
-  .submenu { top: 84px; }
 }
 #about.tab-content { font-size: 1em; }
 </style>
