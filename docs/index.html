@@ -194,9 +194,7 @@ html, body {
 }
 .navbar .tab-button:hover { background-color: #5fa4e0; color: white; }
 
-/* --- Consistent pane + iframe heights --- */
-/* Pane padding: 15px top + 40px bottom = 55px */
-/* 1020 (iframe) + 55 (padding) = 1075 */
+/* Tab Content (hidden by default) */
 .tab-content {
   display: none;
   background-color: #FAFAFA !important;
@@ -205,19 +203,13 @@ html, body {
   font-size: 20px;
   color: #333;
   margin-top: 0;
-  min-height: 1075px;  /* consistent pane height */
+  min-height: calc(100vh - 140px); /* keep a tall viewport for first screen */
 }
 .tab-content.active { display: block; }
 
-.tab-content iframe {
-  height: 1020px !important;  /* consistent iframe height */
-  width: 100%;
-  border: none;
-}
-
 /* Submenus (US & Canada) now in normal flow (no overlay) */
 .submenu {
-  position: relative;
+  position: relative;  /* was absolute; or sticky */
   width: 100%;
   background-color: #2774AE;
   padding: 1px 10px;
@@ -259,6 +251,31 @@ html, body {
   background-color: white;
 }
 .sub-tab:hover { background-color: #5fa4e0; color: white; }
+
+/* sensible global default */
+.tab-content iframe {
+  height: 1000px !important;   /* start here; adjust as needed */
+  width: 100%;
+  border: none;
+}
+
+/* bump only the pages that still show an interior scroll */
+#iframe-us-population,
+#iframe-us-immigration {
+  height: 1020px !important;   /* +60px over global */
+}
+
+#iframe-us-marriage,
+#iframe-us-education,
+#iframe-us-work {
+  height: 1020px !important;   /* small bump */
+}
+
+#iframe-canada-population,
+#iframe-canada-immigration {
+  height: 1020px !important;   /* a touch shorter if they fit */
+}
+
 
 /* Footer */
 .footer {
@@ -306,7 +323,12 @@ html, body {
   <div id="canada-submenu" class="submenu">
     <div class="submenu-wrapper">
       <button class="tab-button sub-tab" data-tab="canada-population" onclick="showSubTab('canada-population', this)">Defining the Population</button>
+            <button class="tab-button sub-tab" data-tab="canada-langrelig" onclick="showSubTab('canada-langrelig', this)">Language &amp; Religion</button>
       <button class="tab-button sub-tab" data-tab="canada-immigration" onclick="showSubTab('canada-immigration', this)">Immigration &amp; Citizenship</button>
+      <button class="tab-button sub-tab" data-tab="canada-education" onclick="showSubTab('canada-education', this)">Education</button>
+                  <button class="tab-button sub-tab" data-tab="canada-work" onclick="showSubTab('canada-work', this)">Work</button>
+
+      <button class="tab-button sub-tab" data-tab="canada-income" onclick="showSubTab('canada-income', this)">Income</button>
     </div>
   </div>
 </div>
@@ -334,8 +356,20 @@ html, body {
 <div id="canada-population" class="tab-content">
 <p><iframe id="iframe-canada-population" src="https://idd-ucla.shinyapps.io/canada_grid_app/"></iframe></p>
 </div>
+<div id="canada-langrelig" class="tab-content">
+<p><iframe id="iframe-canada-langrelig" src="https://idd-ucla.shinyapps.io/canada_page_6_grid_app/"></iframe></p>
+</div>
 <div id="canada-immigration" class="tab-content">
 <p><iframe id="iframe-canada-immigration" src="https://idd-ucla.shinyapps.io/canada_page_2_grid_app/"></iframe></p>
+</div>
+<div id="canada-education" class="tab-content">
+<p><iframe id="iframe-canada-education" src="https://idd-ucla.shinyapps.io/canada_page_3_grid_app/"></iframe></p>
+</div>
+<div id="canada-work" class="tab-content">
+<p><iframe id="iframe-canada-work" src="https://idd-ucla.shinyapps.io/canada_page_4_grid_app/"></iframe></p>
+</div>
+<div id="canada-income" class="tab-content">
+<p><iframe id="iframe-canada-income" src="https://idd-ucla.shinyapps.io/canada_page_5_grid_app/"></iframe></p>
 </div>
 <!-- Europe -->
 <div id="europe" class="tab-content">
@@ -347,14 +381,14 @@ This section is under construction. Stay tuned!
 </p>
 </div>
 <!-- About -->
-<div id="about" class="tab-content" style="position:relative; font-size:1em; min-height:300px;">
-<div style="position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); width:70%;">
-<pre><code>The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded by the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the UCLA Center for Near Eastern Studies (CNES). It was created by Roxanne Corbeil, Kevan Harris, and Gilad Wenig. For any inquiries or assistance, please contact &lt;a href='mailto:cnes@international.ucla.edu'&gt;cnes@international.ucla.edu&lt;/a&gt;.</code></pre>
-</div>
+<div id="about" class="tab-content">
+<p>
+The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded by the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the UCLA Center for Near Eastern Studies (CNES). It was created by Roxanne Corbeil, Kevan Harris, and Gilad Wenig. For any inquiries or assistance, please contact <a href="mailto:cnes@international.ucla.edu">cnes@international.ucla.edu</a>.
+</p>
 </div>
 <!-- Bibliography -->
 <div id="bibliography" class="tab-content">
-<p><span style="text-align:center; display:block; font-size:20px;"> An International Bibliography of the Iranian Diaspora<br>Compiled by H.E. Chehabi and Amir Sayadabdi </span> <iframe id="iframe-bibliography" src="https://idd-ucla.shinyapps.io/idd_bib/" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></p>
+<p><span style="text-align:center; display:block; font-size:20px;"> An International Bibliography of the Iranian Diaspora<br>Compiled by H.E. Chehabi and Amir Sayadabdi </span> <iframe id="iframe-bibliography" src="https://idd-ucla.shinyapps.io/idd_bib/" height="700" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe></p>
 </div>
 <footer class="footer">
 <a href="https://www.international.ucla.edu/cnes/home" target="_blank" rel="noopener"> <img src="CNES_logo.png" alt="Logo" style="height: 40px;"> </a>
