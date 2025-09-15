@@ -293,7 +293,7 @@ html, body {
 </div>
 
 <!-- About -->
-<div id="about" class="tab-content">
+<div id="about" class="tab-content" style="margin-top: 20px;">
   <p>
     The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded by 
     the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the 
@@ -302,6 +302,7 @@ html, body {
     <a href="mailto:cnes@international.ucla.edu">cnes@international.ucla.edu</a>.
   </p>
 </div>
+
 
 <!-- Bibliography -->
 <div id="bibliography" class="tab-content">
