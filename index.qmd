@@ -293,7 +293,8 @@ html, body {
 </div>
 
 <!-- About -->
-<div id="about" class="tab-content" style="margin-top: 20px;">
+<div id="about" class="tab-content">
+  <h2></h2>
   <p>
     The Iranian Diaspora Dashboard is a part of the Iranian Diaspora project funded by 
     the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the 
