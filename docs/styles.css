@@ -1,0 +1,17 @@
+/* Only hide the outer site-wide navbar + search + header */
+header.navbar,
+header#quarto-header,
+.quarto-search {
+  display: none !important;
+}
+
+/* Remove any leftover margin/padding at top of the page */
+body {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Hide the title at the top of the content */
+#title-block-header {
+  display: none !important;
+}
