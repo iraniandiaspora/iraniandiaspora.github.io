@@ -267,8 +267,9 @@ html, body {
 
 #iframe-us-marriage,
 #iframe-us-education,
-#iframe-us-work {
-  height: 1020px !important;   /* small bump */
+#iframe-us-work,
+#iframe-us-income {
+  height: 1020px !important;
 }
 
 #iframe-canada-population,
@@ -309,15 +310,16 @@ html, body {
   </div>
 
   <!-- United States Submenu -->
-  <div id="united-states-submenu" class="submenu">
-    <div class="submenu-wrapper">
-      <button class="tab-button sub-tab" data-tab="population" onclick="showSubTab('population', this)">Defining the Population</button>
-      <button class="tab-button sub-tab" data-tab="immigration" onclick="showSubTab('immigration', this)">Immigration &amp; Citizenship</button>
-      <button class="tab-button sub-tab" data-tab="marriage" onclick="showSubTab('marriage', this)">Marriage</button>
-      <button class="tab-button sub-tab" data-tab="education" onclick="showSubTab('education', this)">Education</button>
-      <button class="tab-button sub-tab" data-tab="work" onclick="showSubTab('work', this)">Work</button>
-    </div>
-  </div>
+   <div id="united-states-submenu" class="submenu">
+     <div class="submenu-wrapper">
+       <button class="tab-button sub-tab" data-tab="population" onclick="showSubTab('population', this)">Defining the Population</button>
+       <button class="tab-button sub-tab" data-tab="immigration" onclick="showSubTab('immigration', this)">Immigration &amp; Citizenship</button>
+       <button class="tab-button sub-tab" data-tab="marriage" onclick="showSubTab('marriage', this)">Marriage</button>
+       <button class="tab-button sub-tab" data-tab="education" onclick="showSubTab('education', this)">Education</button>
+       <button class="tab-button sub-tab" data-tab="work" onclick="showSubTab('work', this)">Work</button>
+      <button class="tab-button sub-tab" data-tab="income" onclick="showSubTab('income', this)">Income</button>
+     </div>
+   </div>
 
   <!-- Canada Submenu -->
   <div id="canada-submenu" class="submenu">
@@ -351,6 +353,9 @@ html, body {
 </div>
 <div id="work" class="tab-content">
 <p><iframe id="iframe-us-work" src="https://idd-ucla.shinyapps.io/page_5_grid_app/"></iframe></p>
+</div>
+<div id="income" class="tab-content">
+<p><iframe id="iframe-us-income" src="https://idd-ucla.shinyapps.io/page_7_grid_app/"></iframe></p>
 </div>
 <!-- Canada sub-tabs -->
 <div id="canada-population" class="tab-content">
