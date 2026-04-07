@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canada: Immigration & Citizenship</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-row-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
+.source a { color:#2774AE; }
+.footnote { font-size:12px; color:#888; text-align:center; margin:8px 0; font-style:italic; }
+.tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
+.tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
+  font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
+.tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:hover:not(.active) { background:#e0e0e0; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+@media (max-width:900px) {
+  body { padding:10px 15px; }
+  .text-row, .chart-row { grid-template-columns:1fr; }
+  .text-row-4 { grid-template-columns:1fr 1fr; }
+}
+</style>
+
+</head>
+<body>
+<div class="text-row"><div class="text-card">Iranian immigration to Canada surged in the 2000s and 2010s, with over 40% of all arrivals coming after 2010. The 1980s revolution and war era accounts for only 8% of the current population.</div><div class="text-card">About 60% of first-generation Iranian-Canadians are naturalized citizens, while 27% have not yet obtained citizenship. Economic immigration has been the primary pathway since the 1990s.</div></div><div class="chart-row"><div class="chart-card"><div id="ca-immig" style="width:100%;height:450px;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true});Plotly.newPlot("ca-immig",[{"x":[1952,1957,1962,1967,1972,1977,1982,1987,1992,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[7.4076,22.2248,14.8151,96.3027,111.1064,251.8584,1051.882,1837.0351,3355.6719,2814.7958,4666.8226,5148.0184,4963.0364,5148.316,4148.223,4073.8978,5703.5305,4666.7465,5259.3936,5295.9595,5888.6833,5074.1327,5370.2164,4259.3689,4999.95,5555.6199,5814.5947,9000.0041,13852.8456,10741.1408,5296.5923,4148.0649,4925.9023,4703.7257,5963.3386],"type":"bar","width":[4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,4.5,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8,0.8],"marker":{"color":["#5a9bd5","#5a9bd5","#5a9bd5","#5a9bd5","#5a9bd5","#5a9bd5","#5a9bd5","#5a9bd5","#5a9bd5","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE","#2774AE"],"line":{"color":"rgba(31,119,180,1)"}},"text":["<b>Before 1955<\/b><br>    37 total (     7/year avg)<br>Cumulative: 0.0%","<b>1955-1959<\/b><br>   111 total (    22/year avg)<br>Cumulative: 0.0%","<b>1960-1964<\/b><br>    74 total (    15/year avg)<br>Cumulative: 0.0%","<b>1965-1969<\/b><br>   482 total (    96/year avg)<br>Cumulative: 0.1%","<b>1970-1974<\/b><br>   556 total (   111/year avg)<br>Cumulative: 0.2%","<b>1975-1979<\/b><br> 1,259 total (   252/year avg)<br>Cumulative: 0.3%","<b>1980-1984<\/b><br> 5,259 total ( 1,052/year avg)<br>Cumulative: 1.0%","<b>1985-1989<\/b><br> 9,185 total ( 1,837/year avg)<br>Cumulative: 2.2%","<b>1990-1994<\/b><br>16,778 total ( 3,356/year avg)<br>Cumulative: 4.4%","<b>1995<\/b><br>Arrivals:  2,815<br>Cumulative: 6.2%","<b>1996<\/b><br>Arrivals:  4,667<br>Cumulative: 9.2%","<b>1997<\/b><br>Arrivals:  5,148<br>Cumulative: 12.6%","<b>1998<\/b><br>Arrivals:  4,963<br>Cumulative: 15.8%","<b>1999<\/b><br>Arrivals:  5,148<br>Cumulative: 19.1%","<b>2000<\/b><br>Arrivals:  4,148<br>Cumulative: 21.8%","<b>2001<\/b><br>Arrivals:  4,074<br>Cumulative: 24.5%","<b>2002<\/b><br>Arrivals:  5,704<br>Cumulative: 28.1%","<b>2003<\/b><br>Arrivals:  4,667<br>Cumulative: 31.2%","<b>2004<\/b><br>Arrivals:  5,259<br>Cumulative: 34.6%","<b>2005<\/b><br>Arrivals:  5,296<br>Cumulative: 38.0%","<b>2006<\/b><br>Arrivals:  5,889<br>Cumulative: 41.8%","<b>2007<\/b><br>Arrivals:  5,074<br>Cumulative: 45.1%","<b>2008<\/b><br>Arrivals:  5,370<br>Cumulative: 48.6%","<b>2009<\/b><br>Arrivals:  4,259<br>Cumulative: 51.4%","<b>2010<\/b><br>Arrivals:  5,000<br>Cumulative: 54.6%","<b>2011<\/b><br>Arrivals:  5,556<br>Cumulative: 58.2%","<b>2012<\/b><br>Arrivals:  5,815<br>Cumulative: 62.0%","<b>2013<\/b><br>Arrivals:  9,000<br>Cumulative: 67.8%","<b>2014<\/b><br>Arrivals: 13,853<br>Cumulative: 76.8%","<b>2015<\/b><br>Arrivals: 10,741<br>Cumulative: 83.8%","<b>2016<\/b><br>Arrivals:  5,297<br>Cumulative: 87.2%","<b>2017<\/b><br>Arrivals:  4,148<br>Cumulative: 89.9%","<b>2018<\/b><br>Arrivals:  4,926<br>Cumulative: 93.1%","<b>2019<\/b><br>Arrivals:  4,704<br>Cumulative: 96.1%","<b>2020<\/b><br>Arrivals:  5,963<br>Cumulative: 100.0%"],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"textposition":["none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none"],"showlegend":false,"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[1952,1957,1962,1967,1972,1977,1982,1987,1992,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020],"y":[0.6653,2.6615,3.9922,12.642,22.6214,45.243,139.7217,304.7218,606.1238,858.945,1278.1129,1740.5011,2186.2745,2648.6895,3021.2774,3387.1896,3899.4732,4318.6342,4791.026,5266.7021,5795.6159,6251.3678,6733.7136,7116.2845,7565.3734,8064.3719,8586.6312,9394.9997,10639.244,11603.9992,12079.7321,12452.3058,12894.7439,13317.2264,13852.8456],"type":"scatter","mode":"lines","yaxis":"y2","line":{"color":"lightblue","width":2},"text":["<b>By 1952:<\/b><br>      7 arrivals<br>(0.0% of total)","<b>By 1957:<\/b><br>     30 arrivals<br>(0.0% of total)","<b>By 1962:<\/b><br>     44 arrivals<br>(0.0% of total)","<b>By 1967:<\/b><br>    141 arrivals<br>(0.1% of total)","<b>By 1972:<\/b><br>    252 arrivals<br>(0.2% of total)","<b>By 1977:<\/b><br>    504 arrivals<br>(0.3% of total)","<b>By 1982:<\/b><br>  1,556 arrivals<br>(1.0% of total)","<b>By 1987:<\/b><br>  3,393 arrivals<br>(2.2% of total)","<b>By 1992:<\/b><br>  6,748 arrivals<br>(4.4% of total)","<b>By 1995:<\/b><br>  9,563 arrivals<br>(6.2% of total)","<b>By 1996:<\/b><br> 14,230 arrivals<br>(9.2% of total)","<b>By 1997:<\/b><br> 19,378 arrivals<br>(12.6% of total)","<b>By 1998:<\/b><br> 24,341 arrivals<br>(15.8% of total)","<b>By 1999:<\/b><br> 29,489 arrivals<br>(19.1% of total)","<b>By 2000:<\/b><br> 33,638 arrivals<br>(21.8% of total)","<b>By 2001:<\/b><br> 37,711 arrivals<br>(24.5% of total)","<b>By 2002:<\/b><br> 43,415 arrivals<br>(28.1% of total)","<b>By 2003:<\/b><br> 48,082 arrivals<br>(31.2% of total)","<b>By 2004:<\/b><br> 53,341 arrivals<br>(34.6% of total)","<b>By 2005:<\/b><br> 58,637 arrivals<br>(38.0% of total)","<b>By 2006:<\/b><br> 64,526 arrivals<br>(41.8% of total)","<b>By 2007:<\/b><br> 69,600 arrivals<br>(45.1% of total)","<b>By 2008:<\/b><br> 74,970 arrivals<br>(48.6% of total)","<b>By 2009:<\/b><br> 79,229 arrivals<br>(51.4% of total)","<b>By 2010:<\/b><br> 84,229 arrivals<br>(54.6% of total)","<b>By 2011:<\/b><br> 89,785 arrivals<br>(58.2% of total)","<b>By 2012:<\/b><br> 95,600 arrivals<br>(62.0% of total)","<b>By 2013:<\/b><br>104,600 arrivals<br>(67.8% of total)","<b>By 2014:<\/b><br>118,452 arrivals<br>(76.8% of total)","<b>By 2015:<\/b><br>129,194 arrivals<br>(83.8% of total)","<b>By 2016:<\/b><br>134,490 arrivals<br>(87.2% of total)","<b>By 2017:<\/b><br>138,638 arrivals<br>(89.9% of total)","<b>By 2018:<\/b><br>143,564 arrivals<br>(93.1% of total)","<b>By 2019:<\/b><br>148,268 arrivals<br>(96.1% of total)","<b>By 2020:<\/b><br>154,231 arrivals<br>(100.0% of total)"],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"showlegend":false,"marker":{"color":"rgba(255,127,14,1)","line":{"color":"rgba(255,127,14,1)"}},"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","frame":null}],{"margin":{"b":50,"l":60,"t":55,"r":60},"title":{"text":"<b>Iranian Migration to Canada:<br>Arrivals and Cumulative Trends<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","tickfont":{"size":10},"dtick":5,"range":[1948,2022]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":","},"yaxis2":{"overlaying":"y","side":"right","showgrid":false,"range":[0,14545.4879],"tickvals":[0,3463,6926,10390,13853],"ticktext":["0%","25%","50%","75%","100%"],"tickfont":{"size":11}},"plot_bgcolor":"white","paper_bgcolor":"white","annotations":[{"text":"Note: Pre-1995 values show 5-year period arrivals, averaged per year.","x":0.5,"y":-0.15,"xref":"paper","yref":"paper","showarrow":false,"font":{"size":9,"color":"#888"},"xanchor":"center"}],"hovermode":"closest","showlegend":false,"font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}},c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a> — 2021 Canadian Census<br>Iran-born respondents only.<br>Pre-1995 immigration periods are grouped into multi-year bands.</p></div><div class="chart-card"><div class="tab-bar"><button class="tab-btn active" onclick="switchTab('cit-status',this,'cit-group')">Citizenship Status</button><button class="tab-btn" onclick="switchTab('cit-immtype',this,'cit-group')">Immigration Type</button></div><div id="cit-status" class="tab-panel active" data-group="cit-group"><div id="ca-cit" style="width:100%;height:400px;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true});Plotly.newPlot("ca-cit",[{"x":["Born in<br />Canada","Naturalized<br />citizen","Not a<br />citizen"],"y":[27555.8958,135372.204,61002.3815],"marker":{"color":["#1a4e72","#4a8c6f","#d4a943"],"line":{"color":"rgba(31,119,180,1)"}},"text":["<b>Canadian citizen by birth<\/b><br> 27,556 (12.3%)","<b>Canadian citizen by naturalization<\/b><br>135,372 (60.5%)","<b>Not a Canadian citizen<\/b><br> 61,002 (27.2%)"],"hoverinfo":["text","text","text"],"textposition":["none","none","none"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],{"margin":{"b":60,"l":60,"t":55,"r":10},"title":{"text":"<b>Citizenship Status:<br>All Iranian-Canadians<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","tickfont":{"size":10},"categoryorder":"array","categoryarray":["Naturalized<br />citizen","Born in<br />Canada","Not a<br />citizen"],"type":"category"},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":","},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}},c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a> — 2021 Canadian Census<br>Based on a 2.7% public-use sample of census records.<br>Estimates for small sub-groups may have limited reliability.</p></div><div id="cit-immtype" class="tab-panel" data-group="cit-group"><div id="ca-immtype" style="width:100%;height:400px;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true});Plotly.newPlot("ca-immtype",[{"x":["1990-1999","2000-2009","2010-2019","2020-2021"],"y":[64.4,65.7,73.5,58.9],"type":"bar","name":"Economic immigrants","marker":{"color":"#1a4e72","line":{"color":"rgba(31,119,180,1)"}},"textposition":["none","none","none","none"],"hovertext":["<b>Economic immigrants<\/b><br>1990-1999<br>64.4%","<b>Economic immigrants<\/b><br>2000-2009<br>65.7%","<b>Economic immigrants<\/b><br>2010-2019<br>73.5%","<b>Economic immigrants<\/b><br>2020-2021<br>58.9%"],"hoverinfo":["text","text","text","text"],"legendgroup":"Economic immigrants","showlegend":false,"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1990-1999","2000-2009","2010-2019","2020-2021"],"y":[11.1,17.7,16.4,19.2],"type":"bar","name":"Family-sponsored immigrants","marker":{"color":"#4a8c6f","line":{"color":"rgba(255,127,14,1)"}},"textposition":["none","none","none","none"],"hovertext":["<b>Family-sponsored immigrants<\/b><br>1990-1999<br>11.1%","<b>Family-sponsored immigrants<\/b><br>2000-2009<br>17.7%","<b>Family-sponsored immigrants<\/b><br>2010-2019<br>16.4%","<b>Family-sponsored immigrants<\/b><br>2020-2021<br>19.2%"],"hoverinfo":["text","text","text","text"],"legendgroup":"Family-sponsored immigrants","showlegend":false,"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1990-1999","2000-2009","2010-2019","2020-2021"],"y":[24.5,16.6,10.2,21.9],"type":"bar","name":"Refugees","marker":{"color":"#d4a943","line":{"color":"rgba(44,160,44,1)"}},"textposition":["none","none","none","none"],"hovertext":["<b>Refugees<\/b><br>1990-1999<br>24.5%","<b>Refugees<\/b><br>2000-2009<br>16.6%","<b>Refugees<\/b><br>2010-2019<br>10.2%","<b>Refugees<\/b><br>2020-2021<br>21.9%"],"hoverinfo":["text","text","text","text"],"legendgroup":"Refugees","showlegend":false,"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null}],{"margin":{"b":60,"l":60,"t":55,"r":10},"barmode":"stack","title":{"text":"<b>Immigration Type by Period:<br>Post-1990 Arrivals<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","tickfont":{"size":10},"categoryorder":"array","categoryarray":["1990-1999","2000-2009","2010-2019","2020-2021"],"type":"category"},"yaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%","range":[0,105]},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}},c);
+var el=document.getElementById("ca-immtype");
+function hlOn(lg){
+  el.data.forEach(function(t,i){
+    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
+  });
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
+}
+function hlOff(){
+  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
+}
+el.__hlOn=hlOn;el.__hlOff=hlOff;
+el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
+el.on("plotly_unhover",hlOff);})();</script>
+<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;"><span data-lg="Economic immigrants" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#1a4e72; border-radius:2px; display:inline-block;"></span> Economic immigrants</span><span data-lg="Family-sponsored immigrants" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#4a8c6f; border-radius:2px; display:inline-block;"></span> Family-sponsored immigrants</span><span data-lg="Refugees" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#d4a943; border-radius:2px; display:inline-block;"></span> Refugees</span></div>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a> — 2021 Canadian Census<br>Based on a 2.7% public-use sample of census records.<br>Estimates for small sub-groups may have limited reliability.</p></div></div></div>
+
+<script>
+function switchTab(tabId, btn, groupId) {
+  var panels = document.querySelectorAll(".tab-panel[data-group='" + groupId + "']");
+  panels.forEach(function(p) { p.classList.remove("active"); });
+  document.getElementById(tabId).classList.add("active");
+  var btns = btn.parentElement.querySelectorAll(".tab-btn");
+  btns.forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  // Resize any plotly charts in newly-visible tab
+  var active = document.getElementById(tabId);
+  active.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+</script>
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+</body>
+</html>

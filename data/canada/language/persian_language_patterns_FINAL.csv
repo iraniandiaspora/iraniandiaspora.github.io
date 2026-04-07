@@ -1,0 +1,12 @@
+generation,persian_status,count,percentage,reliability
+First generation,"Persian mother tongue, Persian home",116669.71631914363,59,Reliable
+First generation,"Persian mother tongue, English/French home",39222.58173013938,19.8,Reliable
+First generation,"Iranian minority mother tongue, same home",14407.783236756288,7.3,Reliable
+First generation,"Iranian minority mother tongue, English/French home",10703.900645166563,5.4,Reliable
+First generation,"English mother tongue, English home",9222.323323202838,4.7,Reliable
+First generation,Other languages,7407.564710890779,3.7,Reliable
+Second+ generation,"Persian mother tongue, Persian home",10333.601124997904,39.3,Reliable
+Second+ generation,"English mother tongue, English home",7444.6144862632855,28.3,Reliable
+Second+ generation,"Persian mother tongue, English/French home",6111.120370820122,23.2,Reliable
+Second+ generation,Other languages,1518.3573063317028,5.8,Use with caution
+Second+ generation,"Iranian minority mother tongue, various home",888.9181033588196,3.4,Use with extreme caution

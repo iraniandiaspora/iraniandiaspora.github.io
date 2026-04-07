@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bibliography</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:20px 40px; margin:0; }
+h2 { text-align:center; color:#1a4e72; margin:0 0 4px; font-size:20px; }
+.subtitle { text-align:center; color:#888; font-size:13px; margin-bottom:20px; }
+.tab-bar { display:flex; justify-content:center; gap:4px; margin-bottom:20px; }
+.tab-btn { padding:8px 20px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
+  font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; }
+.tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+select, input[type="text"] { font-family:"Montserrat",sans-serif; font-size:13px; padding:6px 10px;
+  border:1px solid #ccc; border-radius:4px; background:#fff; }
+select { width:300px; }
+input[type="text"] { width:300px; }
+.search-bar { display:flex; gap:8px; justify-content:center; margin-bottom:16px; align-items:center; }
+.search-btn { padding:6px 16px; background:#2774AE; color:white; border:none; border-radius:4px;
+  font-family:"Montserrat",sans-serif; font-size:13px; cursor:pointer; }
+.entry { text-align:justify; margin-left:24px; text-indent:-24px; margin-bottom:12px; font-size:13px; line-height:1.6; }
+.section-head { text-align:center; font-weight:600; color:#1a4e72; margin:20px 0 10px; font-size:15px; }
+.count { text-align:center; color:#888; font-size:12px; margin-bottom:12px; }
+</style>
+</head>
+<body>
+<h2>An International Bibliography of the Iranian Diaspora</h2>
+<p class="subtitle">Compiled by H.E. Chehabi and Amir Sayadabdi</p>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="showTab('loc',this)">By Location</button>
+  <button class="tab-btn" onclick="showTab('theme',this)">By Theme</button>
+  <button class="tab-btn" onclick="showTab('search',this)">Search</button>
+</div>
+
+<div id="tab-loc" class="tab-panel active">
+  <div style="text-align:center; margin-bottom:12px;">
+    <select id="loc-select" onchange="showLocation()"></select>
+  </div>
+  <div id="loc-content"></div>
+</div>
+
+<div id="tab-theme" class="tab-panel">
+  <div style="text-align:center; margin-bottom:12px;">
+    <select id="theme-select" onchange="showTheme()"></select>
+  </div>
+  <div id="theme-content"></div>
+</div>
+
+<div id="tab-search" class="tab-panel">
+  <div class="search-bar">
+    <input type="text" id="search-input" placeholder="Enter keyword" onkeyup="if(event.key==='Enter')doSearch()">
+    <button class="search-btn" onclick="doSearch()">Search</button>
+  </div>
+  <div id="search-content"></div>
+</div>
+
+<script>
+var bibData = null;
+
+fetch("data/bibliography.json").catch(function(err){
+  document.getElementById("loc-content").innerHTML = '<div class="section-head">Error loading bibliography data.</div>';
+}).then(function(r){return r.json();}).then(function(data) {
+  bibData = data;
+  var locSel = document.getElementById("loc-select");
+  Object.keys(data.entries).forEach(function(loc) {
+    var opt = document.createElement("option");
+    opt.value = loc; opt.textContent = loc;
+    locSel.appendChild(opt);
+  });
+  showLocation();
+  var thSel = document.getElementById("theme-select");
+  Object.keys(data.themes).forEach(function(th) {
+    var opt = document.createElement("option");
+    opt.value = th; opt.textContent = th;
+    thSel.appendChild(opt);
+  });
+  showTheme();
+});
+
+function showTab(id, btn) {
+  document.querySelectorAll(".tab-panel").forEach(function(p){p.classList.remove("active");});
+  document.getElementById("tab-"+id).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(function(b){b.classList.remove("active");});
+  btn.classList.add("active");
+  reportHeight();
+}
+
+function renderEntries(container, entries, heading) {
+  var html = "";
+  if (heading) html += '<div class="section-head">'+heading+'</div>';
+  html += '<div class="count">'+entries.length+' entries</div>';
+  entries.forEach(function(e){ html += '<div class="entry">'+e+'</div>'; });
+  container.innerHTML = html;
+  reportHeight();
+}
+
+function asArray(v) { return Array.isArray(v) ? v : [v]; }
+
+function showLocation() {
+  var loc = document.getElementById("loc-select").value;
+  if (bibData && bibData.entries[loc]) {
+    renderEntries(document.getElementById("loc-content"), asArray(bibData.entries[loc]), loc);
+  }
+}
+
+function showTheme() {
+  var th = document.getElementById("theme-select").value;
+  if (bibData && bibData.themes[th]) {
+    renderEntries(document.getElementById("theme-content"), asArray(bibData.themes[th]), th);
+  }
+}
+
+function doSearch() {
+  var kw = document.getElementById("search-input").value.toLowerCase().trim();
+  if (!kw) return;
+  if (!bibData) {
+    document.getElementById("search-content").innerHTML = '<div class="section-head">Bibliography data is still loading. Please try again.</div>';
+    return;
+  }
+  function stripTags(s) { return s.replace(/<[^>]*>/g, ""); }
+  var locResults = {};
+  Object.keys(bibData.entries).forEach(function(loc) {
+    var arr = asArray(bibData.entries[loc]);
+    var matches = arr.filter(function(e){ return stripTags(e).toLowerCase().indexOf(kw) >= 0 || loc.toLowerCase().indexOf(kw) >= 0; });
+    if (matches.length > 0) locResults[loc] = matches;
+  });
+  var thResults = {};
+  Object.keys(bibData.themes).forEach(function(th) {
+    var arr = asArray(bibData.themes[th]);
+    var matches = arr.filter(function(e){ return stripTags(e).toLowerCase().indexOf(kw) >= 0 || th.toLowerCase().indexOf(kw) >= 0; });
+    if (matches.length > 0) thResults[th] = matches;
+  });
+  var html = "";
+  var total = 0;
+  if (Object.keys(locResults).length > 0) {
+    html += '<div class="section-head">Results by Location</div>';
+    Object.keys(locResults).forEach(function(loc) {
+      html += '<div class="section-head" style="font-size:13px;">'+loc+' ('+locResults[loc].length+')</div>';
+      locResults[loc].forEach(function(e){ html += '<div class="entry">'+e+'</div>'; total++; });
+    });
+  }
+  if (Object.keys(thResults).length > 0) {
+    html += '<div class="section-head">Results by Theme</div>';
+    Object.keys(thResults).forEach(function(th) {
+      html += '<div class="section-head" style="font-size:13px;">'+th+' ('+thResults[th].length+')</div>';
+      thResults[th].forEach(function(e){ html += '<div class="entry">'+e+'</div>'; total++; });
+    });
+  }
+  if (total === 0) html = '<div class="section-head">No matches found.</div>';
+  else html = '<div class="count">'+total+' results for "'+kw+'"</div>' + html;
+  document.getElementById("search-content").innerHTML = html;
+  reportHeight();
+}
+
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type:"iframeHeight", height: document.body.scrollHeight + 40 }, "*");
+  }
+}
+new MutationObserver(reportHeight).observe(document.body, {childList:true, subtree:true});
+window.addEventListener("load", reportHeight);
+</script>
+</body>
+</html>

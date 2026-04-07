@@ -1,0 +1,55 @@
+age_cohort,gender_label,employment_category,count,percentage,generation
+25-34,Men,Private sector,7740.88938314964,50,First-Generation
+25-34,Men,Public sector,2777.7455115463063,17.9,First-Generation
+25-34,Men,Self-employed,2259.2864586004816,14.6,First-Generation
+25-34,Men,No work in last 5 years,2703.8720614968533,17.5,First-Generation
+25-34,Women,Private sector,7666.97114438472,47,First-Generation
+25-34,Women,Public sector,2814.806970870083,17.3,First-Generation
+25-34,Women,Self-employed,1148.1464239425543,7,First-Generation
+25-34,Women,No work in last 5 years,4666.7351533176725,28.6,First-Generation
+35-44,Men,Private sector,13667.067761006034,54.2,First-Generation
+35-44,Men,Public sector,2703.889330840243,10.7,First-Generation
+35-44,Men,Self-employed,5815.116443070497,23.1,First-Generation
+35-44,Men,No work in last 5 years,3037.1114937634825,12,First-Generation
+35-44,Women,Private sector,11852.301727109001,44.1,First-Generation
+35-44,Women,Public sector,4852.0278024611225,18.1,First-Generation
+35-44,Women,Self-employed,3000.0324649965182,11.2,First-Generation
+35-44,Women,No work in last 5 years,7148.5072359111655,26.6,First-Generation
+45-54,Men,Private sector,6518.45106466812,40.2,First-Generation
+45-54,Men,Public sector,1481.4180874927413,9.1,First-Generation
+45-54,Men,Self-employed,5703.760848137852,35.2,First-Generation
+45-54,Men,No work in last 5 years,2518.656896249487,15.5,First-Generation
+45-54,Women,Private sector,6296.45673047212,36.8,First-Generation
+45-54,Women,Public sector,4259.336082683204,24.9,First-Generation
+45-54,Women,Self-employed,2481.5086696703383,14.5,First-Generation
+45-54,Women,No work in last 5 years,4074.1779864515383,23.8,First-Generation
+55-64,Men,Private sector,5962.945269289436,36,First-Generation
+55-64,Men,Public sector,1333.3339392633468,8.1,First-Generation
+55-64,Men,Self-employed,5592.708221448707,33.8,First-Generation
+55-64,Men,No work in last 5 years,3666.7631902961816,22.1,First-Generation
+55-64,Women,Private sector,3296.340280352777,24.6,First-Generation
+55-64,Women,Public sector,2148.1597077292045,16,First-Generation
+55-64,Women,Self-employed,1999.9636378786138,14.9,First-Generation
+55-64,Women,No work in last 5 years,5962.863921038523,44.5,First-Generation
+65-74,Men,Private sector,1777.6983141163942,18,First-Generation
+65-74,Men,Public sector,185.1984088458357,1.9,First-Generation
+65-74,Men,Self-employed,2259.4366232987113,22.8,First-Generation
+65-74,Men,No work in last 5 years,5666.538944039719,57.3,First-Generation
+65-74,Women,Private sector,851.8598606228626,9.8,First-Generation
+65-74,Women,Public sector,444.46030650892646,5.1,First-Generation
+65-74,Women,Self-employed,555.5692470137898,6.4,First-Generation
+65-74,Women,No work in last 5 years,6814.822437685007,78.6,First-Generation
+75+,Men,Private sector,370.39835832202004,6.9,First-Generation
+75+,Men,Public sector,74.0879277106238,1.4,First-Generation
+75+,Men,Self-employed,296.29821116471186,5.5,First-Generation
+75+,Men,No work in last 5 years,4629.753447520775,86.2,First-Generation
+75+,Women,Public sector,74.0757082639394,1.7,First-Generation
+75+,Women,No work in last 5 years,4333.43320152562,98.3,First-Generation
+All adults 25+,Men,Private sector,1000.0452111230544,57.5,Second-Generation
+All adults 25+,Men,Public sector,148.1328198510927,8.5,Second-Generation
+All adults 25+,Men,Self-employed,259.2741171097751,14.9,Second-Generation
+All adults 25+,Men,No work in last 5 years,333.23100951456087,19.1,Second-Generation
+All adults 25+,Women,Private sector,555.5591397991183,51.7,Second-Generation
+All adults 25+,Women,Public sector,185.1846487688027,17.2,Second-Generation
+All adults 25+,Women,Self-employed,222.2362629778054,20.7,Second-Generation
+All adults 25+,Women,No work in last 5 years,111.1135623959091,10.3,Second-Generation
