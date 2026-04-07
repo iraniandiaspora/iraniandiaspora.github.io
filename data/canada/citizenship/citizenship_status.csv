@@ -1,0 +1,7 @@
+generation,status,n_unweighted,count,percentage,reliability
+First generation,Canadian citizen by birth,34,1259.284425231832,0.562355074485735,Reliable
+First generation,Canadian citizen by naturalization,3655,135372.20399913206,60.452781228684806,Reliable
+First generation,Not a Canadian citizen,1647,61002.381540937175,27.241660523948326,Reliable
+Second generation,Canadian citizen by birth,664,24592.856657549844,10.98236225301316,Reliable
+Third+ generation,Canadian citizen by birth,20,740.6703032292476,0.33075903679597635,Use with caution
+Unknown,Canadian citizen by birth,26,963.0844309926855,0.43008188307199674,Use with caution

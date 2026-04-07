@@ -1,0 +1,5 @@
+arrival_period,percentage_Economic immigrants,percentage_Refugees,percentage_Family-sponsored immigrants,n_unweighted_Economic immigrants,n_unweighted_Refugees,n_unweighted_Family-sponsored immigrants,reliability_Economic immigrants,reliability_Refugees,reliability_Family-sponsored immigrants
+1990-1999,64.4,24.5,11.1,376,143,65,Reliable,Reliable,Reliable
+2000-2009,65.7,16.6,17.7,825,209,222,Reliable,Reliable,Reliable
+2010-2019,73.5,10.2,16.4,1295,179,289,Reliable,Reliable,Reliable
+2020-2021,58.9,21.9,19.2,89,33,29,Reliable,Reliable,Use with caution

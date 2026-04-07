@@ -1,0 +1,16 @@
+generation,income_category,households,percentage,n_unweighted,reliability
+First,Decile 1,22223.092278545508,18.8,600,Reliable
+First,Decile 2,21704.867459385514,18.4,586,Reliable
+First,Decile 3,12593.241918213456,10.7,340,Reliable
+First,Decile 4,11037.560222705415,9.4,298,Reliable
+First,Decile 5,11185.352736729936,9.5,302,Reliable
+First,Decile 6,9074.223573504907,7.7,245,Reliable
+First,Decile 7,11370.568292701822,9.6,307,Reliable
+First,Decile 8,5407.304306690177,4.6,146,Reliable
+First,Decile 9,5518.2057593545915,4.7,149,Reliable
+First,Decile 10,7925.685785278549,6.7,214,Reliable
+Second,Bottom 20%,740.7437885679209,21.7,20,Use with caution
+Second,2nd Quintile,518.5418569894485,15.2,14,Use with caution
+Second,3rd Quintile,629.6394699541034,18.5,17,Use with caution
+Second,4th Quintile,777.7994530663049,22.8,21,Use with caution
+Second,Top 20%,740.7527120452008,21.7,20,Use with caution

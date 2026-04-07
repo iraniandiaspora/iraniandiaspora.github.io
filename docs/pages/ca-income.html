@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canada: Income</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-row-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
+.source a { color:#2774AE; }
+.footnote { font-size:12px; color:#888; text-align:center; margin:8px 0; font-style:italic; }
+@media (max-width:900px) {
+  body { padding:10px 15px; }
+  .text-row, .chart-row { grid-template-columns:1fr !important; }
+  .text-row-4 { grid-template-columns:1fr 1fr; }
+  .headline .number { font-size:28px; }
+  .headline { padding:20px 15px; }
+  .section-title { font-size:14px; }
+  .tab-bar { flex-wrap:wrap; gap:4px; }
+  .tab-btn { font-size:12px; padding:5px 10px; }
+}
+@media (max-width:480px) {
+  body { padding:8px 10px; }
+  .text-row-4 { grid-template-columns:1fr; }
+  .text-card { font-size:13px; padding:14px; }
+  .headline .number { font-size:24px; }
+  .chart-card { padding:10px; }
+}
+</style>
+
+</head>
+<body>
+<div class="text-row"><div class="text-card">The left chart ranks Iranian-Canadian households by pre-tax income against all Canadian households (ages 25&ndash;54). Each decile holds 10% of all Canadian households; values above 10% indicate overrepresentation in that income range.</div><div class="text-card">The right chart shows individual pre-tax income by age. The share earning CA$100,000 or more peaks at ages 35&ndash;54 and is lowest among the youngest and oldest age groups.</div></div><div class="chart-row"><div class="chart-card"><div id="ca-inc1" style="width:100%;height:500px;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true});Plotly.newPlot("ca-inc1",[{"x":["1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"],"y":[18.8,18.4,10.7,9.4,9.5,7.7,9.6,4.6,4.7,6.7],"mode":"markers+lines","marker":{"color":"#4A90D9","size":8,"line":{"color":"rgba(31,119,180,1)"}},"line":{"color":"#4A90D9","width":1},"text":["<b>Decile 1<\/b><br>Households: 22,223<br>18.8%","<b>Decile 2<\/b><br>Households: 21,705<br>18.4%","<b>Decile 3<\/b><br>Households: 12,593<br>10.7%","<b>Decile 4<\/b><br>Households: 11,038<br>9.4%","<b>Decile 5<\/b><br>Households: 11,185<br>9.5%","<b>Decile 6<\/b><br>Households:  9,074<br>7.7%","<b>Decile 7<\/b><br>Households: 11,371<br>9.6%","<b>Decile 8<\/b><br>Households:  5,407<br>4.6%","<b>Decile 9<\/b><br>Households:  5,518<br>4.7%","<b>Decile 10<\/b><br>Households:  7,926<br>6.7%"],"hoverinfo":["text","text","text","text","text","text","text","text","text","text"],"type":"scatter","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"fillcolor":"rgba(173,216,230,0.3)","x":["1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"],"y":[18.8,18.4,10.7,9.4,9.5,7.7,9.6,4.6,4.7,6.7],"mode":"none+markers+lines","marker":{"color":"#4A90D9","size":0,"opacity":0,"line":{"color":"rgba(255,127,14,1)"}},"line":{"color":"#4A90D9","width":1},"text":["<b>Decile 1<\/b><br>Households: 22,223<br>18.8%","<b>Decile 2<\/b><br>Households: 21,705<br>18.4%","<b>Decile 3<\/b><br>Households: 12,593<br>10.7%","<b>Decile 4<\/b><br>Households: 11,038<br>9.4%","<b>Decile 5<\/b><br>Households: 11,185<br>9.5%","<b>Decile 6<\/b><br>Households:  9,074<br>7.7%","<b>Decile 7<\/b><br>Households: 11,371<br>9.6%","<b>Decile 8<\/b><br>Households:  5,407<br>4.6%","<b>Decile 9<\/b><br>Households:  5,518<br>4.7%","<b>Decile 10<\/b><br>Households:  7,926<br>6.7%"],"hoverinfo":["skip","skip","skip","skip","skip","skip","skip","skip","skip","skip"],"type":"scatter","fill":"tozeroy","showlegend":false,"name":"rgba(173,216,230,0.3)","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":["1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"],"y":[10,10,10,10,10,10,10,10,10,10],"mode":"lines+markers","marker":{"color":"#4A90D9","size":0,"opacity":0,"line":{"color":"rgba(44,160,44,1)"}},"line":{"color":"#cc0000","width":1.5,"dash":"dot"},"text":["<b>Decile 1<\/b><br>Households: 22,223<br>18.8%","<b>Decile 2<\/b><br>Households: 21,705<br>18.4%","<b>Decile 3<\/b><br>Households: 12,593<br>10.7%","<b>Decile 4<\/b><br>Households: 11,038<br>9.4%","<b>Decile 5<\/b><br>Households: 11,185<br>9.5%","<b>Decile 6<\/b><br>Households:  9,074<br>7.7%","<b>Decile 7<\/b><br>Households: 11,371<br>9.6%","<b>Decile 8<\/b><br>Households:  5,407<br>4.6%","<b>Decile 9<\/b><br>Households:  5,518<br>4.7%","<b>Decile 10<\/b><br>Households:  7,926<br>6.7%"],"hoverinfo":["skip","skip","skip","skip","skip","skip","skip","skip","skip","skip"],"type":"scatter","showlegend":false,"error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null}],{"margin":{"b":50,"l":60,"t":60,"r":10},"title":{"text":"<b>Position in Canadian Household Income Distribution:<br>First Generation (Ages 25-54)<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"Income Decile (Lowest to Highest)","titlefont":{"size":11},"categoryorder":"array","categoryarray":["1st","2nd","3rd","4th","5th","6th","7th","8th","9th","10th"],"type":"category"},"yaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%","range":[0,21.8]},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","annotations":[{"text":"10% =<br>national<br>baseline","x":"8th","y":12,"showarrow":false,"font":{"size":8,"color":"#cc0000"},"xanchor":"center"},{"text":"18.8%","x":"1st","y":17.3,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"18.8%","x":"1st","y":17.3,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"18.4%","x":"2nd","y":16.9,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"18.4%","x":"2nd","y":16.9,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"10.7%","x":"3rd","y":7.7,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"10.7%","x":"3rd","y":7.7,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"9.4%","x":"4th","y":6.4,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"9.4%","x":"4th","y":6.4,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"9.5%","x":"5th","y":6.5,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"9.5%","x":"5th","y":6.5,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"7.7%","x":"6th","y":6.2,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"7.7%","x":"6th","y":6.2,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"9.6%","x":"7th","y":6.6,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"9.6%","x":"7th","y":6.6,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"4.6%","x":"8th","y":3.1,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"4.6%","x":"8th","y":3.1,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"4.7%","x":"9th","y":3.2,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"4.7%","x":"9th","y":3.2,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"6.7%","x":"10th","y":5.2,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}},{"text":"6.7%","x":"10th","y":5.2,"showarrow":false,"font":{"size":10,"color":"#4A90D9"}}],"hovermode":"closest","font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}},c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a> — 2021 Canadian Census<br>Ages 25–54 (prime working years). Each decile holds 10% of all Canadian households, ranked by pre-tax household income.<br>Smaller estimates should be interpreted with caution.</p></div><div class="chart-card"><div id="ca-inc-age" style="width:100%;height:400px;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true});Plotly.newPlot("ca-inc-age",[{"x":[24.8,15.6,20.5,29.6,33.3],"y":["25-34","35-44","45-54","55-64","65-74"],"type":"bar","name":"Under CA$20k","marker":{"color":"#d4e6f1","line":{"color":"rgba(31,119,180,1)"}},"textposition":["none","none","none","none","none"],"hovertext":["<b>Under CA$20k<\/b><br>Age 25-34<br>24.8%","<b>Under CA$20k<\/b><br>Age 35-44<br>15.6%","<b>Under CA$20k<\/b><br>Age 45-54<br>20.5%","<b>Under CA$20k<\/b><br>Age 55-64<br>29.6%","<b>Under CA$20k<\/b><br>Age 65-74<br>33.3%"],"hoverinfo":["text","text","text","text","text"],"legendgroup":"Under CA$20k","showlegend":false,"orientation":"h","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[34.5,29.8,28.5,31,37.2],"y":["25-34","35-44","45-54","55-64","65-74"],"type":"bar","name":"CA$20k-CA$40k","marker":{"color":"#8bbdde","line":{"color":"rgba(255,127,14,1)"}},"textposition":["none","none","none","none","none"],"hovertext":["<b>CA$20k-CA$40k<\/b><br>Age 25-34<br>34.5%","<b>CA$20k-CA$40k<\/b><br>Age 35-44<br>29.8%","<b>CA$20k-CA$40k<\/b><br>Age 45-54<br>28.5%","<b>CA$20k-CA$40k<\/b><br>Age 55-64<br>31.0%","<b>CA$20k-CA$40k<\/b><br>Age 65-74<br>37.2%"],"hoverinfo":["text","text","text","text","text"],"legendgroup":"CA$20k-CA$40k","showlegend":false,"orientation":"h","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[17.7,20.3,18.5,15,14.7],"y":["25-34","35-44","45-54","55-64","65-74"],"type":"bar","name":"CA$40k-CA$60k","marker":{"color":"#5a9bd5","line":{"color":"rgba(44,160,44,1)"}},"textposition":["none","none","none","none","none"],"hovertext":["<b>CA$40k-CA$60k<\/b><br>Age 25-34<br>17.7%","<b>CA$40k-CA$60k<\/b><br>Age 35-44<br>20.3%","<b>CA$40k-CA$60k<\/b><br>Age 45-54<br>18.5%","<b>CA$40k-CA$60k<\/b><br>Age 55-64<br>15.0%","<b>CA$40k-CA$60k<\/b><br>Age 65-74<br>14.7%"],"hoverinfo":["text","text","text","text","text"],"legendgroup":"CA$40k-CA$60k","showlegend":false,"orientation":"h","error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[16.3,19.7,17.2,15.4,8.4],"y":["25-34","35-44","45-54","55-64","65-74"],"type":"bar","name":"CA$60k-CA$100k","marker":{"color":"#2774AE","line":{"color":"rgba(214,39,40,1)"}},"textposition":["none","none","none","none","none"],"hovertext":["<b>CA$60k-CA$100k<\/b><br>Age 25-34<br>16.3%","<b>CA$60k-CA$100k<\/b><br>Age 35-44<br>19.7%","<b>CA$60k-CA$100k<\/b><br>Age 45-54<br>17.2%","<b>CA$60k-CA$100k<\/b><br>Age 55-64<br>15.4%","<b>CA$60k-CA$100k<\/b><br>Age 65-74<br>8.4%"],"hoverinfo":["text","text","text","text","text"],"legendgroup":"CA$60k-CA$100k","showlegend":false,"orientation":"h","error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[6.6,14.6,15.2,9,6.3],"y":["25-34","35-44","45-54","55-64","65-74"],"type":"bar","name":"CA$100k+","marker":{"color":"#1a4e72","line":{"color":"rgba(148,103,189,1)"}},"textposition":["none","none","none","none","none"],"hovertext":["<b>CA$100k+<\/b><br>Age 25-34<br>6.6%","<b>CA$100k+<\/b><br>Age 35-44<br>14.6%","<b>CA$100k+<\/b><br>Age 45-54<br>15.2%","<b>CA$100k+<\/b><br>Age 55-64<br>9.0%","<b>CA$100k+<\/b><br>Age 65-74<br>6.3%"],"hoverinfo":["text","text","text","text","text"],"legendgroup":"CA$100k+","showlegend":false,"orientation":"h","error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null}],{"margin":{"b":40,"l":60,"t":55,"r":10},"barmode":"stack","title":{"text":"<b>Personal Income by Age:<br>First-Generation Iranian-Canadians<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%","range":[0,105]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","categoryorder":"array","categoryarray":["65-74","55-64","45-54","35-44","25-34"],"type":"category"},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}},c);
+var el=document.getElementById("ca-inc-age");
+function hlOn(lg){
+  el.data.forEach(function(t,i){
+    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
+  });
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
+}
+function hlOff(){
+  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
+}
+el.__hlOn=hlOn;el.__hlOff=hlOff;
+el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
+el.on("plotly_unhover",hlOff);
+var _lastLg=null;
+el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});})();</script>
+<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;"><span data-lg="Under CA$20k" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#d4e6f1; border-radius:2px; display:inline-block;"></span> Under CA$20k</span><span data-lg="CA$20k-CA$40k" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#8bbdde; border-radius:2px; display:inline-block;"></span> CA$20k-CA$40k</span><span data-lg="CA$40k-CA$60k" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#5a9bd5; border-radius:2px; display:inline-block;"></span> CA$40k-CA$60k</span><span data-lg="CA$60k-CA$100k" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#2774AE; border-radius:2px; display:inline-block;"></span> CA$60k-CA$100k</span><span data-lg="CA$100k+" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#1a4e72; border-radius:2px; display:inline-block;"></span> CA$100k+</span></div>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a> — 2021 Canadian Census<br>First generation, ages 25–74. Pre-tax personal income. Smaller estimates should be interpreted with caution.</p></div></div>
+
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+</body>
+</html>

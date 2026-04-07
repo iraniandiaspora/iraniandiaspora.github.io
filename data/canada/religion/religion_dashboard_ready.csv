@@ -1,0 +1,11 @@
+generation,religion_category,n_raw,population,percentage,reliability,display_label
+First generation,Muslim,2601,96336,48.7,Reliable,Muslim (48.7%)
+First generation,No religion/Secular,2124,78668,39.8,Reliable,No religion/Secular (39.8%)
+First generation,Christian (all denominations),308,11408,5.8,Reliable,Christian (all denominations) (5.8%)
+First generation,"Other religions (incl. Jewish, Zoroastrian, Baha'i)",260,9630,4.9,Reliable,"Other religions (incl. Jewish, Zoroastrian, Baha'i) (4.9%)"
+First generation,All other/Not stated,43,1593,0.8,Use with caution,All other/Not stated (0.8%)
+Second+ generation,No religion/Secular,413,15297,58.2,Reliable,No religion/Secular (58.2%)
+Second+ generation,Muslim,222,8222,31.3,Reliable,Muslim (31.3%)
+Second+ generation,"Other religions (incl. Jewish, Zoroastrian, Baha'i)",42,1556,5.9,Use with caution,"Other religions (incl. Jewish, Zoroastrian, Baha'i) (5.9%)"
+Second+ generation,Christian (all denominations),32,1185,4.5,Use with caution,Christian (all denominations) (4.5%)
+Second+ generation,All other/Not stated,1,37,0.1,Suppress,All other/Not stated (0.1%)

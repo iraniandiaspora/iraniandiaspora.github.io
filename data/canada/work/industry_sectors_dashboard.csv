@@ -1,0 +1,68 @@
+age_cohort,gender_label,industry_category,count,percentage,n_unweighted,reliability,generation
+25-34,Men,Professional & Technical,4185.157980892589,32.2,113,Reliable,First-Generation
+25-34,Men,Health & Education,2851.8212198102456,21.9,77,Reliable,First-Generation
+25-34,Men,Trade & Services,2778.0171654421265,21.4,75,Reliable,First-Generation
+25-34,Men,Manufacturing & Construction,2740.7088614807785,21.1,74,Reliable,First-Generation
+25-34,Men,Public & Other,444.43687323238726,3.4,12,Use with caution,First-Generation
+25-34,Women,Professional & Technical,3592.686939886811,29.8,97,Reliable,First-Generation
+25-34,Women,Health & Education,3000.008460976616,24.9,81,Reliable,First-Generation
+25-34,Women,Trade & Services,3555.686066669763,29.5,96,Reliable,First-Generation
+25-34,Women,Manufacturing & Construction,1185.209288569557,9.8,32,Reliable,First-Generation
+25-34,Women,Public & Other,703.7577761018994,5.8,19,Use with caution,First-Generation
+35-44,Men,Professional & Technical,7185.341593150181,32,194,Reliable,First-Generation
+35-44,Men,Health & Education,2852.0345848467273,12.7,77,Reliable,First-Generation
+35-44,Men,Trade & Services,4444.712870919102,19.8,120,Reliable,First-Generation
+35-44,Men,Manufacturing & Construction,7185.447899626247,32,194,Reliable,First-Generation
+35-44,Men,Public & Other,814.8607770629592,3.6,22,Use with caution,First-Generation
+35-44,Women,Professional & Technical,5296.380106701749,25.3,143,Reliable,First-Generation
+35-44,Women,Health & Education,5259.37191883991,25.1,142,Reliable,First-Generation
+35-44,Women,Trade & Services,6259.530846045526,29.9,169,Reliable,First-Generation
+35-44,Women,Manufacturing & Construction,2185.276126096046,10.4,59,Reliable,First-Generation
+35-44,Women,Public & Other,1926.0908482143784,9.2,52,Reliable,First-Generation
+45-54,Men,Professional & Technical,3518.460113958113,24.9,95,Reliable,First-Generation
+45-54,Men,Health & Education,1888.8298610533618,13.4,51,Reliable,First-Generation
+45-54,Men,Trade & Services,3185.2373967732046,22.6,86,Reliable,First-Generation
+45-54,Men,Manufacturing & Construction,4740.716828860794,33.6,128,Reliable,First-Generation
+45-54,Men,Public & Other,777.793522924469,5.5,21,Use with caution,First-Generation
+45-54,Women,Professional & Technical,2740.8101327595346,20.2,74,Reliable,First-Generation
+45-54,Women,Health & Education,4555.650166156963,33.6,123,Reliable,First-Generation
+45-54,Women,Trade & Services,4111.1979075764975,30.3,111,Reliable,First-Generation
+45-54,Women,Manufacturing & Construction,1148.1469955442187,8.5,31,Reliable,First-Generation
+45-54,Women,Public & Other,1000.0206477162869,7.4,27,Use with caution,First-Generation
+55-64,Men,Professional & Technical,2518.5237712400367,18.7,68,Reliable,First-Generation
+55-64,Men,Health & Education,1555.5717428715006,11.6,42,Reliable,First-Generation
+55-64,Men,Trade & Services,3518.667853095415,26.2,95,Reliable,First-Generation
+55-64,Men,Manufacturing & Construction,4777.732052620502,35.5,129,Reliable,First-Generation
+55-64,Men,Public & Other,1074.0933992329278,8,29,Use with caution,First-Generation
+55-64,Women,Professional & Technical,1703.702482480975,22,46,Reliable,First-Generation
+55-64,Women,Health & Education,2222.1846001490376,28.7,60,Reliable,First-Generation
+55-64,Women,Trade & Services,2814.858961049612,36.4,76,Reliable,First-Generation
+55-64,Women,Manufacturing & Construction,518.5313928818201,6.7,14,Use with caution,First-Generation
+55-64,Women,Public & Other,481.4981606408962,6.2,13,Use with caution,First-Generation
+65-74,Men,Professional & Technical,999.9934667843268,22.7,27,Use with caution,First-Generation
+65-74,Men,Health & Education,296.3241906884292,6.7,8,Suppress,First-Generation
+65-74,Men,Trade & Services,1296.2622197376043,29.4,35,Reliable,First-Generation
+65-74,Men,Manufacturing & Construction,1518.639906654672,34.5,41,Reliable,First-Generation
+65-74,Men,Public & Other,296.31351187209344,6.7,8,Suppress,First-Generation
+65-74,Women,Professional & Technical,333.33298403598434,16.7,9,Suppress,First-Generation
+65-74,Women,Health & Education,481.49970127124476,24.1,13,Use with caution,First-Generation
+65-74,Women,Trade & Services,851.8705394391984,42.6,23,Use with caution,First-Generation
+65-74,Women,Manufacturing & Construction,111.11202176556051,5.6,3,Suppress,First-Generation
+65-74,Women,Public & Other,222.2362629778054,11.1,6,Suppress,First-Generation
+75+,Men,Professional & Technical,222.2362629778054,26.1,6,Suppress,First-Generation
+75+,Men,Health & Education,111.12578184259351,13,3,Suppress,First-Generation
+75+,Men,Trade & Services,259.2588164023935,30.4,7,Suppress,First-Generation
+75+,Men,Manufacturing & Construction,111.12578184259351,13,3,Suppress,First-Generation
+75+,Men,Public & Other,148.160554713866,17.4,4,Suppress,First-Generation
+75+,Women,Health & Education,74.0757082639394,66.7,2,Suppress,First-Generation
+75+,Women,Public & Other,37.0378541319697,33.3,1,Suppress,First-Generation
+Ages 25+,Men,Professional & Technical,518.5350457441816,35.9,14,Use with caution,Second-Generation
+Ages 25+,Men,Health & Education,222.2192069313679,15.4,6,Suppress,Second-Generation
+Ages 25+,Men,Trade & Services,407.4530537917199,28.2,11,Use with caution,Second-Generation
+Ages 25+,Men,Manufacturing & Construction,222.2069874846835,15.4,6,Suppress,Second-Generation
+Ages 25+,Men,Public & Other,74.0757082639394,5.1,2,Suppress,Second-Generation
+Ages 25+,Women,Professional & Technical,407.4224523769568,39.3,11,Use with caution,Second-Generation
+Ages 25+,Women,Health & Education,185.18618939915132,17.9,5,Suppress,Second-Generation
+Ages 25+,Women,Trade & Services,185.19994947618432,17.9,5,Suppress,Second-Generation
+Ages 25+,Women,Manufacturing & Construction,111.0988332901919,10.7,3,Suppress,Second-Generation
+Ages 25+,Women,Public & Other,148.1483352671816,14.3,4,Suppress,Second-Generation

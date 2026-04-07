@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Canada: Language & Religion</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-row-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
+.source a { color:#2774AE; }
+.footnote { font-size:12px; color:#888; text-align:center; margin:8px 0; font-style:italic; }
+@media (max-width:900px) {
+  body { padding:10px 15px; }
+  .text-row, .chart-row { grid-template-columns:1fr !important; }
+  .text-row-4 { grid-template-columns:1fr 1fr; }
+  .headline .number { font-size:28px; }
+  .headline { padding:20px 15px; }
+  .section-title { font-size:14px; }
+  .tab-bar { flex-wrap:wrap; gap:4px; }
+  .tab-btn { font-size:12px; padding:5px 10px; }
+}
+@media (max-width:480px) {
+  body { padding:8px 10px; }
+  .text-row-4 { grid-template-columns:1fr; }
+  .text-card { font-size:13px; padding:14px; }
+  .headline .number { font-size:24px; }
+  .chart-card { padding:10px; }
+}
+</style>
+
+</head>
+<body>
+<div class="text-row-4"><div class="text-card">59% of first-generation Iranian-Canadians report Persian as their primary home language, while 20% report English or French.</div><div class="text-card">Among second+ generation, 39% maintain Persian at home, while 28% report English as their primary household language.</div><div class="text-card">Nearly half (49%) of first-generation Iranian-Canadians identify as Muslim, while 40% report no religion or a secular identity.</div><div class="text-card">Among the second+ generation, 58% report no religion or a secular identity, and 31% identify as Muslim.</div></div><div class="chart-row"><div class="chart-card"><div id="lang" style="width:100%;height:300px;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true});Plotly.newPlot("lang",[{"x":[59.1,39.3],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Persian mother tongue, Persian home","marker":{"color":"#2d6a4f","line":{"color":"rgba(31,119,180,1)"}},"textposition":["none","none"],"hovertext":["<b>Persian mother tongue, Persian home<\/b><br>1st Generation<br>59.1%","<b>Persian mother tongue, Persian home<\/b><br>2nd+ Generation<br>39.3%"],"hoverinfo":["text","text"],"legendgroup":"Persian mother tongue, Persian home","showlegend":false,"orientation":"h","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[19.8,23.2],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Persian mother tongue, Eng/Fr home","marker":{"color":"#74a892","line":{"color":"rgba(255,127,14,1)"}},"textposition":["none","none"],"hovertext":["<b>Persian mother tongue, Eng/Fr home<\/b><br>1st Generation<br>19.8%","<b>Persian mother tongue, Eng/Fr home<\/b><br>2nd+ Generation<br>23.2%"],"hoverinfo":["text","text"],"legendgroup":"Persian mother tongue, Eng/Fr home","showlegend":false,"orientation":"h","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[7.3],"y":["1st Generation"],"type":"bar","name":"Minority mother tongue, same at home","marker":{"color":"#8b6c42","line":{"color":"rgba(44,160,44,1)"}},"textposition":"none","hovertext":"<b>Minority mother tongue, same at home<\/b><br>1st Generation<br>7.3%","hoverinfo":"text","legendgroup":"Minority mother tongue, same at home","showlegend":false,"orientation":"h","error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[5.4,3.4],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Minority mother tongue, Eng/Fr home","marker":{"color":"#c4a96a","line":{"color":"rgba(214,39,40,1)"}},"textposition":["none","none"],"hovertext":["<b>Minority mother tongue, Eng/Fr home<\/b><br>1st Generation<br>5.4%","<b>Minority mother tongue, Eng/Fr home<\/b><br>2nd+ Generation<br>3.4%"],"hoverinfo":["text","text"],"legendgroup":"Minority mother tongue, Eng/Fr home","showlegend":false,"orientation":"h","error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4.7,28.3],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"English mother tongue, English home","marker":{"color":"#6c757d","line":{"color":"rgba(148,103,189,1)"}},"textposition":["none","none"],"hovertext":["<b>English mother tongue, English home<\/b><br>1st Generation<br>4.7%","<b>English mother tongue, English home<\/b><br>2nd+ Generation<br>28.3%"],"hoverinfo":["text","text"],"legendgroup":"English mother tongue, English home","showlegend":false,"orientation":"h","error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[3.7,5.8],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Other languages","marker":{"color":"#b0b0b0","line":{"color":"rgba(140,86,75,1)"}},"textposition":["none","none"],"hovertext":["<b>Other languages<\/b><br>1st Generation<br>3.7%","<b>Other languages<\/b><br>2nd+ Generation<br>5.8%"],"hoverinfo":["text","text"],"legendgroup":"Other languages","showlegend":false,"orientation":"h","error_y":{"color":"rgba(140,86,75,1)"},"error_x":{"color":"rgba(140,86,75,1)"},"xaxis":"x","yaxis":"y","frame":null}],{"margin":{"b":40,"l":120,"t":55,"r":10},"barmode":"stack","hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}},"title":{"text":"<b>Language by Generation<\/b><br><span style='font-size:12px;font-weight:normal;color:#666;'>Mother tongue = first language learned; home = language spoken most often today<\/span>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%","range":[0,105]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","categoryorder":"array","categoryarray":["2nd+ Generation","1st Generation"],"ticklabelstandoff":6,"type":"category"},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Montserrat, sans-serif"}},c);
+var el=document.getElementById("lang");
+function hlOn(lg){
+  el.data.forEach(function(t,i){
+    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
+  });
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
+}
+function hlOff(){
+  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
+}
+el.__hlOn=hlOn;el.__hlOff=hlOff;
+el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
+el.on("plotly_unhover",hlOff);
+var _lastLg=null;
+el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});})();</script>
+<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;"><span data-lg="Persian mother tongue, Persian home" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#2d6a4f; border-radius:2px; display:inline-block;"></span> Persian mother tongue, Persian home</span><span data-lg="Persian mother tongue, Eng/Fr home" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#74a892; border-radius:2px; display:inline-block;"></span> Persian mother tongue, Eng/Fr home</span><span data-lg="Minority mother tongue, same at home" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#8b6c42; border-radius:2px; display:inline-block;"></span> Minority mother tongue, same at home</span><span data-lg="Minority mother tongue, Eng/Fr home" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#c4a96a; border-radius:2px; display:inline-block;"></span> Minority mother tongue, Eng/Fr home</span><span data-lg="English mother tongue, English home" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#6c757d; border-radius:2px; display:inline-block;"></span> English mother tongue, English home</span><span data-lg="Other languages" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#b0b0b0; border-radius:2px; display:inline-block;"></span> Other languages</span></div>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a> — 2021 Canadian Census<br>Based on a 2.7% public-use sample of census records.<br>Estimates for small sub-groups may have limited reliability.</p></div><div class="chart-card"><div id="relig" style="width:100%;height:300px;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true});Plotly.newPlot("relig",[{"x":[48.7,31.3],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Muslim","marker":{"color":"#1a4e72","line":{"color":"rgba(31,119,180,1)"}},"textposition":["none","none"],"hovertext":["<b>Muslim<\/b><br>1st Generation<br>48.7%","<b>Muslim<\/b><br>2nd+ Generation<br>31.3%"],"hoverinfo":["text","text"],"legendgroup":"Muslim","showlegend":false,"orientation":"h","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[39.8,58.2],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"No religion/Secular","marker":{"color":"#d4a943","line":{"color":"rgba(255,127,14,1)"}},"textposition":["none","none"],"hovertext":["<b>No religion/Secular<\/b><br>1st Generation<br>39.8%","<b>No religion/Secular<\/b><br>2nd+ Generation<br>58.2%"],"hoverinfo":["text","text"],"legendgroup":"No religion/Secular","showlegend":false,"orientation":"h","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[5.8,4.5],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Christian","marker":{"color":"#4a8c6f","line":{"color":"rgba(44,160,44,1)"}},"textposition":["none","none"],"hovertext":["<b>Christian<\/b><br>1st Generation<br>5.8%","<b>Christian<\/b><br>2nd+ Generation<br>4.5%"],"hoverinfo":["text","text"],"legendgroup":"Christian","showlegend":false,"orientation":"h","error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[4.9,5.9],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Other religions","marker":{"color":"#7b5ea7","line":{"color":"rgba(214,39,40,1)"}},"textposition":["none","none"],"hovertext":["<b>Other religions<\/b><br>1st Generation<br>4.9%","<b>Other religions<\/b><br>2nd+ Generation<br>5.9%"],"hoverinfo":["text","text"],"legendgroup":"Other religions","showlegend":false,"orientation":"h","error_y":{"color":"rgba(214,39,40,1)"},"error_x":{"color":"rgba(214,39,40,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[0.8,0.1],"y":["1st Generation","2nd+ Generation"],"type":"bar","name":"Not stated","marker":{"color":"#b0b0b0","line":{"color":"rgba(148,103,189,1)"}},"textposition":["none","none"],"hovertext":["<b>Not stated<\/b><br>1st Generation<br>0.8%","<b>Not stated<\/b><br>2nd+ Generation<br>0.1%"],"hoverinfo":["text","text"],"legendgroup":"Not stated","showlegend":false,"orientation":"h","error_y":{"color":"rgba(148,103,189,1)"},"error_x":{"color":"rgba(148,103,189,1)"},"xaxis":"x","yaxis":"y","frame":null}],{"margin":{"b":40,"l":120,"t":55,"r":10},"barmode":"stack","hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}},"title":{"text":"<b>Religious Identification<br>by Generation<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%","range":[0,105]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","categoryorder":"array","categoryarray":["2nd+ Generation","1st Generation"],"ticklabelstandoff":6,"type":"category"},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Montserrat, sans-serif"}},c);
+var el=document.getElementById("relig");
+function hlOn(lg){
+  el.data.forEach(function(t,i){
+    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
+  });
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
+}
+function hlOff(){
+  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
+}
+el.__hlOn=hlOn;el.__hlOff=hlOff;
+el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
+el.on("plotly_unhover",hlOff);
+var _lastLg=null;
+el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});})();</script>
+<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;"><span data-lg="Muslim" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#1a4e72; border-radius:2px; display:inline-block;"></span> Muslim</span><span data-lg="No religion/Secular" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#d4a943; border-radius:2px; display:inline-block;"></span> No religion/Secular</span><span data-lg="Christian" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#4a8c6f; border-radius:2px; display:inline-block;"></span> Christian</span><span data-lg="Other religions" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#7b5ea7; border-radius:2px; display:inline-block;"></span> Other religions</span><span data-lg="Not stated" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#b0b0b0; border-radius:2px; display:inline-block;"></span> Not stated</span></div>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a> — 2021 Canadian Census<br>Based on a 2.7% public-use sample of census records.<br>Estimates for small sub-groups may have limited reliability.</p></div></div>
+
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+</body>
+</html>
