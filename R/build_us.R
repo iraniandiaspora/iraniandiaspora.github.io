@@ -37,8 +37,8 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true});Plotly.newPlot("%s",%s,%s,c);',
-    json$config, id, json$data, json$layout)
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:window.innerWidth>=900});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+    json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
 var el=document.getElementById("%s");
@@ -60,7 +60,7 @@ el.on("plotly_unhover",hlOff);
 var _lastLg=null;
 el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});', id))
   }
-  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;"></div>\n<script>(function(){%s})();</script>',
+  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
   if (!is.null(legend_html)) {
     chart <- paste0(chart, '\n', legend_html)
@@ -161,17 +161,27 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
+.page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.page-content .chart-card { margin-bottom:0; }
+.pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
+.pc1 { grid-area:2/1; } .pc2 { grid-area:2/2; }
 @media (max-width:900px) {
-  body { padding:10px 15px; }
+  body { padding:10px 15px; display:flex; flex-direction:column; }
   .text-row, .chart-row { grid-template-columns:1fr !important; }
   .text-row-4 { grid-template-columns:1fr 1fr; }
+  .text-row, .text-row-4 { order:1; } /* push text below charts on mobile */
+  .page-content { grid-template-columns:1fr; }
+  .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
+  .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
   .headline .number { font-size:28px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
 }
+@media (max-width:600px) {
+  .text-row-4 { grid-template-columns:1fr !important; }
+}
 @media (max-width:480px) {
   body { padding:8px 10px; }
-  .text-row-4 { grid-template-columns:1fr; }
   .text-card { font-size:13px; padding:14px; }
   .headline .number { font-size:24px; }
   .chart-card { padding:10px; }
@@ -186,7 +196,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 }
 
 # =====================================================
-# US IMMIGRATION
+# US IMMIGRATION & CITIZENSHIP (ACS data — original page)
 # =====================================================
 cat("Building us-immigration...\n")
 
@@ -246,15 +256,132 @@ p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
   ) %>% config(displayModeBar = FALSE)
 
 writeLines(page_template("Immigration & Citizenship", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">Multiple waves of migration have added to the Iranian-American population, with over 50 percent arriving after 1994.</div>',
-  '<div class="text-card">Most Iranian-Americans are either naturalized citizens or born in the US.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">', plotly_div("immig", plotly_to_json(p_immig), source = SRC_IMMIG), '</div>',
-  '<div class="chart-card">', plotly_div("citizen", plotly_to_json(p_citizen), source = SRC_CITIZEN), '</div>',
+  '<div class="page-content">',
+  '<div class="text-card pt1">Multiple waves of migration have added to the Iranian-American population, with over 50 percent arriving after 1994.</div>',
+  '<div class="text-card pt2">Most Iranian-Americans are either naturalized citizens or born in the US.</div>',
+  '<div class="chart-card pc1">', plotly_div("immig", plotly_to_json(p_immig), source = SRC_IMMIG), '</div>',
+  '<div class="chart-card pc2">', plotly_div("citizen", plotly_to_json(p_citizen), source = SRC_CITIZEN), '</div>',
   '</div>'
 )), "docs/pages/us-immigration.html")
+cat("  Done\n")
+
+
+# =====================================================
+# US ADMISSIONS HISTORY (INS/DHS official records, 1978-2023)
+# =====================================================
+cat("Building us-admissions...\n")
+
+# Official admissions from INS/DHS yearbooks (46 years)
+lpr <- readRDS(file.path(DATA_DIR, "iran_lpr_dashboard_1978_2023.rds"))
+lpr[is.na(lpr)] <- 0
+
+SRC_LPR <- "Source: INS Statistical Yearbooks (1978\u20132004); DHS Yearbook of Immigration Statistics (2005\u20132023)"
+
+# --- Chart 1: Total admissions line chart (1978-2023) ---
+lpr$hover_total <- sprintf("<b>%d</b><br>Granted: %s",
+  lpr$year, format(lpr$total, big.mark = ","))
+
+p_lpr_total <- plot_ly(data = lpr, x = ~year, y = ~total,
+    type = "scatter", mode = "lines+markers",
+    line = list(color = "#1a4e72", width = 2),
+    marker = list(color = "#1a4e72", size = 3),
+    text = ~hover_total, hoverinfo = "text", showlegend = FALSE) %>%
+  layout(
+    title = list(text = "<b>Iranians Granted<br>Permanent Resident Status,<br>1978\u20132023</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", dtick = 5, range = c(1976.5, 2024.5),
+      tickfont = list(size = 11)),
+    yaxis = list(title = "", tickformat = ",", rangemode = "tozero",
+      tickfont = list(size = 11)),
+    margin = list(t = 75, b = 40),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+# --- Chart 2: Stacked bar by category (full period 1978-2023) ---
+# Stacked bars instead of stacked area for reliable hover behavior.
+# Pre-1992: employment is 0 (included in family), diversity is 0
+# Post-1992: all 5 categories separated
+lpr_cat <- lpr
+
+# Stack order: Family, Employment (light blue, adjacent to family),
+# Refugee/Asylee, Diversity, Other.
+# Employment is light blue so readers can see that pre-1992 family
+# (which included employment) visually matches family + employment post-1992.
+cat_names  <- c("Family", "Employment", "Refugee/Asylee", "Diversity", "Other")
+cat_cols   <- c("family", "employment", "refugee_asylee", "diversity", "other")
+cat_colors <- c("Family" = "#2774AE", "Employment" = "#8bbdde",
+                "Refugee/Asylee" = "#c0504d", "Diversity" = "#d4a943",
+                "Other" = "#999999")
+cat_defs   <- c("Family" = "immediate relatives and family preferences",
+                "Employment" = "work-based visas",
+                "Refugee/Asylee" = "refugees and asylum recipients",
+                "Diversity" = "visa lottery program",
+                "Other" = "special immigrants and other categories")
+
+# Compute cumulative bases so we can add traces in REVERSE order
+# (for tooltip: Other at top, Family at bottom) while keeping the
+# visual stack in FORWARD order (Family at bottom, Other at top).
+base_family   <- rep(0, nrow(lpr_cat))
+base_employ   <- lpr_cat$family
+base_refugee  <- lpr_cat$family + lpr_cat$employment
+base_divers   <- lpr_cat$family + lpr_cat$employment + lpr_cat$refugee_asylee
+base_other    <- lpr_cat$family + lpr_cat$employment + lpr_cat$refugee_asylee + lpr_cat$diversity
+cat_bases <- list(family = base_family, employment = base_employ,
+                  refugee_asylee = base_refugee, diversity = base_divers,
+                  other = base_other)
+
+p_lpr_cat <- plot_ly()
+for (i in rev(seq_along(cat_names))) {
+  vals <- lpr_cat[[cat_cols[i]]]
+  pre92 <- lpr_cat$year < 1992
+  hover <- ifelse(pre92 & cat_cols[i] == "family",
+    sprintf("<b>%s</b> (incl. employment): %s",
+      cat_names[i], format(vals, big.mark = ",")),
+    sprintf("<b>%s</b>: %s",
+      cat_names[i], format(vals, big.mark = ",")))
+  p_lpr_cat <- p_lpr_cat %>%
+    add_bars(x = lpr_cat$year, y = vals,
+      base = cat_bases[[cat_cols[i]]],
+      marker = list(color = cat_colors[cat_names[i]],
+                    line = list(width = 0)),
+      name = cat_names[i],
+      legendgroup = cat_names[i],
+      showlegend = FALSE,
+      text = hover, hovertemplate = "%{text}<extra></extra>",
+      textposition = "none")
+}
+p_lpr_cat <- p_lpr_cat %>%
+  layout(
+    barmode = "overlay",
+    hovermode = "x unified",
+    title = list(text = "<b>Iranian Permanent Residence Grants<br>by Category, 1978\u20132023</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", dtick = 5, range = c(1976.5, 2024.5),
+      tickfont = list(size = 11)),
+    yaxis = list(title = "", tickformat = ",", rangemode = "tozero",
+      tickfont = list(size = 11)),
+    annotations = list(
+      list(x = 0.5, y = -0.12, xref = "paper", yref = "paper",
+           text = "Pre-1992: family includes employment preferences (not separately reported)",
+           showarrow = FALSE, font = list(size = 9, color = "#888"),
+           xanchor = "center")
+    ),
+    margin = list(t = 55, b = 55),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+cat_leg <- make_html_legend(cat_colors)
+
+writeLines(page_template("US: Immigration History", paste0(
+  '<div class="page-content">',
+  '<div class="text-card pt1">Between 1978 and 2023, over 562,000 Iranians received permanent resident status\u2014the right to live and work indefinitely in the United States. This annual count includes both people arriving from abroad and people already in the country who changed from a temporary visa (such as a student or refugee visa) to permanent status. The current Iran-born population is smaller because these figures span over four decades and include people who have since died or left the country.</div>',
+  '<div class="text-card pt2">U.S. permanent residence is granted through several pathways: family (sponsored by a relative who is a U.S. citizen or permanent resident), employment (sponsored by a U.S. employer), refugee/asylee (granted protection from persecution), and diversity (a lottery for countries with low U.S. immigration rates). Family has been the largest category throughout this period, declining from over 70% to about 50% after 1992, while work-based grants rose from under 10% to 29%. The spike in 1989\u20131991 reflects a 1986 U.S. law that allowed long-term undocumented residents to obtain permanent status.</div>',
+  '<div class="chart-card pc1">', plotly_div("lpr-total", plotly_to_json(p_lpr_total), "450px", source = SRC_LPR), '</div>',
+  '<div class="chart-card pc2">', plotly_div("lpr-cat", plotly_to_json(p_lpr_cat), "450px", source = SRC_LPR, legend_html = cat_leg, highlight_hover = TRUE),
+  '<script>(function(){var el=document.getElementById("lpr-cat");if(el){el.removeAllListeners("plotly_hover");el.removeAllListeners("plotly_unhover");el.removeAllListeners("plotly_click");}})();</script>',
+  '</div>',
+  '</div>'
+)), "docs/pages/us-admissions.html")
 cat("  Done\n")
 
 
@@ -335,12 +462,12 @@ make_butterfly_educ <- function(df_raw, gen_label, age_collapse = FALSE, height 
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
       annotations = list(
-        list(text = "Men", x = 0.22, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Men", x = 0.22, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555")),
-        list(text = "Women", x = 0.78, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Women", x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 30, b = 40),
+      margin = list(l = 60, r = 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -358,16 +485,14 @@ e1 <- new.env(); load(file.path(DATA_DIR, "gen_1_wide.Rda"), envir = e1)
 e2 <- new.env(); load(file.path(DATA_DIR, "gen_2_wide.Rda"), envir = e2)
 
 writeLines(page_template("Education", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">While first-generation, older Iranian-Americans experienced a pronounced gender gap in education, this disparity has reversed among younger first-generation Iranian-Americans, where women now exceed men in educational attainment.</div>',
-  '<div class="text-card">Today, second-generation Iranian-American women are more likely than their male counterparts to hold a bachelor&rsquo;s degree or higher.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">',
+  '<div class="page-content">',
+  '<div class="text-card pt1">While first-generation, older Iranian-Americans experienced a pronounced gender gap in education, this disparity has reversed among younger first-generation Iranian-Americans, where women now exceed men in educational attainment.</div>',
+  '<div class="text-card pt2">Today, second-generation Iranian-American women are more likely than their male counterparts to hold a bachelor&rsquo;s degree or higher.</div>',
+  '<div class="chart-card pc1">',
   '<div class="section-title">Educational Attainment by Age and Gender: First Generation</div>',
   make_butterfly_educ(e1$gen_1_wide, "1st Generation", FALSE, "500px", "ed1"),
   '</div>',
-  '<div class="chart-card">',
+  '<div class="chart-card pc2">',
   '<div class="section-title">Educational Attainment by Age and Gender: Second Generation</div>',
   make_butterfly_educ(e2$gen_2_wide, "2nd Generation", TRUE, "500px", "ed2"),
   '</div>',
@@ -447,12 +572,12 @@ make_butterfly_work <- function(df, gen_val, gen_label, age_collapse = FALSE, he
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
       annotations = list(
-        list(text = "Men", x = 0.22, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Men", x = 0.22, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555")),
-        list(text = "Women", x = 0.78, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Women", x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 30, b = 40),
+      margin = list(l = 60, r = 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -469,16 +594,14 @@ cat("Building us-work...\n")
 ec <- new.env(); load(file.path(DATA_DIR, "class.Rda"), envir = ec)
 
 writeLines(page_template("Work", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">Iranian-Americans are most commonly employed in the private sector, regardless of gender, though men have higher rates of self-employment while women work more in non-profits.</div>',
-  '<div class="text-card">First-generation Iranian-Americans show stronger age-related employment differences than the second generation.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">',
+  '<div class="page-content">',
+  '<div class="text-card pt1">Iranian-Americans are most commonly employed in the private sector, regardless of gender, though men have higher rates of self-employment while women work more in non-profits.</div>',
+  '<div class="text-card pt2">First-generation Iranian-Americans show stronger age-related employment differences than the second generation.</div>',
+  '<div class="chart-card pc1">',
   '<div class="section-title">Employment by Age and Gender: First Generation</div>',
   make_butterfly_work(ec$class, "1st gen", "1st Generation", FALSE, "500px", "wk1"),
   '</div>',
-  '<div class="chart-card">',
+  '<div class="chart-card pc2">',
   '<div class="section-title">Employment by Age and Gender: Second Generation</div>',
   make_butterfly_work(ec$class, "2nd gen", "2nd Generation", TRUE, "500px", "wk2"),
   '</div>',
@@ -580,12 +703,12 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
       annotations = list(
-        list(text = "Men", x = 0.22, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Men", x = 0.22, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555")),
-        list(text = "Women", x = 0.78, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Women", x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 30, b = 40),
+      margin = list(l = 60, r = 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -594,16 +717,14 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
 }
 
 writeLines(page_template("Marriage", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">Among the roughly 286,000 Iranian-Americans in marriages or domestic partnerships, about 64% have partners of Iranian origin.</div>',
-  '<div class="text-card">Marriage patterns differ sharply by generation. First-generation individuals have Iranian partners at rates of roughly 70&ndash;77% across all age groups. Among second-generation Iranian-Americans, about half to 60% have White non-Hispanic partners, with higher rates among younger cohorts. Second-generation outmarriage rates are <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE;">comparable to those of other second-generation Asian Americans</a>.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">',
+  '<div class="page-content">',
+  '<div class="text-card pt1">Among the roughly 286,000 Iranian-Americans in marriages or domestic partnerships, about 64% have partners of Iranian origin.</div>',
+  '<div class="text-card pt2">Marriage patterns differ sharply by generation. First-generation individuals have Iranian partners at rates of roughly 70&ndash;77% across all age groups. Among second-generation Iranian-Americans, about half to 60% have White non-Hispanic partners, with higher rates among younger cohorts. Second-generation outmarriage rates are <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE;">comparable to those of other second-generation Asian Americans</a>.</div>',
+  '<div class="chart-card pc1">',
   '<div class="section-title">Ethnicity of Spouse/Partner: First Generation</div>',
   make_butterfly_marriage(sp, "1st gen", "1st Generation", FALSE, "500px", "mar1"),
   '</div>',
-  '<div class="chart-card">',
+  '<div class="chart-card pc2">',
   '<div class="section-title">Ethnicity of Spouse/Partner: Second Generation</div>',
   make_butterfly_marriage(sp, "2nd gen", "2nd Generation", TRUE, "500px", "mar2"),
   '</div>',
@@ -659,13 +780,13 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
       marker = list(size = 0, opacity = 0),
       hoverinfo = "skip", showlegend = FALSE) %>%
     layout(
-      title = list(text = sprintf("<b>Position in U.S. Household Income Distribution:<br>%s (Ages 25-54)</b>", gen_label),
-        font = list(size = 16, family = "Montserrat")),
+      title = list(text = sprintf("<b>Position in U.S.<br>Household Income Distribution:<br>%s (Ages 25-54)</b>", gen_label),
+        font = list(size = 15, family = "Montserrat")),
       xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
         categoryorder = "array", categoryarray = decile_labels),
       yaxis = list(title = "", ticksuffix = "%", range = c(0, max(d$share) + 3)),
       showlegend = FALSE,
-      margin = list(t = 60, b = 70),
+      margin = list(t = 75, b = 70),
       plot_bgcolor = "white", paper_bgcolor = "white",
       annotations = list(
         list(text = "10% =<br>national<br>baseline", x = decile_labels[5], y = 13,
@@ -690,13 +811,11 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
 }
 
 writeLines(page_template("Income", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">First-generation Iranian-Americans (ages 25&ndash;54) are concentrated in the upper income deciles, with 21% in the top decile&mdash;more than double the national baseline of 10%.</div>',
-  '<div class="text-card">Second-generation Iranian-Americans (ages 25&ndash;54) are even more concentrated at the top, with 25% in the highest income decile and only 6% in the lowest.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">', make_income_chart(inc, "1st gen", "First Generation", "inc1"), '</div>',
-  '<div class="chart-card">', make_income_chart(inc, "2nd gen", "Second Generation", "inc2"), '</div>',
+  '<div class="page-content">',
+  '<div class="text-card pt1">First-generation Iranian-Americans (ages 25&ndash;54) are concentrated in the upper income deciles, with 21% in the top decile&mdash;more than double the national baseline of 10%.</div>',
+  '<div class="text-card pt2">Second-generation Iranian-Americans (ages 25&ndash;54) are even more concentrated at the top, with 25% in the highest income decile and only 6% in the lowest.</div>',
+  '<div class="chart-card pc1">', make_income_chart(inc, "1st gen", "First Generation", "inc1"), '</div>',
+  '<div class="chart-card pc2">', make_income_chart(inc, "2nd gen", "Second Generation", "inc2"), '</div>',
   '</div>'
 )), "docs/pages/us-income.html")
 cat("  Done\n")
@@ -734,9 +853,9 @@ p_waterfall <- plot_ly() %>%
       wf$hover_label, format(weighted_n, big.mark = ","), pct, format(cumulative, big.mark = ",")),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>How We Count: Building the Population Estimate</b>",
+    title = list(text = "<b>How We Count:<br>Building the Population Estimate</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 10),
+    xaxis = list(title = "", tickfont = list(size = 10), tickangle = 0,
       categoryorder = "array",
       categoryarray = wf$short_label),
     yaxis = list(title = "", tickformat = ","),
@@ -841,7 +960,7 @@ pop_page <- paste0('<!DOCTYPE html>
 <script src="https://unpkg.com/pmtiles@3.2.1/dist/pmtiles.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; }
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
 .text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .text-card { background:white; border-radius:8px; padding:20px; text-align:center;
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
@@ -851,9 +970,10 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
 @media (max-width:900px) {
-  body { padding:10px 15px; }
+  body { padding:10px 15px; display:flex; flex-direction:column; }
   .text-row, .chart-row { grid-template-columns:1fr !important; }
   .text-row-4 { grid-template-columns:1fr 1fr; }
+  .text-row, .text-row-4 { order:1; }
   .headline .number { font-size:28px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
@@ -861,9 +981,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .tab-btn { font-size:12px; padding:5px 10px; }
   .map-legend { font-size:10px; padding:6px 8px; }
 }
+@media (max-width:600px) {
+  .text-row-4 { grid-template-columns:1fr !important; }
+}
 @media (max-width:480px) {
   body { padding:8px 10px; }
-  .text-row-4 { grid-template-columns:1fr; }
   .text-card { font-size:13px; padding:14px; }
   .headline .number { font-size:24px; }
   .chart-card { padding:10px; }
@@ -907,7 +1029,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
     </ul>
   </div>
 </div>
-<div class="chart-card">', plotly_div("waterfall", plotly_to_json(p_waterfall), "400px", source = SRC_POP_1YR), '</div>
+<div class="chart-card">', plotly_div("waterfall", plotly_to_json(p_waterfall), "400px", source = SRC_POP_1YR),
+'<script>if(window.innerWidth<900){setTimeout(function(){var el=document.getElementById("waterfall");if(el&&window.Plotly)Plotly.relayout(el,{"xaxis.tickangle":-45,"margin.b":130});},400);}</script>',
+'</div>
 </div>
 
 <!-- Bottom row: region bar + map -->
@@ -971,7 +1095,7 @@ const stateMap = new maplibregl.Map({
   container: "state-map",
   style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
   center: [-98.5, 39.8],
-  zoom: 2.9,
+  zoom: window.innerWidth < 600 ? 2.1 : 2.8,
   minZoom: 2,
   maxZoom: 7,
   attributionControl: false,

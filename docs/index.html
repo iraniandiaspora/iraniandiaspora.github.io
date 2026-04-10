@@ -4,7 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Iranian Diaspora Dashboard</title>
-  <meta name="description" content="Comparative analysis of Iranian diaspora populations in Canada and the United States using census microdata.">
+  <meta name="description" content="Interactive data on Iranian immigrant and diaspora populations worldwide.">
+  <meta property="og:title" content="Iranian Diaspora Dashboard">
+  <meta property="og:description" content="Interactive data on Iranian immigrant and diaspora populations worldwide.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://iraniandiaspora.github.io/">
+  <meta name="twitter:card" content="summary">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -19,6 +24,7 @@
       <button class="tab-button" onclick="showTab('global', this)">Global</button>
       <button class="tab-button" onclick="showTab('united-states', this)">United States</button>
       <button class="tab-button" onclick="showTab('canada', this)">Canada</button>
+      <button class="tab-button" onclick="showTab('australia', this)">Australia</button>
       <button class="tab-button" onclick="showTab('europe', this)">Europe</button>
       <button class="tab-button" onclick="showTab('bibliography', this)">Bibliography</button>
       <button class="tab-button" onclick="showTab('about', this)">About</button>
@@ -30,6 +36,7 @@
     <div class="submenu-wrapper">
       <button class="sub-tab" data-tab="us-population" onclick="showSubTab('us-population', this)">Defining the Population</button>
       <button class="sub-tab" data-tab="us-immigration" onclick="showSubTab('us-immigration', this)">Immigration &amp; Citizenship</button>
+      <button class="sub-tab" data-tab="us-admissions" onclick="showSubTab('us-admissions', this)">Immigration History</button>
       <button class="sub-tab" data-tab="us-marriage" onclick="showSubTab('us-marriage', this)">Marriage</button>
       <button class="sub-tab" data-tab="us-education" onclick="showSubTab('us-education', this)">Education</button>
       <button class="sub-tab" data-tab="us-work" onclick="showSubTab('us-work', this)">Work</button>
@@ -48,6 +55,14 @@
       <button class="sub-tab" data-tab="ca-income" onclick="showSubTab('ca-income', this)">Income</button>
     </div>
   </div>
+
+  <!-- Australia Submenu -->
+  <div id="australia-submenu" class="submenu">
+    <div class="submenu-wrapper">
+      <button class="sub-tab" data-tab="au-population" onclick="showSubTab('au-population', this)">Population</button>
+      <button class="sub-tab" data-tab="au-immigration" onclick="showSubTab('au-immigration', this)">Immigration</button>
+    </div>
+  </div>
 </div>
 
 <!-- Global -->
@@ -61,6 +76,9 @@
 </div>
 <div id="us-immigration" class="tab-content">
   <iframe src="pages/us-immigration.html" title="US Immigration"></iframe>
+</div>
+<div id="us-admissions" class="tab-content">
+  <iframe src="pages/us-admissions.html" title="US Immigration History"></iframe>
 </div>
 <div id="us-marriage" class="tab-content">
   <iframe src="pages/us-marriage.html" title="US Marriage"></iframe>
@@ -95,6 +113,14 @@
   <iframe src="pages/ca-income.html" title="Canada Income"></iframe>
 </div>
 
+<!-- Australia Pages -->
+<div id="au-population" class="tab-content">
+  <iframe src="pages/au-population.html" title="Australia Population"></iframe>
+</div>
+<div id="au-immigration" class="tab-content">
+  <iframe src="pages/au-immigration.html" title="Australia Immigration"></iframe>
+</div>
+
 <!-- Europe -->
 <div id="europe" class="tab-content">
   <div class="placeholder"><h2>Coming Soon</h2><p>This section is under construction.</p></div>
@@ -123,8 +149,10 @@
       <ul style="margin:0 0 0 16px; line-height:1.8;">
         <li>Updated all U.S. data to the <strong>2020&ndash;2024 American Community Survey</strong> (previously 2018&ndash;2022)</li>
         <li>U.S. population estimate revised to <strong>794,915</strong>. Now includes children of Iranian parents identified through household data, and a new &ldquo;Iranian&rdquo; race write-in category first available in the 2024 survey</li>
-        <li>Income pages for both countries now use <strong>pre-tax household income deciles</strong>, ranked against each country&rsquo;s national population (ages 25&ndash;54), enabling direct cross-country comparison</li>
-        <li>Redesigned the site for faster loading and improved interactivity</li>
+        <li>Added <strong>Australia</strong> pages using the 2021 Australian Bureau of Statistics (ABS) Census, including population overview, state and city maps, and immigration timing</li>
+        <li>Added U.S. <strong>Immigration History</strong> tab with Immigration and Naturalization Service (INS) and Department of Homeland Security (DHS) permanent resident admissions data (1978&ndash;2023), broken down by admission category</li>
+        <li>U.S. and Canadian income pages adjusted to <strong>pre-tax household income deciles</strong></li>
+        <li>Redesigned the site for improved speed, interactivity, and mobile viewing</li>
       </ul>
     </div>
 
@@ -217,7 +245,7 @@ if (window.ResizeObserver) {
   });
 }
 
-function showTab(tabName, element) {
+function showTab(tabName, element, skipHash) {
   document.querySelectorAll('.navbar .tab-button').forEach(btn => btn.classList.remove('active'));
   if (element) element.classList.add('active');
   document.querySelectorAll('.tab-content').forEach(tab => {
@@ -226,22 +254,32 @@ function showTab(tabName, element) {
   });
   const usMenu = document.getElementById('united-states-submenu');
   const caMenu = document.getElementById('canada-submenu');
+  const auMenu = document.getElementById('australia-submenu');
+  const allMenus = [usMenu, caMenu, auMenu];
   if (tabName === 'united-states') {
+    allMenus.forEach(m => m.style.display = 'none');
     usMenu.style.display = 'block';
-    caMenu.style.display = 'none';
     const firstSub = document.querySelector('#united-states-submenu .sub-tab');
-    if (firstSub) { firstSub.classList.add('active'); showSubTab('us-population', firstSub); }
+    if (firstSub && !skipHash) { firstSub.classList.add('active'); showSubTab('us-population', firstSub); }
+    else if (firstSub) { firstSub.classList.add('active'); }
   } else if (tabName === 'canada') {
+    allMenus.forEach(m => m.style.display = 'none');
     caMenu.style.display = 'block';
-    usMenu.style.display = 'none';
     const firstSub = document.querySelector('#canada-submenu .sub-tab');
-    if (firstSub) { firstSub.classList.add('active'); showSubTab('ca-population', firstSub); }
+    if (firstSub && !skipHash) { firstSub.classList.add('active'); showSubTab('ca-population', firstSub); }
+    else if (firstSub) { firstSub.classList.add('active'); }
+  } else if (tabName === 'australia') {
+    allMenus.forEach(m => m.style.display = 'none');
+    auMenu.style.display = 'block';
+    const firstSub = document.querySelector('#australia-submenu .sub-tab');
+    if (firstSub && !skipHash) { firstSub.classList.add('active'); showSubTab('au-population', firstSub); }
+    else if (firstSub) { firstSub.classList.add('active'); }
   } else {
-    usMenu.style.display = 'none';
-    caMenu.style.display = 'none';
+    allMenus.forEach(m => m.style.display = 'none');
     document.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
     const content = document.getElementById(tabName);
     if (content) { content.classList.add('active'); content.style.display = 'block'; resizeIframe(content); }
+    if (!skipHash) history.replaceState(null, '', '#' + tabName);
   }
 }
 
@@ -255,6 +293,7 @@ function showSubTab(subTabId, element) {
   });
   const content = document.getElementById(subTabId);
   if (content) { content.classList.add('active'); content.style.display = 'block'; resizeIframe(content); }
+  history.replaceState(null, '', '#' + subTabId);
 }
 
 // Auto-resize iframes to match content height
@@ -289,11 +328,34 @@ window.addEventListener('resize', function() {
   }, 150);
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-  const usBtn = document.querySelector('.navbar .tab-button:nth-child(2)');
-  showTab('united-states', usBtn);
-});
+// Hash-based deep linking: #us-admissions opens US > Immigration History
+function navigateToHash() {
+  var hash = window.location.hash.replace('#', '');
+  if (!hash) { showTab('global', document.querySelector('.navbar .tab-button:nth-child(1)')); return; }
+  // Map sub-tab prefixes to parent tabs
+  var parentMap = { 'us-': 'united-states', 'ca-': 'canada', 'au-': 'australia' };
+  var parentTab = null;
+  for (var prefix in parentMap) {
+    if (hash.indexOf(prefix) === 0) { parentTab = parentMap[prefix]; break; }
+  }
+  if (parentTab) {
+    // Open parent tab without auto-selecting first sub-tab
+    var parentBtn = document.querySelector('.tab-button[onclick*="' + parentTab + '"]');
+    showTab(parentTab, parentBtn, true);
+    // Activate the specific sub-tab
+    var subBtn = document.querySelector('.sub-tab[data-tab="' + hash + '"]');
+    if (subBtn) showSubTab(hash, subBtn);
+  } else {
+    // Top-level tab (global, europe, bibliography, about)
+    var btn = document.querySelector('.tab-button[onclick*="' + hash + '"]');
+    showTab(hash, btn);
+  }
+}
+document.addEventListener('DOMContentLoaded', navigateToHash);
+window.addEventListener('hashchange', navigateToHash);
 </script>
 
+<script data-goatcounter="https://iraniandiaspora.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
