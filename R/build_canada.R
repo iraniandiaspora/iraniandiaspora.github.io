@@ -33,8 +33,8 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true});Plotly.newPlot("%s",%s,%s,c);',
-    json$config, id, json$data, json$layout)
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:window.innerWidth>=900});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+    json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
 var el=document.getElementById("%s");
@@ -56,7 +56,7 @@ el.on("plotly_unhover",hlOff);
 var _lastLg=null;
 el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});', id))
   }
-  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;"></div>\n<script>(function(){%s})();</script>',
+  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
   if (!is.null(legend_html)) {
     chart <- paste0(chart, '\n', legend_html)
@@ -192,20 +192,44 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
-.footnote { font-size:12px; color:#888; text-align:center; margin:8px 0; font-style:italic; }', tab_css, '
+.footnote { font-size:12px; color:#888; text-align:center; margin:8px 0; font-style:italic; }
+.page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.page-content .chart-card { margin-bottom:0; }
+.pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
+.pc1 { grid-area:2/1; } .pc2 { grid-area:2/2; }
+.page-content-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+.page-content-4 .chart-card { margin-bottom:0; }
+.p4-t1 { grid-area:1/1; } .p4-t2 { grid-area:1/2; } .p4-t3 { grid-area:1/3; } .p4-t4 { grid-area:1/4; }
+.p4-c1 { grid-area:2/1/2/3; } .p4-c2 { grid-area:2/3/2/5; }', tab_css, '
 @media (max-width:900px) {
-  body { padding:10px 15px; }
+  body { padding:10px 15px; display:flex; flex-direction:column; }
   .text-row, .chart-row { grid-template-columns:1fr !important; }
   .text-row-4 { grid-template-columns:1fr 1fr; }
+  .text-row, .text-row-4 { order:1; } /* push text below charts on mobile */
+  .page-content { grid-template-columns:1fr; }
+  .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
+  .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
+  .page-content-4 { grid-template-columns:1fr; }
+  .p4-t1,.p4-t2,.p4-t3,.p4-t4,.p4-c1,.p4-c2 { grid-area:auto; }
+  .p4-c1 { order:1; } .p4-t1 { order:2; } .p4-t2 { order:3; }
+  .p4-c2 { order:4; } .p4-t3 { order:5; } .p4-t4 { order:6; }
   .headline .number { font-size:28px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
   .tab-btn { font-size:12px; padding:5px 10px; }
 }
+@media (max-width:600px) {
+  .text-row-4 { grid-template-columns:1fr !important; }
+}
+@media (max-width:600px) {
+  .id-table { border-spacing:4px !important; }
+  .id-cell { padding:8px 4px !important; min-height:60px !important; }
+  .id-num { font-size:16px !important; }
+  .id-label-col { width:55px !important; font-size:10px !important; }
+}
 @media (max-width:480px) {
   body { padding:8px 10px; }
-  .text-row-4 { grid-template-columns:1fr; }
   .text-card { font-size:13px; padding:14px; }
   .headline .number { font-size:24px; }
   .chart-card { padding:10px; }
@@ -244,8 +268,8 @@ make_pop_matrix <- function(pop_included) {
 
   make_cell <- function(pop_val, pct_val, is_persian) {
     bg <- if (is_persian) "#2774AE" else "#d4816b"
-    sprintf('<div style="background:%s; border-radius:6px; padding:14px 8px; text-align:center; color:white; display:flex; flex-direction:column; justify-content:center; min-height:90px;">
-      <div style="font-size:22px; font-weight:700;">%s</div>
+    sprintf('<div class="id-cell" style="background:%s; border-radius:6px; padding:14px 8px; text-align:center; color:white; display:flex; flex-direction:column; justify-content:center; min-height:90px;">
+      <div class="id-num" style="font-size:22px; font-weight:700;">%s</div>
       <div style="font-size:11px; opacity:0.85;">%.1f%%</div>
     </div>', bg, format(pop_val, big.mark = ","), pct_val)
   }
@@ -255,10 +279,10 @@ make_pop_matrix <- function(pop_included) {
   # 4: Born+NoIranian+NoPersian, 5: NotBorn+Iranian+Persian, 6: NotBorn+Iranian+NoPersian
   # 7: NotBorn+PersianOnly
 
-  sprintf('<div style="margin-bottom:10px;">
-  <table style="width:100%%; border-collapse:separate; border-spacing:8px; font-family:Montserrat,sans-serif;">
+  sprintf('<div class="id-table-wrap" style="margin-bottom:10px;">
+  <table class="id-table" style="width:100%%; border-collapse:separate; border-spacing:8px; font-family:Montserrat,sans-serif;">
     <tr>
-      <td style="width:80px;"></td>
+      <td class="id-label-col" style="width:80px;"></td>
       <td colspan="2" style="text-align:center; font-size:13px; font-weight:600; color:#444; padding-bottom:4px;">Born in Iran</td>
       <td colspan="2" style="text-align:center; font-size:13px; font-weight:600; color:#444; padding-bottom:4px;">Not Born in Iran</td>
     </tr>
@@ -443,6 +467,7 @@ writeLines(page_template("Canada: Defining the Population", paste0(
   '<div class="tab-bar"><button class="tab-btn active" onclick="switchTab(\'ca-prov-tab\',this,\'ca-geo\')">By Province</button><button class="tab-btn" onclick="switchTab(\'ca-ont-tab\',this,\'ca-geo\')">By Ontario Municipality</button></div>',
   '<div id="ca-prov-tab" class="tab-panel active" data-group="ca-geo">',
   plotly_div("ca-prov-map", plotly_to_json(p_prov_map), "380px", source = PUMF_SOURCE),
+  '<script>if(window.innerWidth<900){setTimeout(function(){var el=document.getElementById("ca-prov-map");if(el&&window.Plotly)Plotly.relayout(el,{"mapbox.zoom":2.0,"mapbox.center.lat":52});},500);}</script>',
   '</div>',
   '<div id="ca-ont-tab" class="tab-panel" data-group="ca-geo">',
   plotly_div("ca-ont-map", plotly_to_json(p_ont_map), "380px",
@@ -526,12 +551,12 @@ for (cat_name in lang_cats) {
 p_lang <- p_lang %>% layout(
   barmode = "stack",
   hoverlabel = list(showarrow = FALSE),
-  title = list(text = "<b>Language by Generation</b><br><span style='font-size:12px;font-weight:normal;color:#666;'>Mother tongue = first language learned; home = language spoken most often today</span>",
+  title = list(text = "<b>Language by Generation</b><br><span style='font-size:12px;font-weight:normal;color:#666;'>mother tongue = first language learned;<br>home = language spoken most often</span>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_levels),
     ticklabelstandoff = 6),
-  margin = list(t = 55, b = 40, l = 120), showlegend = FALSE,
+  margin = list(t = 70, b = 40, l = 120), showlegend = FALSE,
   plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
@@ -596,15 +621,13 @@ p_relig <- p_relig %>% layout(
 relig_leg <- make_html_legend(relig_colors, break_after = 3)
 
 writeLines(page_template("Canada: Language & Religion", paste0(
-  '<div class="text-row-4">',
-  '<div class="text-card">59% of first-generation Iranian-Canadians report Persian as their primary home language, while 20% report English or French.</div>',
-  '<div class="text-card">Among second+ generation, 39% maintain Persian at home, while 28% report English as their primary household language.</div>',
-  '<div class="text-card">Nearly half (49%) of first-generation Iranian-Canadians identify as Muslim, while 40% report no religion or a secular identity.</div>',
-  '<div class="text-card">Among the second+ generation, 58% report no religion or a secular identity, and 31% identify as Muslim.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">', plotly_div("lang", plotly_to_json(p_lang), "300px", source = PUMF_SOURCE, legend_html = lang_leg, highlight_hover = TRUE), '</div>',
-  '<div class="chart-card">', plotly_div("relig", plotly_to_json(p_relig), "300px", source = PUMF_SOURCE, legend_html = relig_leg, highlight_hover = TRUE), '</div>',
+  '<div class="page-content-4">',
+  '<div class="text-card p4-t1">59% of first-generation Iranian-Canadians report Persian as their primary home language, while 20% report English or French.</div>',
+  '<div class="text-card p4-t2">Among second+ generation, 39% maintain Persian at home, while 28% report English as their primary household language.</div>',
+  '<div class="text-card p4-t3">Nearly half (49%) of first-generation Iranian-Canadians identify as Muslim, while 40% report no religion or a secular identity.</div>',
+  '<div class="text-card p4-t4">Among the second+ generation, 58% report no religion or a secular identity, and 31% identify as Muslim.</div>',
+  '<div class="chart-card p4-c1">', plotly_div("lang", plotly_to_json(p_lang), "300px", source = PUMF_SOURCE, legend_html = lang_leg, highlight_hover = TRUE), '</div>',
+  '<div class="chart-card p4-c2">', plotly_div("relig", plotly_to_json(p_relig), "300px", source = PUMF_SOURCE, legend_html = relig_leg, highlight_hover = TRUE), '</div>',
   '</div>'
 )), "docs/pages/ca-langrelig.html")
 cat("  Done\n")
@@ -669,7 +692,7 @@ p_ca_immig <- plot_ly() %>%
       tickvals = round(seq(0, max(immig_annual$count), length.out = 5)),
       ticktext = c("0%", "25%", "50%", "75%", "100%"),
       tickfont = list(size = 11)),
-    margin = list(t = 55, b = 50, r = 60),
+    margin = list(t = 65, b = 50, r = 60),
     plot_bgcolor = "white", paper_bgcolor = "white",
     annotations = list(
       list(text = "Note: Pre-1995 values show 5-year period arrivals, averaged per year.",
@@ -761,13 +784,11 @@ cit_div <- paste0(
 )
 
 writeLines(page_template("Canada: Immigration & Citizenship", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">Iranian immigration to Canada surged in the 2000s and 2010s, with over 40% of all arrivals coming after 2010. The 1980s revolution and war era accounts for only 8% of the current population.</div>',
-  '<div class="text-card">About 60% of first-generation Iranian-Canadians are naturalized citizens, while 27% have not yet obtained citizenship. Economic immigration has been the primary pathway since the 1990s.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">', plotly_div("ca-immig", plotly_to_json(p_ca_immig), "450px", source = PUMF_SRC_IMMIG), '</div>',
-  '<div class="chart-card">', cit_div, '</div>',
+  '<div class="page-content">',
+  '<div class="text-card pt1">Iranian immigration to Canada surged in the 2000s and 2010s, with over 40% of all arrivals coming after 2010. The 1980s revolution and war era accounts for only 8% of the current population.</div>',
+  '<div class="text-card pt2">About 60% of first-generation Iranian-Canadians are naturalized citizens, while 27% have not yet obtained citizenship. Economic immigration has been the primary pathway since the 1990s.</div>',
+  '<div class="chart-card pc1">', plotly_div("ca-immig", plotly_to_json(p_ca_immig), "450px", source = PUMF_SRC_IMMIG), '</div>',
+  '<div class="chart-card pc2">', cit_div, '</div>',
   '</div>'
 ), has_tabs = TRUE), "docs/pages/ca-immigration.html")
 cat("  Done\n")
@@ -829,12 +850,12 @@ make_ca_educ_butterfly <- function(df, gen_label, id_prefix, height = "450px", s
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
       annotations = list(
-        list(text = "Men", x = 0.22, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Men", x = 0.22, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555")),
-        list(text = "Women", x = 0.78, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Women", x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 30, b = 40),
+      margin = list(l = 60, r = 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -898,7 +919,7 @@ make_fos_butterfly <- function(fos_data, gen_label, id_prefix, height = "350px",
         list(text = "Women", x = 0.78, y = 1.05, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 110, r = 20, t = 40, b = 40),
+      margin = list(l = 60, r = 20, t = 40, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -907,16 +928,14 @@ make_fos_butterfly <- function(fos_data, gen_label, id_prefix, height = "350px",
 }
 
 writeLines(page_template("Canada: Education", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">First-generation Iranian-Canadians age 30&ndash;44 show very high graduate degree attainment (44&ndash;48%), with women exceeding men among 30&ndash;34 year-olds. Among those 55+, men are more likely to hold graduate degrees.</div>',
-  '<div class="text-card">62% of first-generation men studied Science, Technology, Engineering, or Math fields, compared to 33% of women. Women are more concentrated in Social Sciences &amp; Humanities (25%) and Health (16%).</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">',
+  '<div class="page-content">',
+  '<div class="text-card pt1">First-generation Iranian-Canadians age 30&ndash;44 show very high graduate degree attainment (44&ndash;48%), with women exceeding men among 30&ndash;34 year-olds. Among those 55+, men are more likely to hold graduate degrees.</div>',
+  '<div class="text-card pt2">62% of first-generation men studied Science, Technology, Engineering, or Math fields, compared to 33% of women. Women are more concentrated in Social Sciences &amp; Humanities (25%) and Health (16%).</div>',
+  '<div class="chart-card pc1">',
   '<div class="section-title">Educational Attainment by Age and Gender: First Generation</div>',
   make_ca_educ_butterfly(ed1, "1st Gen", "ca-ed1"),
   '</div>',
-  '<div class="chart-card">',
+  '<div class="chart-card pc2">',
   '<div class="section-title">Fields of Study by Gender: First Generation</div>',
   make_fos_butterfly(fos, "1st Gen", "ca-fos", "300px"),
   '</div>',
@@ -983,12 +1002,12 @@ make_employment_butterfly <- function(df, gen_val, gen_label, id_prefix, height 
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
       annotations = list(
-        list(text = "Men", x = 0.22, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Men", x = 0.22, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555")),
-        list(text = "Women", x = 0.78, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Women", x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 80, r = 20, t = 30, b = 40),
+      margin = list(l = 60, r = 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -1048,12 +1067,12 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
       annotations = list(
-        list(text = "Men", x = 0.22, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Men", x = 0.22, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555")),
-        list(text = "Women", x = 0.78, y = 1.02, xref = "paper", yref = "paper",
+        list(text = "Women", x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 80, r = 20, t = 30, b = 40),
+      margin = list(l = 60, r = 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -1062,15 +1081,13 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
 }
 
 writeLines(page_template("Canada: Work", paste0(
-  '<div class="text-row-4">',
-  '<div class="text-card">First-generation men are concentrated in Manufacturing &amp; Construction (26-37% for ages 45+) and Professional &amp; Technical sectors (27-34% for ages 35-44).</div>',
-  '<div class="text-card">First-generation women work primarily in Trade &amp; Services (30&ndash;43%) and Health &amp; Education (24&ndash;33%), with higher Health &amp; Education shares among older cohorts.</div>',
-  '<div class="text-card">Second-generation men show similar sector distribution to the first generation, with Professional &amp; Technical (36%) and Trade &amp; Services (28%) leading.</div>',
-  '<div class="text-card">Second-generation women are concentrated in Professional &amp; Technical (39%), with Health &amp; Education and Trade &amp; Services tied at about 18% each.</div>',
-  '</div>',
-  '<div class="chart-row">',
+  '<div class="page-content-4">',
+  '<div class="text-card p4-t1">First-generation men are concentrated in Manufacturing &amp; Construction (26-37% for ages 45+) and Professional &amp; Technical sectors (27-34% for ages 35-44).</div>',
+  '<div class="text-card p4-t2">First-generation women work primarily in Trade &amp; Services (30&ndash;43%) and Health &amp; Education (24&ndash;33%), with higher Health &amp; Education shares among older cohorts.</div>',
+  '<div class="text-card p4-t3">Second-generation men show similar sector distribution to the first generation, with Professional &amp; Technical (36%) and Trade &amp; Services (28%) leading.</div>',
+  '<div class="text-card p4-t4">Second-generation women are concentrated in Professional &amp; Technical (39%), with Health &amp; Education and Trade &amp; Services tied at about 18% each.</div>',
   # First-gen: tabs for Employment Categories / Industry Sectors
-  '<div class="chart-card">',
+  '<div class="chart-card p4-c1">',
   '<div class="section-title">Work by Age and Gender: First Generation</div>',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'wk1-emp\',this,\'wk1\')">Employment Categories</button>',
@@ -1084,7 +1101,7 @@ writeLines(page_template("Canada: Work", paste0(
   '</div>',
   '</div>',
   # Second-gen: tabs for Employment Categories / Industry Sectors
-  '<div class="chart-card">',
+  '<div class="chart-card p4-c2">',
   '<div class="section-title">Work by Gender: Second Generation</div>',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'wk2-emp\',this,\'wk2\')">Employment Categories</button>',
@@ -1135,13 +1152,13 @@ p_inc_decile <- plot_ly(data = inc1, x = ~short_label, y = ~percentage, type = "
     marker = list(size = 0, opacity = 0),
     hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Position in Canadian Household Income Distribution:<br>First Generation (Ages 25-54)</b>",
-      font = list(size = 16, family = "Montserrat")),
+    title = list(text = "<b>Position in Canadian<br>Household Income Distribution:<br>First Generation (Ages 25-54)</b>",
+      font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
       categoryorder = "array", categoryarray = inc1$short_label),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, max(inc1$percentage) + 3)),
     showlegend = FALSE,
-    margin = list(t = 60, b = 50),
+    margin = list(t = 75, b = 50),
     plot_bgcolor = "white", paper_bgcolor = "white",
     annotations = list(
       list(text = "10% =<br>national<br>baseline", x = inc1$short_label[nrow(inc1) - 2], y = 12,
@@ -1198,13 +1215,11 @@ p_inc_age <- p_inc_age %>% layout(
 inc_age_leg <- make_html_legend(age_band_colors, break_after = 3)
 
 writeLines(page_template("Canada: Income", paste0(
-  '<div class="text-row">',
-  '<div class="text-card">The left chart ranks Iranian-Canadian households by pre-tax income against all Canadian households (ages 25&ndash;54). Each decile holds 10% of all Canadian households; values above 10% indicate overrepresentation in that income range.</div>',
-  '<div class="text-card">The right chart shows individual pre-tax income by age. The share earning CA$100,000 or more peaks at ages 35&ndash;54 and is lowest among the youngest and oldest age groups.</div>',
-  '</div>',
-  '<div class="chart-row">',
-  '<div class="chart-card">', plotly_div("ca-inc1", plotly_to_json(p_inc_decile), "500px", source = PUMF_SRC_INCOME), '</div>',
-  '<div class="chart-card">', plotly_div("ca-inc-age", plotly_to_json(p_inc_age), "400px", source = PUMF_SRC_INCOME_AGE, legend_html = inc_age_leg, highlight_hover = TRUE), '</div>',
+  '<div class="page-content">',
+  '<div class="text-card pt1">The decile chart ranks Iranian-Canadian households by pre-tax income against all Canadian households (ages 25&ndash;54). Each decile holds 10% of all Canadian households; values above 10% indicate overrepresentation in that income range.</div>',
+  '<div class="text-card pt2">The income-by-age chart shows individual pre-tax income by age. The share earning CA$100,000 or more peaks at ages 35&ndash;54 and is lowest among the youngest and oldest age groups.</div>',
+  '<div class="chart-card pc1">', plotly_div("ca-inc1", plotly_to_json(p_inc_decile), "500px", source = PUMF_SRC_INCOME), '</div>',
+  '<div class="chart-card pc2">', plotly_div("ca-inc-age", plotly_to_json(p_inc_age), "400px", source = PUMF_SRC_INCOME_AGE, legend_html = inc_age_leg, highlight_hover = TRUE), '</div>',
   '</div>'
 )), "docs/pages/ca-income.html")
 cat("  Done\n")

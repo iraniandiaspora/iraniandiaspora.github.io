@@ -1,0 +1,283 @@
+"lga_name","state","count"
+"Brisbane","Queensland",4848
+"Parramatta","New South Wales",3525
+"Manningham","Victoria",3023
+"The Hills Shire","New South Wales",2985
+"Whittlesea","Victoria",2390
+"Blacktown","New South Wales",2142
+"Hornsby","New South Wales",1995
+"Ryde","New South Wales",1989
+"Cumberland","New South Wales",1951
+"Casey","Victoria",1855
+"Ku-ring-gai","New South Wales",1504
+"Fairfield","New South Wales",1243
+"Whitehorse","Victoria",1171
+"Stirling","Western Australia",1119
+"Unincorporated ACT","Australian Capital Territory",1109
+"Gold Coast","Queensland",1058
+"Liverpool","New South Wales",1009
+"Knox","Victoria",957
+"Monash","Victoria",940
+"Hume","Victoria",929
+"Sydney","New South Wales",913
+"Melbourne","Victoria",912
+"Boroondara","Victoria",817
+"Salisbury","South Australia",791
+"Maroondah","Victoria",787
+"Wyndham","Victoria",762
+"Northern Beaches","New South Wales",759
+"Banyule","Victoria",753
+"Greater Dandenong","Victoria",723
+"Logan","Queensland",679
+"Port Adelaide Enfield","South Australia",644
+"Canterbury-Bankstown","New South Wales",631
+"Melville","Western Australia",582
+"Willoughby","New South Wales",561
+"Moreland","Victoria",561
+"Penrith","New South Wales",548
+"Lane Cove","New South Wales",533
+"Greater Geelong","Victoria",528
+"Wanneroo","Western Australia",508
+"Joondalup","Western Australia",465
+"Canada Bay","New South Wales",460
+"Marion","South Australia",454
+"Moonee Valley","Victoria",441
+"Brimbank","Victoria",440
+"North Sydney","New South Wales",432
+"Darebin","Victoria",422
+"Campbelltown (SA)","South Australia",421
+"Bayside (NSW)","New South Wales",417
+"Canning","Western Australia",409
+"Moreton Bay","Queensland",389
+"Gosnells","Western Australia",383
+"Tea Tree Gully","South Australia",382
+"Cockburn","Western Australia",381
+"Swan","Western Australia",366
+"Randwick","New South Wales",365
+"Port Phillip","Victoria",360
+"Burnside","South Australia",333
+"Onkaparinga","South Australia",326
+"Stonnington","Victoria",324
+"Melton","Victoria",319
+"Wollongong","New South Wales",319
+"Inner West","New South Wales",316
+"Charles Sturt","South Australia",312
+"Yarra Ranges","Victoria",310
+"South Perth","Western Australia",298
+"Campbelltown (NSW)","New South Wales",293
+"Perth","Western Australia",284
+"Bayswater","Western Australia",266
+"Nillumbik","Victoria",260
+"Glen Eira","Victoria",243
+"Ipswich","Queensland",243
+"Newcastle","New South Wales",241
+"Central Coast (NSW)","New South Wales",218
+"West Torrens","South Australia",213
+"Kingston (Vic.)","Victoria",212
+"Sutherland Shire","New South Wales",207
+"Camden","New South Wales",204
+"Hobsons Bay","Victoria",200
+"Launceston","Tasmania",199
+"Playford","South Australia",194
+"Norwood Payneham and St Peters","South Australia",186
+"Mitcham","South Australia",183
+"Adelaide","South Australia",182
+"Bayside (Vic.)","Victoria",179
+"Maribyrnong","Victoria",174
+"Holdfast Bay","South Australia",166
+"Sunshine Coast","Queensland",162
+"Georges River","New South Wales",161
+"Yarra","Victoria",161
+"Toowoomba","Queensland",151
+"Unley","South Australia",143
+"Victoria Park","Western Australia",139
+"Woollahra","New South Wales",137
+"Belmont","Western Australia",136
+"Frankston","Victoria",127
+"Waverley","New South Wales",127
+"Armadale","Western Australia",124
+"Greater Shepparton","Victoria",120
+"Redland","Queensland",113
+"Cardinia","Victoria",105
+"Lake Macquarie","New South Wales",102
+"Hobart","Tasmania",102
+"Subiaco","Western Australia",97
+"Cambridge","Western Australia",93
+"Vincent","Western Australia",92
+"Strathfield","New South Wales",83
+"Nedlands","Western Australia",83
+"Hunters Hill","New South Wales",79
+"Glenorchy","Tasmania",75
+"Mosman","New South Wales",75
+"Darwin","Northern Territory",74
+"Ballarat","Victoria",72
+"Wagga Wagga","New South Wales",71
+"Prospect","South Australia",68
+"Mandurah","Western Australia",68
+"Townsville","Queensland",67
+"Walkerville","South Australia",66
+"Cairns","Queensland",64
+"Rockingham","Western Australia",62
+"Kwinana","Western Australia",59
+"Hawkesbury","New South Wales",58
+"Greater Bendigo","Victoria",56
+"Kingborough","Tasmania",55
+"Burwood","New South Wales",55
+"Queanbeyan-Palerang Regional","New South Wales",52
+"Mornington Peninsula","Victoria",52
+"Shoalhaven","New South Wales",48
+"Armidale Regional","New South Wales",44
+"Shellharbour","New South Wales",42
+"Kalgoorlie-Boulder","Western Australia",41
+"Claremont","Western Australia",39
+"Adelaide Hills","South Australia",39
+"Wingecarribee","New South Wales",37
+"West Tamar","Tasmania",37
+"Blue Mountains","New South Wales",35
+"Mackay","Queensland",34
+"Maitland","New South Wales",33
+"Fremantle","Western Australia",32
+"Clarence","Tasmania",32
+"Bathurst Regional","New South Wales",31
+"Kalamunda","Western Australia",31
+"Tamworth Regional","New South Wales",30
+"Northam","Western Australia",30
+"Mildura","Victoria",29
+"Mount Barker","South Australia",28
+"No usual address (NSW)","New South Wales",28
+"Mid-Coast","New South Wales",27
+"Port Macquarie-Hastings","New South Wales",27
+"Bundaberg","Queensland",26
+"Rockhampton","Queensland",26
+"Dubbo Regional","New South Wales",26
+"Mosman Park","Western Australia",25
+"Albury","New South Wales",25
+"Wollondilly","New South Wales",24
+"Serpentine-Jarrahdale","Western Australia",24
+"No usual address (Vic.)","Victoria",24
+"Ballina","New South Wales",24
+"Wodonga","Victoria",23
+"Gladstone","Queensland",23
+"Bunbury","Western Australia",23
+"Orange","New South Wales",21
+"Lismore","New South Wales",21
+"Fraser Coast","Queensland",20
+"Mitchell","Victoria",19
+"Mundaring","Western Australia",19
+"Meander Valley","Tasmania",19
+"Goulburn Mulwaree","New South Wales",17
+"Coffs Harbour","New South Wales",17
+"Baw Baw","Victoria",17
+"Latrobe (Vic.)","Victoria",16
+"Gawler","South Australia",15
+"Clarence Valley","New South Wales",14
+"Tweed","New South Wales",13
+"Byron","New South Wales",13
+"Snowy Monaro Regional","New South Wales",13
+"Albany","Western Australia",12
+"Murray Bridge","South Australia",12
+"Lockyer Valley","Queensland",11
+"Christmas Island","Western Australia",11
+"Isaac","Queensland",11
+"East Fremantle","Western Australia",11
+"Scenic Rim","Queensland",11
+"Griffith","New South Wales",10
+"Kiama","New South Wales",10
+"Snowy Valleys","New South Wales",10
+"East Gippsland","Victoria",10
+"Mareeba","Queensland",10
+"Wellington","Victoria",10
+"Cessnock","New South Wales",10
+"Alice Springs","Northern Territory",10
+"Port Stephens","New South Wales",10
+"Dardanup","Western Australia",10
+"No usual address (Qld)","Queensland",10
+"No usual address (WA)","Western Australia",9
+"Bega Valley","New South Wales",9
+"Bassendean","Western Australia",9
+"Palmerston","Northern Territory",9
+"Campaspe","Victoria",9
+"No usual address (SA)","South Australia",9
+"Moorabool","Victoria",8
+"Murrindindi","Victoria",8
+"Surf Coast","Victoria",8
+"Central Highlands (Qld)","Queensland",8
+"Mount Gambier","South Australia",7
+"Swan Hill","Victoria",7
+"Gympie","Queensland",7
+"Charters Towers","Queensland",7
+"East Pilbara","Western Australia",7
+"Golden Plains","Victoria",7
+"Port Hedland","Western Australia",7
+"Noosa","Queensland",7
+"Yass Valley","New South Wales",6
+"Mount Alexander","Victoria",6
+"Kempsey","New South Wales",6
+"Victor Harbor","South Australia",6
+"Maranoa","Queensland",6
+"Central Coast (Tas.)","Tasmania",6
+"Burnie","Tasmania",6
+"Collie","Western Australia",6
+"Unincorporated NT","Northern Territory",6
+"Lithgow","New South Wales",6
+"Benalla","Victoria",6
+"Ashburton","Western Australia",6
+"Tablelands","Queensland",6
+"Mid Murray","South Australia",5
+"Ararat","Victoria",5
+"Bass Coast","Victoria",5
+"Capel","Western Australia",5
+"Busselton","Western Australia",5
+"Loxton Waikerie","South Australia",5
+"Macedon Ranges","Victoria",5
+"Moyne","Victoria",5
+"Katanning","Western Australia",5
+"Hepburn","Victoria",5
+"Whitsunday","Queensland",5
+"Greater Geraldton","Western Australia",5
+"Ravensthorpe","Western Australia",5
+"Naracoorte Lucindale","South Australia",4
+"Brighton","Tasmania",4
+"Harvey","Western Australia",4
+"Towong","Victoria",4
+"Devonport","Tasmania",4
+"No usual address (ACT)","Australian Capital Territory",4
+"Cabonne","New South Wales",4
+"Adelaide Plains","South Australia",4
+"Hilltops","New South Wales",4
+"Whyalla","South Australia",4
+"Litchfield","Northern Territory",4
+"Esperance","Western Australia",4
+"Carnarvon","Western Australia",4
+"Parkes","New South Wales",4
+"Karratha","Western Australia",4
+"Narrandera","New South Wales",4
+"Wattle Range","South Australia",3
+"Western Downs","Queensland",3
+"Plantagenet","Western Australia",3
+"Glenelg","Victoria",3
+"Colac Otway","Victoria",3
+"Manjimup","Western Australia",3
+"South Burnett","Queensland",3
+"Somerset","Queensland",3
+"Light","South Australia",3
+"Southern Downs","Queensland",3
+"Blayney","New South Wales",3
+"Derwent Valley","Tasmania",3
+"Port Pirie","South Australia",3
+"Warrnambool","Victoria",3
+"Peppermint Grove","Western Australia",3
+"Cottesloe","Western Australia",3
+"Gannawarra","Victoria",3
+"Port Augusta","South Australia",3
+"Broken Hill","New South Wales",3
+"Horsham","Victoria",3
+"Livingstone","Queensland",3
+"Mount Isa","Queensland",3
+"Roxby Downs","South Australia",3
+"Oberon","New South Wales",3
+"Broome","Western Australia",3
+"Mid-Western Regional","New South Wales",3
+"George Town","Tasmania",3
+"Burdekin","Queensland",3
+"North Burnett","Queensland",3

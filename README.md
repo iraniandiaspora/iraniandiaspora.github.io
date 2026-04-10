@@ -1,6 +1,6 @@
 # Iranian Diaspora Dashboard
 
-Interactive data dashboard comparing Iranian diaspora populations in the United States, Canada, and worldwide.
+Interactive data dashboard comparing Iranian diaspora populations in the United States, Canada, Australia, and worldwide.
 
 **[iraniandiaspora.github.io](https://iraniandiaspora.github.io)**
 
@@ -8,9 +8,10 @@ Interactive data dashboard comparing Iranian diaspora populations in the United 
 
 | Country | Source | Years |
 |---------|--------|-------|
-| United States | American Community Survey (ACS) PUMS | 2020–2024 |
+| United States | American Community Survey (ACS) Public Use Microdata Sample (PUMS); Immigration and Naturalization Service (INS) / Department of Homeland Security (DHS) Yearbook of Immigration Statistics | 2020–2024; 1978–2023 |
 | Canada | Census Public Use Microdata File (PUMF) | 2021 |
-| Global | UN International Migrant Stock | 2024 |
+| Australia | Australian Bureau of Statistics (ABS) Census of Population and Housing | 2021 |
+| Global | United Nations International Migrant Stock | 2024 |
 
 ## Citation
 
@@ -20,7 +21,7 @@ If you use data, figures, or findings from this dashboard, please cite:
 
 ## License
 
-Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying census microdata are subject to their original terms of use from the U.S. Census Bureau, Statistics Canada, and the United Nations.
+Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying data are subject to their original terms of use from the U.S. Census Bureau, the U.S. Department of Homeland Security (INS/DHS), Statistics Canada, the Australian Bureau of Statistics, and the United Nations.
 
 ## Credits
 

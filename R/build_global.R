@@ -36,8 +36,8 @@ plotly_to_json <- function(p, inject_hoveron = FALSE) {
 }
 
 plotly_div <- function(id, json, height = "500px") {
-  sprintf('<div id="%s" style="width:100%%;height:%s;"></div>
-<script>(function(){var c=Object.assign(%s,{responsive:true});Plotly.newPlot("%s",%s,%s,c);})();</script>', id, height, json$config, id, json$data, json$layout)
+  sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>
+<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:window.innerWidth>=900});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
 }
 
 iframe_resize_script <- '
@@ -146,9 +146,10 @@ yr_nums_orig <- as.numeric(gsub("X", "", years))
 yr_nums <- yr_nums_orig
 wide_interp <- wide_mat
 
-# Stack order reversed so US is outermost (top), Other(Europe) closest to center
+# Top: rev so US is outermost (top), Other(Europe) closest to center
+# Bottom: no rev so legend order matches visual order (Türkiye near center, Other(Non-Europe) outermost bottom)
 top_groups <- rev(legend_order[1:7])
-bot_groups <- rev(legend_order[8:12])
+bot_groups <- legend_order[8:12]
 
 p_stock <- plot_ly()
 
@@ -209,7 +210,7 @@ for (i in seq_along(bot_groups)) {
 }
 
 p_stock <- p_stock %>% layout(
-  title = list(text = "<b>Iran-Born Migrant Population, Total by Country (1990\u20132024)</b>",
+  title = list(text = "<b>Iran-Born Migrant Population,<br>Total by Country (1990\u20132024)</b>",
     font = list(size = 16, family = "Montserrat", color = "#333"), x = 0.5, xanchor = "center"),
   xaxis = list(title = "", dtick = 5, tickvals = yr_nums_orig,
     ticktext = as.character(yr_nums_orig), tickfont = list(size = 12),
@@ -286,7 +287,7 @@ p_world <- plot_ly(type = "choropleth",
   geo = list(showframe = FALSE, showcoastlines = TRUE, coastlinecolor = "#ccc",
     projection = list(type = "natural earth"), bgcolor = "white",
     landcolor = "#f0f0f0", showland = TRUE),
-  margin = list(t = 50, b = 20, l = 0, r = 0),
+  margin = list(t = 10, b = 10, l = 0, r = 0),
   paper_bgcolor = "white"
 ) %>% config(displayModeBar = FALSE)
 
@@ -302,16 +303,20 @@ global_page <- paste0('<!DOCTYPE html>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
-.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.global-grid { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .text-card { background:white; border-radius:8px; padding:20px; text-align:center;
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
-.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; overflow:hidden; min-width:0; }
 @media (max-width:900px) {
   body { padding:10px 15px; }
-  .text-row, .chart-row { grid-template-columns:1fr !important; }
+  .global-grid { grid-template-columns:1fr; }
   .chart-with-legend { flex-direction:column !important; }
   .chart-legend-sidebar { width:auto !important; display:flex; flex-wrap:wrap; gap:4px 16px; padding:10px 0 0 0 !important; justify-content:center; line-height:1.8 !important; }
+  /* Mobile reorder: area chart, text1, world map, text2 */
+  .global-area  { order:1; }
+  .global-text1 { order:2; }
+  .global-map   { order:3; }
+  .global-text2 { order:4; }
 }
 @media (max-width:480px) {
   body { padding:8px 10px; }
@@ -322,26 +327,66 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 </head>
 <body>
 
-<div class="text-row">
-<div class="text-card">The United States has the largest Iranian immigrant population. However, sizable Iranian communities exist across Europe, Canada, Australia, T&uuml;rkiye, and Israel. According to the UN, <b>1.73 million</b> Iran-born individuals reside outside Iran as of 2024.</div>
-<div class="text-card">These estimates count people born in Iran who reside in another country. Second-generation Iranians born in the destination country are not included. The UN derives these figures from each country&rsquo;s census or population register data on foreign-born residents.</div>
-</div>
-
-<div class="chart-row">
-<div class="chart-card" style="overflow:visible;">
+<div class="global-grid">
+<div class="text-card global-text1">The United States has the largest Iranian immigrant population. However, sizable Iranian communities exist across Europe, Canada, Australia, T&uuml;rkiye, and Israel. According to the UN, <b>1.73 million</b> Iran-born individuals reside outside Iran as of 2024.</div>
+<div class="text-card global-text2">These estimates count people born in Iran who reside in another country. Second-generation Iranians born in the destination country are not included. The UN derives these figures from each country&rsquo;s census or population register data on foreign-born residents.</div>
+<div class="chart-card global-area" style="overflow:visible;">
   <div class="chart-with-legend" style="display:flex; align-items:stretch;">
     <div style="flex:1; min-width:0;">',
-      plotly_div("stock-area", plotly_to_json(p_stock), "500px"),
+      plotly_div("stock-area", plotly_to_json(p_stock, inject_hoveron = TRUE), "500px"),
     '</div>
     <div class="chart-legend-sidebar" style="width:200px; flex-shrink:0; padding:40px 10px 0 5px; font-size:13px; line-height:2.2;">',
       paste(sapply(legend_order, function(g) {
-        sprintf("<div style=\"display:flex; align-items:center; gap:8px;\"><div style=\"width:14px; height:14px; border-radius:50%%; background:%s; flex-shrink:0;\"></div> %s</div>", colors[g], g)
+        html_g <- gsub("&", "&amp;", g)
+        sprintf("<div data-lg=\"%s\" style=\"display:flex; align-items:center; gap:8px; cursor:pointer; transition:opacity 0.2s;\" onmouseenter=\"var el=document.getElementById('stock-area');if(el&&el.__hlOn&&!el.__locked)el.__hlOn(this.getAttribute('data-lg'));\" onmouseleave=\"var el=document.getElementById('stock-area');if(el&&el.__hlOff&&!el.__locked)el.__hlOff();\" onclick=\"var el=document.getElementById('stock-area');if(el&&el.__toggle)el.__toggle(this.getAttribute('data-lg'));\"><div style=\"width:14px; height:14px; border-radius:50%%; background:%s; flex-shrink:0;\"></div> %s</div>", g, colors[g], html_g)
       }), collapse = "\n"),
     '</div>
   </div>
   <p style="font-size:10px; color:#888; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>. Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.</p>
+  <script>(function(){
+    var el=document.getElementById("stock-area");
+    if(!el)return;
+    var card=el.closest(".chart-card");
+    var origColors=null;
+    var locked=null;
+    el.__hlOn=function(name){
+      if(!origColors){origColors=el.data.map(function(t){return t.fillcolor||null;});}
+      el.data.forEach(function(t,i){
+        var match=t.name===name;
+        var updates={opacity:match?1:0.12};
+        if(t.fillcolor){updates.fillcolor=match?origColors[i]:"rgba(200,200,200,0.15)";}
+        if(t.line){updates["line.color"]=match?origColors[i]:"rgba(200,200,200,0.15)";}
+        Plotly.restyle(el,updates,[i]);
+      });
+      if(card){card.querySelectorAll("[data-lg]").forEach(function(s){
+        s.style.opacity=s.getAttribute("data-lg")===name?1:0.3;
+      });}
+    };
+    el.__hlOff=function(){
+      if(!origColors)return;
+      locked=null;
+      el.data.forEach(function(t,i){
+        var updates={opacity:1};
+        if(origColors[i]){updates.fillcolor=origColors[i];updates["line.color"]=origColors[i];}
+        Plotly.restyle(el,updates,[i]);
+      });
+      if(card){card.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
+    };
+    el.__toggle=function(name){
+      if(locked===name){el.__hlOff();}
+      else{locked=name;el.__hlOn(name);}
+    };
+    el.on("plotly_hover",function(d){
+      if(locked)return;
+      if(d.points&&d.points[0]&&d.points[0].data.name){el.__hlOn(d.points[0].data.name);}
+    });
+    el.on("plotly_unhover",function(){if(!locked)el.__hlOff();});
+    el.on("plotly_click",function(d){
+      if(d.points&&d.points[0]&&d.points[0].data.name){el.__toggle(d.points[0].data.name);}
+    });
+  })();</script>
 </div>
-<div class="chart-card">',
+<div class="chart-card global-map">',
   '<div style="text-align:center; font-size:16px; font-weight:600; margin:4px 0 12px;">Iranian Migrant Stock Worldwide (2024)</div>',
   '<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:12px; font-size:13px; color:#444; margin:0 0 12px; line-height:1;">',
   '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#f4c430;border-radius:2px;"></span> Iran</span>',
