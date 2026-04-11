@@ -1,5 +1,5 @@
 # Build all 6 Canada pages from pre-computed CSV outputs
-# Run from idd-static-prototype/ directory:
+# Run from the iraniandiaspora.github.io/ directory:
 #   Rscript R/build_canada.R
 
 library(plotly)
@@ -33,7 +33,7 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
@@ -311,24 +311,23 @@ make_pop_matrix <- function(pop_included) {
     make_cell(p[6], pct[6], FALSE))
 }
 
-# Region bar chart from settlement_by_province.csv
-prov <- read.csv(file.path(DATA_DIR, "immigration/settlement_by_province.csv"),
-  check.names = FALSE)
-# Sum across all immigration periods to get provincial totals
-prov_totals <- data.frame(
-  province = c("Ontario", "British Columbia", "Quebec", "Alberta", "Manitoba", "Saskatchewan",
-               "New Brunswick", "Newfoundland", "Nova Scotia", "PEI"),
-  stringsAsFactors = FALSE
-)
-prov_totals$pop <- sapply(prov_totals$province, function(pr) sum(prov[[pr]], na.rm = TRUE))
+# Region bar chart — built from iranians_by_province.csv so it shares the
+# denominator used by the province map below. Previously this pulled from
+# immigration/settlement_by_province.csv which sums to first-generation
+# settlement only (~169,521) and conflicted with the province-map total
+# (~240,189). Both charts now describe the same universe.
+prov_for_regions <- read.csv(file.path(DATA_DIR, "population/iranians_by_province.csv"))
 
-# Map provinces to regions
-prov_totals$region <- case_when(
-  prov_totals$province %in% c("Ontario", "Quebec") ~ "Central",
-  prov_totals$province %in% c("British Columbia", "Alberta", "Manitoba", "Saskatchewan") ~ "Western",
-  prov_totals$province %in% c("New Brunswick", "Newfoundland", "Nova Scotia", "PEI") ~ "Atlantic",
-  TRUE ~ "Other"
-)
+# Map provinces to regions (same grouping as before)
+prov_totals <- prov_for_regions %>%
+  mutate(region = case_when(
+    province %in% c("Ontario", "Quebec") ~ "Central",
+    province %in% c("British Columbia", "Alberta", "Manitoba", "Saskatchewan") ~ "Western",
+    province %in% c("New Brunswick", "Newfoundland and Labrador", "Nova Scotia",
+                    "Prince Edward Island") ~ "Atlantic",
+    province %in% c("Yukon", "Northwest Territories", "Nunavut") ~ "Northern",
+    TRUE ~ "Other"
+  ))
 
 region_totals <- prov_totals %>%
   group_by(region) %>%
@@ -421,7 +420,7 @@ p_ont_map <- plot_ly() %>%
     locations = ont_data$GeoUID,
     z = ont_data$pop,
     featureidkey = "properties.GeoUID",
-    text = sprintf("<b>%s</b><br>%s Iranian-Canadians",
+    text = sprintf("<b>%s</b><br>%s residents with Iranian ethnic origin or born in Iran",
       ont_data$`Region Name`, format(round(ont_data$pop), big.mark = ",")),
     hoverinfo = "text",
     colorscale = list(c(0, "#c6dbef"), c(0.05, "#9ecae1"), c(0.15, "#6baed6"),
@@ -443,8 +442,8 @@ writeLines(page_template("Canada: Defining the Population", paste0(
   '<div class="chart-row" style="grid-template-columns:40% 60%;">',
   '<div class="headline">',
   '<div class="label">Estimated Iranian-Canadian Population</div>',
-  '<div class="number">223,968 &ndash; 240,189</div>',
-  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.statcan.gc.ca/census-recensement/2021/ref/questionnaire/index-eng.cfm" style="color:#2774AE;" target="_blank">2021 Canadian Census</a></div>',
+  sprintf('<div class="number">%s</div>', format(round(sum(pop_included$Population)), big.mark = ",")),
+  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.statcan.gc.ca/census-recensement/2021/ref/questionnaire/index-eng.cfm" style="color:#2774AE;" target="_blank">2021 Canadian Census</a> Public Use Microdata File</div>',
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of three census questions:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
@@ -471,7 +470,7 @@ writeLines(page_template("Canada: Defining the Population", paste0(
   '</div>',
   '<div id="ca-ont-tab" class="tab-panel" data-group="ca-geo">',
   plotly_div("ca-ont-map", plotly_to_json(p_ont_map), "380px",
-    source = "Source: <a href='https://www.statcan.gc.ca/census-recensement/2021/dp-pd/index-eng.cfm' target='_blank' style='color:#2774AE;'>Statistics Canada</a> \u2014 2021 Census<br>Census subdivisions (municipalities) in Ontario with Iranian-origin residents."),
+    source = "Source: <a href='https://www.statcan.gc.ca/census-recensement/2021/dp-pd/index-eng.cfm' target='_blank' style='color:#2774AE;'>Statistics Canada</a> \u2014 2021 Census (cancensus aggregate tables, Iranian ethnic origin OR born in Iran, maximum per municipality). Municipal totals differ from the province-level PUMF count because the published aggregate tables are individually suppressed for small census subdivisions and use a different counting rule than the microdata."),
   '</div>',
   '</div>',
   '</div>'

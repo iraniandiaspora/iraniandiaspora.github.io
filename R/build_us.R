@@ -1,7 +1,7 @@
-# Master build: generate all chart JSON and assemble pages
+# Master build: generate all US chart JSON and assemble us-*.html pages
 # Each page = hand-crafted HTML with Plotly.newPlot() calls
-# Run from idd-static-prototype/ directory:
-#   cd idd-static-prototype && Rscript R/build_all.R
+# Run from the iraniandiaspora.github.io/ directory:
+#   Rscript R/build_us.R
 
 library(plotly)
 library(dplyr)
@@ -37,7 +37,7 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
@@ -718,7 +718,7 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
 
 writeLines(page_template("Marriage", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">Among the roughly 286,000 Iranian-Americans in marriages or domestic partnerships, about 64% have partners of Iranian origin.</div>',
+  '<div class="text-card pt1">Among roughly 312,000 Iranian-Americans in marriages or domestic partnerships, about 60% have partners of Iranian origin. Both opposite-sex and same-sex partners, married or unmarried, are counted.</div>',
   '<div class="text-card pt2">Marriage patterns differ sharply by generation. First-generation individuals have Iranian partners at rates of roughly 70&ndash;77% across all age groups. Among second-generation Iranian-Americans, about half to 60% have White non-Hispanic partners, with higher rates among younger cohorts. Second-generation outmarriage rates are <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE;">comparable to those of other second-generation Asian Americans</a>.</div>',
   '<div class="chart-card pc1">',
   '<div class="section-title">Ethnicity of Spouse/Partner: First Generation</div>',
@@ -741,22 +741,38 @@ cat("Building us-income...\n")
 ei <- new.env(); load(file.path(DATA_DIR, "iran_data.Rda"), envir = ei)
 iran <- ei$iran_data
 
-# National decile thresholds
+# National decile thresholds — household-level (see
+# pull_acs_5yr_2020_2024.R). The reference distribution is one row per
+# household whose reference person is aged 25-54, weighted by WGTP.
 nat <- readRDS(file.path(DATA_DIR, "national_reference_acs5_2020_2024.rds"))
 pctiles <- nat$income_pctiles
 breaks <- c(-Inf, pctiles$p10, pctiles$p20, pctiles$p30, pctiles$p40,
             pctiles$p50, pctiles$p60, pctiles$p70, pctiles$p80, pctiles$p90, Inf)
 
-# Filter to prime-age (25-54) with valid household income
+# Iranian side: one row per Iranian household (by SERIAL) with at least
+# one prime-age adult (25-54) of compound-Iranian identification.
+# Previously this filtered to all prime-age persons and summed PERWT,
+# which multi-counted households with multiple prime-age adults. The
+# household-level approach matches how the national reference is built
+# and makes the comparison internally consistent. Second-generation
+# children living with 1st-gen parents inherit the parent's household.
 inc <- iran %>%
   filter(AGE >= 25 & AGE <= 54 & !is.na(HHINCOME)) %>%
+  # Prefer a 1st-gen row when a household has multiple prime-age Iranian
+  # members (the sort puts 1st-gen first so slice(1) picks it). Then dedupe.
+  mutate(gen_rank = ifelse(generation == "1st gen", 0L, 1L)) %>%
+  arrange(SERIAL, gen_rank, AGE) %>%
+  group_by(SERIAL) %>%
+  slice(1) %>%
+  ungroup() %>%
+  select(-gen_rank) %>%
   mutate(decile = cut(HHINCOME, breaks = breaks, labels = paste0("D", 1:10),
                       include.lowest = TRUE, right = TRUE))
 
 make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
   d <- df %>% filter(gen == gen_val) %>%
     group_by(decile) %>%
-    summarize(n = n(), weighted = sum(PERWT, na.rm = TRUE), .groups = "drop") %>%
+    summarize(n = n(), weighted = sum(HHWT, na.rm = TRUE), .groups = "drop") %>%
     mutate(share = round(weighted / sum(weighted) * 100, 1))
 
   decile_labels <- c("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th")
@@ -810,10 +826,27 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
   plotly_div(id_prefix, plotly_to_json(p), "500px", source = SRC_INCOME)
 }
 
+# Pre-compute top- and bottom-decile shares so the text cards track the
+# underlying data automatically instead of hard-coding literals that drift
+# whenever the pipeline is re-run.
+decile_share <- function(gen_val, target_decile) {
+  d <- inc %>% filter(gen == gen_val) %>%
+    group_by(decile) %>%
+    summarize(weighted = sum(HHWT, na.rm = TRUE), .groups = "drop") %>%
+    mutate(share = weighted / sum(weighted) * 100)
+  round(d$share[d$decile == target_decile], 1)
+}
+fg_d10 <- decile_share("1st gen", "D10")
+sg_d10 <- decile_share("2nd gen", "D10")
+sg_d1  <- decile_share("2nd gen", "D1")
+
 writeLines(page_template("Income", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">First-generation Iranian-Americans (ages 25&ndash;54) are concentrated in the upper income deciles, with 21% in the top decile&mdash;more than double the national baseline of 10%.</div>',
-  '<div class="text-card pt2">Second-generation Iranian-Americans (ages 25&ndash;54) are even more concentrated at the top, with 25% in the highest income decile and only 6% in the lowest.</div>',
+  sprintf('<div class="text-card pt1">First-generation Iranian-Americans (ages 25&ndash;54) are concentrated in the upper income deciles, with %s%% in the top decile&mdash;%s the national baseline of 10%%.</div>',
+    format(fg_d10, nsmall = 0),
+    ifelse(fg_d10 >= 20, "more than double", "well above")),
+  sprintf('<div class="text-card pt2">Second-generation Iranian-Americans (ages 25&ndash;54) are even more concentrated at the top, with %s%% in the highest income decile and %s%% in the lowest.</div>',
+    format(sg_d10, nsmall = 0), format(sg_d1, nsmall = 0)),
   '<div class="chart-card pc1">', make_income_chart(inc, "1st gen", "First Generation", "inc1"), '</div>',
   '<div class="chart-card pc2">', make_income_chart(inc, "2nd gen", "Second Generation", "inc2"), '</div>',
   '</div>'

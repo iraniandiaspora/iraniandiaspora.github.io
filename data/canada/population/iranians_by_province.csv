@@ -1,11 +1,11 @@
 pr,pop,n_unweighted,province,reliability
-35,134595.56191557556,3634,Ontario,Reliable
-59,58887.73846757848,1590,British Columbia,Reliable
-24,29565.95871576638,798,Quebec,Reliable
-48,12102.566124518731,327,Alberta,Reliable
-46,1480.770298207344,40,Manitoba,Reliable
-12,1334.271112834402,36,Nova Scotia,Reliable
-47,1074.955614536,29,Saskatchewan,Use with caution
-10,592.7957497047698,16,Newfoundland and Labrador,Use with caution
-13,407.1346041341316,11,New Brunswick,Use with caution
-11,147.676153091264,4,Prince Edward Island,Suppress
+35,126669.46113133343,3420,Ontario,Reliable
+59,56184.08758195998,1517,British Columbia,Reliable
+24,27750.505110412265,749,Quebec,Reliable
+48,10289.031751119928,278,Alberta,Reliable
+46,1110.577723655508,30,Manitoba,Reliable
+12,889.5140752229347,24,Nova Scotia,Use with caution
+47,518.9440897759999,14,Saskatchewan,Use with caution
+10,370.49734356548106,10,Newfoundland and Labrador,Use with caution
+13,74.024473478933,2,New Brunswick,Suppress
+11,73.838076545632,2,Prince Edward Island,Suppress

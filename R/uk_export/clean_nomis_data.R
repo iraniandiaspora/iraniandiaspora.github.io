@@ -67,6 +67,11 @@ lookup$RGNCD <- ifelse(is.na(lookup$RGNCD) & grepl("^W", lookup$LADCD),
 lookup$RGNNM <- ifelse(is.na(lookup$RGNNM) & grepl("^W", lookup$LADCD),
                        "Wales", lookup$RGNNM)
 
+# Note: ONS rounds local-authority counts to protect disclosure, so the
+# sum of LAD-aggregated regions differs from the published E+W total by
+# about +/-6. This is source-level non-additivity, not a join bug.
+# Do not rescale the regional counts to match the national total —
+# that would hide real noise behind false precision.
 regions <- la_clean %>%
   left_join(lookup %>% select(la_code = LADCD, region_code = RGNCD,
                               region_name = RGNNM),

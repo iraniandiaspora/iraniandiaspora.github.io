@@ -37,7 +37,7 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
@@ -246,23 +246,28 @@ hl_for   <- hl$value_thousands[hl$category == "foreign_citizens"] * 1000
 # =====================================================
 cat("Building de-population...\n")
 
-# Bundesland bar (all_gens), sorted descending
+# Bundesland bar (all_gens), sorted descending.
+# Suppressed states (Destatis rule: <5K) are kept in the chart with a grey
+# fill and "Suppressed (<5K)" hover instead of being silently coerced to 0.
+# The 10 visible states sum to ~294K vs the 319K headline; the ~25K gap
+# lives in 6 suppressed Bundesländer and is labeled as such below the chart.
 bund_all <- bund %>% filter(gen == "all_gens") %>%
-  mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000) %>%
-  arrange(desc(value))
-top_n <- bund_all[1:10, ]
-other_val <- sum(bund_all$value[11:nrow(bund_all)])
-bar_df <- bind_rows(
-  top_n %>% select(land, value),
-  data.frame(land = "Other states", value = other_val, stringsAsFactors = FALSE)
-)
+  mutate(is_suppressed = is.na(value_k),
+         value = ifelse(is_suppressed, 0, value_k * 1000)) %>%
+  arrange(desc(value), is_suppressed)
+# Visible states first (by size), then suppressed ones grouped at the end.
+bar_df <- bund_all %>% select(land, value, is_suppressed)
 bar_df$pct <- round(bar_df$value / hl_total * 100, 1)
+bar_df$hover <- ifelse(bar_df$is_suppressed,
+  sprintf("<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000", bar_df$land),
+  sprintf("<b>%s</b><br>%s (%.1f%%)", bar_df$land, format(bar_df$value, big.mark = ","), bar_df$pct))
+bar_df$fill_color <- ifelse(bar_df$is_suppressed, "#c8c8c8", "#2774AE")
+bar_df$display_value <- ifelse(bar_df$is_suppressed, 2500, bar_df$value)
 bar_df$land <- factor(bar_df$land, levels = bar_df$land)
 
-p_bund_bar <- plot_ly(bar_df, x = ~land, y = ~value, type = "bar",
-    marker = list(color = c(rep("#2774AE", 10), "#b0b0b0")),
-    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
-      land, format(value, big.mark = ","), pct),
+p_bund_bar <- plot_ly(bar_df, x = ~land, y = ~display_value, type = "bar",
+    marker = list(color = ~fill_color),
+    text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Origin Population<br>by German State</b>",
@@ -274,22 +279,42 @@ p_bund_bar <- plot_ly(bar_df, x = ~land, y = ~value, type = "bar",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
 
-# Bundesland choropleth (load GeoJSON server-side, pass inline)
+# Bundesland choropleth (load GeoJSON server-side, pass inline).
+# Suppressed states are rendered in neutral grey (z=NA dropped by plotly and
+# filled via the default trace color) with a "Suppressed" hover rather than
+# shading at 0 on the blue ramp.
 bund_map_data <- bund %>% filter(gen == "all_gens") %>%
-  mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000)
+  mutate(is_suppressed = is.na(value_k),
+         value = ifelse(is_suppressed, NA_real_, value_k * 1000))
+bund_map_visible <- bund_map_data %>% filter(!is_suppressed)
+bund_map_suppressed <- bund_map_data %>% filter(is_suppressed)
 
 de_geojson <- jsonlite::fromJSON(file.path(DATA_DIR, "bundeslaender.geojson"),
   simplifyVector = FALSE)
 
 p_de_map <- plot_ly() %>%
+  # Suppressed polygons: neutral grey with "Suppressed" hover
   add_trace(type = "choroplethmapbox",
     geojson = de_geojson,
-    locations = bund_map_data$land,
-    z = bund_map_data$value,
+    locations = bund_map_suppressed$land,
+    z = rep(1, nrow(bund_map_suppressed)),
+    featureidkey = "properties.name",
+    text = sprintf("<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000",
+      bund_map_suppressed$land),
+    hoverinfo = "text",
+    colorscale = list(c(0, "#d0d0d0"), c(1, "#d0d0d0")),
+    zmin = 0, zmax = 1,
+    showscale = FALSE,
+    marker = list(line = list(color = "white", width = 1), opacity = 0.7)
+  ) %>%
+  add_trace(type = "choroplethmapbox",
+    geojson = de_geojson,
+    locations = bund_map_visible$land,
+    z = bund_map_visible$value,
     featureidkey = "properties.name",
     text = sprintf("<b>%s</b><br>%s Iranian-origin residents<br>%.1f%% of Germany total",
-      bund_map_data$land, format(bund_map_data$value, big.mark = ","),
-      bund_map_data$value / hl_total * 100),
+      bund_map_visible$land, format(bund_map_visible$value, big.mark = ","),
+      bund_map_visible$value / hl_total * 100),
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"), c(0.1, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
@@ -353,7 +378,8 @@ pop_body <- paste0(
   '<div class="section-title">Geographic Distribution of the Iranian-Origin Population</div>',
   plotly_div("de-bund-map", plotly_to_json(p_de_map), "450px", source = MZ_SOURCE),
   '</div>',
-  '</div>'
+  '</div>',
+  '<p style="font-size:11px; color:#777; text-align:center; margin:8px 0 0 0; line-height:1.5;">Six German states with fewer than 5,000 Iranian-origin residents are suppressed by Destatis (shown in grey). Published state counts sum to about 294,000; the remaining ~25,000 residents are distributed across those six suppressed states and are included in the 319,000 national headline.</p>'
 )
 
 writeLines(page_template("Germany: Population", pop_body), "docs/pages/de-population.html")
@@ -684,8 +710,18 @@ p_emp_status <- plot_ly(emp_bar_df, x = ~status, y = ~count, type = "bar",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
 
+# True employed total ("Erwerbstätige") — the denominator for industry %.
+# Previously percentages were normalized to the sum of visible industry
+# bars (~164K), which understated suppressed sectors. Now % is computed
+# against the full published employed total (~170K), and suppressed
+# sectors are shown as grey bars labeled "Suppressed (<5K)".
+hl_employed <- emp$value_k[emp$section == "status" &
+                           emp$category == "Erwerbst\u00e4tige" &
+                           emp$gen == "all_gens"] * 1000
+
 ind <- emp %>% filter(section == "industry", gen == "all_gens") %>%
-  mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000,
+  mutate(is_suppressed = is.na(value_k),
+         value = ifelse(is_suppressed, 0, value_k * 1000),
          label = case_when(
            category == "Land- und Forstwirtschaft, Fischerei" ~ "Agriculture & fishing",
            category == "Produzierendes Gewerbe, Baugewerbe" ~ "Industry & construction",
@@ -693,20 +729,27 @@ ind <- emp %>% filter(section == "industry", gen == "all_gens") %>%
            category == "\u00d6ffentliche Verwaltung" ~ "Public administration",
            category == "Sonstige Dienstleistungen" ~ "Other services (incl. health, education)",
            TRUE ~ category
-         ))
-ind <- ind %>% filter(value > 0) %>% arrange(desc(value))
-ind_total <- sum(ind$value)
-ind$pct <- round(ind$value / ind_total * 100, 1)
+         )) %>%
+  arrange(desc(value), is_suppressed)
+# Percentages always use the true employed total; visible bars don't sum to
+# 100% because two sectors are Destatis-suppressed.
+ind$pct <- round(ind$value / hl_employed * 100, 1)
+ind$display_value <- ifelse(ind$is_suppressed, 3000, ind$value)
+ind$hover <- ifelse(ind$is_suppressed,
+  sprintf("<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000", ind$label),
+  sprintf("<b>%s</b><br>%s (%.1f%% of all employed)", ind$label,
+          format(ind$value, big.mark = ","), ind$pct))
 ind$label <- factor(ind$label, levels = ind$label)
 # Warm-earth palette for the industry chart; matches the labour-force
-# chart in the same tab card and keeps the Work side of the page visually
-# distinct from the blue income gradient on the right.
-ind_palette <- c("#c4793a", "#d4a943", "#8a5a3a", "#e8b878", "#b0b0b0")
+# chart in the same tab card. Suppressed sectors are grey.
+ind_palette_visible <- c("#c4793a", "#d4a943", "#8a5a3a", "#e8b878", "#b0b0b0")
+n_visible <- sum(!ind$is_suppressed)
+ind$fill_color <- c(ind_palette_visible[seq_len(n_visible)],
+                    rep("#c8c8c8", nrow(ind) - n_visible))
 
-p_industry <- plot_ly(ind, x = ~label, y = ~value, type = "bar",
-    marker = list(color = ind_palette[seq_len(nrow(ind))]),
-    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
-      label, format(value, big.mark = ","), pct),
+p_industry <- plot_ly(ind, x = ~label, y = ~display_value, type = "bar",
+    marker = list(color = ~fill_color),
+    text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Origin Employment by Industry</b>",
@@ -798,7 +841,7 @@ workinc_body <- paste0(
   '</div>',
   '<div id="de-wk-industry" class="tab-panel" data-group="de-wk-tabs">',
   plotly_div("de-industry", plotly_to_json(p_industry), "460px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Iranian-origin residents employed across five broad sectors.")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Iranian-origin residents employed across five broad sectors. Agriculture and Public administration are suppressed by Destatis (shown in grey). Percentages are computed against the full published employed total (~170,000), so visible bars do not sum to 100%.")),
   '</div>',
   '</div>',
   # RIGHT: income chart
