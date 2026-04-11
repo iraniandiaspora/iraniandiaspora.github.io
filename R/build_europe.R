@@ -454,7 +454,7 @@ body <- paste0(
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",
-    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. United Kingdom added as a dashed line at its three decennial census points (2001, 2011, 2021). Germany is omitted: Eurostat only publishes Iranian-citizen counts for Germany, not Iran-born; the German Mikrozensus runs annually and a German line could be added in a later update.")),
+    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. The United Kingdom is shown as a dashed line at its three decennial census points (2001, 2011, 2021). Germany is not shown on this chart because Eurostat does not publish Iran-born counts for Germany; see the Germany pages for the national Mikrozensus figures.")),
   '</div>',
   '</div>'
 )
