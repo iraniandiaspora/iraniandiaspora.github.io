@@ -35,7 +35,7 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:window.innerWidth>=900});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
