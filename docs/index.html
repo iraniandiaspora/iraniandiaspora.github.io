@@ -70,6 +70,7 @@
     <div class="submenu-wrapper submenu-country">
       <button class="country-tab active" data-country="overview" onclick="showEuropeCountry('overview', this)">All Europe</button>
       <button class="country-tab" data-country="germany" onclick="showEuropeCountry('germany', this)">Germany</button>
+      <button class="country-tab" data-country="uk" onclick="showEuropeCountry('uk', this)">United Kingdom</button>
     </div>
     <!-- Row 2a: Overview page row (single page) -->
     <div id="europe-overview-pages" class="submenu-wrapper submenu-pages active" data-country="overview">
@@ -81,6 +82,10 @@
       <button class="sub-tab" data-tab="de-immigration" onclick="showSubTab('de-immigration', this)">Immigration &amp; Citizenship</button>
       <button class="sub-tab" data-tab="de-langedu" onclick="showSubTab('de-langedu', this)">Language &amp; Education</button>
       <button class="sub-tab" data-tab="de-workinc" onclick="showSubTab('de-workinc', this)">Work &amp; Income</button>
+    </div>
+    <!-- Row 2c: United Kingdom page row -->
+    <div id="europe-uk-pages" class="submenu-wrapper submenu-pages" data-country="uk">
+      <button class="sub-tab" data-tab="uk-population" onclick="showSubTab('uk-population', this)">Population</button>
     </div>
   </div>
 </div>
@@ -160,6 +165,11 @@
   <iframe src="pages/de-workinc.html" title="Germany Work and Income"></iframe>
 </div>
 
+<!-- United Kingdom Pages (Europe tab) -->
+<div id="uk-population" class="tab-content">
+  <iframe src="pages/uk-population.html" title="UK Population"></iframe>
+</div>
+
 <!-- Bibliography -->
 <div id="bibliography" class="tab-content">
   <iframe src="pages/bibliography.html" title="Bibliography"></iframe>
@@ -181,11 +191,14 @@
     <div style="border-left:3px solid #2774AE; padding-left:16px; margin-bottom:20px;">
       <p style="font-weight:600; margin-bottom:4px;">April 2026</p>
       <ul style="margin:0 0 0 16px; line-height:1.8;">
-        <li>Updated all U.S. data to the <strong>2020&ndash;2024 American Community Survey</strong> (previously 2018&ndash;2022)</li>
-        <li>U.S. population estimate revised to <strong>794,915</strong>. Now includes children of Iranian parents identified through household data, and a new &ldquo;Iranian&rdquo; race write-in category first available in the 2024 survey</li>
+        <li>Added a new <strong>Europe</strong> tab with an &ldquo;All Europe&rdquo; overview page showing ~656,000 Iran-born residents across eleven European countries, including a European choropleth map, country ranking, and a 1998&ndash;2025 population trajectory</li>
+        <li>Added <strong>Germany</strong> pages using the 2024 Mikrozensus (Destatis), covering population, state-level geography, citizenship, immigration reasons and timing, Persian language at home, education, labour force, industry, and income</li>
+        <li>Added a <strong>Germany Annual Arrivals</strong> time series (1991&ndash;2023) compiled from four editions of the BAMF Migrationsbericht</li>
+        <li>Added a <strong>United Kingdom</strong> page showing ~114,000 Iran-born residents across the four UK nations (ONS Census 2021 &amp; Scotland Census 2022), with a regional choropleth map of nine English regions plus Scotland and Wales</li>
+        <li>Added the three UK decennial census points (2001, 2011, 2021) to the Europe time-series chart</li>
         <li>Added <strong>Australia</strong> pages using the 2021 Australian Bureau of Statistics (ABS) Census, including population overview, state and city maps, and immigration timing</li>
-        <li>Added <strong>Germany</strong> pages using the 2024 Mikrozensus (Destatis), covering population, state-level geography, immigration reasons, citizenship, education, labour force, income, and Persian language at home</li>
         <li>Added U.S. <strong>Immigration History</strong> tab with Immigration and Naturalization Service (INS) and Department of Homeland Security (DHS) permanent resident admissions data (1978&ndash;2023), broken down by admission category</li>
+        <li>Updated all U.S. data to the <strong>2020&ndash;2024 American Community Survey</strong> (previously 2018&ndash;2022), revising the U.S. population estimate to <strong>794,915</strong>. Now includes children of Iranian parents identified through household data, and a new &ldquo;Iranian&rdquo; race write-in category first available in the 2024 survey</li>
         <li>U.S. and Canadian income pages adjusted to <strong>pre-tax household income deciles</strong></li>
         <li>Redesigned the site for improved speed, interactivity, and mobile viewing</li>
       </ul>

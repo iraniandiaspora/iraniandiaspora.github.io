@@ -1,14 +1,17 @@
 # Iranian Diaspora Dashboard
 
-Interactive data dashboard comparing Iranian diaspora populations in the United States, Canada, Australia, and worldwide.
+Interactive data dashboard comparing Iranian diaspora populations in the United States, Europe, Canada, Australia, and worldwide.
 
 **[iraniandiaspora.github.io](https://iraniandiaspora.github.io)**
 
 ## Data Sources
 
-| Country | Source | Years |
+| Country / Region | Source | Years |
 |---------|--------|-------|
 | United States | American Community Survey (ACS) Public Use Microdata Sample (PUMS); Immigration and Naturalization Service (INS) / Department of Homeland Security (DHS) Yearbook of Immigration Statistics | 2020–2024; 1978–2023 |
+| Europe overview | Eurostat (population by country of birth, 9 countries) + national sources for Germany and the UK | 1998–2025 |
+| Germany | Mikrozensus Erstergebnisse (Destatis); Bundesamt in Zahlen (BAMF); Migrationsberichte (BAMF) | 2024; 1991–2023 |
+| United Kingdom | ONS Census (England &amp; Wales), Scotland's Census, NISRA Census (Northern Ireland) | 2021–2022 |
 | Canada | Census Public Use Microdata File (PUMF) | 2021 |
 | Australia | Australian Bureau of Statistics (ABS) Census of Population and Housing | 2021 |
 | Global | United Nations International Migrant Stock | 2024 |
