@@ -339,6 +339,36 @@ for (g in top6$geo) {
   ))
 }
 
+# United Kingdom: three decennial census points (2001, 2011, 2021). Sources:
+#   2001 Census: ~42,500 Iran-born in England and Wales (ONS)
+#   2011 Census:  84,735 UK total (79,985 E + 1,695 W + 2,773 S + 282 NI)
+#   2021 Census: 114,432 UK total (sum of E+W 2021, Scotland 2022, NI 2021)
+uk_ts <- data.frame(
+  year = c(2001, 2011, 2021),
+  value = c(42494, 84735, 114432),
+  country = "United Kingdom",
+  stringsAsFactors = FALSE
+)
+p_ts <- p_ts %>% add_trace(
+  data = uk_ts,
+  x = ~year, y = ~value,
+  type = "scatter", mode = "lines+markers",
+  line = list(color = "#4a8c6f", width = 2.5, dash = "dot"),
+  marker = list(color = "#4a8c6f", size = 7, symbol = "diamond"),
+  text = ~sprintf("<b>United Kingdom</b> %d<br>%s Iran-born residents (census)",
+    year, format(value, big.mark = ",")),
+  hoverinfo = "text",
+  showlegend = FALSE
+)
+last_points <- rbind(last_points, data.frame(
+  geo = "UK",
+  country = "United Kingdom",
+  x = 2021,
+  y = 114432,
+  color = "#4a8c6f",
+  stringsAsFactors = FALSE
+))
+
 # The Netherlands / Austria lines land close together at the right edge.
 # Nudge overlapping labels vertically so they don't collide. Sort by y and
 # bump any label that is within MIN_GAP of the previous one.
@@ -424,7 +454,7 @@ body <- paste0(
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",
-    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 the six European countries with the longest continuous annual reporting. Germany and the United Kingdom are omitted because their data comes from one-time censuses rather than annual series.")),
+    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. United Kingdom added as a dashed line at its three decennial census points (2001, 2011, 2021). Germany is omitted: Eurostat only publishes Iranian-citizen counts for Germany, not Iran-born; the German Mikrozensus runs annually and a German line could be added in a later update.")),
   '</div>',
   '</div>'
 )

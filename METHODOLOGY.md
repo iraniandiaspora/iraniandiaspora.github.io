@@ -92,6 +92,57 @@ The census question asks: "In which country was the person born?" The total coun
 
 **Data access:** Census data tables are available from [ABS Census Data](https://www.abs.gov.au/census/find-census-data). Cross-tabulations of country of birth by socioeconomic variables (education, income, occupation) require the free [ABS TableBuilder](https://www.abs.gov.au/statistics/microdata-tablebuilder/tablebuilder) tool.
 
+## Germany
+
+### Population Identification
+
+Iranian-origin residents in Germany are identified in the 2024 [Mikrozensus](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html), an annual 1% household survey run by the Federal Statistical Office (Destatis). Destatis uses a strictly birth-based definition called *Migrationsgeschichte*. A person is counted if they meet at least one:
+
+1. **Place of birth** — born in Iran
+2. **Parental origin** — at least one parent born in Iran
+
+The headline estimate of 319,000 includes both the first generation (born in Iran, 250,000) and the second generation (born in Germany with at least one Iran-born parent, 69,000).
+
+Persian language is not used as a counting criterion because the Mikrozensus language code does not distinguish Iranian Persian from Afghan Dari, and Germany hosts a much larger Afghan-origin population than Iranian. The 176,000 Persian-at-home figure shown on the Language & Education page describes a subset of the 319,000 Iranian-origin population, not an alternative count.
+
+Third-generation children (German-born with German-born parents but Iran-born grandparents) are not counted as Iranian-origin under any post-2017 Mikrozensus definition.
+
+**Data access:** The Mikrozensus Erstergebnisse (first-results publication) is a free public download from [Destatis](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/_publikationen-innen-migrationshintergrund.html). Destatis also publishes a Scientific Use File with full microdata, available to researchers through [GESIS](https://www.gesis.org/); access is restricted to researchers at German-registered institutions.
+
+### Annual Arrivals Time Series
+
+The annual arrivals chart on the Immigration & Citizenship page shows Iranian *Zuzüge* (arrivals) in Germany from 1991 through 2023, compiled from four editions of the BAMF *Migrationsbericht* (2005, 2015, 2020, 2023). This is a flow series — it counts arrivals during each year, not the current Iran-born population. Overlapping years across editions are used as a sanity check and agree exactly. Pre-1991 data exists only for West Germany and is not included.
+
+### Other Sources
+
+The Immigration & Citizenship page also draws on the BAMF publication [*Das Bundesamt in Zahlen 2024*](https://www.bamf.de/SharedDocs/Anlagen/DE/Statistik/BundesamtinZahlen/) for asylum and naturalization counts.
+
+The dashboard does not cite third-party analyses of German administrative data (such as the Institut der deutschen Wirtschaft Kurzberichte), even though their underlying data are official, in order to keep sourcing transparent and consistent.
+
+## United Kingdom
+
+### Population Identification
+
+Iran-born residents in the United Kingdom are identified in the 2021 Census of England and Wales (ONS), Scotland's Census 2022, and the 2021 Census of Northern Ireland (NISRA). All four nations ask the same place-of-birth question. A person is counted if they report Iran as their country of birth.
+
+**Narrower than the US/Canada definition.** The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted here. This makes the 114,432 UK total a narrower estimate than the compound definitions used on the United States and Canada pages.
+
+The regional map on the UK Population page aggregates the 331 lower-tier local authorities in England and Wales into the nine English regions plus Wales, and appends Scotland's total. Northern Ireland (461 Iran-born residents) is not shown on the regional map because the Great Britain regions GeoJSON does not include it.
+
+**Data access:** England and Wales counts are from [NOMIS](https://www.nomisweb.co.uk/sources/census_2021) table TS012. Scotland and Northern Ireland totals are published directly by [Scotland's Census](https://www.scotlandscensus.gov.uk/) and [NISRA](https://www.nisra.gov.uk/statistics/census/2021-census).
+
+## Europe Overview
+
+The All Europe overview page on the Europe tab combines three types of sources to produce a single comparable ranking of Iran-born populations across 11 European countries:
+
+- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** publishes population by country of birth for nine European countries (Austria, Belgium, Denmark, France, Italy, Netherlands, Norway, Sweden, Switzerland), available as annual time series going back to 1998.
+- **Destatis Mikrozensus 2024** is used for Germany, because Eurostat does not publish Iran-born figures for Germany (only Iranian-citizen counts, which would leave out about 100,000 naturalized Germans).
+- **UK national censuses** are used for the United Kingdom, because the UK is not a Eurostat reporting country after Brexit. The UK figure is summed across the 2021 Censuses of England, Wales, and Northern Ireland and the 2022 Census of Scotland.
+
+All figures count people born in Iran who currently reside in the reporting country. Second-generation European-born children of Iran-born parents are not included in the totals shown on the overview page, because Eurostat does not publish a harmonized second-generation count. National sources that do collect second-generation data (Germany, the Netherlands, Sweden, Denmark, Norway) report larger Iranian-origin populations on their individual country pages.
+
+Denmark, France, and Switzerland have gaps in recent Eurostat reporting and are shown with their most recent available year, which may lag by several years. Reference years for each country are shown in the map tooltips.
+
 ## Global
 
 Global migration figures are drawn from the [UN International Migrant Stock](https://www.un.org/development/desa/pd/content/international-migrant-stock) database (2024 revision). These count people born in Iran who reside in another country, based on each country's census or population register. Second-generation Iranians born in the destination country are not included.

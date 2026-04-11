@@ -231,6 +231,7 @@ lang <- read.csv(file.path(DATA_DIR, "de_language.csv"))
 motive <- read.csv(file.path(DATA_DIR, "de_motive.csv"))
 nat <- read.csv(file.path(DATA_DIR, "de_naturalization.csv"))
 duration <- read.csv(file.path(DATA_DIR, "de_duration.csv"))
+annual_arrivals <- read.csv(file.path(DATA_DIR, "de_annual_arrivals.csv"))
 
 # Headline lookups (values are in thousands; convert to persons)
 hl_total <- hl$value_thousands[hl$category == "total"] * 1000
@@ -447,6 +448,54 @@ p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
 
+# Annual arrivals chart — Iranian Zuzüge 1991-2023 from BAMF/Destatis
+# Migrationsberichte. This is a flow series (annual arrivals in that year),
+# not a stock-based cohort view. Includes a cumulative secondary line
+# matching the US-immigration chart style.
+annual_arrivals$cumulative <- cumsum(annual_arrivals$iran_arrivals)
+total_cum <- max(annual_arrivals$cumulative)
+annual_arrivals$cum_pct <- round(annual_arrivals$cumulative / total_cum * 100, 1)
+
+p_annual <- plot_ly() %>%
+  add_bars(
+    data = annual_arrivals,
+    x = ~year, y = ~iran_arrivals,
+    marker = list(color = "#c4793a", line = list(color = "#8a5a3a", width = 0.3)),
+    text = ~sprintf("<b>%d</b><br>%s Iranians arrived<br>Cumulative: %s (%.0f%%)",
+      year, format(iran_arrivals, big.mark = ","),
+      format(cumulative, big.mark = ","), cum_pct),
+    hoverinfo = "text",
+    showlegend = FALSE,
+    name = "Annual arrivals"
+  ) %>%
+  add_lines(
+    data = annual_arrivals,
+    x = ~year,
+    y = ~cumulative / total_cum * max(annual_arrivals$iran_arrivals) * 1.02,
+    yaxis = "y2",
+    line = list(color = "#1a4e72", width = 2.5),
+    text = ~sprintf("<b>By %d:</b> %s cumulative (%.0f%%)",
+      year, format(cumulative, big.mark = ","), cum_pct),
+    hoverinfo = "text",
+    showlegend = FALSE,
+    name = "Cumulative"
+  ) %>%
+  layout(
+    title = list(text = "<b>Annual Iranian Arrivals to Germany, 1991\u20132023</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", tickfont = list(size = 10), dtick = 4),
+    yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
+    yaxis2 = list(overlaying = "y", side = "right", showgrid = FALSE,
+      range = c(0, max(annual_arrivals$iran_arrivals) * 1.05),
+      tickvals = seq(0, max(annual_arrivals$iran_arrivals), length.out = 5),
+      ticktext = c("0%", "25%", "50%", "75%", "100%"),
+      tickfont = list(size = 10)),
+    margin = list(t = 55, b = 40, l = 55, r = 45),
+    plot_bgcolor = "white", paper_bgcolor = "white",
+    hovermode = "x unified"
+  ) %>%
+  config(displayModeBar = FALSE)
+
 p_citizen <- plot_ly(data.frame(
     status = c("German citizens", "Iranian nationals"),
     count  = c(hl_deu, hl_for),
@@ -473,28 +522,33 @@ p_citizen <- plot_ly(data.frame(
 immig_body <- paste0(
   '<div class="text-row">',
   '<div class="text-card">About 167,000 Iranian-origin residents hold German citizenship (roughly 52% of the total), and about 152,000 are still Iranian nationals. BAMF recorded 7,840 Iranian naturalizations in 2024.</div>',
-  '<div class="text-card">Flight and asylum are the most common reason Iran-born residents came to Germany, accounting for about 44% of first-generation arrivals, followed by study and family reunification. About half of Iran-born residents have been in Germany for less than 10 years; one in four have lived there for 30 years or more.</div>',
+  '<div class="text-card">Annual Iranian arrivals to Germany show two distinct waves: a steady background flow in the 1990s and 2000s of around 3,000\u20138,000 per year, and a sharp increase from 2015 onwards peaking above 21,000 in 2016 and again in 2023. The Mikrozensus records that about 44% of first-generation residents came through the asylum system.</div>',
   '</div>',
 
   '<div class="chart-row">',
   # Left: citizenship chart
   '<div class="chart-card">',
-  plotly_div("de-cit", plotly_to_json(p_citizen), "460px",
+  plotly_div("de-cit", plotly_to_json(p_citizen), "480px",
     source = paste0(MZ_SOURCE, "<br>About 167,000 Iranian-origin residents (52%) hold German citizenship, including naturalized Germans.")),
   '</div>',
 
-  # Right: tabbed motive + duration (both Mikrozensus)
+  # Right: tabbed annual arrivals + motive + duration
   '<div class="chart-card">',
   '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'de-immig-motive\',this,\'de-immig-tabs\')">Main Reason for Coming</button>',
+  '<button class="tab-btn active" onclick="switchTab(\'de-immig-annual\',this,\'de-immig-tabs\')">Annual Arrivals</button>',
+  '<button class="tab-btn" onclick="switchTab(\'de-immig-motive\',this,\'de-immig-tabs\')">Main Reason for Coming</button>',
   '<button class="tab-btn" onclick="switchTab(\'de-immig-duration\',this,\'de-immig-tabs\')">Years in Germany</button>',
   '</div>',
-  '<div id="de-immig-motive" class="tab-panel active" data-group="de-immig-tabs">',
-  plotly_div("de-motive", plotly_to_json(p_motive), "420px",
+  '<div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs">',
+  plotly_div("de-annual", plotly_to_json(p_annual), "440px",
+    source = "Source: BAMF Migrationsb&#228;richte (2005, 2015, 2020, 2023 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here."),
+  '</div>',
+  '<div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs">',
+  plotly_div("de-motive", plotly_to_json(p_motive), "440px",
     source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. First generation only (born in Iran).")),
   '</div>',
   '<div id="de-immig-duration" class="tab-panel" data-group="de-immig-tabs">',
-  plotly_div("de-duration", plotly_to_json(p_duration), "420px",
+  plotly_div("de-duration", plotly_to_json(p_duration), "440px",
     source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Iran-born residents only.")),
   '</div>',
   '</div>',
