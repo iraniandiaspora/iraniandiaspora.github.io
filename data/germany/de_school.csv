@@ -1,0 +1,19 @@
+"school_level","gen","value_k","suppressed","low_rel"
+"Insgesamt","all_gens",319,FALSE,FALSE
+"Insgesamt","first_gen",250,FALSE,FALSE
+"Noch in Ausbildung/ noch nicht schulpflichtig","all_gens",55,FALSE,FALSE
+"Noch in Ausbildung/ noch nicht schulpflichtig","first_gen",20,FALSE,FALSE
+"Ohne Schulabschluss","all_gens",31,FALSE,FALSE
+"Ohne Schulabschluss","first_gen",30,FALSE,FALSE
+"Mit Schulabschluss","all_gens",233,FALSE,FALSE
+"Mit Schulabschluss","first_gen",199,FALSE,FALSE
+"Darunter: Hauptschule","all_gens",19,FALSE,FALSE
+"Darunter: Hauptschule","first_gen",17,FALSE,FALSE
+"Polytechnische Oberschule","all_gens",NA,TRUE,FALSE
+"Polytechnische Oberschule","first_gen",NA,TRUE,FALSE
+"Realschule o. ä.","all_gens",29,FALSE,FALSE
+"Realschule o. ä.","first_gen",23,FALSE,FALSE
+"Fachhochschulreife","all_gens",26,FALSE,FALSE
+"Fachhochschulreife","first_gen",22,FALSE,FALSE
+"Abitur","all_gens",159,FALSE,FALSE
+"Abitur","first_gen",137,FALSE,FALSE

@@ -33,7 +33,7 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:window.innerWidth>=900});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('

@@ -1,0 +1,49 @@
+"section","category","gen","value_k","suppressed","low_rel"
+"status","Bevölkerung insgesamt","all_gens",319,FALSE,FALSE
+"status","Bevölkerung insgesamt","first_gen",250,FALSE,FALSE
+"status","Erwerbspersonen zusammen","all_gens",186,FALSE,FALSE
+"status","Erwerbspersonen zusammen","first_gen",157,FALSE,FALSE
+"status","Erwerbstätige","all_gens",170,FALSE,FALSE
+"status","Erwerbstätige","first_gen",142,FALSE,FALSE
+"status","Erwerbslose","all_gens",16,FALSE,FALSE
+"status","Erwerbslose","first_gen",15,FALSE,FALSE
+"status","Nichterwerbspersonen","all_gens",133,FALSE,FALSE
+"status","Nichterwerbspersonen","first_gen",93,FALSE,FALSE
+"stellung","Erwerbstätige nach Stellung im Beruf Selbstständige","all_gens",22,FALSE,FALSE
+"stellung","Erwerbstätige nach Stellung im Beruf Selbstständige","first_gen",17,FALSE,FALSE
+"stellung","mithelfende Familienangehörige","all_gens",NA,TRUE,FALSE
+"stellung","mithelfende Familienangehörige","first_gen",NA,TRUE,FALSE
+"stellung","Beamte/-innen","all_gens",NA,TRUE,FALSE
+"stellung","Beamte/-innen","first_gen",NA,TRUE,FALSE
+"stellung","Angestellte, Arbeiter/-innen","all_gens",136,FALSE,FALSE
+"stellung","Angestellte, Arbeiter/-innen","first_gen",116,FALSE,FALSE
+"stellung","Auszubildende","all_gens",8,FALSE,TRUE
+"stellung","Auszubildende","first_gen",NA,TRUE,FALSE
+"industry","Land- und Forstwirtschaft, Fischerei","all_gens",NA,TRUE,FALSE
+"industry","Land- und Forstwirtschaft, Fischerei","first_gen",NA,TRUE,FALSE
+"industry","Produzierendes Gewerbe, Baugewerbe","all_gens",33,FALSE,FALSE
+"industry","Produzierendes Gewerbe, Baugewerbe","first_gen",29,FALSE,FALSE
+"industry","Handel, Gastgewerbe und Verkehr","all_gens",58,FALSE,FALSE
+"industry","Handel, Gastgewerbe und Verkehr","first_gen",50,FALSE,FALSE
+"industry","Öffentliche Verwaltung","all_gens",NA,TRUE,FALSE
+"industry","Öffentliche Verwaltung","first_gen",NA,TRUE,FALSE
+"industry","Sonstige Dienstleistungen","all_gens",73,FALSE,FALSE
+"industry","Sonstige Dienstleistungen","first_gen",59,FALSE,FALSE
+"income","Erwerbstätige mit Angabe zum Nettoeinkommmen von ... bis unter ... Euro unter 500","all_gens",7,FALSE,TRUE
+"income","Erwerbstätige mit Angabe zum Nettoeinkommmen von ... bis unter ... Euro unter 500","first_gen",NA,TRUE,FALSE
+"income","500 - 1 000","all_gens",25,FALSE,FALSE
+"income","500 - 1 000","first_gen",21,FALSE,FALSE
+"income","1 000 - 1 500","all_gens",24,FALSE,FALSE
+"income","1 000 - 1 500","first_gen",20,FALSE,FALSE
+"income","1 500 - 2 000","all_gens",27,FALSE,FALSE
+"income","1 500 - 2 000","first_gen",23,FALSE,FALSE
+"income","2 000 - 2 500","all_gens",28,FALSE,FALSE
+"income","2 000 - 2 500","first_gen",25,FALSE,FALSE
+"income","2 500 - 3 000","all_gens",18,FALSE,FALSE
+"income","2 500 - 3 000","first_gen",16,FALSE,FALSE
+"income","3 000 - 3 500","all_gens",13,FALSE,FALSE
+"income","3 000 - 3 500","first_gen",10,FALSE,TRUE
+"income","3 500 und mehr","all_gens",28,FALSE,FALSE
+"income","3 500 und mehr","first_gen",22,FALSE,FALSE
+"income","Kein Einkommen","all_gens",NA,TRUE,FALSE
+"income","Kein Einkommen","first_gen",NA,TRUE,FALSE

@@ -1,0 +1,8 @@
+"bucket","value_k","suppressed","low_rel"
+"under_5",14,FALSE,FALSE
+"5_to_10",18,FALSE,FALSE
+"10_to_15",16,FALSE,FALSE
+"15_to_18",12,FALSE,TRUE
+"18_to_25",45,FALSE,FALSE
+"25_to_65",144,FALSE,FALSE
+"65_plus",NA,TRUE,FALSE

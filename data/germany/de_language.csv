@@ -1,0 +1,77 @@
+"language","gen","value_k","suppressed","low_rel"
+"Zu Hause vorwiegend gesprochene Sprache Insgesamt","all_gens",319,FALSE,FALSE
+"Zu Hause vorwiegend gesprochene Sprache Insgesamt","first_gen",250,FALSE,FALSE
+"nur Deutsch","all_gens",68,FALSE,FALSE
+"nur Deutsch","first_gen",33,FALSE,FALSE
+"vorwiegend deutsch","all_gens",29,FALSE,FALSE
+"vorwiegend deutsch","first_gen",20,FALSE,FALSE
+"vorwiegend nicht-deutsch","all_gens",222,FALSE,FALSE
+"vorwiegend nicht-deutsch","first_gen",196,FALSE,FALSE
+"vorwiegend  Albanisch","all_gens",NA,TRUE,FALSE
+"vorwiegend  Albanisch","first_gen",NA,TRUE,FALSE
+"Arabisch","all_gens",NA,TRUE,FALSE
+"Arabisch","first_gen",NA,TRUE,FALSE
+"Bosnisch","all_gens",NA,TRUE,FALSE
+"Bosnisch","first_gen",NA,TRUE,FALSE
+"Bulgarisch","all_gens",NA,TRUE,FALSE
+"Bulgarisch","first_gen",NA,TRUE,FALSE
+"Chinesisch","all_gens",NA,TRUE,FALSE
+"Chinesisch","first_gen",NA,TRUE,FALSE
+"Dänisch","all_gens",NA,TRUE,FALSE
+"Dänisch","first_gen",NA,TRUE,FALSE
+"Englisch","all_gens",10,FALSE,TRUE
+"Englisch","first_gen",9,FALSE,TRUE
+"Französisch","all_gens",NA,TRUE,FALSE
+"Französisch","first_gen",NA,TRUE,FALSE
+"Griechisch","all_gens",NA,TRUE,FALSE
+"Griechisch","first_gen",NA,TRUE,FALSE
+"Hindi","all_gens",NA,TRUE,FALSE
+"Hindi","first_gen",NA,TRUE,FALSE
+"Italienisch","all_gens",NA,TRUE,FALSE
+"Italienisch","first_gen",NA,TRUE,FALSE
+"Kroatisch","all_gens",NA,TRUE,FALSE
+"Kroatisch","first_gen",NA,TRUE,FALSE
+"Kurdisch","all_gens",9,FALSE,TRUE
+"Kurdisch","first_gen",8,FALSE,TRUE
+"Mazedonisch","all_gens",NA,TRUE,FALSE
+"Mazedonisch","first_gen",NA,TRUE,FALSE
+"Niederländisch","all_gens",NA,TRUE,FALSE
+"Niederländisch","first_gen",NA,TRUE,FALSE
+"Paschtu","all_gens",NA,TRUE,FALSE
+"Paschtu","first_gen",NA,TRUE,FALSE
+"Persisch","all_gens",176,FALSE,FALSE
+"Persisch","first_gen",156,FALSE,FALSE
+"Polnisch","all_gens",NA,TRUE,FALSE
+"Polnisch","first_gen",NA,TRUE,FALSE
+"Portugiesisch","all_gens",NA,TRUE,FALSE
+"Portugiesisch","first_gen",NA,TRUE,FALSE
+"Rumänisch","all_gens",NA,TRUE,FALSE
+"Rumänisch","first_gen",NA,TRUE,FALSE
+"Russisch","all_gens",NA,TRUE,FALSE
+"Russisch","first_gen",NA,TRUE,FALSE
+"Serbisch","all_gens",NA,TRUE,FALSE
+"Serbisch","first_gen",NA,TRUE,FALSE
+"Spanisch","all_gens",NA,TRUE,FALSE
+"Spanisch","first_gen",NA,TRUE,FALSE
+"Türkisch","all_gens",NA,TRUE,FALSE
+"Türkisch","first_gen",NA,TRUE,FALSE
+"Ukrainisch","all_gens",NA,TRUE,FALSE
+"Ukrainisch","first_gen",NA,TRUE,FALSE
+"Ungarisch","all_gens",NA,TRUE,FALSE
+"Ungarisch","first_gen",NA,TRUE,FALSE
+"Urdu","all_gens",NA,TRUE,FALSE
+"Urdu","first_gen",NA,TRUE,FALSE
+"Vietnamesisch","all_gens",NA,TRUE,FALSE
+"Vietnamesisch","first_gen",NA,TRUE,FALSE
+"Eine andere in Europa gesprochene Sprache","all_gens",NA,TRUE,FALSE
+"Eine andere in Europa gesprochene Sprache","first_gen",NA,TRUE,FALSE
+"Eine andere in Afrika gesprochene Sprache","all_gens",NA,TRUE,FALSE
+"Eine andere in Afrika gesprochene Sprache","first_gen",NA,TRUE,FALSE
+"Eine andere in Asien gesprochene Sprache","all_gens",10,FALSE,TRUE
+"Eine andere in Asien gesprochene Sprache","first_gen",8,FALSE,TRUE
+"Eine sonstige Sprache","all_gens",NA,TRUE,FALSE
+"Eine sonstige Sprache","first_gen",NA,TRUE,FALSE
+"Nachrichtlich Deutsch und mindestens eine andere Sprache","all_gens",146,FALSE,FALSE
+"Nachrichtlich Deutsch und mindestens eine andere Sprache","first_gen",123,FALSE,FALSE
+"kein Deutsch, nur andere Sprache(n)","all_gens",76,FALSE,FALSE
+"kein Deutsch, nur andere Sprache(n)","first_gen",73,FALSE,FALSE

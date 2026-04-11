@@ -37,7 +37,7 @@ plotly_to_json <- function(p, inject_hoveron = FALSE) {
 
 plotly_div <- function(id, json, height = "500px") {
   sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>
-<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:window.innerWidth>=900});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
+<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
 }
 
 iframe_resize_script <- '

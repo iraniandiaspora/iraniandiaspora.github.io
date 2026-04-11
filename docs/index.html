@@ -23,9 +23,9 @@
     <nav class="navbar">
       <button class="tab-button" onclick="showTab('global', this)">Global</button>
       <button class="tab-button" onclick="showTab('united-states', this)">United States</button>
+      <button class="tab-button" onclick="showTab('europe', this)">Europe</button>
       <button class="tab-button" onclick="showTab('canada', this)">Canada</button>
       <button class="tab-button" onclick="showTab('australia', this)">Australia</button>
-      <button class="tab-button" onclick="showTab('europe', this)">Europe</button>
       <button class="tab-button" onclick="showTab('bibliography', this)">Bibliography</button>
       <button class="tab-button" onclick="showTab('about', this)">About</button>
     </nav>
@@ -61,6 +61,26 @@
     <div class="submenu-wrapper">
       <button class="sub-tab" data-tab="au-population" onclick="showSubTab('au-population', this)">Population</button>
       <button class="sub-tab" data-tab="au-immigration" onclick="showSubTab('au-immigration', this)">Immigration</button>
+    </div>
+  </div>
+
+  <!-- Europe Submenu: country selector row + per-country page rows -->
+  <div id="europe-submenu" class="submenu">
+    <!-- Row 1: Country selector (more countries added here as data becomes available) -->
+    <div class="submenu-wrapper submenu-country">
+      <button class="country-tab active" data-country="overview" onclick="showEuropeCountry('overview', this)">All Europe</button>
+      <button class="country-tab" data-country="germany" onclick="showEuropeCountry('germany', this)">Germany</button>
+    </div>
+    <!-- Row 2a: Overview page row (single page) -->
+    <div id="europe-overview-pages" class="submenu-wrapper submenu-pages active" data-country="overview">
+      <button class="sub-tab" data-tab="eu-overview" onclick="showSubTab('eu-overview', this)">Iran-Born Across Europe</button>
+    </div>
+    <!-- Row 2b: Germany page row -->
+    <div id="europe-germany-pages" class="submenu-wrapper submenu-pages" data-country="germany">
+      <button class="sub-tab" data-tab="de-population" onclick="showSubTab('de-population', this)">Population</button>
+      <button class="sub-tab" data-tab="de-immigration" onclick="showSubTab('de-immigration', this)">Immigration &amp; Citizenship</button>
+      <button class="sub-tab" data-tab="de-langedu" onclick="showSubTab('de-langedu', this)">Language &amp; Education</button>
+      <button class="sub-tab" data-tab="de-workinc" onclick="showSubTab('de-workinc', this)">Work &amp; Income</button>
     </div>
   </div>
 </div>
@@ -121,9 +141,23 @@
   <iframe src="pages/au-immigration.html" title="Australia Immigration"></iframe>
 </div>
 
-<!-- Europe -->
-<div id="europe" class="tab-content">
-  <div class="placeholder"><h2>Coming Soon</h2><p>This section is under construction.</p></div>
+<!-- Europe Overview Page -->
+<div id="eu-overview" class="tab-content">
+  <iframe src="pages/eu-overview.html" title="Europe: Iran-Born Overview"></iframe>
+</div>
+
+<!-- Germany Pages (Europe tab) -->
+<div id="de-population" class="tab-content">
+  <iframe src="pages/de-population.html" title="Germany Population"></iframe>
+</div>
+<div id="de-immigration" class="tab-content">
+  <iframe src="pages/de-immigration.html" title="Germany Immigration"></iframe>
+</div>
+<div id="de-langedu" class="tab-content">
+  <iframe src="pages/de-langedu.html" title="Germany Language and Education"></iframe>
+</div>
+<div id="de-workinc" class="tab-content">
+  <iframe src="pages/de-workinc.html" title="Germany Work and Income"></iframe>
 </div>
 
 <!-- Bibliography -->
@@ -150,6 +184,7 @@
         <li>Updated all U.S. data to the <strong>2020&ndash;2024 American Community Survey</strong> (previously 2018&ndash;2022)</li>
         <li>U.S. population estimate revised to <strong>794,915</strong>. Now includes children of Iranian parents identified through household data, and a new &ldquo;Iranian&rdquo; race write-in category first available in the 2024 survey</li>
         <li>Added <strong>Australia</strong> pages using the 2021 Australian Bureau of Statistics (ABS) Census, including population overview, state and city maps, and immigration timing</li>
+        <li>Added <strong>Germany</strong> pages using the 2024 Mikrozensus (Destatis), covering population, state-level geography, immigration reasons, citizenship, education, labour force, income, and Persian language at home</li>
         <li>Added U.S. <strong>Immigration History</strong> tab with Immigration and Naturalization Service (INS) and Department of Homeland Security (DHS) permanent resident admissions data (1978&ndash;2023), broken down by admission category</li>
         <li>U.S. and Canadian income pages adjusted to <strong>pre-tax household income deciles</strong></li>
         <li>Redesigned the site for improved speed, interactivity, and mobile viewing</li>
@@ -255,7 +290,8 @@ function showTab(tabName, element, skipHash) {
   const usMenu = document.getElementById('united-states-submenu');
   const caMenu = document.getElementById('canada-submenu');
   const auMenu = document.getElementById('australia-submenu');
-  const allMenus = [usMenu, caMenu, auMenu];
+  const euMenu = document.getElementById('europe-submenu');
+  const allMenus = [usMenu, caMenu, auMenu, euMenu];
   if (tabName === 'united-states') {
     allMenus.forEach(m => m.style.display = 'none');
     usMenu.style.display = 'block';
@@ -274,6 +310,18 @@ function showTab(tabName, element, skipHash) {
     const firstSub = document.querySelector('#australia-submenu .sub-tab');
     if (firstSub && !skipHash) { firstSub.classList.add('active'); showSubTab('au-population', firstSub); }
     else if (firstSub) { firstSub.classList.add('active'); }
+  } else if (tabName === 'europe') {
+    allMenus.forEach(m => m.style.display = 'none');
+    euMenu.style.display = 'block';
+    // Default to All Europe overview when no specific page is requested.
+    // showEuropeCountry will navigate to eu-overview on its own.
+    const defaultCountry = document.querySelector('#europe-submenu .country-tab[data-country="overview"]');
+    if (defaultCountry && !skipHash) {
+      showEuropeCountry('overview', defaultCountry);
+    } else if (defaultCountry) {
+      // skipHash mode: swap country row but let hash routing set the sub-tab
+      showEuropeCountry('overview', defaultCountry, true);
+    }
   } else {
     allMenus.forEach(m => m.style.display = 'none');
     document.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
@@ -294,6 +342,33 @@ function showSubTab(subTabId, element) {
   const content = document.getElementById(subTabId);
   if (content) { content.classList.add('active'); content.style.display = 'block'; resizeIframe(content); }
   history.replaceState(null, '', '#' + subTabId);
+}
+
+// Europe nav: switch which country's page row is visible
+function showEuropeCountry(countryName, element, skipNavigate) {
+  // Toggle country tab active state
+  document.querySelectorAll('#europe-submenu .country-tab').forEach(t => t.classList.remove('active'));
+  if (element) element.classList.add('active');
+  // Show only this country's page row
+  var activeRow = null;
+  document.querySelectorAll('#europe-submenu .submenu-pages').forEach(row => {
+    if (row.getAttribute('data-country') === countryName) {
+      row.classList.add('active');
+      activeRow = row;
+    } else {
+      row.classList.remove('active');
+    }
+  });
+  // Navigate to the first sub-tab in this country's row (unless caller is
+  // about to set a specific sub-tab via hash routing)
+  if (!skipNavigate && activeRow) {
+    var firstSub = activeRow.querySelector('.sub-tab');
+    if (firstSub) {
+      activeRow.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+      firstSub.classList.add('active');
+      showSubTab(firstSub.getAttribute('data-tab'), firstSub);
+    }
+  }
 }
 
 // Auto-resize iframes to match content height
@@ -333,15 +408,37 @@ function navigateToHash() {
   var hash = window.location.hash.replace('#', '');
   if (!hash) { showTab('global', document.querySelector('.navbar .tab-button:nth-child(1)')); return; }
   // Map sub-tab prefixes to parent tabs
-  var parentMap = { 'us-': 'united-states', 'ca-': 'canada', 'au-': 'australia' };
+  var parentMap = { 'us-': 'united-states', 'ca-': 'canada', 'au-': 'australia',
+                    'eu-': 'europe',
+                    'de-': 'europe', 'uk-': 'europe', 'nl-': 'europe',
+                    'se-': 'europe', 'no-': 'europe', 'dk-': 'europe',
+                    'fr-': 'europe', 'at-': 'europe', 'be-': 'europe',
+                    'it-': 'europe', 'ch-': 'europe' };
+  // For Europe, also map prefix to which country row to show
+  var europeCountryMap = { 'eu-': 'overview',
+                           'de-': 'germany', 'uk-': 'uk', 'nl-': 'netherlands',
+                           'se-': 'sweden', 'no-': 'norway', 'dk-': 'denmark',
+                           'fr-': 'france', 'at-': 'austria', 'be-': 'belgium',
+                           'it-': 'italy', 'ch-': 'switzerland' };
   var parentTab = null;
+  var europeCountry = null;
   for (var prefix in parentMap) {
-    if (hash.indexOf(prefix) === 0) { parentTab = parentMap[prefix]; break; }
+    if (hash.indexOf(prefix) === 0) {
+      parentTab = parentMap[prefix];
+      if (europeCountryMap[prefix]) europeCountry = europeCountryMap[prefix];
+      break;
+    }
   }
   if (parentTab) {
     // Open parent tab without auto-selecting first sub-tab
     var parentBtn = document.querySelector('.tab-button[onclick*="' + parentTab + '"]');
     showTab(parentTab, parentBtn, true);
+    // For Europe, also activate the right country row (skip auto-navigate
+    // since we're about to set the specific sub-tab from the hash below)
+    if (europeCountry) {
+      var countryBtn = document.querySelector('#europe-submenu .country-tab[data-country="' + europeCountry + '"]');
+      if (countryBtn) showEuropeCountry(europeCountry, countryBtn, true);
+    }
     // Activate the specific sub-tab
     var subBtn = document.querySelector('.sub-tab[data-tab="' + hash + '"]');
     if (subBtn) showSubTab(hash, subBtn);

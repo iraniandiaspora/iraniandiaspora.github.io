@@ -101,6 +101,37 @@ html, body {
 }
 .sub-tab:hover { background-color: #5fa4e0; }
 
+/* Europe two-row submenu: country selector row above page row */
+.submenu-country {
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  padding-bottom: 2px;
+  margin-bottom: 2px;
+  flex-wrap: wrap;
+  gap: 2px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.country-tab {
+  border: none;
+  background-color: transparent;
+  color: white;
+  padding: 4px 14px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  font-family: "Montserrat", sans-serif;
+  cursor: pointer;
+  outline: none;
+  opacity: 0.7;
+  transition: opacity 0.15s, background-color 0.15s;
+  white-space: nowrap;
+}
+.country-tab:hover { opacity: 1; background-color: rgba(255,255,255,0.08); }
+.country-tab.active { opacity: 1; background-color: rgba(255,255,255,0.15); }
+.submenu-pages { display: none; }
+.submenu-pages.active { display: flex; }
+
 /* Tab Content */
 .tab-content {
   display: none;
@@ -155,6 +186,7 @@ html, body {
   .submenu { padding: 2px 6px; }
   .submenu-wrapper { flex-wrap: wrap; gap: 2px; }
   .sub-tab { font-size: 12px; padding: 4px 8px; }
+  .country-tab { font-size: 11px; padding: 3px 10px; }
   .tab-content iframe { min-height: 300px; }
   .footer { flex-direction: column; height: auto; padding: 8px 10px; }
 }
@@ -164,4 +196,5 @@ html, body {
   .header-title { font-size: 16px; }
   .tab-button { font-size: 12px; padding: 6px 8px; }
   .sub-tab { font-size: 11px; padding: 4px 6px; }
+  .country-tab { font-size: 10px; padding: 3px 8px; letter-spacing: 0.2px; }
 }

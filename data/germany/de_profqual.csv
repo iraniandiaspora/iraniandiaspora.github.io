@@ -1,0 +1,33 @@
+"prof_level","gen","value_k","suppressed","low_rel"
+"Insgesamt","all_gens",319,FALSE,FALSE
+"Insgesamt","first_gen",250,FALSE,FALSE
+"Noch in Ausbildung/ noch nicht schulpflichtig","all_gens",75,FALSE,FALSE
+"Noch in Ausbildung/ noch nicht schulpflichtig","first_gen",34,FALSE,FALSE
+"Ohne berufsqualifizierenden Abschluss","all_gens",84,FALSE,FALSE
+"Ohne berufsqualifizierenden Abschluss","first_gen",78,FALSE,FALSE
+"Mit berufsqualifizierendem Abschluss","all_gens",160,FALSE,FALSE
+"Mit berufsqualifizierendem Abschluss","first_gen",138,FALSE,FALSE
+"darunter: nicht-akademischer Abschluss","all_gens",52,FALSE,FALSE
+"darunter: nicht-akademischer Abschluss","first_gen",43,FALSE,FALSE
+"davon: Lehre o. ä.","all_gens",36,FALSE,FALSE
+"davon: Lehre o. ä.","first_gen",30,FALSE,FALSE
+"Meister/Techniker o. ä.","all_gens",16,FALSE,FALSE
+"Meister/Techniker o. ä.","first_gen",13,FALSE,FALSE
+"Fachschulabschluss DDR","all_gens",NA,TRUE,FALSE
+"Fachschulabschluss DDR","first_gen",NA,TRUE,FALSE
+"akademischer Abschluss","all_gens",108,FALSE,FALSE
+"akademischer Abschluss","first_gen",95,FALSE,FALSE
+"davon: Berufsakademie","all_gens",11,FALSE,TRUE
+"davon: Berufsakademie","first_gen",11,FALSE,TRUE
+"Fachhochschule","all_gens",22,FALSE,FALSE
+"Fachhochschule","first_gen",18,FALSE,FALSE
+"Universität","all_gens",64,FALSE,FALSE
+"Universität","first_gen",56,FALSE,FALSE
+"Promotion","all_gens",11,FALSE,FALSE
+"Promotion","first_gen",10,FALSE,TRUE
+"nachrichtlich von akademischen Abschluss Bachelor","all_gens",36,FALSE,FALSE
+"nachrichtlich von akademischen Abschluss Bachelor","first_gen",32,FALSE,FALSE
+"Master","all_gens",25,FALSE,FALSE
+"Master","first_gen",22,FALSE,FALSE
+"Diplom/ Magister/ Staatsexamen","all_gens",36,FALSE,FALSE
+"Diplom/ Magister/ Staatsexamen","first_gen",31,FALSE,FALSE
