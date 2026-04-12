@@ -461,7 +461,14 @@ function navigateToHash() {
     showTab(hash, btn);
   }
 }
-document.addEventListener('DOMContentLoaded', navigateToHash);
+document.addEventListener('DOMContentLoaded', function() {
+  navigateToHash();
+  // Prevent browser from auto-scrolling to the hash anchor on initial load.
+  // The header-container is position:sticky so it stays visible during
+  // scroll, but some browsers (notably Safari) scroll to the hash target
+  // on replaceState, pushing the header out of the initial viewport.
+  window.scrollTo(0, 0);
+});
 window.addEventListener('hashchange', navigateToHash);
 </script>
 

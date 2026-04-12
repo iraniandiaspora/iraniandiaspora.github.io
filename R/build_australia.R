@@ -35,7 +35,7 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
@@ -205,6 +205,10 @@ measures_html <- paste0(
 )
 
 # --- State choropleth map ---
+# NOTE: this builder depends on the `ozmaps` package in addition to
+# plotly/dplyr/jsonlite/readxl. Install with:
+#   install.packages(c("sf", "ozmaps"))
+# This is the only R builder that needs ozmaps.
 library(sf)
 library(ozmaps)
 sf_use_s2(FALSE)
@@ -423,9 +427,13 @@ arr <- arrival %>% mutate(
 ) %>% filter(!is.na(year))
 
 arr <- arr %>% arrange(year)
-arr$cumulative <- cumsum(arr$annual_avg)
-total_arr <- sum(arr$annual_avg)
-arr$cum_pct <- round(arr$cumulative / total_arr * 100, 1)
+# Bar heights stay at annual_avg so period bars don't swamp post-2015
+# single-year bars visually, but cumulative share is computed from the
+# actual arrival counts (not the averaged series) so the hover value is
+# meaningful: "cumulative share of all Iran-born arrivals so far."
+arr$cum_true <- cumsum(arr$count)
+total_true <- sum(arr$count)
+arr$cum_pct <- round(arr$cum_true / total_true * 100, 1)
 
 arr$hover <- ifelse(arr$is_period,
   sprintf("<b>%s</b><br>Total arrivals: %s (%s/year avg)<br>Cumulative: %.1f%%",

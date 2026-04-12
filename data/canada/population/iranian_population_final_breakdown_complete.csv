@@ -1,14 +1,14 @@
 Category,Population,Percentage_of_Total,Included_in_Total,Notes,n_unweighted,reliability
-Born in Iran + Iranian Ethnic + Persian,105558,47.1,Yes,Core Iranian population - born in Iran with Iranian identity and Persian language,NA,NA
-Born in Iran + Iranian Ethnic + No Persian,13556,6.1,Yes,Iranians born in Iran who don't speak Persian (likely arrived as adults),NA,NA
-Born in Iran + No Iranian Ethnic + Persian,53779,24,Yes,"Ethnic minorities from Iran who speak Persian (Kurdish, Azeri, etc.)",NA,NA
-Born in Iran + No Iranian Ethnic + No Persian,20000,8.9,Yes,Non-Persian ethnic minorities from Iran,NA,NA
-Not Born + Iranian Ethnic + Persian,13074,5.8,Yes,Second+ generation Iranians maintaining Persian,NA,NA
-Not Born + Iranian Ethnic + No Persian,11371,5.1,Yes,Second+ generation Iranians without Persian,NA,NA
-Not Born + No Iranian Ethnic + Persian (Included),6630,3,Yes,"Strict criteria: Second gen with Iranian parents, West Asian VM, strong Persian",NA,NA
-Not Born + No Iranian Ethnic + Persian (Excluded),16222,NA,No,"Likely Afghan, Tajik, other Central Asian Persian speakers",NA,NA
+Born in Iran + Iranian Ethnic + Persian,105558,47.1,Yes,Core Iranian population: born in Iran with Iranian ethnicity and Persian language,2850,NA
+Born in Iran + Iranian Ethnic + No Persian,13556,6.1,Yes,Iranians born in Iran who don't speak Persian (often arrived as adults),366,NA
+Born in Iran + No Iranian Ethnic + Persian,53779,24,Yes,"Born in Iran, non-Iranian ethnic (e.g. Kurdish, Azeri) who speaks Persian",1452,NA
+Born in Iran + No Iranian Ethnic + No Persian,20000,8.9,Yes,"Born in Iran, non-Iranian ethnic, non-Persian speaker",540,NA
+Not Born + Iranian Ethnic + Persian,13074,5.8,Yes,Second/third generation Iranians maintaining Persian,353,NA
+Not Born + Iranian Ethnic + No Persian,11371,5.1,Yes,Second/third generation Iranians without Persian,307,NA
+Not Born + No Iranian Ethnic + Persian (Included),6593,2.9,Yes,"Strict criteria: 2nd/3rd gen, West Asian visible minority, Persian speaker",178,NA
+Not Born + No Iranian Ethnic + Persian (Excluded),16259,NA,No,"Likely Afghan, Tajik, other Central Asian Persian speakers; narrow rule excludes",439,NA
 Total Born in Iran,192893,86.1,Summary,All people born in Iran regardless of ethnicity or language,NA,NA
 Total Iranian Ethnic,143559,64.1,Summary,All people identifying as Iranian ethnic regardless of birthplace,NA,NA
-Total Persian Speakers (Included),179041,79.9,Summary,All Persian speakers included in Iranian count,NA,NA
-Total Excluded Persian Speakers,16222,NA,Summary,Persian speakers excluded as likely non-Iranian,NA,NA
-TOTAL IRANIAN-CANADIAN POPULATION,223968,100,Total,Sum of all included categories,NA,NA
+Total Persian Speakers (Included),179004,79.9,Summary,All Persian speakers included in Iranian count,NA,NA
+Total Excluded Persian Speakers,16259,NA,Summary,Persian speakers excluded as likely non-Iranian,NA,NA
+TOTAL IRANIAN-CANADIAN POPULATION,223931,100,Total,Sum of all included categories,NA,NA

@@ -1,6 +1,9 @@
 # Build Global overview page — stacked area chart + world choropleth
 # Input: data/global/stocks_countries.Rda
-# Output: pages/global.html
+# Output: docs/pages/global.html
+#
+# Run from the iraniandiaspora.github.io/ directory:
+#   Rscript R/build_global.R
 
 library(plotly)
 library(dplyr)
@@ -37,7 +40,7 @@ plotly_to_json <- function(p, inject_hoveron = FALSE) {
 
 plotly_div <- function(id, json, height = "500px") {
   sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>
-<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
+<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
 }
 
 iframe_resize_script <- '
@@ -236,7 +239,7 @@ stocks_2024 <- stocks %>%
 iso_map <- c(
   "United States of America" = "USA", "Canada" = "CAN", "Germany" = "DEU",
   "United Kingdom" = "GBR", "Sweden" = "SWE", "Netherlands" = "NLD",
-  "T\u00fcrkiye" = "TUR", "T\u00fcrkiye" = "TUR", "Israel" = "ISR", "Iraq" = "IRQ", "Australia" = "AUS",
+  "T\u00fcrkiye" = "TUR", "Israel" = "ISR", "Iraq" = "IRQ", "Australia" = "AUS",
   "France" = "FRA", "Austria" = "AUT", "Italy" = "ITA", "Norway" = "NOR",
   "Denmark" = "DNK", "Spain" = "ESP", "Belgium" = "BEL", "Switzerland" = "CHE",
   "Finland" = "FIN", "Greece" = "GRC", "Japan" = "JPN", "India" = "IND",
@@ -253,11 +256,47 @@ iso_map <- c(
   "Namibia" = "NAM", "Czechia" = "CZE", "Hungary" = "HUN", "Poland" = "POL",
   "Romania" = "ROU", "Bulgaria" = "BGR", "Ireland" = "IRL", "Portugal" = "PRT",
   "Luxembourg" = "LUX", "Iceland" = "ISL", "Cyprus" = "CYP",
-  "State of Palestine" = "PSE", "Iran (Islamic Republic of)" = "IRN"
+  "State of Palestine" = "PSE", "Iran (Islamic Republic of)" = "IRN",
+  # Additional small-population destinations (previously silently dropped)
+  "Mexico" = "MEX", "Ecuador" = "ECU", "Estonia" = "EST", "Indonesia" = "IDN",
+  "Slovakia" = "SVK", "Slovenia" = "SVN", "Malta" = "MLT", "Panama" = "PAN",
+  "Costa Rica" = "CRI", "Sri Lanka" = "LKA",
+  "Venezuela (Bolivarian Republic of)" = "VEN",
+  "Bolivia (Plurinational State of)" = "BOL",
+  "Lithuania" = "LTU", "Belarus" = "BLR", "Croatia" = "HRV", "Latvia" = "LVA",
+  "Dominican Republic" = "DOM", "Guatemala" = "GTM", "El Salvador" = "SLV",
+  "Liechtenstein" = "LIE", "Yemen" = "YEM", "Nauru" = "NRU"
 )
 
-stocks_2024$iso3 <- iso_map[stocks_2024$destination]
+# Some UN rows append a footnote asterisk to the country name (e.g. "United
+# States of America*", "United Kingdom*"). Strip the trailing asterisk
+# before matching so those rows still find their ISO3 code instead of being
+# silently dropped from the world choropleth.
+stocks_2024 <- stocks_2024 %>%
+  mutate(destination_clean = sub("\\*$", "", destination),
+         iso3 = iso_map[destination_clean])
+
+# Log any residual mismatches so maintainers can extend the map next time.
+missing_dests <- stocks_2024 %>% filter(is.na(iso3))
+if (nrow(missing_dests) > 0) {
+  message(sprintf(
+    "build_global.R: %d destinations dropped from world map (%s Iran-born 2024):",
+    nrow(missing_dests), format(sum(missing_dests$pop_2024, na.rm = TRUE), big.mark = ",")))
+  for (i in seq_len(nrow(missing_dests))) {
+    message(sprintf("  - %s (%s)",
+                    missing_dests$destination[i],
+                    format(missing_dests$pop_2024[i], big.mark = ",")))
+  }
+}
 stocks_2024 <- stocks_2024 %>% filter(!is.na(iso3))
+# Dedupe: some asterisked rows are the same country as the non-asterisked
+# row with a UN footnote (rare in this dataset but keep the check).
+stocks_2024 <- stocks_2024 %>%
+  group_by(iso3, destination_clean) %>%
+  summarize(destination = first(destination_clean),
+            pop_2024 = sum(pop_2024, na.rm = TRUE),
+            .groups = "drop") %>%
+  arrange(desc(pop_2024))
 
 stocks_2024 <- stocks_2024 %>% mutate(
   bin = case_when(
