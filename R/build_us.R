@@ -1,7 +1,7 @@
-# Master build: generate all chart JSON and assemble pages
+# Master build: generate all US chart JSON and assemble us-*.html pages
 # Each page = hand-crafted HTML with Plotly.newPlot() calls
-# Run from idd-static-prototype/ directory:
-#   cd idd-static-prototype && Rscript R/build_all.R
+# Run from the iraniandiaspora.github.io/ directory:
+#   Rscript R/build_us.R
 
 library(plotly)
 library(dplyr)
@@ -37,7 +37,7 @@ plotly_to_json <- function(p) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
@@ -213,6 +213,20 @@ citizen <- iran_data %>%
 
 immig$cum_pct <- round(immig$cumulative_immigrants / max(immig$cumulative_immigrants) * 100, 1)
 
+# Weighted median year of arrival for the first-generation Iran-born
+# population. Computed dynamically so the text card always names the
+# correct "half arrived in or after year X" boundary. Previously the
+# card hard-coded "over 50 percent arriving after 1994" which became
+# stale as the distribution shifted forward (the current median is
+# 1999 under 2020-2024 5-year pool).
+fg_yrim <- iran_data %>%
+  filter(gen == "1st gen", !is.na(YRIMMIG)) %>%
+  mutate(YRIMMIG_num = suppressWarnings(as.numeric(YRIMMIG))) %>%
+  filter(!is.na(YRIMMIG_num), YRIMMIG_num > 0) %>%
+  arrange(YRIMMIG_num)
+fg_yrim$cum <- cumsum(fg_yrim$PERWT) / sum(fg_yrim$PERWT, na.rm = TRUE)
+fg_median_year <- fg_yrim$YRIMMIG_num[which(fg_yrim$cum >= 0.5)[1]]
+
 p_immig <- plot_ly() %>%
   add_bars(data = immig, x = ~YRIMMIG, y = ~n, marker = list(color = "#2774AE"),
     text = ~sprintf("<b>Year:</b> %d<br><b>Arrivals:</b> %s<br><b>Cumulative:</b> %s (%s%%)",
@@ -257,7 +271,8 @@ p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
 
 writeLines(page_template("Immigration & Citizenship", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">Multiple waves of migration have added to the Iranian-American population, with over 50 percent arriving after 1994.</div>',
+  sprintf('<div class="text-card pt1">Multiple waves of migration have built the first-generation Iranian-American population. About half of Iran-born residents arrived in %d or later.</div>',
+    fg_median_year),
   '<div class="text-card pt2">Most Iranian-Americans are either naturalized citizens or born in the US.</div>',
   '<div class="chart-card pc1">', plotly_div("immig", plotly_to_json(p_immig), source = SRC_IMMIG), '</div>',
   '<div class="chart-card pc2">', plotly_div("citizen", plotly_to_json(p_citizen), source = SRC_CITIZEN), '</div>',
@@ -267,15 +282,15 @@ cat("  Done\n")
 
 
 # =====================================================
-# US ADMISSIONS HISTORY (INS/DHS official records, 1978-2023)
+# US ADMISSIONS HISTORY (INS/DHS official records, 1970-2023)
 # =====================================================
 cat("Building us-admissions...\n")
 
-# Official admissions from INS/DHS yearbooks (46 years)
-lpr <- readRDS(file.path(DATA_DIR, "iran_lpr_dashboard_1978_2023.rds"))
+# Official admissions from INS Annual Reports (1970-1977) + INS/DHS yearbooks (1978-2023)
+lpr <- readRDS(file.path(DATA_DIR, "iran_lpr_dashboard_1970_2023.rds"))
 lpr[is.na(lpr)] <- 0
 
-SRC_LPR <- "Source: INS Statistical Yearbooks (1978\u20132004); DHS Yearbook of Immigration Statistics (2005\u20132023)"
+SRC_LPR <- "Source: INS Annual Reports (1970\u20131977); INS Statistical Yearbooks (1978\u20132004); DHS Yearbook of Immigration Statistics (2005\u20132023)"
 
 # --- Chart 1: Total admissions line chart (1978-2023) ---
 lpr$hover_total <- sprintf("<b>%d</b><br>Granted: %s",
@@ -287,9 +302,9 @@ p_lpr_total <- plot_ly(data = lpr, x = ~year, y = ~total,
     marker = list(color = "#1a4e72", size = 3),
     text = ~hover_total, hoverinfo = "text", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Iranians Granted<br>Permanent Resident Status,<br>1978\u20132023</b>",
+    title = list(text = "<b>Iranians Granted<br>Permanent Resident Status,<br>1970\u20132023</b>",
       font = list(size = 15, family = "Montserrat")),
-    xaxis = list(title = "", dtick = 5, range = c(1976.5, 2024.5),
+    xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ",", rangemode = "tozero",
       tickfont = list(size = 11)),
@@ -354,15 +369,15 @@ p_lpr_cat <- p_lpr_cat %>%
   layout(
     barmode = "overlay",
     hovermode = "x unified",
-    title = list(text = "<b>Iranian Permanent Residence Grants<br>by Category, 1978\u20132023</b>",
+    title = list(text = "<b>Iranian Permanent Residence Grants<br>by Category, 1970\u20132023</b>",
       font = list(size = 15, family = "Montserrat")),
-    xaxis = list(title = "", dtick = 5, range = c(1976.5, 2024.5),
+    xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ",", rangemode = "tozero",
       tickfont = list(size = 11)),
     annotations = list(
       list(x = 0.5, y = -0.12, xref = "paper", yref = "paper",
-           text = "Pre-1992: family includes employment preferences (not separately reported)",
+           text = "Pre-1992: family includes employment preferences (not separately reported). Pre-1978: all categories combined.",
            showarrow = FALSE, font = list(size = 9, color = "#888"),
            xanchor = "center")
     ),
@@ -374,7 +389,8 @@ cat_leg <- make_html_legend(cat_colors)
 
 writeLines(page_template("US: Immigration History", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">Between 1978 and 2023, over 562,000 Iranians received permanent resident status\u2014the right to live and work indefinitely in the United States. This annual count includes both people arriving from abroad and people already in the country who changed from a temporary visa (such as a student or refugee visa) to permanent status. The current Iran-born population is smaller because these figures span over four decades and include people who have since died or left the country.</div>',
+  sprintf('<div class="text-card pt1">Between 1970 and 2023, over %s Iranians received permanent resident status\u2014the right to live and work indefinitely in the United States. About 23,000 arrived in the pre-revolution decade (1970\u20131977), when Iranian migration was modest but growing. This annual count includes both people arriving from abroad and people already in the country who changed from a temporary visa (such as a student or refugee visa) to permanent status. The current Iran-born population is smaller because these figures span over five decades and include people who have since died or left the country.</div>',
+    format(sum(lpr$total), big.mark = ",")),
   '<div class="text-card pt2">U.S. permanent residence is granted through several pathways: family (sponsored by a relative who is a U.S. citizen or permanent resident), employment (sponsored by a U.S. employer), refugee/asylee (granted protection from persecution), and diversity (a lottery for countries with low U.S. immigration rates). Family has been the largest category throughout this period, declining from over 70% to about 50% after 1992, while work-based grants rose from under 10% to 29%. The spike in 1989\u20131991 reflects a 1986 U.S. law that allowed long-term undocumented residents to obtain permanent status.</div>',
   '<div class="chart-card pc1">', plotly_div("lpr-total", plotly_to_json(p_lpr_total), "450px", source = SRC_LPR), '</div>',
   '<div class="chart-card pc2">', plotly_div("lpr-cat", plotly_to_json(p_lpr_cat), "450px", source = SRC_LPR, legend_html = cat_leg, highlight_hover = TRUE),
@@ -718,7 +734,7 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
 
 writeLines(page_template("Marriage", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">Among the roughly 286,000 Iranian-Americans in marriages or domestic partnerships, about 64% have partners of Iranian origin.</div>',
+  '<div class="text-card pt1">Among roughly 312,000 Iranian-Americans in marriages or domestic partnerships, about 60% have partners of Iranian origin. Both opposite-sex and same-sex partners, married or unmarried, are counted.</div>',
   '<div class="text-card pt2">Marriage patterns differ sharply by generation. First-generation individuals have Iranian partners at rates of roughly 70&ndash;77% across all age groups. Among second-generation Iranian-Americans, about half to 60% have White non-Hispanic partners, with higher rates among younger cohorts. Second-generation outmarriage rates are <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE;">comparable to those of other second-generation Asian Americans</a>.</div>',
   '<div class="chart-card pc1">',
   '<div class="section-title">Ethnicity of Spouse/Partner: First Generation</div>',
@@ -741,22 +757,38 @@ cat("Building us-income...\n")
 ei <- new.env(); load(file.path(DATA_DIR, "iran_data.Rda"), envir = ei)
 iran <- ei$iran_data
 
-# National decile thresholds
+# National decile thresholds — household-level (see
+# pull_acs_5yr_2020_2024.R). The reference distribution is one row per
+# household whose reference person is aged 25-54, weighted by WGTP.
 nat <- readRDS(file.path(DATA_DIR, "national_reference_acs5_2020_2024.rds"))
 pctiles <- nat$income_pctiles
 breaks <- c(-Inf, pctiles$p10, pctiles$p20, pctiles$p30, pctiles$p40,
             pctiles$p50, pctiles$p60, pctiles$p70, pctiles$p80, pctiles$p90, Inf)
 
-# Filter to prime-age (25-54) with valid household income
+# Iranian side: one row per Iranian household (by SERIAL) with at least
+# one prime-age adult (25-54) of compound-Iranian identification.
+# Previously this filtered to all prime-age persons and summed PERWT,
+# which multi-counted households with multiple prime-age adults. The
+# household-level approach matches how the national reference is built
+# and makes the comparison internally consistent. Second-generation
+# children living with 1st-gen parents inherit the parent's household.
 inc <- iran %>%
   filter(AGE >= 25 & AGE <= 54 & !is.na(HHINCOME)) %>%
+  # Prefer a 1st-gen row when a household has multiple prime-age Iranian
+  # members (the sort puts 1st-gen first so slice(1) picks it). Then dedupe.
+  mutate(gen_rank = ifelse(generation == "1st gen", 0L, 1L)) %>%
+  arrange(SERIAL, gen_rank, AGE) %>%
+  group_by(SERIAL) %>%
+  slice(1) %>%
+  ungroup() %>%
+  select(-gen_rank) %>%
   mutate(decile = cut(HHINCOME, breaks = breaks, labels = paste0("D", 1:10),
                       include.lowest = TRUE, right = TRUE))
 
 make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
   d <- df %>% filter(gen == gen_val) %>%
     group_by(decile) %>%
-    summarize(n = n(), weighted = sum(PERWT, na.rm = TRUE), .groups = "drop") %>%
+    summarize(n = n(), weighted = sum(HHWT, na.rm = TRUE), .groups = "drop") %>%
     mutate(share = round(weighted / sum(weighted) * 100, 1))
 
   decile_labels <- c("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th")
@@ -810,10 +842,27 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
   plotly_div(id_prefix, plotly_to_json(p), "500px", source = SRC_INCOME)
 }
 
+# Pre-compute top- and bottom-decile shares so the text cards track the
+# underlying data automatically instead of hard-coding literals that drift
+# whenever the pipeline is re-run.
+decile_share <- function(gen_val, target_decile) {
+  d <- inc %>% filter(gen == gen_val) %>%
+    group_by(decile) %>%
+    summarize(weighted = sum(HHWT, na.rm = TRUE), .groups = "drop") %>%
+    mutate(share = weighted / sum(weighted) * 100)
+  round(d$share[d$decile == target_decile], 1)
+}
+fg_d10 <- decile_share("1st gen", "D10")
+sg_d10 <- decile_share("2nd gen", "D10")
+sg_d1  <- decile_share("2nd gen", "D1")
+
 writeLines(page_template("Income", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">First-generation Iranian-Americans (ages 25&ndash;54) are concentrated in the upper income deciles, with 21% in the top decile&mdash;more than double the national baseline of 10%.</div>',
-  '<div class="text-card pt2">Second-generation Iranian-Americans (ages 25&ndash;54) are even more concentrated at the top, with 25% in the highest income decile and only 6% in the lowest.</div>',
+  sprintf('<div class="text-card pt1">First-generation Iranian-Americans (ages 25&ndash;54) are concentrated in the upper income deciles, with %s%% in the top decile&mdash;%s the national baseline of 10%%.</div>',
+    format(fg_d10, nsmall = 0),
+    ifelse(fg_d10 >= 20, "more than double", "well above")),
+  sprintf('<div class="text-card pt2">Second-generation Iranian-Americans (ages 25&ndash;54) are even more concentrated at the top, with %s%% in the highest income decile and %s%% in the lowest.</div>',
+    format(sg_d10, nsmall = 0), format(sg_d1, nsmall = 0)),
   '<div class="chart-card pc1">', make_income_chart(inc, "1st gen", "First Generation", "inc1"), '</div>',
   '<div class="chart-card pc2">', make_income_chart(inc, "2nd gen", "Second Generation", "inc2"), '</div>',
   '</div>'

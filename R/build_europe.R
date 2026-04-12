@@ -50,7 +50,7 @@ plotly_to_json <- function(plot_obj) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
@@ -339,12 +339,15 @@ for (g in top6$geo) {
   ))
 }
 
-# United Kingdom: three decennial census points (2001, 2011, 2021). Sources:
+# United Kingdom: three decennial census points (2001, 2011, 2021/22). Sources:
 #   2001 Census: ~42,500 Iran-born in England and Wales (ONS)
 #   2011 Census:  84,735 UK total (79,985 E + 1,695 W + 2,773 S + 282 NI)
-#   2021 Census: 114,432 UK total (sum of E+W 2021, Scotland 2022, NI 2021)
+#   2021 Census: 114,432 UK total (E+W 2021 ONS + NI 2021 NISRA + Scotland 2022 NRS)
+# Note: the 2021 point is labeled 2021/22 because the Scottish census was
+# run a year later; the other two constituent nations are 2021.
 uk_ts <- data.frame(
   year = c(2001, 2011, 2021),
+  year_label = c("2001", "2011", "2021/22"),
   value = c(42494, 84735, 114432),
   country = "United Kingdom",
   stringsAsFactors = FALSE
@@ -355,8 +358,8 @@ p_ts <- p_ts %>% add_trace(
   type = "scatter", mode = "lines+markers",
   line = list(color = "#4a8c6f", width = 2.5, dash = "dot"),
   marker = list(color = "#4a8c6f", size = 7, symbol = "diamond"),
-  text = ~sprintf("<b>United Kingdom</b> %d<br>%s Iran-born residents (census)",
-    year, format(value, big.mark = ",")),
+  text = ~sprintf("<b>United Kingdom</b> %s<br>%s Iran-born residents (census)",
+    year_label, format(value, big.mark = ",")),
   hoverinfo = "text",
   showlegend = FALSE
 )
@@ -416,10 +419,13 @@ p_ts <- p_ts %>% layout(
 EUROSTAT_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table' target='_blank' style='color:#2774AE;'>Eurostat</a>"
 MIKRO_LINK <- "<a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220247005.html' target='_blank' style='color:#2774AE;'>Destatis Mikrozensus 2024</a>"
 ONS_LINK <- "<a href='https://www.nomisweb.co.uk/sources/census_2021' target='_blank' style='color:#2774AE;'>ONS Census 2021</a>"
+NRS_LINK <- "<a href='https://www.scotlandscensus.gov.uk/' target='_blank' style='color:#2774AE;'>NRS Scotland's Census 2022</a>"
+NISRA_LINK <- "<a href='https://www.nisra.gov.uk/statistics/census/2021-census' target='_blank' style='color:#2774AE;'>NISRA NI Census 2021</a>"
+UK_COMBINED_LINK <- paste0(ONS_LINK, " (England &amp; Wales), ", NRS_LINK, ", and ", NISRA_LINK)
 
 source_note <- sprintf(
-  "Source: %s population by country of birth. Germany from %s. United Kingdom from %s (England, Wales, Scotland, and Northern Ireland combined).",
-  EUROSTAT_LINK, MIKRO_LINK, ONS_LINK)
+  "Source: %s population by country of birth. Germany from %s. United Kingdom combined from %s.",
+  EUROSTAT_LINK, MIKRO_LINK, UK_COMBINED_LINK)
 
 n_countries <- nrow(latest)
 
@@ -435,7 +441,7 @@ body <- paste0(
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
   '<li><strong>', EUROSTAT_LINK, '</strong> <span style="color:#888;">&mdash; 9 European countries (country-of-birth tables)</span></li>',
   '<li><strong>', MIKRO_LINK, '</strong> <span style="color:#888;">&mdash; Germany</span></li>',
-  '<li><strong>', ONS_LINK, '</strong> <span style="color:#888;">&mdash; United Kingdom</span></li>',
+  '<li><strong>', ONS_LINK, ', ', NRS_LINK, ', ', NISRA_LINK, '</strong> <span style="color:#888;">&mdash; United Kingdom (combined)</span></li>',
   '</ul>',
   '</div>',
   '</div>',
@@ -454,7 +460,7 @@ body <- paste0(
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",
-    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. The United Kingdom is shown as a dashed line at its three decennial census points (2001, 2011, 2021). Germany is not shown on this chart because Eurostat does not publish Iran-born counts for Germany; see the Germany pages for the national Mikrozensus figures.")),
+    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. The United Kingdom is shown as a dashed line at its three decennial census points (2001, 2011, and 2021/22 \u2014 the last combines E&amp;W 2021 ONS and NI 2021 NISRA with Scotland 2022 NRS). Germany is not shown on this chart because Eurostat does not publish Iran-born counts for Germany; see the Germany pages for the national Mikrozensus figures.")),
   '</div>',
   '</div>'
 )

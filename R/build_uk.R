@@ -41,7 +41,7 @@ plotly_to_json <- function(plot_obj) {
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;if(window.innerWidth<900){l.dragmode=false;}Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
@@ -178,7 +178,7 @@ pop_body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Each nation&rsquo;s census asks the same <strong>place of birth</strong> question:</p>',
   '<p style="padding-left:12px; margin:0; font-style:italic; color:#555;">&ldquo;What is your country of birth?&rdquo;</p>',
-  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted here. The map shows nine English regions plus Scotland and Wales; Northern Ireland (461 Iran-born) is not shown on the regional map.</p>',
+  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted here. The map shows nine English regions plus Scotland and Wales; Northern Ireland (461 Iran-born) is not shown on the regional map. Sum of LAD-aggregated regions differs from the published England + Wales total by &plusmn;6 due to ONS disclosure rounding at the local authority level.</p>',
   '</div>',
   '</div>',
   '<div class="chart-card">',

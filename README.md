@@ -1,3 +1,12 @@
+<!--
+  PUBLIC DOCUMENTATION. Intended audience: anyone visiting the GitHub repo
+  or the live site. This file is the GitHub repo README; it is also the
+  human-readable entry point for the project.
+
+  Do NOT include Claude-session state, TODOs, or internal gotchas here.
+  Session state lives in ../.claude/memory/HISTORY.md.
+-->
+
 # Iranian Diaspora Dashboard
 
 Interactive data dashboard comparing Iranian diaspora populations in the United States, Europe, Canada, Australia, and worldwide.

@@ -1,3 +1,13 @@
+<!--
+  PUBLIC DOCUMENTATION. Intended audience: readers of the Iranian Diaspora
+  Dashboard at https://iraniandiaspora.github.io. This file is committed to
+  the deployment repo and linked from the About page.
+
+  Do NOT include Claude-session state, TODOs, or internal gotchas here.
+  Session state lives in ../.claude/memory/HISTORY.md. Internal methodology
+  notes for Claude sessions live in ../.claude/rules/<topic>-pipeline.md.
+-->
+
 # Methodology
 
 ## United States
@@ -149,4 +159,56 @@ Global migration figures are drawn from the [UN International Migrant Stock](htt
 
 ## Replication
 
-The R scripts and intermediate data files needed to rebuild the dashboard are included in this repository. The `R/` directory contains the build scripts that generate static HTML pages, and `R/us_export/`, `R/canada_export/`, `R/australia_export/`, and `R/global_export/` contain the data processing scripts that produce the intermediate files from raw census microdata. The raw ACS PUMS, Canadian PUMF, and ABS Census files are not included due to size and licensing but can be obtained from the sources listed above.
+The repository is organized so that the build stage is fully reproducible
+from committed intermediate data, while the upstream extraction stage
+requires raw microdata that is not committed here.
+
+**Build stage (always reproducible in-place).** The scripts in `R/build_*.R`
+regenerate every page under `docs/pages/` from the committed intermediate
+data under `data/`:
+
+```
+Rscript R/build_us.R
+Rscript R/build_canada.R
+Rscript R/build_global.R
+Rscript R/build_australia.R
+Rscript R/build_germany.R
+Rscript R/build_uk.R
+Rscript R/build_europe.R
+```
+
+Anyone with a working R installation and the packages listed below can
+reproduce the full dashboard from this repository without touching raw
+microdata.
+
+**Upstream extraction stage (requires raw microdata).** The intermediate
+files under `data/us/`, `data/canada/`, `data/global/`, `data/australia/`,
+`data/germany/`, `data/uk/`, and `data/europe/` are produced by separate
+export pipelines that read raw census/PUMF microdata from outside this
+repository. Those raw inputs are 1–10 GB in total and not redistributable,
+so they are not committed here. The export scripts live in two places:
+
+- **U.S. pipeline** — `../ID_Analysis/scripts/` (separate repo, ACS PUMS
+  pulled via `tidycensus`).
+- **Canada pipeline** — `../IDD_Canada/R/` (separate repo, 2021 PUMF fixed-width
+  file under `../IDD_Canada/data/pumf_individual/`).
+- **Australia** — `R/australia_export/` in this repo (raw ABS inputs under
+  `../_data/australia/`).
+- **Germany** — `R/germany_export/` in this repo (Mikrozensus xlsx under
+  `../_data/germany/`).
+- **United Kingdom** — `R/uk_export/` in this repo (NOMIS CSVs under
+  `../_data/uk/`).
+- **Europe overview** — `R/europe_export/` in this repo (Eurostat CSV under
+  `../_data/eurostat/` plus the Germany and UK files above).
+- **Global (UN Migrant Stock)** — `R/global_export/export_un_migrant_stock.R`
+  (raw UN xlsx staged in `../ID_Analysis/output/dashboard_us/`).
+
+The copies under `R/us_export/` and `R/canada_export/` are reference
+snapshots of the upstream pipeline scripts, preserved for transparency.
+They are not runnable from this repo on their own — see
+`R/canada_export/README.md` for details.
+
+**R package dependencies** for the build stage: `plotly`, `dplyr`,
+`jsonlite`, `readxl`, `sf`, `ozmaps` (Australia only), `cancensus` (Canada
+Ontario CSD map only). `mapgl` and `tigris` are used by the U.S. state-map
+builder.
