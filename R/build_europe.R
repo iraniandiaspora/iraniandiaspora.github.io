@@ -42,6 +42,11 @@ plotly_to_json <- function(plot_obj) {
   b <- plotly_build(plot_obj)$x
   b$data   <- unclass_deep(b$data)
   b$layout <- unclass_deep(b$layout)
+  if (is.null(b$layout$font)) b$layout$font <- list()
+  b$layout$font$family <- "Montserrat, sans-serif"
+  b$layout$hoverlabel <- list(
+    bgcolor = "white", bordercolor = "#ccc",
+    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
   list(
     data   = toJSON(b$data, auto_unbox = TRUE, null = "null", na = "null"),
     layout = toJSON(b$layout, auto_unbox = TRUE, null = "null", na = "null"),
@@ -139,7 +144,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .text-card { background:white; border-radius:8px; padding:20px; text-align:center;
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
-.chart-row { display:grid; grid-template-columns:1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
@@ -264,7 +269,7 @@ p_bar <- plot_ly(
     textposition = "none"
   ) %>%
   layout(
-    title = list(text = "<b>By Country, Most Recent Year</b>",
+    title = list(text = "<b>Iran-Born in Europe by Country,<br>Most Recent Year</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
     yaxis = list(title = "", tickfont = list(size = 11)),
@@ -402,7 +407,7 @@ p_ts <- p_ts %>% add_trace(
 )
 
 p_ts <- p_ts %>% layout(
-  title = list(text = "<b>Population Over Time, 1998\u20132025</b>",
+  title = list(text = "<b>Iran-Born Population in Europe<br>Over Time, 1998\u20132025</b>",
     font = list(size = 14, family = "Montserrat")),
   xaxis = list(title = "", tickfont = list(size = 10), dtick = 5,
     # Extend the x-axis past 2025 so the labels have room to render
@@ -431,7 +436,7 @@ n_countries <- nrow(latest)
 
 body <- paste0(
   # Top row: headline (left) + Europe choropleth map (right)
-  '<div class="chart-row" style="grid-template-columns:40% 60%;">',
+  '<div class="chart-row">',
   '<div class="headline">',
   '<div class="label">Estimated Iran-Born Population in Europe</div>',
   '<div class="number">', format(total_iran_born, big.mark = ","), '</div>',
@@ -453,10 +458,10 @@ body <- paste0(
   '</div>',
 
   # Bottom row: horizontal bar chart (left) + time series (right)
-  '<div class="chart-row" style="grid-template-columns:40% 60%;">',
+  '<div class="chart-row">',
   '<div class="chart-card">',
   plotly_div("eu-bar", plotly_to_json(p_bar), "460px",
-    source = "Most recent year available for each country. Hover over the map above for the exact reference year per country."),
+    source = source_note),
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",

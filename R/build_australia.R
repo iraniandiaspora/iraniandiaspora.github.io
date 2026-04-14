@@ -2,7 +2,8 @@
 # Run from deployment repo root:
 #   Rscript R/build_australia.R
 #
-# Produces: docs/pages/au-population.html, docs/pages/au-immigration.html
+# Produces: docs/pages/au-population.html, docs/pages/au-immigration.html,
+#           docs/pages/au-education.html, docs/pages/au-workinc.html
 
 library(plotly)
 library(dplyr)
@@ -34,15 +35,31 @@ plotly_to_json <- function(p) {
        config = toJSON(b$x$config, auto_unbox = TRUE))
 }
 
-plotly_div <- function(id, json, height = "500px", source = NULL) {
+plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL) {
   init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
+  if (!is.null(legend_html)) chart <- paste0(chart, '\n', legend_html)
   if (!is.null(source)) {
     chart <- paste0(chart, sprintf('\n<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">%s</p>', source))
   }
   chart
+}
+
+make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
+  items <- mapply(function(col, lab) {
+    sprintf('<span style="display:inline-flex;align-items:center;gap:4px;margin:0 8px;"><span style="display:inline-block;width:14px;height:14px;background:%s;border-radius:2px;flex-shrink:0;"></span><span style="font-size:12px;color:#333;">%s</span></span>', col, lab)
+  }, colors, labels, SIMPLIFY = TRUE, USE.NAMES = FALSE)
+  if (!is.null(break_after) && break_after < length(items)) {
+    row1 <- paste(items[1:break_after], collapse = "")
+    row2 <- paste(items[(break_after + 1):length(items)], collapse = "")
+    inner <- paste0('<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">', row1, '</div>',
+                    '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">', row2, '</div>')
+  } else {
+    inner <- paste(items, collapse = "")
+  }
+  sprintf('<div style="text-align:center;margin:6px 0 2px;">%s</div>', inner)
 }
 
 iframe_resize_script <- '
@@ -142,6 +159,8 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .page-content { grid-template-columns:1fr; }
   .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
   .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
+  .tab-bar { flex-wrap:wrap; gap:4px; }
+  .tab-btn { font-size:12px; padding:5px 10px; }
 }
 @media (max-width:600px) {
   .measure-num { font-size:22px !important; }
@@ -153,6 +172,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .stat-row { grid-template-columns:1fr !important; }
   .headline .number { font-size:24px; }
   .chart-card { padding:10px; }
+  .tab-btn { font-size:11px; padding:4px 8px; }
 }', tab_css, '
 </style>
 ', extra_head, '
@@ -335,29 +355,62 @@ p_melbourne_map <- plot_ly() %>%
     paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 
+# --- Waterfall chart (compound definition) ---
+wf <- read.csv(file.path(DATA_DIR, "au_compound.csv"), stringsAsFactors = FALSE)
+wf$ymin <- wf$cumulative - wf$count
+wf$ymax <- wf$cumulative
+wf$short_label <- c("Birth +\nAncestry +\nLanguage", "Birth +\nAncestry", "Birth +\nLanguage",
+                     "Ancestry +\nLanguage", "Birth\nonly", "Ancestry\nonly", "Language\nonly",
+                     "Children of\nIran-born\nparents")
+
+# Same color scheme as US waterfall: blue gradient for core, then distinct
+wf_colors <- c("#1a4e72", "#2774AE", "#5a9bd5", "#4a8c6f", "#c4793a", "#d4a943", "#7b5ea7", "#e07b54")
+
+p_waterfall <- plot_ly() %>%
+  add_bars(data = wf, x = ~short_label, y = ~count, base = ~ymin,
+    marker = list(color = wf_colors),
+    text = sprintf("<b>%s</b><br>%s (%.1f%%)<br>Cumulative: %s",
+      wf$component, format(wf$count, big.mark = ","), wf$pct,
+      format(wf$cumulative, big.mark = ",")),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(text = "<b>Iranian-Australians: How We Count</b>",
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = "", tickfont = list(size = 9), tickangle = 0,
+      categoryorder = "array", categoryarray = wf$short_label),
+    yaxis = list(title = "", tickformat = ","),
+    showlegend = FALSE,
+    margin = list(t = 50, b = 110, l = 60),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+compound_total <- wf$cumulative[nrow(wf)]
+
 # --- Assemble population page ---
 pop_body <- paste0(
-  # Top row: headline + measures chart
-  '<div class="chart-row" style="grid-template-columns:45% 55%;">',
+  # Top row: headline + waterfall
+  '<div class="chart-row">',
   '<div class="headline">',
-  '<div class="label">Iranian-Origin Population in Australia</div>',
-  '<div class="number">81,111</div>',
+  '<div class="label">Estimated Iranian-Australian Population</div>',
+  '<div class="number">', format(compound_total, big.mark = ","), '</div>',
   '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
   '<a href="https://www.abs.gov.au/census" style="color:#2774AE;" target="_blank">',
   'Australian Bureau of Statistics</a>, Census of Population and Housing, 2021</div>',
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
-  '<p style="margin-bottom:8px;">The census provides three separate measures of the Iranian-origin population:</p>',
+  '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of four criteria:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Country of birth</strong> <span style="color:#888;">&mdash; &ldquo;In which country was the person born?&rdquo;</span></li>',
-  '<li><strong>Ancestry</strong> <span style="color:#888;">&mdash; &ldquo;What is the person&rsquo;s ancestry?&rdquo; (up to two responses)</span></li>',
-  '<li><strong>Language</strong> <span style="color:#888;">&mdash; &ldquo;Does the person speak a language other than English at home?&rdquo;</span></li>',
+  '<li><strong>Country of birth</strong> <span style="color:#888;">&mdash; born in Iran</span></li>',
+  '<li><strong>Ancestry</strong> <span style="color:#888;">&mdash; reports Iranian ancestry</span></li>',
+  '<li><strong>Language at home</strong> <span style="color:#888;">&mdash; speaks Persian (excluding Dari)</span></li>',
+  '<li><strong>Parental birthplace</strong> <span style="color:#888;">&mdash; Australian-born with at least one Iran-born parent</span></li>',
   '</ul>',
-  '<p style="margin-top:10px;">The headline uses the ancestry count (81,111), the broadest single measure. ',
-  'These three counts overlap substantially and cannot yet be combined into a single unduplicated estimate. ',
-  'A compound figure will be added once cross-tabulated microdata become available.</p>',
+  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The compound total counts each person once, even if they meet more than one criterion.</p>',
   '</div>',
   '</div>',
-  '<div class="chart-card" style="display:flex; align-items:center;">', measures_html, '</div>',
+  '<div class="chart-card">',
+  plotly_div("au-waterfall", plotly_to_json(p_waterfall), "430px",
+    source = "Source: <a href='https://www.abs.gov.au/census' target='_blank' style='color:#2774AE;'>ABS</a> \u2014 Census of Population and Housing, 2021. Cell counts are randomly adjusted by ABS to prevent identification of individuals; totals may not sum exactly."),
+  '</div>',
   '</div>',
 
   # Bottom row: map with tabs
@@ -397,12 +450,17 @@ arrival <- read.csv(file.path(DATA_DIR, "year_of_arrival.csv"), stringsAsFactors
 citizenship <- read.csv(file.path(DATA_DIR, "citizenship.csv"), stringsAsFactors = FALSE)
 
 # --- Year of arrival chart (Canada-style: wide bars for periods, narrow for annual) ---
+# Merge pre-1961 periods into "Before 1971" since counts are small
+arrival <- arrival %>%
+  mutate(period = ifelse(period %in% c("Before 1951", "1951 - 1960", "1961 - 1970"),
+    "Before 1971", period)) %>%
+  group_by(period) %>%
+  summarize(count = sum(count), .groups = "drop")
+
 # Convert period data to numeric x-axis with bar widths
 arr <- arrival %>% mutate(
   year = case_when(
-    period == "Before 1951" ~ 1945,
-    period == "1951 - 1960" ~ 1955,
-    period == "1961 - 1970" ~ 1965,
+    period == "Before 1971" ~ 1965,
     period == "1971 - 1980" ~ 1975,
     period == "1981 - 1990" ~ 1985,
     period == "1991 - 2000" ~ 1995,
@@ -414,7 +472,7 @@ arr <- arrival %>% mutate(
   is_period = !grepl("^Arrived", period),
   # Period bars: show per-year average; annual bars: show actual count
   period_years = case_when(
-    period == "Before 1951" ~ 10, period == "2011 - 2015" ~ 5,
+    period == "Before 1971" ~ 20, period == "2011 - 2015" ~ 5,
     is_period ~ 10, TRUE ~ 1
   ),
   annual_avg = round(count / period_years),
@@ -446,13 +504,20 @@ p_arrival <- plot_ly() %>%
   add_bars(data = arr, x = ~year, y = ~annual_avg,
     width = ~bar_width, marker = list(color = ~bar_color),
     text = ~hover, hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
+  add_trace(data = arr, x = ~year, y = ~cum_pct, type = "scatter",
+    mode = "lines", yaxis = "y2",
+    line = list(color = "lightblue", width = 2),
+    hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iranian Migration to Australia:<br>Arrivals by Period</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11), dtick = 10,
-      range = c(1938, 2023)),
+      range = c(1958, 2023)),
     yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 65, b = 50),
+    yaxis2 = list(title = "", overlaying = "y", side = "right",
+      ticksuffix = "%", range = c(0, 105), showgrid = FALSE,
+      tickfont = list(size = 10, color = "#888")),
+    margin = list(t = 65, b = 50, r = 40),
     showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white",
     annotations = list(
@@ -476,7 +541,7 @@ cit_data <- data.frame(
 )
 
 p_cit <- plot_ly(data = cit_data, x = ~status, y = ~count, type = "bar",
-    marker = list(color = c("#2774AE", "#d4816b")),
+    marker = list(color = c("#2774AE", "#e07b54")),
     text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
       gsub("\n", " ", status), format(count, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
@@ -499,20 +564,363 @@ peak_period <- arrival$count[arrival$period == "2011 - 2015"]
 # --- Assemble immigration page ---
 immig_body <- paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">Iranian migration to Australia was minimal before 1980, ',
-  'with only ', format(pre_rev, big.mark = ","), ' Iran-born residents arriving before that year. ',
-  'The 1980s saw a sharp increase to ', format(post_rev_80s, big.mark = ","),
-  ' arrivals, and numbers continued rising through each subsequent period.</div>',
-  '<div class="text-card pt2">The peak period was 2011\u20132015, when ',
-  format(peak_period, big.mark = ","), ' Iran-born individuals arrived\u2014more than a third of ',
-  'the current Iran-born population. Annual arrivals ranged between 2,800 and 3,500 from 2016 to 2019, ',
-  'then fell to 1,283 in 2020 and 727 in 2021.</div>',
+  '<div class="text-card pt1" style="text-align:center;">',
+  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s</div>', format(peak_period, big.mark = ",")),
+  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Peak Period Arrivals (2011\u20132015)</div>',
+  '<div style="font-size:12px; color:#888; margin-top:6px;">Iran-born residents, ABS Census 2021.</div>',
+  '</div>',
+  '<div class="text-card pt2" style="text-align:center;">',
+  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', cit_pct),
+  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Australian Citizens</div>',
+  sprintf('<div style="font-size:12px; color:#888; margin-top:6px;">Of %s Iran-born Australians.</div>',
+    format(total_birthplace, big.mark = ",")),
+  '</div>',
   '<div class="chart-card pc1">', plotly_div("au-arrival", plotly_to_json(p_arrival), "450px", source = ABS_SOURCE), '</div>',
   '<div class="chart-card pc2">', plotly_div("au-cit", plotly_to_json(p_cit), "450px", source = ABS_SOURCE), '</div>',
   '</div>'
 )
 
 writeLines(page_template("Australia: Immigration", immig_body), "docs/pages/au-immigration.html")
+cat("  Done\n")
+
+
+# =====================================================
+# AUSTRALIA EDUCATION & RELIGION
+# =====================================================
+cat("Building au-education...\n")
+
+edu <- read.csv(file.path(DATA_DIR, "au_education.csv"), stringsAsFactors = FALSE)
+rel <- read.csv(file.path(DATA_DIR, "au_religion.csv"), stringsAsFactors = FALSE)
+second_gen <- read.csv(file.path(DATA_DIR, "au_second_gen.csv"), stringsAsFactors = FALSE)
+
+# --- Education horizontal bar ---
+# Exclude supplementary/not stated/not applicable
+edu_chart <- edu %>%
+  filter(!education_level %in% c("Supplementary Codes", "Not stated", "Not applicable")) %>%
+  arrange(desc(count))
+
+edu_total <- sum(edu_chart$count)
+edu_chart$pct <- round(edu_chart$count / edu_total * 100, 1)
+
+# Shorten long labels for y-axis
+edu_chart$label <- edu_chart$education_level
+edu_chart$label <- gsub("Secondary Education - ", "Secondary: ", edu_chart$label)
+edu_chart$label <- gsub(" Level$", "", edu_chart$label)
+edu_chart$label <- gsub("Graduate Diploma and Graduate Certificate", "Grad. Diploma & Certificate", edu_chart$label)
+edu_chart$label <- gsub("Advanced Diploma and Diploma", "Diploma & Adv. Diploma", edu_chart$label)
+edu_chart$label <- factor(edu_chart$label, levels = rev(edu_chart$label))
+
+bachelors_plus <- sum(edu_chart$count[edu_chart$education_level %in%
+  c("Postgraduate Degree Level", "Graduate Diploma and Graduate Certificate Level",
+    "Bachelor Degree Level")])
+bachelors_pct <- round(bachelors_plus / edu_total * 100, 1)
+
+# Ordinal blue gradient: darkest for highest qualification
+edu_blues <- colorRampPalette(c("#08306b", "#c6dbef"))(nrow(edu_chart))
+p_edu <- plot_ly(edu_chart, y = ~label, x = ~count, type = "bar",
+    orientation = "h", marker = list(color = edu_blues),
+    text = sprintf("<b>%s</b><br>%s (%.1f%%)",
+      edu_chart$education_level,
+      format(edu_chart$count, big.mark = ","), edu_chart$pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(
+      text = "<b>Highest Educational Attainment<br>of Iran-Born Australians, 2021</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", tickformat = ","),
+    yaxis = list(title = "", tickfont = list(size = 11)),
+    margin = list(l = 200, r = 20, t = 55, b = 30),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+# --- Religion by generation (100% stacked horizontal bar) ---
+rel_gen <- read.csv(file.path(DATA_DIR, "au_religion_by_gen.csv"), stringsAsFactors = FALSE)
+
+# Keep top 4 categories (Islam, Secular, Christianity, Other Religions)
+rel_cats <- c("Secular/No religion", "Islam", "Other Religions", "Christianity")
+rel_gen <- rel_gen %>% filter(religion %in% rel_cats)
+rel_gen$gen <- factor(rel_gen$gen, levels = c("1st Generation", "2nd Generation"))
+
+rel_colors <- c(
+  "Secular/No religion" = "#d4a943",
+  "Islam"               = "#1a4e72",
+  "Christianity"        = "#4a8c6f",
+  "Other Religions"     = "#7b5ea7"
+)
+
+p_rel <- plot_ly()
+for (cat in rel_cats) {
+  sub <- rel_gen %>% filter(religion == cat)
+  p_rel <- p_rel %>% add_bars(data = sub, y = ~gen, x = ~pct, name = cat,
+    orientation = "h", marker = list(color = rel_colors[cat]),
+    hovertext = sprintf("<b>%s</b><br>%s<br>%.1f%%", cat, sub$gen, sub$pct),
+    hoverinfo = "text", textposition = "none",
+    legendgroup = cat, showlegend = FALSE)
+}
+p_rel <- p_rel %>% layout(
+  barmode = "stack",
+  title = list(text = "<b>Religion of Iranian-Australians<br>by Generation, 2021</b>",
+    font = list(size = 15, family = "Montserrat")),
+  xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
+  yaxis = list(title = "", categoryorder = "array",
+    categoryarray = rev(levels(rel_gen$gen)), ticklabelstandoff = 6),
+  margin = list(t = 55, b = 40, l = 120), showlegend = FALSE,
+  plot_bgcolor = "white", paper_bgcolor = "white"
+) %>% config(displayModeBar = FALSE)
+
+rel_leg <- make_html_legend(rel_colors)
+
+no_relig_pct <- 46.4  # all Iranian ancestry
+islam_pct <- 25.3
+
+# --- Assemble education page ---
+second_gen_count <- second_gen$count[1]
+
+edu_body <- paste0(
+  '<div class="page-content">',
+  '<div class="text-card pt1" style="text-align:center;">',
+  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', bachelors_pct),
+  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Bachelor\u2019s Degree or Higher</div>',
+  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Iran-born adults aged 15+ with stated qualifications, ABS Census 2021.</div>'),
+  '</div>',
+  '<div class="text-card pt2" style="text-align:center;">',
+  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', no_relig_pct),
+  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">No Religious Affiliation</div>',
+  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Among Iranian-ancestry population. Islam %s%%, Christianity 12%%.</div>',
+    islam_pct),
+  '</div>',
+  '<div class="chart-card pc1">', plotly_div("au-edu", plotly_to_json(p_edu), "430px", source = ABS_SOURCE), '</div>',
+  '<div class="chart-card pc2">', plotly_div("au-rel", plotly_to_json(p_rel), "430px",
+    source = "Source: <a href='https://www.abs.gov.au/census' target='_blank' style='color:#2774AE;'>ABS</a> \u2014 Census 2021. Iranian ancestry population, 1st gen = Iran-born, 2nd gen = Australian-born.",
+    legend_html = rel_leg), '</div>',
+  '</div>'
+)
+
+writeLines(page_template("Australia: Education & Religion", edu_body), "docs/pages/au-education.html")
+cat("  Done\n")
+
+
+# =====================================================
+# AUSTRALIA WORK & INCOME
+# =====================================================
+cat("Building au-workinc...\n")
+
+lf <- read.csv(file.path(DATA_DIR, "au_labourforce.csv"), stringsAsFactors = FALSE)
+occ <- read.csv(file.path(DATA_DIR, "au_occupation.csv"), stringsAsFactors = FALSE)
+ind <- read.csv(file.path(DATA_DIR, "au_industry.csv"), stringsAsFactors = FALSE)
+inc <- read.csv(file.path(DATA_DIR, "au_income_weekly.csv"), stringsAsFactors = FALSE)
+
+# --- Labour force summary stats ---
+employed_ft <- lf$count[lf$status == "Employed, worked full-time"]
+employed_pt <- lf$count[lf$status == "Employed, worked part-time"]
+employed_away <- lf$count[lf$status == "Employed, away from work"]
+total_employed <- employed_ft + employed_pt + employed_away
+unemp_ft <- lf$count[lf$status == "Unemployed, looking for full-time work"]
+unemp_pt <- lf$count[lf$status == "Unemployed, looking for part-time work"]
+total_unemployed <- unemp_ft + unemp_pt
+nilf <- lf$count[lf$status == "Not in the labour force"]
+pop_15plus <- total_birthplace - lf$count[lf$status == "Not applicable"]
+labour_force <- total_employed + total_unemployed
+participation_rate <- round(labour_force / pop_15plus * 100, 1)
+unemployment_rate <- round(total_unemployed / labour_force * 100, 1)
+
+# --- Occupation horizontal bar ---
+occ_chart <- occ %>%
+  filter(!occupation %in% c("Inadequately described", "Not stated", "Not applicable")) %>%
+  arrange(desc(count))
+
+occ_total <- sum(occ_chart$count)
+occ_chart$pct <- round(occ_chart$count / occ_total * 100, 1)
+# Shorten long labels for y-axis
+occ_chart$label <- occ_chart$occupation
+occ_chart$label <- gsub(" Workers$", "", occ_chart$label)
+occ_chart$label <- gsub("Community and Personal Service", "Community & Personal Service", occ_chart$label)
+occ_chart$label <- gsub("Clerical and Administrative", "Clerical & Administrative", occ_chart$label)
+occ_chart$label <- gsub("Technicians and Trades", "Technicians & Trades", occ_chart$label)
+occ_chart$label <- gsub("Machinery Operators and Drivers", "Machinery Operators & Drivers", occ_chart$label)
+occ_chart$label <- factor(occ_chart$label, levels = rev(occ_chart$label))
+
+# Categorical: occupations are distinct categories
+occ_colors <- c("#1a4e72", "#2774AE", "#4a8c6f", "#c4793a",
+                "#d4a943", "#7b5ea7", "#2ca089", "#e07b54")
+p_occ <- plot_ly(occ_chart, y = ~label, x = ~count, type = "bar",
+    orientation = "h", marker = list(color = occ_colors[seq_len(nrow(occ_chart))]),
+    text = sprintf("<b>%s</b><br>%s (%.1f%%)",
+      occ_chart$occupation,
+      format(occ_chart$count, big.mark = ","), occ_chart$pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(
+      text = "<b>Occupation of Iran-Born Workers<br>in Australia, 2021</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", tickformat = ","),
+    yaxis = list(title = "", tickfont = list(size = 11)),
+    margin = list(l = 220, r = 20, t = 55, b = 30),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+# --- Industry horizontal bar (top 15 only, excl. residual categories) ---
+ind_chart <- ind %>%
+  filter(!industry %in% c("Inadequately described", "Not stated", "Not applicable")) %>%
+  arrange(desc(count)) %>%
+  head(15)
+
+ind_total <- sum(ind$count[!ind$industry %in% c("Inadequately described", "Not stated", "Not applicable")])
+ind_chart$pct <- round(ind_chart$count / ind_total * 100, 1)
+# Shorten long labels
+ind_chart$label <- gsub(", Forestry and Fishing", "", ind_chart$industry)
+ind_chart$label <- gsub(", Gas, Water and Waste Services", "/Gas/Water", ind_chart$label)
+ind_chart$label <- gsub(", Postal and Warehousing", "/Postal", ind_chart$label)
+ind_chart$label <- gsub(" and Telecommunications", " & Telecom", ind_chart$label)
+ind_chart$label <- gsub(" and Insurance Services", " & Insurance", ind_chart$label)
+ind_chart$label <- gsub(", Hiring and Real Estate Services", "/Real Estate", ind_chart$label)
+ind_chart$label <- gsub(", Scientific and Technical Services", "/Scientific/Technical", ind_chart$label)
+ind_chart$label <- gsub(" and Support Services", " & Support", ind_chart$label)
+ind_chart$label <- gsub(" and Safety", " & Safety", ind_chart$label)
+ind_chart$label <- gsub(" and Training", " & Training", ind_chart$label)
+ind_chart$label <- gsub(" and Social Assistance", " & Social Asst.", ind_chart$label)
+ind_chart$label <- gsub(" and Recreation Services", " & Recreation", ind_chart$label)
+ind_chart$label <- gsub(" and Food Services", " & Food", ind_chart$label)
+ind_chart$label <- factor(ind_chart$label, levels = rev(ind_chart$label))
+
+# Categorical: industries are distinct categories
+ind_colors <- rep(c("#1a4e72", "#2774AE", "#4a8c6f", "#c4793a", "#d4a943",
+                    "#7b5ea7", "#2ca089", "#e07b54"), length.out = nrow(ind_chart))
+p_ind <- plot_ly(ind_chart, y = ~label, x = ~count, type = "bar",
+    orientation = "h", marker = list(color = ind_colors),
+    text = sprintf("<b>%s</b><br>%s (%.1f%%)",
+      ind_chart$industry,
+      format(ind_chart$count, big.mark = ","), ind_chart$pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(
+      text = "<b>Industry of Employment<br>of Iran-Born Workers in Australia, 2021</b>",
+      font = list(size = 14, family = "Montserrat")),
+    xaxis = list(title = "", tickformat = ","),
+    yaxis = list(title = "", tickfont = list(size = 10)),
+    margin = list(l = 185, r = 20, t = 55, b = 30),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+# --- Income weekly bar chart ---
+inc_chart <- inc %>%
+  filter(!income_band_weekly %in% c("Not stated", "Not applicable"))
+
+# Order factor by the implicit ordering in the CSV (already sorted low to high)
+inc_chart$label <- gsub("\\$", "A$", inc_chart$income_band_weekly)
+inc_chart$label <- gsub("Nil income", "A$0", inc_chart$label)
+inc_chart$label <- gsub("Negative income", "Negative", inc_chart$label)
+inc_chart$label <- factor(inc_chart$label, levels = inc_chart$label)
+
+inc_stated <- sum(inc_chart$count)
+inc_chart$pct <- round(inc_chart$count / inc_stated * 100, 1)
+
+# Color: higher income = darker
+n_bars <- nrow(inc_chart)
+inc_chart$color <- colorRampPalette(c("#c6dbef", "#08306b"))(n_bars)
+
+p_inc <- plot_ly(inc_chart, x = ~label, y = ~count, type = "bar",
+    marker = list(color = ~color),
+    text = sprintf("<b>%s weekly</b><br>%s (%.1f%%)",
+      inc_chart$income_band_weekly,
+      format(inc_chart$count, big.mark = ","), inc_chart$pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(
+      text = "<b>Weekly Personal Income<br>of Iran-Born Australians, 2021</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", tickangle = -45, tickfont = list(size = 9)),
+    yaxis = list(title = "", tickformat = ","),
+    margin = list(t = 55, b = 90),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+# --- Labour force status bar ---
+lf_chart <- lf %>%
+  filter(!status %in% c("Not stated", "Not applicable"))
+
+lf_chart$label <- c("Full-time", "Part-time", "Away from work",
+  "Unemp. (FT)", "Unemp. (PT)", "Not in\nlabour force")
+lf_chart$label <- factor(lf_chart$label, levels = lf_chart$label)
+lf_chart$color <- c("#1a4e72", "#2774AE", "#5a9bd5", "#e07b54", "#d4a943", "#b0b0b0")
+lf_chart$pct <- round(lf_chart$count / pop_15plus * 100, 1)
+
+p_lf <- plot_ly(lf_chart, x = ~label, y = ~count, type = "bar",
+    marker = list(color = ~color),
+    text = sprintf("<b>%s</b><br>%s (%.1f%% of pop. 15+)",
+      lf_chart$status,
+      format(lf_chart$count, big.mark = ","), lf_chart$pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(
+      text = "<b>Labour Force Status<br>of Iran-Born Australians, 2021</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", tickfont = list(size = 10)),
+    yaxis = list(title = "", tickformat = ","),
+    margin = list(t = 55, b = 60),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+# --- Top occupations for text card ---
+top_occ <- occ_chart$occupation[1]
+top_occ_pct <- occ_chart$pct[1]
+top_ind <- ind_chart$industry[1]
+top_ind_pct <- ind_chart$pct[1]
+
+# --- Median income approximation ---
+# Find the band containing the median (50th percentile)
+inc_ordered <- inc_chart
+inc_ordered$cumsum <- cumsum(inc_ordered$count)
+median_idx <- which(inc_ordered$cumsum >= inc_stated / 2)[1]
+median_band <- inc_ordered$income_band_weekly[median_idx]
+
+# --- Assemble work/income page ---
+workinc_body <- paste0(
+  '<div class="page-content">',
+  # Text cards
+  '<div class="text-card pt1" style="text-align:center;">',
+  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', participation_rate),
+  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Labour Force Participation</div>',
+  '<div style="font-size:12px; color:#888; margin-top:6px;">Iran-born residents aged 15+, ABS Census 2021.</div>',
+  '</div>',
+  '<div class="text-card pt2" style="text-align:center;">',
+  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s</div>', median_band),
+  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Median Weekly Income</div>',
+  '<div style="font-size:12px; color:#888; margin-top:6px;">Iran-born residents aged 15+, ABS Census 2021.</div>',
+  '</div>',
+
+  # Chart cell 1: tabbed (Occupation | Industry)
+  '<div class="chart-card pc1">',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'au-tab-occ\',this,\'work-tabs\')">Occupation</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-tab-ind\',this,\'work-tabs\')">Industry</button>',
+  '</div>',
+  '<div id="au-tab-occ" class="tab-panel active" data-group="work-tabs">',
+  plotly_div("au-occ", plotly_to_json(p_occ), "430px", source = ABS_SOURCE),
+  '</div>',
+  '<div id="au-tab-ind" class="tab-panel" data-group="work-tabs">',
+  plotly_div("au-ind", plotly_to_json(p_ind), "430px", source = ABS_SOURCE),
+  '</div>',
+  '</div>',
+
+  # Chart cell 2: tabbed (Income | Labour Force)
+  '<div class="chart-card pc2">',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'au-tab-inc\',this,\'inc-tabs\')">Weekly Income</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-tab-lf\',this,\'inc-tabs\')">Labour Force Status</button>',
+  '</div>',
+  '<div id="au-tab-inc" class="tab-panel active" data-group="inc-tabs">',
+  plotly_div("au-inc", plotly_to_json(p_inc), "430px", source = ABS_SOURCE),
+  '</div>',
+  '<div id="au-tab-lf" class="tab-panel" data-group="inc-tabs">',
+  plotly_div("au-lf", plotly_to_json(p_lf), "430px", source = ABS_SOURCE),
+  '</div>',
+  '</div>',
+  '</div>'
+)
+
+writeLines(page_template("Australia: Work & Income", workinc_body, has_tabs = TRUE),
+           "docs/pages/au-workinc.html")
 cat("  Done\n")
 
 cat("All Australia pages built.\n")

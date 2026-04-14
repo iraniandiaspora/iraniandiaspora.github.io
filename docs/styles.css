@@ -122,7 +122,7 @@ html, body {
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.3px;
-  text-transform: uppercase;
+  text-transform: none;
   font-family: "Montserrat", sans-serif;
   cursor: pointer;
   outline: none;

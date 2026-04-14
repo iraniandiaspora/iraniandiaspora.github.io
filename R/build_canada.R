@@ -257,59 +257,38 @@ cat("Building ca-population...\n")
 pop <- read.csv(file.path(DATA_DIR, "population/iranian_population_final_breakdown_complete.csv"))
 pop_included <- pop %>% filter(Included_in_Total == "Yes")
 
-# Build the HTML matrix grid (2x4 colored cells)
-# Rows: Born in Iran (4 cells), Not Born in Iran (3 cells)
-# Colors: blue for Persian speakers, salmon/pink for non-Persian speakers
-make_pop_matrix <- function(pop_included) {
-  # Match original layout: rows = Persian Speaker / Non-Persian Speaker
-  # columns = Born in Iran (Reported Iranian / Did not report Iranian) + Not Born (same)
-  p <- pop_included$Population
-  pct <- pop_included$Percentage_of_Total
+# --- Waterfall chart (compound definition, same style as US/AU) ---
+wf <- pop_included
+wf$cumulative <- cumsum(wf$Population)
+wf$ymin <- wf$cumulative - wf$Population
+wf$short_label <- c("Born + Iranian\n+ Persian",
+                     "Born + Iranian\n(no Persian)",
+                     "Born + Persian\n(no Iranian)",
+                     "Born only\n(neither)",
+                     "2nd gen +\nIranian + Persian",
+                     "2nd gen +\nIranian only",
+                     "2nd gen +\nPersian only")
 
-  make_cell <- function(pop_val, pct_val, is_persian) {
-    bg <- if (is_persian) "#2774AE" else "#d4816b"
-    sprintf('<div class="id-cell" style="background:%s; border-radius:6px; padding:14px 8px; text-align:center; color:white; display:flex; flex-direction:column; justify-content:center; min-height:90px;">
-      <div class="id-num" style="font-size:22px; font-weight:700;">%s</div>
-      <div style="font-size:11px; opacity:0.85;">%.1f%%</div>
-    </div>', bg, format(pop_val, big.mark = ","), pct_val)
-  }
+# Same color scheme as US/AU waterfall
+wf_colors <- c("#1a4e72", "#2774AE", "#5a9bd5", "#4a8c6f", "#c4793a", "#d4a943", "#7b5ea7")
 
-  # Data mapping from CSV (indexed by row in pop_included):
-  # 1: Born+Iranian+Persian, 2: Born+Iranian+NoPersian, 3: Born+NoIranian+Persian
-  # 4: Born+NoIranian+NoPersian, 5: NotBorn+Iranian+Persian, 6: NotBorn+Iranian+NoPersian
-  # 7: NotBorn+PersianOnly
-
-  sprintf('<div class="id-table-wrap" style="margin-bottom:10px;">
-  <table class="id-table" style="width:100%%; border-collapse:separate; border-spacing:8px; font-family:Montserrat,sans-serif;">
-    <tr>
-      <td class="id-label-col" style="width:80px;"></td>
-      <td colspan="2" style="text-align:center; font-size:13px; font-weight:600; color:#444; padding-bottom:4px;">Born in Iran</td>
-      <td colspan="2" style="text-align:center; font-size:13px; font-weight:600; color:#444; padding-bottom:4px;">Not Born in Iran</td>
-    </tr>
-    <tr>
-      <td style="width:80px; font-size:12px; color:#555; font-weight:600; vertical-align:middle; padding-right:4px; white-space:nowrap;">Persian<br>Speaker</td>
-      <td>%s</td><td>%s</td><td>%s</td><td>%s</td>
-    </tr>
-    <tr>
-      <td style="width:80px; font-size:12px; color:#555; font-weight:600; vertical-align:middle; padding-right:4px; white-space:nowrap;">Non-Persian<br>Speaker</td>
-      <td>%s</td><td>%s</td><td>%s</td><td></td>
-    </tr>
-    <tr>
-      <td></td>
-      <td style="text-align:center; font-size:10px; color:#666;">Reported<br>Iranian origin</td>
-      <td style="text-align:center; font-size:10px; color:#666;">Did not report<br>Iranian origin</td>
-      <td style="text-align:center; font-size:10px; color:#666;">Reported<br>Iranian origin</td>
-      <td style="text-align:center; font-size:10px; color:#666;">Did not report<br>Iranian origin</td>
-    </tr>
-  </table>
-</div>',
-    # Persian Speaker row: Born+Iranian+Persian, Born+NoIranian+Persian, NotBorn+Iranian+Persian, NotBorn+PersianOnly
-    make_cell(p[1], pct[1], TRUE), make_cell(p[3], pct[3], TRUE),
-    make_cell(p[5], pct[5], TRUE), make_cell(p[7], pct[7], TRUE),
-    # Non-Persian Speaker row: Born+Iranian+NoPersian, Born+NoIranian+NoPersian, NotBorn+Iranian+NoPersian
-    make_cell(p[2], pct[2], FALSE), make_cell(p[4], pct[4], FALSE),
-    make_cell(p[6], pct[6], FALSE))
-}
+p_waterfall <- plot_ly() %>%
+  add_bars(data = wf, x = ~short_label, y = ~Population, base = ~ymin,
+    marker = list(color = wf_colors),
+    text = sprintf("<b>%s</b><br>%s (%.1f%%)<br>Cumulative: %s",
+      wf$Category, format(wf$Population, big.mark = ","),
+      wf$Percentage_of_Total, format(wf$cumulative, big.mark = ",")),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(text = "<b>Iranian-Canadians: How We Count</b>",
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = "", tickfont = list(size = 9), tickangle = 0,
+      categoryorder = "array", categoryarray = wf$short_label),
+    yaxis = list(title = "", tickformat = ","),
+    showlegend = FALSE,
+    margin = list(t = 50, b = 110, l = 60),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
 
 # Region bar chart — built from iranians_by_province.csv so it shares the
 # denominator used by the province map below. Previously this pulled from
@@ -346,7 +325,7 @@ region_totals <- region_totals %>% filter(region %in% region_order)
 region_totals$region <- factor(region_totals$region, levels = region_order)
 
 p_region <- plot_ly(data = region_totals, x = ~region, y = ~pct, type = "bar",
-    marker = list(color = c("#1a4e72", "#4a8c6f", "#d4a943", "#7b5ea7")),
+    marker = list(color = c("#7b5ea7", "#d4a943", "#2ca089", "#e07b54")),
     text = ~sprintf("<b>%s Canada</b><br>%s (%.1f%%)", region,
       format(round(pop), big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
@@ -439,7 +418,7 @@ p_ont_map <- plot_ly() %>%
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 
 writeLines(page_template("Canada: Defining the Population", paste0(
-  '<div class="chart-row" style="grid-template-columns:40% 60%;">',
+  '<div class="chart-row">',
   '<div class="headline">',
   '<div class="label">Estimated Iranian-Canadian Population</div>',
   sprintf('<div class="number">%s</div>', format(round(sum(pop_included$Population)), big.mark = ",")),
@@ -454,12 +433,10 @@ writeLines(page_template("Canada: Defining the Population", paste0(
   '</div>',
   '</div>',
   '<div class="chart-card">',
-  '<div class="section-title">Iranian-Canadian Population by Identification Criteria</div>',
-  make_pop_matrix(pop_included),
-  sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">%s</p>', PUMF_SOURCE),
+  plotly_div("ca-waterfall", plotly_to_json(p_waterfall), "430px", source = PUMF_SOURCE),
   '</div>',
   '</div>',
-  '<div class="chart-row" style="grid-template-columns:40% 60%;">',
+  '<div class="chart-row">',
   '<div class="chart-card">', plotly_div("ca-region", plotly_to_json(p_region), "400px", source = PUMF_SOURCE), '</div>',
   '<div class="chart-card">',
   '<div class="section-title">Geographic Distribution of Iranian-Canadians</div>',
@@ -489,24 +466,24 @@ relig <- read.csv(file.path(DATA_DIR, "religion/religion_dashboard_ready.csv"))
 # --- Language: Horizontal 100% stacked bars by generation ---
 # Standardize category names for both generations
 lang <- lang %>% mutate(short_cat = case_when(
-  persian_status == "Persian mother tongue, Persian home" ~ "Persian mother tongue, Persian home",
-  persian_status == "Persian mother tongue, English/French home" ~ "Persian mother tongue, Eng/Fr home",
-  persian_status == "Iranian minority mother tongue, same home" ~ "Minority mother tongue, same at home",
-  persian_status == "Iranian minority mother tongue, English/French home" ~ "Minority mother tongue, Eng/Fr home",
-  persian_status == "Iranian minority mother tongue, various home" ~ "Minority mother tongue, Eng/Fr home",
-  persian_status == "English mother tongue, English home" ~ "English mother tongue, English home",
+  persian_status == "Persian mother tongue, Persian home" ~ "Persian (mother tongue), Persian (at home)",
+  persian_status == "Persian mother tongue, English/French home" ~ "Persian (mother tongue), Eng/Fr (at home)",
+  persian_status == "Iranian minority mother tongue, same home" ~ "Minority (mother tongue), same (at home)",
+  persian_status == "Iranian minority mother tongue, English/French home" ~ "Minority (mother tongue), Eng/Fr (at home)",
+  persian_status == "Iranian minority mother tongue, various home" ~ "Minority (mother tongue), Eng/Fr (at home)",
+  persian_status == "English mother tongue, English home" ~ "English (mother tongue), English (at home)",
   persian_status == "Other languages" ~ "Other languages",
   TRUE ~ persian_status
 ))
 
-lang_cats <- c("Persian mother tongue, Persian home", "Persian mother tongue, Eng/Fr home",
-               "Minority mother tongue, same at home", "Minority mother tongue, Eng/Fr home",
-               "English mother tongue, English home", "Other languages")
-lang_colors <- c("Persian mother tongue, Persian home" = "#2d6a4f",
-                 "Persian mother tongue, Eng/Fr home" = "#74a892",
-                 "Minority mother tongue, same at home" = "#8b6c42",
-                 "Minority mother tongue, Eng/Fr home" = "#c4a96a",
-                 "English mother tongue, English home" = "#6c757d",
+lang_cats <- c("Persian (mother tongue), Persian (at home)", "Persian (mother tongue), Eng/Fr (at home)",
+               "Minority (mother tongue), same (at home)", "Minority (mother tongue), Eng/Fr (at home)",
+               "English (mother tongue), English (at home)", "Other languages")
+lang_colors <- c("Persian (mother tongue), Persian (at home)" = "#2d6a4f",
+                 "Persian (mother tongue), Eng/Fr (at home)" = "#74a892",
+                 "Minority (mother tongue), same (at home)" = "#8b6c42",
+                 "Minority (mother tongue), Eng/Fr (at home)" = "#c4a96a",
+                 "English (mother tongue), English (at home)" = "#6c757d",
                  "Other languages" = "#b0b0b0")
 
 lang_gen_levels <- c("1st Generation", "2nd+ Generation")
@@ -518,7 +495,7 @@ lang2 <- lang %>% filter(generation == "Second+ generation") %>%
 
 # Merge minority MT categories for 2nd gen (it has "Iranian minority mother tongues" instead)
 lang2 <- lang2 %>% mutate(short_cat = case_when(
-  grepl("^Iranian minority moth", persian_status) ~ "Minority mother tongue, Eng/Fr home",
+  grepl("^Iranian minority moth", persian_status) ~ "Minority (mother tongue), Eng/Fr (at home)",
   TRUE ~ short_cat
 ))
 
@@ -550,12 +527,12 @@ for (cat_name in lang_cats) {
 p_lang <- p_lang %>% layout(
   barmode = "stack",
   hoverlabel = list(showarrow = FALSE),
-  title = list(text = "<b>Language by Generation</b><br><span style='font-size:12px;font-weight:normal;color:#666;'>mother tongue = first language learned;<br>home = language spoken most often</span>",
+  title = list(text = "<b>Language of Iranian-Canadians<br>by Generation</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_levels),
     ticklabelstandoff = 6),
-  margin = list(t = 70, b = 40, l = 120), showlegend = FALSE,
+  margin = list(t = 55, b = 40, l = 120), showlegend = FALSE,
   plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
@@ -608,7 +585,7 @@ for (cat_name in relig_cats) {
 p_relig <- p_relig %>% layout(
   barmode = "stack",
   hoverlabel = list(showarrow = FALSE),
-  title = list(text = "<b>Religious Identification<br>by Generation</b>",
+  title = list(text = "<b>Religious Identification<br>of Iranian-Canadians by Generation</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_levels),
@@ -714,7 +691,7 @@ cit1_order <- c("Naturalized\ncitizen", "Born in\nCanada", "Not a\ncitizen")
 cit1$short_label <- factor(cit1$short_label, levels = cit1_order)
 
 p_ca_cit <- plot_ly(data = cit1, x = ~short_label, y = ~count, type = "bar",
-    marker = list(color = c("#1a4e72", "#4a8c6f", "#d4a943")),
+    marker = list(color = c("#2774AE", "#5a9bd5", "#e07b54")),
     text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", status, format(round(count), big.mark = ","), percentage),
     hoverinfo = "text", textposition = "none") %>%
   layout(
@@ -757,7 +734,7 @@ for (cat_name in immtype_cats) {
 }
 p_ca_immtype <- p_ca_immtype %>% layout(
   barmode = "stack",
-  title = list(text = "<b>Immigration Type by Period:<br>Post-1990 Arrivals</b>",
+  title = list(text = "<b>Iranian Immigration to Canada<br>by Type: Post-1990 Arrivals</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", tickfont = list(size = 10),
     categoryorder = "array", categoryarray = period_order_cat),
@@ -958,11 +935,11 @@ writeLines(page_template("Canada: Education", paste0(
   '<div class="text-card pt1">First-generation Iranian-Canadians age 30&ndash;44 show very high graduate degree attainment (44&ndash;48%), with women exceeding men among 30&ndash;34 year-olds. Among those 55+, men are more likely to hold graduate degrees.</div>',
   '<div class="text-card pt2">62% of first-generation men studied Science, Technology, Engineering, or Math fields, compared to 33% of women. Women are more concentrated in Social Sciences &amp; Humanities (25%) and Health (16%).</div>',
   '<div class="chart-card pc1">',
-  '<div class="section-title">Educational Attainment by Age and Gender: First Generation</div>',
+  '<div class="section-title">Educational Attainment of Iranian-Canadians: First Generation</div>',
   make_ca_educ_butterfly(ed1, "1st Gen", "ca-ed1"),
   '</div>',
   '<div class="chart-card pc2">',
-  '<div class="section-title">Fields of Study by Gender: First Generation</div>',
+  '<div class="section-title">Fields of Study of Iranian-Canadians: First Generation</div>',
   make_fos_butterfly(fos, "1st Gen", "ca-fos", "300px"),
   '</div>',
   '</div>'
@@ -1114,7 +1091,7 @@ writeLines(page_template("Canada: Work", paste0(
   '<div class="text-card p4-t4">Second-generation women are concentrated in Professional &amp; Technical (39%), with Health &amp; Education and Trade &amp; Services tied at about 18% each.</div>',
   # First-gen: tabs for Employment Categories / Industry Sectors
   '<div class="chart-card p4-c1">',
-  '<div class="section-title">Work by Age and Gender: First Generation</div>',
+  '<div class="section-title">Work of Iranian-Canadians: First Generation</div>',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'wk1-emp\',this,\'wk1\')">Employment Categories</button>',
   '<button class="tab-btn" onclick="switchTab(\'wk1-ind\',this,\'wk1\')">Industry Sectors</button>',
@@ -1128,7 +1105,7 @@ writeLines(page_template("Canada: Work", paste0(
   '</div>',
   # Second-gen: tabs for Employment Categories / Industry Sectors
   '<div class="chart-card p4-c2">',
-  '<div class="section-title">Work by Gender: Second Generation</div>',
+  '<div class="section-title">Work of Iranian-Canadians: Second Generation</div>',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'wk2-emp\',this,\'wk2\')">Employment Categories</button>',
   '<button class="tab-btn" onclick="switchTab(\'wk2-ind\',this,\'wk2\')">Industry Sectors</button>',
@@ -1168,7 +1145,7 @@ p_inc_decile <- plot_ly(data = inc1, x = ~short_label, y = ~percentage, type = "
     line = list(color = "#4A90D9", width = 1),
     text = ~sprintf("<b>%s</b><br>Households: %s<br>%.1f%%",
       income_category, format(round(households), big.mark = ","), percentage),
-    hoverinfo = "text") %>%
+    hoverinfo = "text", textposition = "none") %>%
   add_trace(y = ~percentage, type = "scatter", mode = "none",
     fill = "tozeroy", fillcolor = "rgba(173,216,230,0.3)",
     marker = list(size = 0, opacity = 0),
@@ -1242,8 +1219,8 @@ inc_age_leg <- make_html_legend(age_band_colors, break_after = 3)
 
 writeLines(page_template("Canada: Income", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">The decile chart ranks Iranian-Canadian households by pre-tax income against all Canadian households (ages 25&ndash;54). Each decile holds 10% of all Canadian households; values above 10% indicate overrepresentation in that income range.</div>',
-  '<div class="text-card pt2">The income-by-age chart shows individual pre-tax income by age. The share earning CA$100,000 or more peaks at ages 35&ndash;54 and is lowest among the youngest and oldest age groups.</div>',
+  '<div class="text-card pt1">First-generation Iranian-Canadian households are concentrated at the bottom of the national income distribution: 19% fall in the lowest decile, nearly double the 10% national baseline. Only 7% reach the top decile. This contrasts with the United States, where first-generation Iranian-Americans are overrepresented at the top.</div>',
+  '<div class="text-card pt2">Among first-generation Iranian-Canadian earners, the share making CA$100,000 or more is highest at ages 35&ndash;54. The individual pre-tax income distribution differs from the household income pattern, where Iranian-Canadians are concentrated at the bottom.</div>',
   '<div class="chart-card pc1">', plotly_div("ca-inc1", plotly_to_json(p_inc_decile), "500px", source = PUMF_SRC_INCOME), '</div>',
   '<div class="chart-card pc2">', plotly_div("ca-inc-age", plotly_to_json(p_inc_age), "400px", source = PUMF_SRC_INCOME_AGE, legend_html = inc_age_leg, highlight_hover = TRUE), '</div>',
   '</div>'

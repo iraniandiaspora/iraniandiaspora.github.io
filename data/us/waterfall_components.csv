@@ -1,0 +1,6 @@
+component,weighted_n,unweighted_n,cumulative,pct,milestone,milestone_value
+Both BPL + Ancestry,302214,2945,302214,38,,NA
+Born in Iran only,127680,1233,429894,16.1,,NA
+Ancestry only,213471,2027,643365,26.9,Core (BPL+Ancestry),643365
+Children (MOMLOC/POPLOC),105465,914,748830,13.3,≈ Pew 750K,748830
+MENA race only,46085,404,794915,5.8,Grand Total,794915

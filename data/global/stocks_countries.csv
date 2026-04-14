@@ -1,0 +1,71 @@
+destination,destination_code,origin,origin_code,X1990,X1995,X2000,X2005,X2010,X2015,X2020,X2024
+Libya,434,Iran (Islamic Republic of),364,383,340,303,334,367,410,439,464
+Namibia,516,Iran (Islamic Republic of),364,45,43,41,32,30,29,30,32
+South Africa,710,Iran (Islamic Republic of),364,1104,1001,901,838,698,600,498,499
+Kazakhstan,398,Iran (Islamic Republic of),364,3108,3093,3078,3063,3048,3033,3019,3012
+Tajikistan,762,Iran (Islamic Republic of),364,1813,1473,1267,1221,1218,1197,1200,1203
+Turkmenistan,795,Iran (Islamic Republic of),364,2699,2204,1786,1771,1718,1904,1887,1876
+China,156,Iran (Islamic Republic of),364,555,664,792,943,1119,1181,1201,1331
+Japan,392,Iran (Islamic Republic of),364,1137,7536,6357,5280,4912,4260,4367,4201
+India,356,Iran (Islamic Republic of),364,3721,2661,2211,2046,2027,1924,1812,1810
+Pakistan,586,Iran (Islamic Republic of),364,4108,3060,2940,2381,2345,2301,2148,2148
+Sri Lanka,144,Iran (Islamic Republic of),364,1,12,25,51,103,104,104,105
+Indonesia,360,Iran (Islamic Republic of),364,0,0,60,28,103,761,338,220
+Malaysia,458,Iran (Islamic Republic of),364,0,22,6,22,130,528,442,358
+Armenia,51,Iran (Islamic Republic of),364,22245,19417,16665,13705,11117,8510,6065,6793
+Azerbaijan,31,Iran (Islamic Republic of),364,2734,2391,2098,1916,1484,1105,790,710
+Cyprus,196,Iran (Islamic Republic of),364,299,423,547,1128,1262,1158,1194,1267
+Georgia,268,Iran (Islamic Republic of),364,0,0,120,113,114,119,121,124
+Iraq,368,Iran (Islamic Republic of),364,14976,44953,42602,17651,18029,14405,14540,14747
+Israel,376,Iran (Islamic Republic of),364,47744,52577,52536,51258,50183,53878,58077,61572
+Türkiye,792,Iran (Islamic Republic of),364,11362,13609,15701,22290,29160,52639,125721,199735
+Yemen,887,Iran (Islamic Republic of),364,0,0,0,0,10,7,6,6
+Belarus,112,Iran (Islamic Republic of),364,25,38,51,49,47,49,47,46
+Bulgaria,100,Iran (Islamic Republic of),364,98,127,155,199,239,303,475,653
+Czechia,203,Iran (Islamic Republic of),364,0,0,166,298,513,710,953,1132
+Hungary,348,Iran (Islamic Republic of),364,1800,1595,1389,1706,2037,1997,4125,4866
+Poland,616,Iran (Islamic Republic of),364,74,95,121,187,315,337,338,371
+Romania,642,Iran (Islamic Republic of),364,784,844,905,964,1025,1086,1146,1194
+Russian Federation,643,Iran (Islamic Republic of),364,3096,2829,2461,2240,1974,1542,1197,922
+Slovakia,703,Iran (Islamic Republic of),364,11,198,93,206,104,130,168,183
+Ukraine*,804,Iran (Islamic Republic of),364,2580,2496,2443,2232,2129,2136,2170,2199
+Denmark*,208,Iran (Islamic Republic of),364,8606,10236,11191,11637,12157,15098,17152,21174
+Estonia,233,Iran (Islamic Republic of),364,0,0,0,0,28,75,216,220
+Finland*,246,Iran (Islamic Republic of),364,558,1160,1762,3019,3924,5589,7611,8959
+Iceland,352,Iran (Islamic Republic of),364,14,16,18,27,35,63,166,251
+Latvia,428,Iran (Islamic Republic of),364,15,22,30,34,38,35,46,42
+Lithuania,440,Iran (Islamic Republic of),364,24,27,21,55,82,121,60,63
+Norway*,578,Iran (Islamic Republic of),364,5198,7055,8857,11527,13037,16043,18379,20436
+Sweden,752,Iran (Islamic Republic of),364,39569,48225,50875,54136,61064,68746,80749,89047
+United Kingdom*,826,Iran (Islamic Republic of),364,31600,36268,41505,56842,80720,96383,112117,124200
+Croatia,191,Iran (Islamic Republic of),364,0,0,0,24,48,48,44,42
+Greece,300,Iran (Islamic Republic of),364,2645,1946,1279,1613,2017,1900,4684,4976
+Italy,380,Iran (Islamic Republic of),364,4187,5424,6744,8203,10058,14197,19481,23973
+Malta,470,Iran (Islamic Republic of),364,9,11,13,17,24,41,87,151
+Portugal,620,Iran (Islamic Republic of),364,52,113,179,195,180,203,740,832
+Slovenia,705,Iran (Islamic Republic of),364,8,17,30,31,54,89,161,183
+Austria,40,Iran (Islamic Republic of),364,7699,9336,11197,11943,13176,17756,24919,29559
+Belgium,56,Iran (Islamic Republic of),364,1887,2780,4099,6041,9474,10604,12789,15212
+Germany,276,Iran (Islamic Republic of),364,107679,101117,130940,125839,120737,96409,185393,283454
+Liechtenstein,438,Iran (Islamic Republic of),364,0,0,0,0,8,11,13,14
+Luxembourg,442,Iran (Islamic Republic of),364,224,212,204,177,152,231,1074,1241
+Netherlands*,528,Iran (Islamic Republic of),364,6992,13742,20709,23936,25769,29385,37422,44869
+Switzerland,756,Iran (Islamic Republic of),364,2262,3037,4100,5754,7783,9969,13950,17038
+Cayman Islands*,136,Iran (Islamic Republic of),364,2,6,11,10,10,9,10,11
+Dominican Republic,214,Iran (Islamic Republic of),364,70,78,85,57,30,30,31,33
+Costa Rica,188,Iran (Islamic Republic of),364,81,63,77,51,100,100,119,144
+El Salvador,222,Iran (Islamic Republic of),364,20,17,14,16,17,18,18,18
+Guatemala,320,Iran (Islamic Republic of),364,12,12,12,14,16,18,18,20
+Mexico,484,Iran (Islamic Republic of),364,113,154,197,227,288,313,344,401
+Panama,591,Iran (Islamic Republic of),364,31,45,62,61,74,86,99,151
+Argentina,32,Iran (Islamic Republic of),364,190,184,180,190,208,215,221,227
+Bolivia (Plurinational State of),68,Iran (Islamic Republic of),364,21,29,36,45,53,63,68,76
+Brazil,76,Iran (Islamic Republic of),364,5,661,544,603,557,665,846,815
+Ecuador,218,Iran (Islamic Republic of),364,122,96,107,95,134,167,287,327
+Venezuela (Bolivarian Republic of),862,Iran (Islamic Republic of),364,201,154,118,105,98,90,84,80
+Canada,124,Iran (Islamic Republic of),364,27795,43551,66938,89641,119904,154303,178830,205304
+United States of America*,840,Iran (Islamic Republic of),364,214160,232448,291868,299831,369696,400316,408216,431405
+Australia*,36,Iran (Islamic Republic of),364,14854,18533,21375,26699,36536,61710,76276,88697
+New Zealand*,554,Iran (Islamic Republic of),364,1485,1485,1916,2683,2977,3798,4956,5632
+Nauru,520,Iran (Islamic Republic of),364,0,0,0,0,31,372,356,412
+France,250,Iran (Islamic Republic of),364,,,18376,20772,,22543,24178,24178
