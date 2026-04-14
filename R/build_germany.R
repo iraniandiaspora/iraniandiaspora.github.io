@@ -455,14 +455,9 @@ dur_df <- duration %>%
   )
 dur_df$label <- factor(dur_df$label, levels = unname(dur_labels))
 dur_df$pct <- round(dur_df$value / hl_fg * 100, 1)
-# Warm-earth palette for the duration chart — shares the family with the
-# motive chart next to it in the tab group, and differs from the blue
-# citizenship chart on the left side of the page.
-dur_colors <- c("#c4793a", "#d4a943", "#e8b878", "#d6c49a", "#c7a78a",
-                "#b58f73", "#8a5a3a", "#5a3a22")
-
+# Monochromatic blue — consistent with other countries' duration charts.
 p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
-    marker = list(color = dur_colors),
+    marker = list(color = "#2774AE"),
     text = ~sprintf("<b>%s years</b><br>%s (%.1f%%)",
       label, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
@@ -547,7 +542,7 @@ immig_body <- paste0(
   '<button class="tab-btn" onclick="switchTab(\'de-immig-duration\',this,\'de-immig-tabs\')">Years in Germany</button>',
   '</div>',
   '<div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs">',
-  plotly_div("de-annual", plotly_to_json(p_annual), "440px",
+  plotly_div("de-annual", plotly_to_json(p_annual), "430px",
     source = "Source: BAMF Migrationsb&#228;richte (2005, 2015, 2020, 2023 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here."),
   '</div>',
   '<div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs">',
@@ -555,7 +550,7 @@ immig_body <- paste0(
     source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. First generation only (born in Iran).")),
   '</div>',
   '<div id="de-immig-duration" class="tab-panel" data-group="de-immig-tabs">',
-  plotly_div("de-duration", plotly_to_json(p_duration), "440px",
+  plotly_div("de-duration", plotly_to_json(p_duration), "430px",
     source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Iran-born residents only.")),
   '</div>',
   '</div>',

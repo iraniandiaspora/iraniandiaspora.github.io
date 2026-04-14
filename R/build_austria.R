@@ -170,7 +170,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 # --- Source citation strings ---
 STAT_AT_LINK <- "<a href='https://www.statistik.at/en/' target='_blank' style='color:#2774AE;'>Statistics Austria</a>"
 EURO_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/' target='_blank' style='color:#2774AE;'>Eurostat</a>"
-TREND_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; migr_pop3ctb, Iran-born population stock")
+TREND_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Iran-born population stock, 1990\u20132025")
 
 # --- Load data ---------------------------------------------------------------
 cat("Loading Austria trend data...\n")
@@ -186,7 +186,7 @@ at_min_yr <- min(trend$year)
 # =============================================================================
 cat("Building at-population...\n")
 
-# --- Historical trend bar chart -----------------------------------------------
+# --- Historical trend line chart -----------------------------------------------
 p_hist <- plot_ly(trend, x = ~year, y = ~iran_born, type = "scatter",
     mode = "lines+markers",
     line = list(color = "#1a4e72", width = 2.5),
@@ -202,13 +202,64 @@ p_hist <- plot_ly(trend, x = ~year, y = ~iran_born, type = "scatter",
     xaxis = list(title = "", dtick = 5),
     yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
     margin = list(t = 50, b = 30),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    bargap = 0.15
+    plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-# --- Assemble at-population page ----------------------------------------------
+# --- Bundesland horizontal bar chart ------------------------------------------
+bl <- read.csv(file.path(DATA_DIR, "at_bundesland.csv"), stringsAsFactors = FALSE)
+bl <- bl[order(bl$iran_born), ]
+bl$bundesland <- factor(bl$bundesland, levels = bl$bundesland)
+bl_total <- sum(bl$iran_born)
+bl$pct <- round(bl$iran_born / bl_total * 100, 1)
+
+CENSUS_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Census 2021, Iran-born by region")
+
+p_bl <- plot_ly(bl, y = ~bundesland, x = ~iran_born, type = "bar",
+    orientation = "h",
+    marker = list(color = "#2774AE",
+                  line = list(color = "#1a4e72", width = 0.4)),
+    text = ~sprintf("<b>%s</b><br>%s Iran-born (%s%%)",
+      bundesland, format(iran_born, big.mark = ","), pct),
+    hoverinfo = "text",
+    textposition = "none") %>%
+  layout(
+    title = list(
+      text = "<b>Iran-Born by Bundesland,<br>Census 2021</b>",
+      font = list(size = 14, family = "Montserrat")),
+    xaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
+    yaxis = list(title = "", tickfont = list(size = 11)),
+    margin = list(t = 45, b = 30, l = 130, r = 20),
+    plot_bgcolor = "white", paper_bgcolor = "white",
+    showlegend = FALSE,
+    bargap = 0.35
+  ) %>% config(displayModeBar = FALSE)
+
+# --- Sex breakdown boxes (from Bundesland census data) -------------------------
+at_male   <- sum(bl$male)
+at_female <- sum(bl$female)
+
+make_gen_box <- function(val, pct_text, label, sublabel, color) {
+  sprintf(
+    '<div style="background:%s; border-radius:6px; padding:22px 14px; text-align:center; color:white; flex:1; min-width:0;">
+      <div style="font-size:30px; font-weight:700; line-height:1.1;">%s</div>
+      <div style="font-size:13px; margin-top:4px; font-weight:600;">%s</div>
+      <div style="font-size:12px; opacity:0.9; margin-top:2px;">%s</div>
+      <div style="font-size:11px; opacity:0.85; margin-top:3px;">%s</div>
+    </div>',
+    color, format(val, big.mark = ","), label, pct_text, sublabel)
+}
+
+sex_boxes <- paste0(
+  '<div style="display:flex; gap:12px; margin-top:12px;">',
+  make_gen_box(at_male, paste0(round(at_male / bl_total * 100), "% of total"),
+    "Male", "Iran-born men", "#1a4e72"),
+  make_gen_box(at_female, paste0(round(at_female / bl_total * 100), "% of total"),
+    "Female", "Iran-born women", "#5a9bd5"),
+  '</div>')
+
+# --- Assemble at-population page (Italy format) --------------------------------
 pop_body <- paste0(
-  # Top row: headline + trend chart
+  # Top row: headline + sex boxes (left) + trend line chart (right)
   '<div class="chart-row">',
   '<div class="headline">',
   '<div class="label">Estimated Iran-Born Population in Austria</div>',
@@ -222,10 +273,18 @@ pop_body <- paste0(
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Austrian-born children of Iran-born parents are not counted as Iran-born in population statistics. This count reflects first-generation residents only.</p>',
   '</div>',
+  sex_boxes,
+  sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0 0; padding-right:2px;">%s</p>', CENSUS_SOURCE),
   '</div>',
-  '<div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">',
+  '<div class="chart-card">',
   plotly_div("at-hist", plotly_to_json(p_hist), "430px", source = TREND_SOURCE),
   '</div>',
+  '</div>',
+
+  # Bottom: geographic distribution (full width, like Italy map)
+  '<div class="chart-card">',
+  '<div class="section-title" style="margin-top:0;">Geographic Distribution in Austria</div>',
+  plotly_div("at-bundesland", plotly_to_json(p_bl), "380px", source = CENSUS_SOURCE),
   '</div>'
 )
 

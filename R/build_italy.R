@@ -167,12 +167,14 @@ data_yr   <- hl$year[1]
 # =============================================================================
 cat("Building it-population...\n")
 
-# --- Historical trend (Eurostat, vertical bars) --------------------------------
-p_hist <- plot_ly(trend, x = ~year, y = ~iran_born, type = "bar",
-    marker = list(color = "#2774AE"),
+# --- Historical trend (Eurostat, line + markers) --------------------------------
+p_hist <- plot_ly(trend, x = ~year, y = ~iran_born, type = "scatter",
+    mode = "lines+markers",
+    line = list(color = "#1a4e72", width = 2.5),
+    marker = list(color = "#1a4e72", size = 5),
     text = sprintf("<b>%d</b><br>%s Iran-born",
       trend$year, format(trend$iran_born, big.mark = ",")),
-    hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iran-Born Population in Italy, 2002\u20132025</b>",
       font = list(size = 15, family = "Montserrat")),

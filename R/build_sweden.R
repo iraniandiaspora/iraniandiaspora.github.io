@@ -254,7 +254,7 @@ total_yrs <- sum(yrs$count)
 yrs$pct <- round(yrs$count / total_yrs * 100, 1)
 
 p_yrssince <- plot_ly(yrs, x = ~seq_len(nrow(yrs)) - 1L, y = ~count, type = "bar",
-    marker = list(color = "#1a4e72"),
+    marker = list(color = "#2774AE"),
     text = sprintf("<b>%s</b><br>%s (%s%%)",
       yrs$duration, format(yrs$count, big.mark = ","), yrs$pct),
     hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%

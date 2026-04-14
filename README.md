@@ -9,7 +9,7 @@
 
 # Iranian Diaspora Dashboard
 
-Interactive data dashboard comparing Iranian diaspora populations across 14 countries and worldwide.
+Interactive data dashboard comparing Iranian diaspora populations across 15 countries and worldwide.
 
 **[iraniandiaspora.github.io](https://iraniandiaspora.github.io)**
 
@@ -20,6 +20,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 14 coun
 - **Europe** -- overview of 11 countries, plus individual pages for Germany (4), United Kingdom (2), Netherlands (2), Sweden (1), Denmark (2), Norway (1), Austria (1), Italy (1), Switzerland (1)
 - **Canada** -- population, language/religion, immigration, education, work, income (6 pages)
 - **Australia** -- population, immigration, education/religion, work/income (4 pages)
+- **Israel** -- population (1 page)
 - **Bibliography** -- curated by H.E. Chehabi and Amir Sayadabdi
 - **About** -- project description and changelog
 
@@ -41,6 +42,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 14 coun
 | Austria | Statistik Austria / Eurostat population register | 1990--2025 |
 | Italy | ISTAT / Eurostat population register | 2002--2025 |
 | Switzerland | Swiss Federal Statistical Office (BFS) population register | 2010--2024 |
+| Israel | Israel Central Bureau of Statistics (CBS) Statistical Abstract | 2024 |
 
 ## Citation
 
@@ -50,7 +52,7 @@ If you use data, figures, or findings from this dashboard, please cite:
 
 ## License
 
-Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying data are subject to their original terms of use from the U.S. Census Bureau, the U.S. Department of Homeland Security (INS/DHS), Statistics Canada, the Australian Bureau of Statistics, CBS Statistics Netherlands, Destatis, BAMF, ONS, ISTAT, BFS, Statistik Austria, Eurostat, and the United Nations.
+Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying data are subject to their original terms of use from the U.S. Census Bureau, the U.S. Department of Homeland Security (INS/DHS), Statistics Canada, the Australian Bureau of Statistics, CBS Statistics Netherlands, Destatis, BAMF, ONS, ISTAT, BFS, Statistik Austria, the Israel Central Bureau of Statistics, Eurostat, and the United Nations.
 
 ## Credits
 

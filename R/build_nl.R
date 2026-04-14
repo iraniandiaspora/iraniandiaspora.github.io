@@ -316,8 +316,8 @@ max_bar <- max(arrival_agg$count)
 
 p_arrival <- plot_ly() %>%
   add_bars(data = arrival_agg, x = ~x_num, y = ~count,
-    marker = list(color = "#1a4e72",
-      line = list(color = "#0d3250", width = 0.3)),
+    marker = list(color = "#2774AE",
+      line = list(color = "#1a4e72", width = 0.3)),
     text = sprintf("<b>%s</b><br>%s Iran-born residents<br>Cumulative: %.0f%%",
       arrival_agg$label, format(arrival_agg$count, big.mark = ","),
       arrival_agg$cum_pct),
