@@ -5,7 +5,7 @@
 
 library(plotly)
 library(dplyr)
-library(readxl)
+library(readr)
 library(jsonlite)
 
 DATA_DIR <- "data/us"
@@ -200,10 +200,10 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 # =====================================================
 cat("Building us-immigration...\n")
 
-immig <- read_excel(file.path(DATA_DIR, "by_yrimmig.xlsx"))
+immig <- read_csv(file.path(DATA_DIR, "by_yrimmig.csv"), show_col_types = FALSE)
 
-# Rebuild citizenship from iran_data.Rda (by_citizen.xlsx had weighting bug)
-load(file.path(DATA_DIR, "iran_data.Rda"))
+# Rebuild citizenship from iran_data (by_citizen.xlsx had weighting bug)
+iran_data <- read_csv(file.path(DATA_DIR, "iran_data.csv"), show_col_types = FALSE)
 citizen <- iran_data %>%
   mutate(CITIZEN2 = case_when(
     CITIZEN2 == "US-born" ~ "Born in the US",
@@ -257,10 +257,10 @@ citizen <- citizen[order(citizen$CITIZEN2), ]
 
 cit_total <- sum(citizen$n)
 p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
-    marker = list(color = c("#1a4e72", "#4a8c6f", "#d4a943")),
+    marker = list(color = c("#2774AE", "#5a9bd5", "#e07b54")),
     text = ~sprintf("<b>%s</b><br>%s (%s%%)", CITIZEN2,
       format(n, big.mark = ","), round(n / cit_total * 100)),
-    hoverinfo = "text") %>%
+    hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Americans by<br>Citizenship Status</b>",
       font = list(size = 16, family = "Montserrat")),
@@ -287,7 +287,7 @@ cat("  Done\n")
 cat("Building us-admissions...\n")
 
 # Official admissions from INS Annual Reports (1970-1977) + INS/DHS yearbooks (1978-2023)
-lpr <- readRDS(file.path(DATA_DIR, "iran_lpr_dashboard_1970_2023.rds"))
+lpr <- read_csv(file.path(DATA_DIR, "iran_lpr_1970_2023.csv"), show_col_types = FALSE)
 lpr[is.na(lpr)] <- 0
 
 SRC_LPR <- "Source: INS Annual Reports (1970\u20131977); INS Statistical Yearbooks (1978\u20132004); DHS Yearbook of Immigration Statistics (2005\u20132023)"
@@ -302,7 +302,7 @@ p_lpr_total <- plot_ly(data = lpr, x = ~year, y = ~total,
     marker = list(color = "#1a4e72", size = 3),
     text = ~hover_total, hoverinfo = "text", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Iranians Granted<br>Permanent Resident Status,<br>1970\u20132023</b>",
+    title = list(text = "<b>Iranians Granted<br>US Permanent Resident Status,<br>1970\u20132023</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
@@ -328,9 +328,9 @@ cat_colors <- c("Family" = "#2774AE", "Employment" = "#8bbdde",
                 "Refugee/Asylee" = "#c0504d", "Diversity" = "#d4a943",
                 "Other" = "#999999")
 cat_defs   <- c("Family" = "immediate relatives and family preferences",
-                "Employment" = "work-based visas",
-                "Refugee/Asylee" = "refugees and asylum recipients",
-                "Diversity" = "visa lottery program",
+                "Employment" = "employment-based immigrants and family",
+                "Refugee/Asylee" = "adjusting to permanent residence",
+                "Diversity" = "Diversity Visa program",
                 "Other" = "special immigrants and other categories")
 
 # Compute cumulative bases so we can add traces in REVERSE order
@@ -348,12 +348,16 @@ cat_bases <- list(family = base_family, employment = base_employ,
 p_lpr_cat <- plot_ly()
 for (i in rev(seq_along(cat_names))) {
   vals <- lpr_cat[[cat_cols[i]]]
-  pre92 <- lpr_cat$year < 1992
-  hover <- ifelse(pre92 & cat_cols[i] == "family",
-    sprintf("<b>%s</b> (incl. employment): %s",
-      cat_names[i], format(vals, big.mark = ",")),
-    sprintf("<b>%s</b>: %s",
-      cat_names[i], format(vals, big.mark = ",")))
+  pre78 <- lpr_cat$year < 1978
+  pre92 <- lpr_cat$year < 1992 & !pre78
+  hover <- ifelse(pre78 & cat_cols[i] == "family",
+    sprintf("<b>Total</b> (categories not reported separately): %s",
+      format(vals, big.mark = ",")),
+    ifelse(pre92 & cat_cols[i] == "family",
+      sprintf("<b>Family + Employment</b> (combined in source): %s",
+        format(vals, big.mark = ",")),
+      sprintf("<b>%s</b>: %s",
+        cat_names[i], format(vals, big.mark = ","))))
   p_lpr_cat <- p_lpr_cat %>%
     add_bars(x = lpr_cat$year, y = vals,
       base = cat_bases[[cat_cols[i]]],
@@ -369,7 +373,7 @@ p_lpr_cat <- p_lpr_cat %>%
   layout(
     barmode = "overlay",
     hovermode = "x unified",
-    title = list(text = "<b>Iranian Permanent Residence Grants<br>by Category, 1970\u20132023</b>",
+    title = list(text = "<b>Iranian US Permanent Residence Grants<br>by Category, 1970\u20132023</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
@@ -377,7 +381,7 @@ p_lpr_cat <- p_lpr_cat %>%
       tickfont = list(size = 11)),
     annotations = list(
       list(x = 0.5, y = -0.12, xref = "paper", yref = "paper",
-           text = "Pre-1992: family includes employment preferences (not separately reported). Pre-1978: all categories combined.",
+           text = "1970\u20131977: total grants only (no category breakdown in source). 1978\u20131991: family and employment combined in published tabulations.",
            showarrow = FALSE, font = list(size = 9, color = "#888"),
            xanchor = "center")
     ),
@@ -389,9 +393,9 @@ cat_leg <- make_html_legend(cat_colors)
 
 writeLines(page_template("US: Immigration History", paste0(
   '<div class="page-content">',
-  sprintf('<div class="text-card pt1">Between 1970 and 2023, over %s Iranians received permanent resident status\u2014the right to live and work indefinitely in the United States. About 23,000 arrived in the pre-revolution decade (1970\u20131977), when Iranian migration was modest but growing. This annual count includes both people arriving from abroad and people already in the country who changed from a temporary visa (such as a student or refugee visa) to permanent status. The current Iran-born population is smaller because these figures span over five decades and include people who have since died or left the country.</div>',
+  sprintf('<div class="text-card pt1"><p style="font-size:16px;line-height:1.5;margin:0 0 8px;">Between 1970 and 2023, <b>%s Iranians</b> were granted U.S. lawful permanent residence.</p><p style="font-size:13px;color:#555;margin:0 0 6px;">These figures count green cards granted, not the number of Iranians currently living in the United States.</p><ul style="margin:4px 0 0 18px;padding:0;font-size:13px;line-height:1.6;text-align:left;color:#555;"><li>Some people arrived from abroad already approved for permanent residence</li><li>Others were already in the United States on temporary visas and later received green cards</li><li>A person who first entered as a student could later receive permanent residence through family, employment, or another category</li><li>The total is larger than today\u2019s Iran-born population because it adds up grants over five decades, including people who later died or left the country</li></ul></div>',
     format(sum(lpr$total), big.mark = ",")),
-  '<div class="text-card pt2">U.S. permanent residence is granted through several pathways: family (sponsored by a relative who is a U.S. citizen or permanent resident), employment (sponsored by a U.S. employer), refugee/asylee (granted protection from persecution), and diversity (a lottery for countries with low U.S. immigration rates). Family has been the largest category throughout this period, declining from over 70% to about 50% after 1992, while work-based grants rose from under 10% to 29%. The spike in 1989\u20131991 reflects a 1986 U.S. law that allowed long-term undocumented residents to obtain permanent status.</div>',
+  '<div class="text-card pt2"><p style="margin:0 0 6px;">Green cards are grouped by the pathway through which permanent residence was granted:</p><ul style="margin:4px 0 8px 18px;padding:0;font-size:13px;line-height:1.5;text-align:left;"><li><b>Family</b> \u2014 through immediate relatives or family sponsorship</li><li><b>Employment</b> \u2014 through employment-based immigration</li><li><b>Refugee/Asylee</b> \u2014 refugees and asylees adjusting to permanent residence</li><li><b>Diversity</b> \u2014 through the annual visa lottery open to countries with low immigration rates</li></ul><p style="font-size:13px;color:#555;margin:0;">Family remained the largest category, though its share declined after 1992. The 1989\u20131991 spike reflects legalization under the 1986 Immigration Reform and Control Act (IRCA).</p></div>',
   '<div class="chart-card pc1">', plotly_div("lpr-total", plotly_to_json(p_lpr_total), "450px", source = SRC_LPR), '</div>',
   '<div class="chart-card pc2">', plotly_div("lpr-cat", plotly_to_json(p_lpr_cat), "450px", source = SRC_LPR, legend_html = cat_leg, highlight_hover = TRUE),
   '<script>(function(){var el=document.getElementById("lpr-cat");if(el){el.removeAllListeners("plotly_hover");el.removeAllListeners("plotly_unhover");el.removeAllListeners("plotly_click");}})();</script>',
@@ -497,19 +501,19 @@ make_butterfly_educ <- function(df_raw, gen_label, age_collapse = FALSE, height 
 # =====================================================
 cat("Building us-education...\n")
 
-e1 <- new.env(); load(file.path(DATA_DIR, "gen_1_wide.Rda"), envir = e1)
-e2 <- new.env(); load(file.path(DATA_DIR, "gen_2_wide.Rda"), envir = e2)
+e1 <- list(gen_1_wide = read_csv(file.path(DATA_DIR, "gen_1_wide.csv"), show_col_types = FALSE))
+e2 <- list(gen_2_wide = read_csv(file.path(DATA_DIR, "gen_2_wide.csv"), show_col_types = FALSE))
 
 writeLines(page_template("Education", paste0(
   '<div class="page-content">',
   '<div class="text-card pt1">While first-generation, older Iranian-Americans experienced a pronounced gender gap in education, this disparity has reversed among younger first-generation Iranian-Americans, where women now exceed men in educational attainment.</div>',
   '<div class="text-card pt2">Today, second-generation Iranian-American women are more likely than their male counterparts to hold a bachelor&rsquo;s degree or higher.</div>',
   '<div class="chart-card pc1">',
-  '<div class="section-title">Educational Attainment by Age and Gender: First Generation</div>',
+  '<div class="section-title">Educational Attainment of Iranian-Americans: First Generation</div>',
   make_butterfly_educ(e1$gen_1_wide, "1st Generation", FALSE, "500px", "ed1"),
   '</div>',
   '<div class="chart-card pc2">',
-  '<div class="section-title">Educational Attainment by Age and Gender: Second Generation</div>',
+  '<div class="section-title">Educational Attainment of Iranian-Americans: Second Generation</div>',
   make_butterfly_educ(e2$gen_2_wide, "2nd Generation", TRUE, "500px", "ed2"),
   '</div>',
   '</div>'
@@ -607,18 +611,18 @@ make_butterfly_work <- function(df, gen_val, gen_label, age_collapse = FALSE, he
 # =====================================================
 cat("Building us-work...\n")
 
-ec <- new.env(); load(file.path(DATA_DIR, "class.Rda"), envir = ec)
+ec <- list(class = read_csv(file.path(DATA_DIR, "class.csv"), show_col_types = FALSE))
 
 writeLines(page_template("Work", paste0(
   '<div class="page-content">',
   '<div class="text-card pt1">Iranian-Americans are most commonly employed in the private sector, regardless of gender, though men have higher rates of self-employment while women work more in non-profits.</div>',
   '<div class="text-card pt2">First-generation Iranian-Americans show stronger age-related employment differences than the second generation.</div>',
   '<div class="chart-card pc1">',
-  '<div class="section-title">Employment by Age and Gender: First Generation</div>',
+  '<div class="section-title">Employment of Iranian-Americans: First Generation</div>',
   make_butterfly_work(ec$class, "1st gen", "1st Generation", FALSE, "500px", "wk1"),
   '</div>',
   '<div class="chart-card pc2">',
-  '<div class="section-title">Employment by Age and Gender: Second Generation</div>',
+  '<div class="section-title">Employment of Iranian-Americans: Second Generation</div>',
   make_butterfly_work(ec$class, "2nd gen", "2nd Generation", TRUE, "500px", "wk2"),
   '</div>',
   '</div>'
@@ -630,7 +634,7 @@ cat("  Done\n")
 # =====================================================
 cat("Building us-marriage...\n")
 
-em <- new.env(); load(file.path(DATA_DIR, "spouse_gender.Rda"), envir = em)
+em <- list(spouse_gender = read_csv(file.path(DATA_DIR, "spouse_gender.csv"), show_col_types = FALSE))
 sp <- em$spouse_gender %>%
   filter(!is.na(age_group)) %>%
   mutate(
@@ -734,14 +738,28 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
 
 writeLines(page_template("Marriage", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">Among roughly 312,000 Iranian-Americans in marriages or domestic partnerships, about 60% have partners of Iranian origin. Both opposite-sex and same-sex partners, married or unmarried, are counted.</div>',
-  '<div class="text-card pt2">Marriage patterns differ sharply by generation. First-generation individuals have Iranian partners at rates of roughly 70&ndash;77% across all age groups. Among second-generation Iranian-Americans, about half to 60% have White non-Hispanic partners, with higher rates among younger cohorts. Second-generation outmarriage rates are <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE;">comparable to those of other second-generation Asian Americans</a>.</div>',
+  {
+    raw_all <- em$spouse_gender
+    total_w <- sum(raw_all$PERWT)
+    iran_pct <- round(sum(raw_all$PERWT[raw_all$spouse_iran == "Yes"]) / total_w * 100)
+    sprintf('<div class="text-card pt1">Among roughly %s Iranian-Americans in marriages or domestic partnerships, about %d%% have partners of Iranian origin. Both opposite-sex and same-sex partners, married or unmarried, are counted.</div>',
+      format(round(total_w, -3), big.mark = ","), iran_pct)
+  },
+  {
+    raw <- em$spouse_gender
+    g1 <- raw %>% dplyr::filter(gen == "1st gen", !is.na(age_group))
+    g1_pct <- round(sum(g1$PERWT[g1$spouse_iran == "Yes"]) / sum(g1$PERWT) * 100)
+    g2 <- raw %>% dplyr::filter(gen == "2nd gen", !is.na(age_group))
+    g2_white <- round(sum(g2$PERWT[g2$spouse == "Other White"]) / sum(g2$PERWT) * 100)
+    sprintf('<div class="text-card pt2">Partnership patterns vary by generation. Among first-generation Iranian-Americans, about %d%% have an Iranian partner. Among the second generation, about %d%% have a White non-Hispanic partner, a pattern consistent with other second-generation immigrant groups. Second-generation outmarriage rates are <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE;">comparable to those of other second-generation Asian Americans</a>.</div>',
+      g1_pct, g2_white)
+  },
   '<div class="chart-card pc1">',
-  '<div class="section-title">Ethnicity of Spouse/Partner: First Generation</div>',
+  '<div class="section-title">Spouse/Partner Ethnicity of Iranian-Americans: First Generation</div>',
   make_butterfly_marriage(sp, "1st gen", "1st Generation", FALSE, "500px", "mar1"),
   '</div>',
   '<div class="chart-card pc2">',
-  '<div class="section-title">Ethnicity of Spouse/Partner: Second Generation</div>',
+  '<div class="section-title">Spouse/Partner Ethnicity of Iranian-Americans: Second Generation</div>',
   make_butterfly_marriage(sp, "2nd gen", "2nd Generation", TRUE, "500px", "mar2"),
   '</div>',
   '</div>'
@@ -754,14 +772,12 @@ cat("  Done\n")
 # =====================================================
 cat("Building us-income...\n")
 
-ei <- new.env(); load(file.path(DATA_DIR, "iran_data.Rda"), envir = ei)
-iran <- ei$iran_data
+iran <- read_csv(file.path(DATA_DIR, "iran_data.csv"), show_col_types = FALSE)
 
 # National decile thresholds — household-level (see
 # pull_acs_5yr_2020_2024.R). The reference distribution is one row per
 # household whose reference person is aged 25-54, weighted by WGTP.
-nat <- readRDS(file.path(DATA_DIR, "national_reference_acs5_2020_2024.rds"))
-pctiles <- nat$income_pctiles
+pctiles <- read_csv(file.path(DATA_DIR, "national_reference.csv"), show_col_types = FALSE)
 breaks <- c(-Inf, pctiles$p10, pctiles$p20, pctiles$p30, pctiles$p40,
             pctiles$p50, pctiles$p60, pctiles$p70, pctiles$p80, pctiles$p90, Inf)
 
@@ -800,7 +816,7 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
     line = list(color = "#4A90D9", width = 1),
     text = ~sprintf("<b>Decile:</b> %s<br><b>Sample size (n):</b> %s<br><b>Share:</b> %.1f%%",
       label, format(n, big.mark = ","), share),
-    hoverinfo = "text") %>%
+    hoverinfo = "text", textposition = "none") %>%
     # Shaded area
     add_trace(x = ~label, y = ~share, type = "scatter", mode = "none",
       fill = "tozeroy", fillcolor = "rgba(173,216,230,0.3)",
@@ -876,8 +892,7 @@ cat("  Done\n")
 cat("Building us-population...\n")
 
 # Waterfall
-ew <- new.env(); load(file.path(DATA_DIR, "waterfall_components.Rda"), envir = ew)
-wf <- ew$waterfall
+wf <- read_csv(file.path(DATA_DIR, "waterfall_components.csv"), show_col_types = FALSE)
 wf$ymin <- wf$cumulative - wf$weighted_n
 wf$ymax <- wf$cumulative
 wf$label <- format(wf$weighted_n, big.mark = ",")
@@ -902,7 +917,7 @@ p_waterfall <- plot_ly() %>%
       wf$hover_label, format(weighted_n, big.mark = ","), pct, format(cumulative, big.mark = ",")),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>How We Count:<br>Building the Population Estimate</b>",
+    title = list(text = "<b>Iranian-Americans: How We Count</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10), tickangle = 0,
       categoryorder = "array",
@@ -913,9 +928,8 @@ p_waterfall <- plot_ly() %>%
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-# Region bar chart
-ep <- new.env(); load(file.path(DATA_DIR, "iran_data.Rda"), envir = ep)
-region_dat <- ep$iran_data %>%
+# Region bar chart — reuse iran_data already loaded above
+region_dat <- iran_data %>%
   filter(!is.na(REGION)) %>%
   group_by(REGION) %>%
   summarize(pop = sum(PERWT, na.rm = TRUE), .groups = "drop") %>%
@@ -929,7 +943,7 @@ region_dat$REGION <- factor(region_dat$REGION, levels = region_dat$REGION)
 
 total_pop <- sum(region_dat$pop)
 p_region <- plot_ly(data = region_dat, x = ~REGION, y = ~pop, type = "bar",
-    marker = list(color = c("#1a4e72", "#4a8c6f", "#c4793a", "#d4a943")),
+    marker = list(color = c("#7b5ea7", "#d4a943", "#2ca089", "#e07b54")),
     text = ~sprintf("<b>%s</b><br>%s (%s%%)",
       REGION, format(pop, big.mark = ","), round(pop / total_pop * 100)),
     hoverinfo = "text", textposition = "none") %>%
@@ -950,8 +964,8 @@ if (!has_freestiler) {
 library(freestiler)
 library(sf)
 
-es <- new.env(); load(file.path(DATA_DIR, "merged_data.Rda"), envir = es)
-state_sf <- st_transform(es$merged_data, 4326)
+state_sf <- st_read(file.path(DATA_DIR, "us_states.geojson"), quiet = TRUE)
+state_sf <- st_transform(state_sf, 4326)
 state_sf$population_est <- as.numeric(state_sf$population_est)
 state_sf <- state_sf[, c("state", "population_est", "geometry")]
 # Title-case state names for display
@@ -962,8 +976,8 @@ freestile(state_sf, output = "docs/pages/tiles/us_states.pmtiles",
   min_zoom = 2, max_zoom = 7, overwrite = TRUE, quiet = TRUE)
 cat("  State PMTiles:", round(file.size("docs/pages/tiles/us_states.pmtiles") / 1e3), "KB\n")
 
-ec <- new.env(); load(file.path(DATA_DIR, "joined_counties.Rda"), envir = ec)
-county_sf <- st_transform(ec$joined_counties, 4326)
+county_sf <- st_read(file.path(DATA_DIR, "ca_counties.geojson"), quiet = TRUE)
+county_sf <- st_transform(county_sf, 4326)
 county_sf <- county_sf[, c("NAME", "NAMELSAD", "pop_estimate", "moe", "percent", "geometry")]
 
 freestile(county_sf, output = "docs/pages/tiles/ca_counties.pmtiles",

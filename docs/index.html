@@ -61,6 +61,8 @@
     <div class="submenu-wrapper">
       <button class="sub-tab" data-tab="au-population" onclick="showSubTab('au-population', this)">Population</button>
       <button class="sub-tab" data-tab="au-immigration" onclick="showSubTab('au-immigration', this)">Immigration</button>
+      <button class="sub-tab" data-tab="au-education" onclick="showSubTab('au-education', this)">Education &amp; Religion</button>
+      <button class="sub-tab" data-tab="au-workinc" onclick="showSubTab('au-workinc', this)">Work &amp; Income</button>
     </div>
   </div>
 
@@ -70,7 +72,14 @@
     <div class="submenu-wrapper submenu-country">
       <button class="country-tab active" data-country="overview" onclick="showEuropeCountry('overview', this)">All Europe</button>
       <button class="country-tab" data-country="germany" onclick="showEuropeCountry('germany', this)">Germany</button>
+      <button class="country-tab" data-country="sweden" onclick="showEuropeCountry('sweden', this)">Sweden</button>
       <button class="country-tab" data-country="uk" onclick="showEuropeCountry('uk', this)">United Kingdom</button>
+      <button class="country-tab" data-country="netherlands" onclick="showEuropeCountry('netherlands', this)">Netherlands</button>
+      <button class="country-tab" data-country="denmark" onclick="showEuropeCountry('denmark', this)">Denmark</button>
+      <button class="country-tab" data-country="norway" onclick="showEuropeCountry('norway', this)">Norway</button>
+      <button class="country-tab" data-country="austria" onclick="showEuropeCountry('austria', this)">Austria</button>
+      <button class="country-tab" data-country="italy" onclick="showEuropeCountry('italy', this)">Italy</button>
+      <button class="country-tab" data-country="switzerland" onclick="showEuropeCountry('switzerland', this)">Switzerland</button>
     </div>
     <!-- Row 2a: Overview page row (single page) -->
     <div id="europe-overview-pages" class="submenu-wrapper submenu-pages active" data-country="overview">
@@ -86,103 +95,188 @@
     <!-- Row 2c: United Kingdom page row -->
     <div id="europe-uk-pages" class="submenu-wrapper submenu-pages" data-country="uk">
       <button class="sub-tab" data-tab="uk-population" onclick="showSubTab('uk-population', this)">Population</button>
+      <button class="sub-tab" data-tab="uk-workedu" onclick="showSubTab('uk-workedu', this)">Work &amp; Education</button>
+    </div>
+    <!-- Row 2d: Netherlands page row -->
+    <div id="europe-netherlands-pages" class="submenu-wrapper submenu-pages" data-country="netherlands">
+      <button class="sub-tab" data-tab="nl-population" onclick="showSubTab('nl-population', this)">Population</button>
+      <button class="sub-tab" data-tab="nl-workinc" onclick="showSubTab('nl-workinc', this)">Work &amp; Income</button>
+    </div>
+    <!-- Row 2e: Sweden page row -->
+    <div id="europe-sweden-pages" class="submenu-wrapper submenu-pages" data-country="sweden">
+      <button class="sub-tab" data-tab="se-population" onclick="showSubTab('se-population', this)">Population</button>
+    </div>
+    <!-- Row 2f: Denmark page row -->
+    <div id="europe-denmark-pages" class="submenu-wrapper submenu-pages" data-country="denmark">
+      <button class="sub-tab" data-tab="dk-population" onclick="showSubTab('dk-population', this)">Population</button>
+      <button class="sub-tab" data-tab="dk-workinc" onclick="showSubTab('dk-workinc', this)">Work &amp; Industry</button>
+    </div>
+    <!-- Row 2g: Norway page row -->
+    <div id="europe-norway-pages" class="submenu-wrapper submenu-pages" data-country="norway">
+      <button class="sub-tab" data-tab="no-population" onclick="showSubTab('no-population', this)">Population</button>
+    </div>
+    <!-- Row 2h: Austria page row -->
+    <div id="europe-austria-pages" class="submenu-wrapper submenu-pages" data-country="austria">
+      <button class="sub-tab" data-tab="at-population" onclick="showSubTab('at-population', this)">Population</button>
+    </div>
+    <!-- Row 2i: Italy page row -->
+    <div id="europe-italy-pages" class="submenu-wrapper submenu-pages" data-country="italy">
+      <button class="sub-tab" data-tab="it-population" onclick="showSubTab('it-population', this)">Population</button>
+    </div>
+    <!-- Row 2j: Switzerland page row -->
+    <div id="europe-switzerland-pages" class="submenu-wrapper submenu-pages" data-country="switzerland">
+      <button class="sub-tab" data-tab="ch-population" onclick="showSubTab('ch-population', this)">Population</button>
     </div>
   </div>
 </div>
 
 <!-- Global -->
-<div id="global" class="tab-content">
+<div id="page-global" class="tab-content">
   <iframe src="pages/global.html" title="Global overview"></iframe>
 </div>
 
 <!-- US Pages -->
-<div id="us-population" class="tab-content">
-  <iframe src="pages/us-population.html" title="US Population"></iframe>
+<div id="page-us-population" class="tab-content">
+  <iframe data-src="pages/us-population.html" title="US Population"></iframe>
 </div>
-<div id="us-immigration" class="tab-content">
-  <iframe src="pages/us-immigration.html" title="US Immigration"></iframe>
+<div id="page-us-immigration" class="tab-content">
+  <iframe data-src="pages/us-immigration.html" title="US Immigration"></iframe>
 </div>
-<div id="us-admissions" class="tab-content">
-  <iframe src="pages/us-admissions.html" title="US Immigration History"></iframe>
+<div id="page-us-admissions" class="tab-content">
+  <iframe data-src="pages/us-admissions.html" title="US Immigration History"></iframe>
 </div>
-<div id="us-marriage" class="tab-content">
-  <iframe src="pages/us-marriage.html" title="US Marriage"></iframe>
+<div id="page-us-marriage" class="tab-content">
+  <iframe data-src="pages/us-marriage.html" title="US Marriage"></iframe>
 </div>
-<div id="us-education" class="tab-content">
-  <iframe src="pages/us-education.html" title="US Education"></iframe>
+<div id="page-us-education" class="tab-content">
+  <iframe data-src="pages/us-education.html" title="US Education"></iframe>
 </div>
-<div id="us-work" class="tab-content">
-  <iframe src="pages/us-work.html" title="US Work"></iframe>
+<div id="page-us-work" class="tab-content">
+  <iframe data-src="pages/us-work.html" title="US Work"></iframe>
 </div>
-<div id="us-income" class="tab-content">
-  <iframe src="pages/us-income.html" title="US Income"></iframe>
+<div id="page-us-income" class="tab-content">
+  <iframe data-src="pages/us-income.html" title="US Income"></iframe>
 </div>
 
 <!-- Canada Pages -->
-<div id="ca-population" class="tab-content">
-  <iframe src="pages/ca-population.html" title="Canada Population"></iframe>
+<div id="page-ca-population" class="tab-content">
+  <iframe data-src="pages/ca-population.html" title="Canada Population"></iframe>
 </div>
-<div id="ca-langrelig" class="tab-content">
-  <iframe src="pages/ca-langrelig.html" title="Canada Language and Religion"></iframe>
+<div id="page-ca-langrelig" class="tab-content">
+  <iframe data-src="pages/ca-langrelig.html" title="Canada Language and Religion"></iframe>
 </div>
-<div id="ca-immigration" class="tab-content">
-  <iframe src="pages/ca-immigration.html" title="Canada Immigration"></iframe>
+<div id="page-ca-immigration" class="tab-content">
+  <iframe data-src="pages/ca-immigration.html" title="Canada Immigration"></iframe>
 </div>
-<div id="ca-education" class="tab-content">
-  <iframe src="pages/ca-education.html" title="Canada Education"></iframe>
+<div id="page-ca-education" class="tab-content">
+  <iframe data-src="pages/ca-education.html" title="Canada Education"></iframe>
 </div>
-<div id="ca-work" class="tab-content">
-  <iframe src="pages/ca-work.html" title="Canada Work"></iframe>
+<div id="page-ca-work" class="tab-content">
+  <iframe data-src="pages/ca-work.html" title="Canada Work"></iframe>
 </div>
-<div id="ca-income" class="tab-content">
-  <iframe src="pages/ca-income.html" title="Canada Income"></iframe>
+<div id="page-ca-income" class="tab-content">
+  <iframe data-src="pages/ca-income.html" title="Canada Income"></iframe>
 </div>
 
 <!-- Australia Pages -->
-<div id="au-population" class="tab-content">
-  <iframe src="pages/au-population.html" title="Australia Population"></iframe>
+<div id="page-au-population" class="tab-content">
+  <iframe data-src="pages/au-population.html" title="Australia Population"></iframe>
 </div>
-<div id="au-immigration" class="tab-content">
-  <iframe src="pages/au-immigration.html" title="Australia Immigration"></iframe>
+<div id="page-au-immigration" class="tab-content">
+  <iframe data-src="pages/au-immigration.html" title="Australia Immigration"></iframe>
+</div>
+<div id="page-au-education" class="tab-content">
+  <iframe data-src="pages/au-education.html" title="Australia Education & Religion"></iframe>
+</div>
+<div id="page-au-workinc" class="tab-content">
+  <iframe data-src="pages/au-workinc.html" title="Australia Work & Income"></iframe>
 </div>
 
 <!-- Europe Overview Page -->
-<div id="eu-overview" class="tab-content">
-  <iframe src="pages/eu-overview.html" title="Europe: Iran-Born Overview"></iframe>
+<div id="page-eu-overview" class="tab-content">
+  <iframe data-src="pages/eu-overview.html" title="Europe: Iran-Born Overview"></iframe>
 </div>
 
 <!-- Germany Pages (Europe tab) -->
-<div id="de-population" class="tab-content">
-  <iframe src="pages/de-population.html" title="Germany Population"></iframe>
+<div id="page-de-population" class="tab-content">
+  <iframe data-src="pages/de-population.html" title="Germany Population"></iframe>
 </div>
-<div id="de-immigration" class="tab-content">
-  <iframe src="pages/de-immigration.html" title="Germany Immigration"></iframe>
+<div id="page-de-immigration" class="tab-content">
+  <iframe data-src="pages/de-immigration.html" title="Germany Immigration"></iframe>
 </div>
-<div id="de-langedu" class="tab-content">
-  <iframe src="pages/de-langedu.html" title="Germany Language and Education"></iframe>
+<div id="page-de-langedu" class="tab-content">
+  <iframe data-src="pages/de-langedu.html" title="Germany Language and Education"></iframe>
 </div>
-<div id="de-workinc" class="tab-content">
-  <iframe src="pages/de-workinc.html" title="Germany Work and Income"></iframe>
+<div id="page-de-workinc" class="tab-content">
+  <iframe data-src="pages/de-workinc.html" title="Germany Work and Income"></iframe>
 </div>
 
 <!-- United Kingdom Pages (Europe tab) -->
-<div id="uk-population" class="tab-content">
-  <iframe src="pages/uk-population.html" title="UK Population"></iframe>
+<div id="page-uk-population" class="tab-content">
+  <iframe data-src="pages/uk-population.html" title="UK Population"></iframe>
+</div>
+<div id="page-uk-workedu" class="tab-content">
+  <iframe data-src="pages/uk-workedu.html" title="UK Work and Education"></iframe>
+</div>
+
+<!-- Netherlands Pages (Europe tab) -->
+<div id="page-nl-population" class="tab-content">
+  <iframe data-src="pages/nl-population.html" title="Netherlands Population"></iframe>
+</div>
+<div id="page-nl-workinc" class="tab-content">
+  <iframe data-src="pages/nl-workinc.html" title="Netherlands Work and Income"></iframe>
+</div>
+
+<!-- Sweden Pages (Europe tab) -->
+<div id="page-se-population" class="tab-content">
+  <iframe data-src="pages/se-population.html" title="Sweden Population"></iframe>
+</div>
+
+<!-- Denmark Pages (Europe tab) -->
+<div id="page-dk-population" class="tab-content">
+  <iframe data-src="pages/dk-population.html" title="Denmark Population"></iframe>
+</div>
+<div id="page-dk-workinc" class="tab-content">
+  <iframe data-src="pages/dk-workinc.html" title="Denmark Work and Industry"></iframe>
+</div>
+
+<!-- Norway Pages (Europe tab) -->
+<div id="page-no-population" class="tab-content">
+  <iframe data-src="pages/no-population.html" title="Norway Population"></iframe>
+</div>
+
+<!-- Austria Pages (Europe tab) -->
+<div id="page-at-population" class="tab-content">
+  <iframe data-src="pages/at-population.html" title="Austria Population"></iframe>
+</div>
+
+<!-- Italy Pages (Europe tab) -->
+<div id="page-it-population" class="tab-content">
+  <iframe data-src="pages/it-population.html" title="Italy Population"></iframe>
+</div>
+
+<!-- Switzerland Pages (Europe tab) -->
+<div id="page-ch-population" class="tab-content">
+  <iframe data-src="pages/ch-population.html" title="Switzerland Population"></iframe>
 </div>
 
 <!-- Bibliography -->
-<div id="bibliography" class="tab-content">
-  <iframe src="pages/bibliography.html" title="Bibliography"></iframe>
+<div id="page-bibliography" class="tab-content">
+  <iframe data-src="pages/bibliography.html" title="Bibliography"></iframe>
 </div>
 
 <!-- About -->
-<div id="about" class="tab-content">
+<div id="page-about" class="tab-content">
   <div class="about-content" style="max-width:800px; margin:0 auto; text-align:left;">
     <p>
       The Iranian Diaspora Dashboard is part of the Iranian Diaspora project funded by
       the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the
       UCLA Center for Near Eastern Studies (CNES). It was created by Roxanne Corbeil,
-      Kevan Harris, and Gilad Wenig. For any inquiries or assistance, please contact
+      Kevan Harris, and Gilad Wenig. The dashboard draws on census and population-register data
+      from 14 countries&mdash;the United States, Canada, Australia, Germany, the United Kingdom,
+      the Netherlands, Sweden, Denmark, Norway, Austria, Italy, Switzerland, and additional
+      countries via Eurostat&mdash;plus the United Nations International Migrant Stock for
+      global coverage. For any inquiries or assistance, please contact
       <a href="mailto:cnes@international.ucla.edu">cnes@international.ucla.edu</a>.
     </p>
 
@@ -191,15 +285,11 @@
     <div style="border-left:3px solid #2774AE; padding-left:16px; margin-bottom:20px;">
       <p style="font-weight:600; margin-bottom:4px;">April 2026</p>
       <ul style="margin:0 0 0 16px; line-height:1.8;">
-        <li>Added a new <strong>Europe</strong> tab with an &ldquo;All Europe&rdquo; overview page showing ~656,000 Iran-born residents across eleven European countries, including a European choropleth map, country ranking, and a 1998&ndash;2025 population trajectory</li>
-        <li>Added <strong>Germany</strong> pages using the 2024 Mikrozensus (Destatis), covering population, state-level geography, citizenship, immigration reasons and timing, Persian language at home, education, labour force, industry, and income</li>
-        <li>Added a <strong>Germany Annual Arrivals</strong> time series (1991&ndash;2023) compiled from four editions of the BAMF Migrationsbericht</li>
-        <li>Added a <strong>United Kingdom</strong> page showing ~114,000 Iran-born residents across the four UK nations (ONS Census 2021 &amp; Scotland Census 2022), with a regional choropleth map of nine English regions plus Scotland and Wales</li>
-        <li>Added the three UK decennial census points (2001, 2011, 2021) to the Europe time-series chart</li>
-        <li>Added <strong>Australia</strong> pages using the 2021 Australian Bureau of Statistics (ABS) Census, including population overview, state and city maps, and immigration timing</li>
-        <li>Added U.S. <strong>Immigration History</strong> tab with Immigration and Naturalization Service (INS) and Department of Homeland Security (DHS) permanent resident admissions data (1978&ndash;2023), broken down by admission category</li>
-        <li>Updated all U.S. data to the <strong>2020&ndash;2024 American Community Survey</strong> (previously 2018&ndash;2022), revising the U.S. population estimate to <strong>794,915</strong>. Now includes children of Iranian parents identified through household data, and a new &ldquo;Iranian&rdquo; race write-in category first available in the 2024 survey</li>
-        <li>U.S. and Canadian income pages adjusted to <strong>pre-tax household income deciles</strong></li>
+        <li>Added <strong>Europe</strong> tab with an overview of ~656,000 Iran-born residents across eleven countries, plus individual pages for <strong>Germany</strong> (4 pages), <strong>United Kingdom</strong> (2 pages), <strong>Netherlands</strong> (2 pages), <strong>Sweden</strong>, <strong>Denmark</strong> (2 pages), <strong>Norway</strong>, <strong>Austria</strong>, <strong>Italy</strong>, and <strong>Switzerland</strong></li>
+        <li>Expanded <strong>United Kingdom</strong> to two pages with age, sex, economic activity, qualification, year of arrival, and religion cross-tabs from the ONS custom dataset tool</li>
+        <li>Expanded <strong>Australia</strong> to four pages with a new compound definition (~110,993), adding education, religion, occupation, industry, and income data from ABS TableBuilder Pro</li>
+        <li>Added U.S. <strong>Immigration History</strong> tab with permanent resident admissions data (1970&ndash;2023)</li>
+        <li>Updated U.S. data to the <strong>2020&ndash;2024 American Community Survey</strong>, revising the population estimate to <strong>794,915</strong></li>
         <li>Redesigned the site for improved speed, interactivity, and mobile viewing</li>
       </ul>
     </div>
@@ -220,7 +310,7 @@
     </div>
     <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">How to cite</h3>
     <p style="margin-left:24px; text-indent:-24px; line-height:1.8;">Harris, Kevan, Roxanne Corbeil, and Gilad Wenig. 2024. <em>Iranian Diaspora Dashboard</em>. UCLA Center for Near Eastern Studies. <a href="https://iraniandiaspora.github.io" style="color:#2774AE;">https://iraniandiaspora.github.io</a></p>
-    <p style="font-size:12px; color:#888; margin-top:8px;">Charts and original analysis are licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:#2774AE;">CC BY 4.0</a>. Underlying census microdata are subject to their original terms of use.</p>
+    <p style="font-size:12px; color:#888; margin-top:8px;">Charts and original analysis are licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:#2774AE;">CC BY 4.0</a>. Underlying data are subject to their original terms of use from the U.S. Census Bureau, DHS, Statistics Canada, ABS, Destatis, BAMF, ONS, CBS, SCB, DST, SSB, Statistik Austria, ISTAT, BFS, Eurostat, and the United Nations.</p>
   </div>
 </div>
 
@@ -234,9 +324,19 @@
 </footer>
 
 <script>
+// Lazy-load: swap data-src → src on first activation so iframes don't all load at once
+function activateIframe(container) {
+  if (!container) return;
+  var iframe = container.querySelector('iframe');
+  if (iframe && !iframe.src && iframe.dataset.src) {
+    iframe.src = iframe.dataset.src;
+  }
+}
+
 // Trigger iframe to re-report its height and resize plotly charts after becoming visible
 function resizeIframe(container) {
   if (!container) return;
+  activateIframe(container);
   var iframe = container.querySelector('iframe');
   if (iframe && iframe.contentWindow) {
     // Give the browser a moment to layout, then trigger resize + plotly relayout
@@ -338,7 +438,7 @@ function showTab(tabName, element, skipHash) {
   } else {
     allMenus.forEach(m => m.style.display = 'none');
     document.querySelectorAll('.sub-tab').forEach(st => st.classList.remove('active'));
-    const content = document.getElementById(tabName);
+    const content = document.getElementById('page-' + tabName);
     if (content) { content.classList.add('active'); content.style.display = 'block'; resizeIframe(content); }
     if (!skipHash) history.replaceState(null, '', '#' + tabName);
   }
@@ -352,7 +452,7 @@ function showSubTab(subTabId, element) {
     tab.classList.remove('active');
     tab.style.display = 'none';
   });
-  const content = document.getElementById(subTabId);
+  const content = document.getElementById('page-' + subTabId);
   if (content) { content.classList.add('active'); content.style.display = 'block'; resizeIframe(content); }
   history.replaceState(null, '', '#' + subTabId);
 }
@@ -463,11 +563,6 @@ function navigateToHash() {
 }
 document.addEventListener('DOMContentLoaded', function() {
   navigateToHash();
-  // Prevent browser from auto-scrolling to the hash anchor on initial load.
-  // The header-container is position:sticky so it stays visible during
-  // scroll, but some browsers (notably Safari) scroll to the hash target
-  // on replaceState, pushing the header out of the initial viewport.
-  window.scrollTo(0, 0);
 });
 window.addEventListener('hashchange', navigateToHash);
 </script>

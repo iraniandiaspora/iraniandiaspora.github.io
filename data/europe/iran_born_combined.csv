@@ -40,6 +40,7 @@ BE,Belgium,2023,14315,Eurostat migr_pop3ctb
 BE,Belgium,2024,16704,Eurostat migr_pop3ctb
 BE,Belgium,2025,17480,Eurostat migr_pop3ctb
 CH,Switzerland,2001,5284,Eurostat migr_pop3ctb
+CH,Switzerland,2010,8030,BFS STATPOP
 CH,Switzerland,2011,8030,Eurostat migr_pop3ctb
 CH,Switzerland,2012,8521,Eurostat migr_pop3ctb
 CH,Switzerland,2013,9091,Eurostat migr_pop3ctb
@@ -51,6 +52,9 @@ CH,Switzerland,2018,12584,Eurostat migr_pop3ctb
 CH,Switzerland,2019,13035,Eurostat migr_pop3ctb
 CH,Switzerland,2020,13657,Eurostat migr_pop3ctb
 CH,Switzerland,2021,14241,Eurostat migr_pop3ctb
+CH,Switzerland,2022,15545,BFS STATPOP
+CH,Switzerland,2023,16556,BFS STATPOP
+CH,Switzerland,2024,17213,BFS STATPOP
 DE,Germany,2024,250000,"Destatis Mikrozensus 2024, Table 12211-53"
 DK,Denmark,2000,11085,Eurostat migr_pop3ctb
 DK,Denmark,2001,11291,Eurostat migr_pop3ctb

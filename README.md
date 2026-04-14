@@ -9,21 +9,38 @@
 
 # Iranian Diaspora Dashboard
 
-Interactive data dashboard comparing Iranian diaspora populations in the United States, Europe, Canada, Australia, and worldwide.
+Interactive data dashboard comparing Iranian diaspora populations across 14 countries and worldwide.
 
 **[iraniandiaspora.github.io](https://iraniandiaspora.github.io)**
+
+## Live Sections
+
+- **Global** -- world map and stacked area chart (UN Migrant Stock 2024)
+- **United States** -- population, immigration history, admissions (1970--2023), marriage, education, work, income (7 pages)
+- **Europe** -- overview of 11 countries, plus individual pages for Germany (4), United Kingdom (2), Netherlands (2), Sweden (1), Denmark (2), Norway (1), Austria (1), Italy (1), Switzerland (1)
+- **Canada** -- population, language/religion, immigration, education, work, income (6 pages)
+- **Australia** -- population, immigration, education/religion, work/income (4 pages)
+- **Bibliography** -- curated by H.E. Chehabi and Amir Sayadabdi
+- **About** -- project description and changelog
 
 ## Data Sources
 
 | Country / Region | Source | Years |
 |---------|--------|-------|
-| United States | American Community Survey (ACS) Public Use Microdata Sample (PUMS); Immigration and Naturalization Service (INS) / Department of Homeland Security (DHS) Yearbook of Immigration Statistics | 2020–2024; 1978–2023 |
-| Europe overview | Eurostat (population by country of birth, 9 countries) + national sources for Germany and the UK | 1998–2025 |
-| Germany | Mikrozensus Erstergebnisse (Destatis); Bundesamt in Zahlen (BAMF); Migrationsberichte (BAMF) | 2024; 1991–2023 |
-| United Kingdom | ONS Census (England &amp; Wales), Scotland's Census, NISRA Census (Northern Ireland) | 2021–2022 |
-| Canada | Census Public Use Microdata File (PUMF) | 2021 |
-| Australia | Australian Bureau of Statistics (ABS) Census of Population and Housing | 2021 |
 | Global | United Nations International Migrant Stock | 2024 |
+| United States | American Community Survey (ACS) PUMS; INS/DHS Yearbook of Immigration Statistics | 2020--2024; 1970--2023 |
+| Canada | Census Public Use Microdata File (PUMF) | 2021 |
+| Australia | Australian Bureau of Statistics (ABS) Census; ABS TableBuilder Pro | 2021 |
+| Europe overview | Eurostat migr_pop3ctb (9 countries) + Destatis (Germany) + ONS/NRS/NISRA (UK) | 1998--2025 |
+| Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2024; 1991--2023 |
+| United Kingdom | ONS Census 2021 (England &amp; Wales); Scotland's Census 2022; NISRA Census 2021; ONS custom dataset | 2021--2022 |
+| Netherlands | CBS StatLine population register, Labour Force Survey, household income | 1999--2025 |
+| Sweden | Statistics Sweden (SCB) population register; Eurostat | 1998--2025 |
+| Denmark | Statistics Denmark (DST) population register; Register-based Labour Force Statistics (RAS) | 1980--2026 |
+| Norway | Statistics Norway (SSB) population register; employed immigrants statistics | 1970--2026 |
+| Austria | Statistik Austria / Eurostat population register | 1990--2025 |
+| Italy | ISTAT / Eurostat population register | 2002--2025 |
+| Switzerland | Swiss Federal Statistical Office (BFS) population register | 2010--2024 |
 
 ## Citation
 
@@ -33,7 +50,7 @@ If you use data, figures, or findings from this dashboard, please cite:
 
 ## License
 
-Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying data are subject to their original terms of use from the U.S. Census Bureau, the U.S. Department of Homeland Security (INS/DHS), Statistics Canada, the Australian Bureau of Statistics, and the United Nations.
+Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying data are subject to their original terms of use from the U.S. Census Bureau, the U.S. Department of Homeland Security (INS/DHS), Statistics Canada, the Australian Bureau of Statistics, CBS Statistics Netherlands, Destatis, BAMF, ONS, ISTAT, BFS, Statistik Austria, Eurostat, and the United Nations.
 
 ## Credits
 

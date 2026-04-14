@@ -1,0 +1,141 @@
+gender,gen,age_group,class_wkrd,n
+Male,1st gen,25-34,N/A,1217
+Male,1st gen,25-34,Non-profit employee,1461
+Male,1st gen,25-34,Private sector employee,12344
+Male,1st gen,25-34,Public sector employee,3549
+Male,1st gen,25-34,Self-employed,2476
+Male,1st gen,25-34,Unpaid family member,48
+Male,1st gen,35-44,N/A,1232
+Male,1st gen,35-44,Non-profit employee,2731
+Male,1st gen,35-44,Private sector employee,24992
+Male,1st gen,35-44,Public sector employee,4548
+Male,1st gen,35-44,Self-employed,6602
+Male,1st gen,35-44,Unpaid family member,12
+Male,1st gen,45-54,N/A,1692
+Male,1st gen,45-54,Non-profit employee,1659
+Male,1st gen,45-54,Private sector employee,18992
+Male,1st gen,45-54,Public sector employee,3462
+Male,1st gen,45-54,Self-employed,8431
+Male,1st gen,45-54,Unpaid family member,170
+Male,1st gen,55-64,N/A,5293
+Male,1st gen,55-64,Non-profit employee,1975
+Male,1st gen,55-64,Private sector employee,23321
+Male,1st gen,55-64,Public sector employee,3551
+Male,1st gen,55-64,Self-employed,12102
+Male,1st gen,55-64,Unpaid family member,136
+Male,1st gen,65-74,N/A,13489
+Male,1st gen,65-74,Non-profit employee,1244
+Male,1st gen,65-74,Private sector employee,13625
+Male,1st gen,65-74,Public sector employee,3641
+Male,1st gen,65-74,Self-employed,9525
+Male,1st gen,65-74,Unpaid family member,235
+Male,1st gen,75-84,N/A,11556
+Male,1st gen,75-84,Non-profit employee,332
+Male,1st gen,75-84,Private sector employee,2612
+Male,1st gen,75-84,Public sector employee,910
+Male,1st gen,75-84,Self-employed,1979
+Male,1st gen,75-84,Unpaid family member,57
+Male,2nd gen,25-34,N/A,1995
+Male,2nd gen,25-34,Non-profit employee,2471
+Male,2nd gen,25-34,Private sector employee,19344
+Male,2nd gen,25-34,Public sector employee,2887
+Male,2nd gen,25-34,Self-employed,3229
+Male,2nd gen,25-34,Unpaid family member,94
+Male,2nd gen,35-44,N/A,1307
+Male,2nd gen,35-44,Non-profit employee,1489
+Male,2nd gen,35-44,Private sector employee,11254
+Male,2nd gen,35-44,Public sector employee,2051
+Male,2nd gen,35-44,Self-employed,3027
+Male,2nd gen,35-44,Unpaid family member,56
+Male,2nd gen,45-54,N/A,739
+Male,2nd gen,45-54,Non-profit employee,476
+Male,2nd gen,45-54,Private sector employee,3445
+Male,2nd gen,45-54,Public sector employee,621
+Male,2nd gen,45-54,Self-employed,1533
+Male,2nd gen,45-54,Unpaid family member,19
+Male,2nd gen,55-64,N/A,456
+Male,2nd gen,55-64,Non-profit employee,166
+Male,2nd gen,55-64,Private sector employee,2475
+Male,2nd gen,55-64,Public sector employee,539
+Male,2nd gen,55-64,Self-employed,706
+Male,2nd gen,55-64,Unpaid family member,51
+Male,2nd gen,65-74,N/A,382
+Male,2nd gen,65-74,Non-profit employee,36
+Male,2nd gen,65-74,Private sector employee,675
+Male,2nd gen,65-74,Public sector employee,129
+Male,2nd gen,65-74,Self-employed,658
+Male,2nd gen,75-84,N/A,692
+Male,2nd gen,75-84,Non-profit employee,19
+Male,2nd gen,75-84,Private sector employee,123
+Male,2nd gen,75-84,Public sector employee,27
+Male,2nd gen,75-84,Self-employed,89
+Female,1st gen,25-34,N/A,2364
+Female,1st gen,25-34,Non-profit employee,1989
+Female,1st gen,25-34,Private sector employee,13034
+Female,1st gen,25-34,Public sector employee,3001
+Female,1st gen,25-34,Self-employed,1303
+Female,1st gen,25-34,Unpaid family member,124
+Female,1st gen,35-44,N/A,5791
+Female,1st gen,35-44,Non-profit employee,4421
+Female,1st gen,35-44,Private sector employee,22062
+Female,1st gen,35-44,Public sector employee,5813
+Female,1st gen,35-44,Self-employed,4009
+Female,1st gen,35-44,Unpaid family member,87
+Female,1st gen,45-54,N/A,5121
+Female,1st gen,45-54,Non-profit employee,3673
+Female,1st gen,45-54,Private sector employee,17122
+Female,1st gen,45-54,Public sector employee,5667
+Female,1st gen,45-54,Self-employed,4278
+Female,1st gen,45-54,Unpaid family member,156
+Female,1st gen,55-64,N/A,10735
+Female,1st gen,55-64,Non-profit employee,3247
+Female,1st gen,55-64,Private sector employee,16030
+Female,1st gen,55-64,Public sector employee,5548
+Female,1st gen,55-64,Self-employed,6188
+Female,1st gen,55-64,Unpaid family member,142
+Female,1st gen,65-74,N/A,18133
+Female,1st gen,65-74,Non-profit employee,1195
+Female,1st gen,65-74,Private sector employee,7035
+Female,1st gen,65-74,Public sector employee,2314
+Female,1st gen,65-74,Self-employed,3025
+Female,1st gen,65-74,Unpaid family member,190
+Female,1st gen,75-84,N/A,13898
+Female,1st gen,75-84,Non-profit employee,311
+Female,1st gen,75-84,Private sector employee,1132
+Female,1st gen,75-84,Public sector employee,495
+Female,1st gen,75-84,Self-employed,521
+Female,1st gen,75-84,Unpaid family member,40
+Female,2nd gen,25-34,N/A,1657
+Female,2nd gen,25-34,Non-profit employee,3939
+Female,2nd gen,25-34,Private sector employee,16847
+Female,2nd gen,25-34,Public sector employee,3672
+Female,2nd gen,25-34,Self-employed,1917
+Female,2nd gen,25-34,Unpaid family member,70
+Female,2nd gen,35-44,N/A,1790
+Female,2nd gen,35-44,Non-profit employee,1891
+Female,2nd gen,35-44,Private sector employee,10280
+Female,2nd gen,35-44,Public sector employee,2493
+Female,2nd gen,35-44,Self-employed,2973
+Female,2nd gen,35-44,Unpaid family member,116
+Female,2nd gen,45-54,N/A,857
+Female,2nd gen,45-54,Non-profit employee,903
+Female,2nd gen,45-54,Private sector employee,3124
+Female,2nd gen,45-54,Public sector employee,918
+Female,2nd gen,45-54,Self-employed,1348
+Female,2nd gen,45-54,Unpaid family member,9
+Female,2nd gen,55-64,N/A,730
+Female,2nd gen,55-64,Non-profit employee,471
+Female,2nd gen,55-64,Private sector employee,1281
+Female,2nd gen,55-64,Public sector employee,1008
+Female,2nd gen,55-64,Self-employed,866
+Female,2nd gen,55-64,Unpaid family member,17
+Female,2nd gen,65-74,N/A,531
+Female,2nd gen,65-74,Non-profit employee,170
+Female,2nd gen,65-74,Private sector employee,478
+Female,2nd gen,65-74,Public sector employee,280
+Female,2nd gen,65-74,Self-employed,282
+Female,2nd gen,65-74,Unpaid family member,17
+Female,2nd gen,75-84,N/A,666
+Female,2nd gen,75-84,Private sector employee,53
+Female,2nd gen,75-84,Public sector employee,10
+Female,2nd gen,75-84,Self-employed,58

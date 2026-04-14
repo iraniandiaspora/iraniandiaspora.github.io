@@ -1,12 +1,21 @@
 # Build Global overview page — stacked area chart + world choropleth
-# Input: data/global/stocks_countries.Rda
+# Input: data/global/stocks_countries.csv
 # Output: docs/pages/global.html
 #
 # Run from the iraniandiaspora.github.io/ directory:
 #   Rscript R/build_global.R
+#
+# Data sourcing:
+#   stocks_countries.csv is primarily UN International Migrant Stock (2024).
+#   Countries with incomplete UN coverage are supplemented from Eurostat
+#   (migr_pop3ctb). As of 2026-04-12, France is the only Eurostat-sourced
+#   country (UN has no France row; Eurostat values from 2000-2018, with
+#   2020/2024 carried forward from 2018). The headline total is computed
+#   dynamically from the CSV sum, not from the UN's published total.
 
 library(plotly)
 library(dplyr)
+library(readr)
 library(jsonlite)
 
 DATA_DIR <- "data/global"
@@ -25,6 +34,11 @@ plotly_to_json <- function(p, inject_hoveron = FALSE) {
   b <- plotly_build(p)
   b$x$data <- strip_internal_classes(b$x$data)
   b$x$layout <- strip_internal_classes(b$x$layout)
+  if (is.null(b$x$layout$font)) b$x$layout$font <- list()
+  b$x$layout$font$family <- "Montserrat, sans-serif"
+  b$x$layout$hoverlabel <- list(
+    bgcolor = "white", bordercolor = "#ccc",
+    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
   # Inject hoveron="fills+points" into traces with fill
   if (inject_hoveron) {
     for (i in seq_along(b$x$data)) {
@@ -80,9 +94,12 @@ new MutationObserver(reportHeight).observe(document.body, { childList: true, sub
 cat("Building global...\n")
 
 # --- Load UN Migrant Stock data ---
-e <- new.env(); load(file.path(DATA_DIR, "stocks_countries.Rda"), envir = e)
-stocks <- e$stocks_countries
+stocks <- read_csv(file.path(DATA_DIR, "stocks_countries.csv"), show_col_types = FALSE)
 stocks$destination <- trimws(gsub("[*]", "", stocks$destination))
+
+# Headline total computed from the CSV (UN + Eurostat supplement)
+total_2024 <- sum(stocks$X2024, na.rm = TRUE)
+total_label <- sprintf("%.2f million", total_2024 / 1e6)
 
 # Group into 12 categories matching original dashboard
 stocks <- stocks %>% mutate(group = case_when(
@@ -367,8 +384,8 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 <body>
 
 <div class="global-grid">
-<div class="text-card global-text1">The United States has the largest Iranian immigrant population. However, sizable Iranian communities exist across Europe, Canada, Australia, T&uuml;rkiye, and Israel. According to the UN, <b>1.73 million</b> Iran-born individuals reside outside Iran as of 2024.</div>
-<div class="text-card global-text2">These estimates count people born in Iran who reside in another country. Second-generation Iranians born in the destination country are not included. The UN derives these figures from each country&rsquo;s census or population register data on foreign-born residents.</div>
+<div class="text-card global-text1">The United States has the largest Iranian immigrant population. However, sizable Iranian communities exist across Europe, Canada, Australia, T&uuml;rkiye, and Israel. An estimated <b>', total_label, '</b> Iran-born individuals reside outside Iran as of 2024, based on UN International Migrant Stock data supplemented by Eurostat where UN coverage is incomplete.</div>
+<div class="text-card global-text2">These estimates count people born in Iran who reside in another country. Second-generation Iranians born in the destination country are not included. Figures are derived from each country&rsquo;s census or population register data on foreign-born residents.</div>
 <div class="chart-card global-area" style="overflow:visible;">
   <div class="chart-with-legend" style="display:flex; align-items:stretch;">
     <div style="flex:1; min-width:0;">',
@@ -381,7 +398,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
       }), collapse = "\n"),
     '</div>
   </div>
-  <p style="font-size:10px; color:#888; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>. Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.</p>
+  <p style="font-size:10px; color:#888; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a>. Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.</p>
   <script>(function(){
     var el=document.getElementById("stock-area");
     if(!el)return;
@@ -436,7 +453,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#e8e8e8;border:1px solid #ccc;border-radius:2px;"></span> No data</span>',
   '</div>',
   plotly_div("world-map", plotly_to_json(p_world), "460px"),
-  '<p style="font-size:10px; color:#888; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a><br>Based on foreign-born population data from national censuses and population registers.</p>
+  '<p style="font-size:10px; color:#888; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a><br>Based on foreign-born population data from national censuses and population registers.</p>
 </div>
 </div>
 

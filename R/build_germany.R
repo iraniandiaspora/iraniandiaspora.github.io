@@ -191,6 +191,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
   .tab-btn { font-size:12px; padding:5px 10px; }
+  .measure-num { font-size:28px !important; }
 }
 @media (max-width:600px) {
   .text-row-4 { grid-template-columns:1fr !important; }
@@ -200,6 +201,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .text-card { font-size:13px; padding:14px; }
   .headline .number { font-size:24px; }
   .chart-card { padding:10px; }
+  .measure-num { font-size:24px !important; }
 }
 </style>
 ', extra_head, '
@@ -354,32 +356,32 @@ mig_grid <- paste0(
 
 pop_body <- paste0(
   # Top row: headline block + migration grid
-  '<div class="chart-row" style="grid-template-columns:45% 55%;">',
+  '<div class="chart-row">',
   '<div class="headline">',
   '<div class="label">Estimated Iranian-Origin Population in Germany</div>',
   '<div class="number">', format(hl_total, big.mark = ","), '</div>',
-  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html" style="color:#2774AE;" target="_blank">2024 Mikrozensus</a>, published by Destatis, the German Federal Statistical Office</div>',
+  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html" style="color:#2774AE;" target="_blank">2024 Mikrozensus</a>, an annual 1% household survey by Destatis, the German Federal Statistical Office</div>',
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of two survey questions:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
   '<li><strong>Place of birth</strong> <span style="color:#888;">&mdash; &ldquo;In which country were you born?&rdquo; (Iran)</span></li>',
   '<li><strong>Parental origin</strong> <span style="color:#888;">&mdash; &ldquo;In which country was your mother / father born?&rdquo; (Iran, for at least one parent)</span></li>',
   '</ul>',
-  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Together these define what Destatis calls a person\'s <em>Migrationsgeschichte</em> (migration history). The Mikrozensus is an annual 1% sample of all households in Germany. Figures are rounded to the nearest thousand and cells smaller than 5,000 are suppressed. Persian language is <em>not</em> a counting criterion in the Mikrozensus; it is available as a cross-tab (see the Language &amp; Education page) but cannot be used to identify Iranian-origin residents because it would also include Afghan Dari and Tajik speakers.</p>',
   '</div>',
   '</div>',
   '<div class="chart-card" style="display:flex; align-items:center;">', mig_grid, '</div>',
   '</div>',
 
   # Bottom row: bar chart + choropleth map
-  '<div class="chart-row" style="grid-template-columns:45% 55%;">',
-  '<div class="chart-card">', plotly_div("de-bund-bar", plotly_to_json(p_bund_bar), "450px", source = MZ_SOURCE), '</div>',
+  '<div class="chart-row">',
+  '<div class="chart-card">', plotly_div("de-bund-bar", plotly_to_json(p_bund_bar), "450px",
+    source = paste0(MZ_SOURCE, "<br>Six states with fewer than 5,000 Iranian-origin residents are suppressed by Destatis (shown in grey).")), '</div>',
   '<div class="chart-card">',
-  '<div class="section-title">Geographic Distribution of the Iranian-Origin Population</div>',
-  plotly_div("de-bund-map", plotly_to_json(p_de_map), "450px", source = MZ_SOURCE),
+  '<div class="section-title">Geographic Distribution in Germany</div>',
+  plotly_div("de-bund-map", plotly_to_json(p_de_map), "450px",
+    source = paste0(MZ_SOURCE, "<br>Grey states: suppressed (<5,000). Published state counts sum to ~294,000 of the 319,000 national total.")),
   '</div>',
-  '</div>',
-  '<p style="font-size:11px; color:#777; text-align:center; margin:8px 0 0 0; line-height:1.5;">Six German states with fewer than 5,000 Iranian-origin residents are suppressed by Destatis (shown in grey). Published state counts sum to about 294,000; the remaining ~25,000 residents are distributed across those six suppressed states and are included in the 319,000 national headline.</p>'
+  '</div>'
 )
 
 writeLines(page_template("Germany: Population", pop_body), "docs/pages/de-population.html")
@@ -426,9 +428,9 @@ p_motive <- plot_ly(motive_clean, x = ~short, y = ~value, type = "bar",
   layout(
     title = list(text = "<b>Main Reason Iran-Born Immigrants<br>Came to Germany</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -15, tickfont = list(size = 11)),
+    xaxis = list(title = "", tickangle = -45, tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 65, b = 90),
+    margin = list(t = 65, b = 110),
     plot_bgcolor = "white", paper_bgcolor = "white",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
@@ -465,7 +467,7 @@ p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
       label, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Years Iran-Born Residents Have Lived in Germany</b>",
+    title = list(text = "<b>Years Iran-Born Residents<br>Have Lived in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "Years in Germany", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -476,49 +478,28 @@ p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
 
 # Annual arrivals chart — Iranian Zuzüge 1991-2023 from BAMF/Destatis
 # Migrationsberichte. This is a flow series (annual arrivals in that year),
-# not a stock-based cohort view. Includes a cumulative secondary line
-# matching the US-immigration chart style.
-annual_arrivals$cumulative <- cumsum(annual_arrivals$iran_arrivals)
-total_cum <- max(annual_arrivals$cumulative)
-annual_arrivals$cum_pct <- round(annual_arrivals$cumulative / total_cum * 100, 1)
-
+# not a stock-based cohort view. No cumulative line here — unlike the US
+# (FY1978+) or Canada, the data starts at 1991 when Germany already had
+# ~108K Iran-born residents, so a cumulative % starting at 0 is misleading.
 p_annual <- plot_ly() %>%
   add_bars(
     data = annual_arrivals,
     x = ~year, y = ~iran_arrivals,
-    marker = list(color = "#c4793a", line = list(color = "#8a5a3a", width = 0.3)),
-    text = ~sprintf("<b>%d</b><br>%s Iranians arrived<br>Cumulative: %s (%.0f%%)",
-      year, format(iran_arrivals, big.mark = ","),
-      format(cumulative, big.mark = ","), cum_pct),
-    hoverinfo = "text",
+    marker = list(color = "#2774AE", line = list(color = "#1a4e72", width = 0.3)),
+    text = ~sprintf("<b>%d</b><br>%s Iranian arrivals",
+      year, format(iran_arrivals, big.mark = ",")),
+    hoverinfo = "text", textposition = "none",
     showlegend = FALSE,
     name = "Annual arrivals"
   ) %>%
-  add_lines(
-    data = annual_arrivals,
-    x = ~year,
-    y = ~cumulative / total_cum * max(annual_arrivals$iran_arrivals) * 1.02,
-    yaxis = "y2",
-    line = list(color = "#1a4e72", width = 2.5),
-    text = ~sprintf("<b>By %d:</b> %s cumulative (%.0f%%)",
-      year, format(cumulative, big.mark = ","), cum_pct),
-    hoverinfo = "text",
-    showlegend = FALSE,
-    name = "Cumulative"
-  ) %>%
   layout(
-    title = list(text = "<b>Annual Iranian Arrivals to Germany, 1991\u20132023</b>",
+    title = list(text = "<b>Annual Iranian Arrivals to Germany,<br>1991\u20132023</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10), dtick = 4),
     yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
-    yaxis2 = list(overlaying = "y", side = "right", showgrid = FALSE,
-      range = c(0, max(annual_arrivals$iran_arrivals) * 1.05),
-      tickvals = seq(0, max(annual_arrivals$iran_arrivals), length.out = 5),
-      ticktext = c("0%", "25%", "50%", "75%", "100%"),
-      tickfont = list(size = 10)),
-    margin = list(t = 55, b = 40, l = 55, r = 45),
+    margin = list(t = 55, b = 40, l = 55, r = 20),
     plot_bgcolor = "white", paper_bgcolor = "white",
-    hovermode = "x unified"
+    hovermode = "closest"
   ) %>%
   config(displayModeBar = FALSE)
 
@@ -531,12 +512,12 @@ p_citizen <- plot_ly(data.frame(
   # Blue family on the left side of the Immigration page; the motive and
   # duration charts on the right use a warm-earth palette so colors don't
   # clash across the two sides.
-  marker = list(color = c("#1a4e72", "#5a9bd5")),
+  marker = list(color = c("#2774AE", "#e07b54")),
   text = ~sprintf("<b>%s</b><br>%s (%s%%)",
     status, format(count, big.mark = ","), pct),
   hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship of Iranian-Origin Residents</b>",
+    title = list(text = "<b>Citizenship of Iranian-Origin<br>Residents in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 12)),
     yaxis = list(title = "", tickformat = ","),
@@ -547,15 +528,15 @@ p_citizen <- plot_ly(data.frame(
 
 immig_body <- paste0(
   '<div class="text-row">',
-  '<div class="text-card">About 167,000 Iranian-origin residents hold German citizenship (roughly 52% of the total), and about 152,000 are still Iranian nationals. BAMF recorded 7,840 Iranian naturalizations in 2024.</div>',
-  '<div class="text-card">Annual Iranian arrivals to Germany show two distinct waves: a steady background flow in the 1990s and 2000s of around 3,000\u20138,000 per year, and a sharp increase from 2015 onwards peaking above 21,000 in 2016 and again in 2023. The Mikrozensus records that about 44% of first-generation residents came through the asylum system.</div>',
+  '<div class="text-card">About 167,000 Iranian-origin residents hold German citizenship (roughly 52% of the total), and about 152,000 are still Iranian nationals. There were 7,840 Iranian naturalizations recorded in 2024.</div>',
+  '<div class="text-card">Annual Iranian arrivals to Germany averaged 3,000\u20138,000 per year through the 1990s and 2000s, rising to above 21,000 in 2016 and again in 2023. About 44% of first-generation residents came through the asylum system.</div>',
   '</div>',
 
   '<div class="chart-row">',
   # Left: citizenship chart
   '<div class="chart-card">',
   plotly_div("de-cit", plotly_to_json(p_citizen), "480px",
-    source = paste0(MZ_SOURCE, "<br>About 167,000 Iranian-origin residents (52%) hold German citizenship, including naturalized Germans.")),
+    source = MZ_SOURCE),
   '</div>',
 
   # Right: tabbed annual arrivals + motive + duration
@@ -621,7 +602,7 @@ p_school <- plot_ly(school_all, x = ~cat, y = ~pct, type = "bar",
       cat, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Highest School Qualification</b>",
+    title = list(text = "<b>Highest School Qualification in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -15, tickfont = list(size = 10)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 60)),
@@ -658,7 +639,7 @@ p_prof <- plot_ly(prof_all, x = ~cat, y = ~pct, type = "bar",
       cat, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Highest Vocational or Academic Qualification</b>",
+    title = list(text = "<b>Highest Vocational or Academic<br>Qualification in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 40)),
@@ -701,7 +682,7 @@ p_emp_status <- plot_ly(emp_bar_df, x = ~status, y = ~count, type = "bar",
       status, format(count, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Labour Force Status</b>",
+    title = list(text = "<b>Labour Force Status in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -803,7 +784,7 @@ p_income <- plot_ly(inc, x = ~bracket, y = ~pct, type = "bar",
       bracket, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers</b>",
+    title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -25, tickfont = list(size = 10)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 25)),
@@ -824,7 +805,7 @@ cat("Building de-workinc...\n")
 
 workinc_body <- paste0(
   '<div class="text-row">',
-  '<div class="text-card">The Mikrozensus counts about 170,000 employed Iranian-origin residents aged 15 and over, against roughly 16,000 unemployed and 133,000 not in the labour force (including students, retirees, and carers). Employment is concentrated in the broad services sector, which includes health care, education, and professional services.</div>',
+  '<div class="text-card">About 170,000 Iranian-origin residents aged 15 and over are employed, with roughly 16,000 unemployed and 133,000 not in the labour force (including students, retirees, and carers). Employment is concentrated in the broad services sector, which includes health care, education, and professional services.</div>',
   sprintf('<div class="text-card">Among employed Iranian-origin residents, about %.0f%% report monthly net personal income between %s1,000 and %s2,500. Roughly %.0f%% earn %s3,000 or more per month, and about %.0f%% earn under %s1,000.</div>',
     middle_share, "\u20ac", "\u20ac", top_share, "\u20ac", low_share, "\u20ac"),
   '</div>',
@@ -905,7 +886,7 @@ for (cat_name in lang_cat_order) {
 }
 p_lang <- p_lang %>% layout(
   barmode = "stack",
-  title = list(text = "<b>Main Language Spoken at Home</b>",
+  title = list(text = "<b>Main Language Spoken at Home in Germany</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "",
