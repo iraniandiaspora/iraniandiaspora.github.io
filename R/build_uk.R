@@ -237,7 +237,7 @@ p_uk_map <- plot_ly() %>%
     marker = list(line = list(color = "white", width = 1), opacity = 0.92)
   ) %>% layout(
     mapbox = list(style = "carto-positron",
-      center = list(lon = -2.5, lat = 54.7), zoom = 4.3),
+      center = list(lon = -4.0, lat = 54.5), zoom = 4.2),
     margin = list(t = 10, b = 10, l = 0, r = 0),
     paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
@@ -314,7 +314,7 @@ pop_body <- paste0(
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
   '<li><strong>Country of birth</strong> <span style="color:#888;">&mdash; &ldquo;What is your country of birth?&rdquo;</span></li>',
   '</ul>',
-  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted. Northern Ireland (', format(nireland, big.mark = ","), ' Iran-born) is included in the total but not shown on the regional map.</p>',
+  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted.</p>',
   '</div>',
   '</div>',
   '<div class="chart-card">',

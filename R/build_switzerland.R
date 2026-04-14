@@ -210,18 +210,19 @@ data_yr    <- hl$year[1]
 # =============================================================================
 cat("Building ch-population...\n")
 
-# --- Population trend 2010-2024 (vertical bars) ------------------------------
-p_trend <- plot_ly(trend, x = ~year, y = ~total, type = "bar",
-    marker = list(color = "#2774AE",
-      line = list(color = "#1a4e72", width = 0.3)),
+# --- Population trend 2010-2024 (line + markers) ------------------------------
+p_trend <- plot_ly(trend, x = ~year, y = ~total, type = "scatter",
+    mode = "lines+markers",
+    line = list(color = "#1a4e72", width = 2.5),
+    marker = list(color = "#1a4e72", size = 5),
     text = sprintf("<b>%d</b><br>%s Iran-born",
       trend$year, format(trend$total, big.mark = ",")),
-    hoverinfo = "text", textposition = "none") %>%
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iran-Born Population in Switzerland,<br>2010\u20132024</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", dtick = 2),
-    yaxis = list(title = "", tickformat = ","),
+    yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
     showlegend = FALSE,
     margin = list(t = 40, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"

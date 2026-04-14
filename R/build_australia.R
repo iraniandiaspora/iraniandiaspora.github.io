@@ -575,7 +575,7 @@ immig_body <- paste0(
   sprintf('<div style="font-size:12px; color:#888; margin-top:6px;">Of %s Iran-born Australians.</div>',
     format(total_birthplace, big.mark = ",")),
   '</div>',
-  '<div class="chart-card pc1">', plotly_div("au-arrival", plotly_to_json(p_arrival), "450px", source = ABS_SOURCE), '</div>',
+  '<div class="chart-card pc1">', plotly_div("au-arrival", plotly_to_json(p_arrival), "430px", source = ABS_SOURCE), '</div>',
   '<div class="chart-card pc2">', plotly_div("au-cit", plotly_to_json(p_cit), "450px", source = ABS_SOURCE), '</div>',
   '</div>'
 )
@@ -835,6 +835,50 @@ p_inc <- plot_ly(inc_chart, x = ~label, y = ~count, type = "bar",
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
+# --- Personal income decile chart (Iran-born vs national, ages 25-54) ---
+# Line + shaded area, matching US/CA pattern but teal to mark personal income
+dec <- read.csv(file.path(DATA_DIR, "au_income_deciles.csv"), stringsAsFactors = FALSE)
+decile_labels <- c("1st", "2nd", "3rd", "4th", "5th", "6th", "7th", "8th", "9th", "10th")
+dec$label <- decile_labels
+dec$label <- factor(dec$label, levels = decile_labels)
+
+p_dec <- plot_ly(data = dec, x = ~label, y = ~pct, type = "scatter", mode = "markers+lines",
+    marker = list(color = "#00897b", size = 8),
+    line = list(color = "#00897b", width = 1),
+    text = sprintf("<b>Decile:</b> %s<br><b>Count:</b> %s<br><b>Share:</b> %.1f%%",
+      dec$label, format(dec$count, big.mark = ","), dec$pct),
+    hoverinfo = "text", textposition = "none") %>%
+  # Shaded area
+  add_trace(x = ~label, y = ~pct, type = "scatter", mode = "lines",
+    fill = "tozeroy", fillcolor = "rgba(178,223,219,0.3)",
+    marker = list(size = 0, opacity = 0),
+    hoverinfo = "skip", showlegend = FALSE) %>%
+  # 10% reference line
+  add_trace(x = decile_labels, y = rep(10, 10), type = "scatter", mode = "lines",
+    line = list(color = "#cc0000", width = 1.5, dash = "dot"),
+    marker = list(size = 0, opacity = 0),
+    hoverinfo = "skip", showlegend = FALSE) %>%
+  layout(
+    title = list(
+      text = "<b>Position in Australian<br>Personal Income Distribution:<br>Iran-Born (Ages 25\u201354)</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
+      categoryorder = "array", categoryarray = decile_labels),
+    yaxis = list(title = "", ticksuffix = "%", range = c(0, max(dec$pct) + 3)),
+    showlegend = FALSE,
+    margin = list(t = 75, b = 70),
+    plot_bgcolor = "white", paper_bgcolor = "white",
+    annotations = list(
+      list(text = "10% =<br>national<br>baseline", x = decile_labels[5], y = 13,
+        showarrow = FALSE, font = list(size = 8, color = "#cc0000"), xanchor = "center"))
+  ) %>% config(displayModeBar = FALSE)
+
+AU_INC_SOURCE <- "Source: <a href='https://www.abs.gov.au/census/find-census-data' target='_blank' style='color:#2774AE;'>ABS</a> \u2014 Census 2021<br>Ages 25\u201354 (prime working years).<br>Each decile holds 10% of all Australians, ranked by pre-tax personal income."
+
+# Decile share for text card
+dec_d1_pct <- dec$pct[1]
+dec_d10_pct <- dec$pct[10]
+
 # --- Labour force status bar ---
 lf_chart <- lf %>%
   filter(!status %in% c("Not stated", "Not applicable"))
@@ -889,11 +933,12 @@ workinc_body <- paste0(
   '<div style="font-size:12px; color:#888; margin-top:6px;">Iran-born residents aged 15+, ABS Census 2021.</div>',
   '</div>',
 
-  # Chart cell 1: tabbed (Occupation | Industry)
+  # Chart cell 1: tabbed (Occupation | Industry | Labour Force Status)
   '<div class="chart-card pc1">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'au-tab-occ\',this,\'work-tabs\')">Occupation</button>',
   '<button class="tab-btn" onclick="switchTab(\'au-tab-ind\',this,\'work-tabs\')">Industry</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-tab-lf\',this,\'work-tabs\')">Labour Force</button>',
   '</div>',
   '<div id="au-tab-occ" class="tab-panel active" data-group="work-tabs">',
   plotly_div("au-occ", plotly_to_json(p_occ), "430px", source = ABS_SOURCE),
@@ -901,19 +946,22 @@ workinc_body <- paste0(
   '<div id="au-tab-ind" class="tab-panel" data-group="work-tabs">',
   plotly_div("au-ind", plotly_to_json(p_ind), "430px", source = ABS_SOURCE),
   '</div>',
+  '<div id="au-tab-lf" class="tab-panel" data-group="work-tabs">',
+  plotly_div("au-lf", plotly_to_json(p_lf), "430px", source = ABS_SOURCE),
+  '</div>',
   '</div>',
 
-  # Chart cell 2: tabbed (Income | Labour Force)
+  # Chart cell 2: tabbed (Income Deciles | Weekly Income)
   '<div class="chart-card pc2">',
   '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'au-tab-inc\',this,\'inc-tabs\')">Weekly Income</button>',
-  '<button class="tab-btn" onclick="switchTab(\'au-tab-lf\',this,\'inc-tabs\')">Labour Force Status</button>',
+  '<button class="tab-btn active" onclick="switchTab(\'au-tab-dec\',this,\'inc-tabs\')">Income Deciles</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-tab-inc\',this,\'inc-tabs\')">Weekly Income</button>',
   '</div>',
-  '<div id="au-tab-inc" class="tab-panel active" data-group="inc-tabs">',
+  '<div id="au-tab-dec" class="tab-panel active" data-group="inc-tabs">',
+  plotly_div("au-dec", plotly_to_json(p_dec), "430px", source = AU_INC_SOURCE),
+  '</div>',
+  '<div id="au-tab-inc" class="tab-panel" data-group="inc-tabs">',
   plotly_div("au-inc", plotly_to_json(p_inc), "430px", source = ABS_SOURCE),
-  '</div>',
-  '<div id="au-tab-lf" class="tab-panel" data-group="inc-tabs">',
-  plotly_div("au-lf", plotly_to_json(p_lf), "430px", source = ABS_SOURCE),
   '</div>',
   '</div>',
   '</div>'

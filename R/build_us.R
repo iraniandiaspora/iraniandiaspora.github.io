@@ -274,7 +274,7 @@ writeLines(page_template("Immigration & Citizenship", paste0(
   sprintf('<div class="text-card pt1">Multiple waves of migration have built the first-generation Iranian-American population. About half of Iran-born residents arrived in %d or later.</div>',
     fg_median_year),
   '<div class="text-card pt2">Most Iranian-Americans are either naturalized citizens or born in the US.</div>',
-  '<div class="chart-card pc1">', plotly_div("immig", plotly_to_json(p_immig), source = SRC_IMMIG), '</div>',
+  '<div class="chart-card pc1">', plotly_div("immig", plotly_to_json(p_immig), "430px", source = SRC_IMMIG), '</div>',
   '<div class="chart-card pc2">', plotly_div("citizen", plotly_to_json(p_citizen), source = SRC_CITIZEN), '</div>',
   '</div>'
 )), "docs/pages/us-immigration.html")

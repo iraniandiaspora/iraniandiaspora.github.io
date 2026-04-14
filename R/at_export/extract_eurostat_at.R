@@ -4,6 +4,13 @@
 #
 # Input:  data/europe/iran_born_combined.csv, data/global/stocks_countries.csv
 # Output: data/austria/at_trend.csv
+#
+# Bundesland data (at_bundesland.csv) is from Eurostat Census 2021 table
+# CENS_21COB_R3 (population by country of birth, NUTS-3 regions).
+# API call:
+#   https://ec.europa.eu/eurostat/api/dissemination/statistics/1.0/data/CENS_21COB_R3?geo=AT11&geo=AT12&geo=AT13&geo=AT21&geo=AT22&geo=AT31&geo=AT32&geo=AT33&geo=AT34&c_birth=IR&sex=T&age=TOTAL&unit=NR
+# This is static census data (reference year 2021) — no need to re-extract
+# unless Austria publishes a new census.
 
 cat("Extracting Austria from Eurostat + UN...\n")
 

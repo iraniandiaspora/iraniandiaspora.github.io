@@ -790,7 +790,7 @@ writeLines(page_template("Canada: Immigration & Citizenship", paste0(
     im_median_year, im_1980s_share),
   sprintf('<div class="text-card pt2">About %d%% of Iranian-Canadians are naturalized citizens, while %d%% have not yet obtained citizenship. Economic immigration has been the primary pathway since the 1990s.</div>',
     cit_naturalized_pct, cit_not_citizen_pct),
-  '<div class="chart-card pc1">', plotly_div("ca-immig", plotly_to_json(p_ca_immig), "450px", source = PUMF_SRC_IMMIG), '</div>',
+  '<div class="chart-card pc1">', plotly_div("ca-immig", plotly_to_json(p_ca_immig), "430px", source = PUMF_SRC_IMMIG), '</div>',
   '<div class="chart-card pc2">', cit_div, '</div>',
   '</div>'
 ), has_tabs = TRUE), "docs/pages/ca-immigration.html")
