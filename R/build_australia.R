@@ -141,7 +141,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:visible; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .stat-row { display:grid; grid-template-columns:repeat(3, 1fr); gap:16px; margin-bottom:20px; }
 .stat-card { background:white; border-radius:8px; padding:18px 12px; text-align:center; border:1px solid #e0e0e0; }
@@ -155,7 +157,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   body { padding:10px 15px; display:flex; flex-direction:column; }
   .text-row, .chart-row { grid-template-columns:1fr !important; }
   .stat-row { grid-template-columns:1fr 1fr !important; }
-  .headline .number { font-size:28px; }
+  .headline .number { font-size:34px; }
   .page-content { grid-template-columns:1fr; }
   .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
   .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
@@ -170,7 +172,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
   .stat-row { grid-template-columns:1fr !important; }
-  .headline .number { font-size:24px; }
+  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
   .tab-btn { font-size:11px; padding:4px 8px; }
 }', tab_css, '
@@ -261,7 +263,8 @@ p_state_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.01, "#c6dbef"), c(0.1, "#6baed6"),
       c(0.5, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
@@ -307,7 +310,8 @@ p_sydney_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#c6dbef"), c(0.05, "#9ecae1"), c(0.15, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
@@ -343,7 +347,8 @@ p_melbourne_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#c6dbef"), c(0.05, "#9ecae1"), c(0.15, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
@@ -561,20 +566,21 @@ pre_rev <- sum(arrival$count[arrival$period %in% c("Before 1951", "1951 - 1960",
 post_rev_80s <- arrival$count[arrival$period == "1981 - 1990"]
 peak_period <- arrival$count[arrival$period == "2011 - 2015"]
 
+peak_period_pct <- round(peak_period / total_birthplace * 100)
+
 # --- Assemble immigration page ---
 immig_body <- paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s</div>', format(peak_period, big.mark = ",")),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Peak Period Arrivals (2011\u20132015)</div>',
-  '<div style="font-size:12px; color:#888; margin-top:6px;">Iran-born residents, ABS Census 2021.</div>',
-  '</div>',
-  '<div class="text-card pt2" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', cit_pct),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Australian Citizens</div>',
-  sprintf('<div style="font-size:12px; color:#888; margin-top:6px;">Of %s Iran-born Australians.</div>',
-    format(total_birthplace, big.mark = ",")),
-  '</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians arrived during 2011&ndash;2015.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Arrivals have continued at about 2,500&ndash;3,500 per year since 2016.</div>
+  </div>', peak_period_pct),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians hold Australian citizenship.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Eligible residents can apply for citizenship after four years in Australia.</div>
+  </div>', cit_pct),
   '<div class="chart-card pc1">', plotly_div("au-arrival", plotly_to_json(p_arrival), "430px", source = ABS_SOURCE), '</div>',
   '<div class="chart-card pc2">', plotly_div("au-cit", plotly_to_json(p_cit), "450px", source = ABS_SOURCE), '</div>',
   '</div>'
@@ -614,6 +620,8 @@ bachelors_plus <- sum(edu_chart$count[edu_chart$education_level %in%
   c("Postgraduate Degree Level", "Graduate Diploma and Graduate Certificate Level",
     "Bachelor Degree Level")])
 bachelors_pct <- round(bachelors_plus / edu_total * 100, 1)
+postgrad_count <- edu_chart$count[edu_chart$education_level == "Postgraduate Degree Level"][1]
+postgrad_pct   <- round(postgrad_count / edu_total * 100)
 
 # Ordinal blue gradient: darkest for highest qualification
 edu_blues <- colorRampPalette(c("#08306b", "#c6dbef"))(nrow(edu_chart))
@@ -678,17 +686,16 @@ second_gen_count <- second_gen$count[1]
 
 edu_body <- paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', bachelors_pct),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Bachelor\u2019s Degree or Higher</div>',
-  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Iran-born adults aged 15+ with stated qualifications, ABS Census 2021.</div>'),
-  '</div>',
-  '<div class="text-card pt2" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', no_relig_pct),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">No Religious Affiliation</div>',
-  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Among Iranian-ancestry population. Islam %s%%, Christianity 12%%.</div>',
-    islam_pct),
-  '</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australian adults (15+) hold a bachelor&rsquo;s degree or higher.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% hold a postgraduate degree &mdash; about half of all bachelor&rsquo;s-or-higher holders.</div>
+  </div>', bachelors_pct, postgrad_pct),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-ancestry Australians report no religious affiliation.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Islam %s%%, Christianity 12%%.</div>
+  </div>', no_relig_pct, islam_pct),
   '<div class="chart-card pc1">', plotly_div("au-edu", plotly_to_json(p_edu), "430px", source = ABS_SOURCE), '</div>',
   '<div class="chart-card pc2">', plotly_div("au-rel", plotly_to_json(p_rel), "430px",
     source = "Source: <a href='https://www.abs.gov.au/census' target='_blank' style='color:#2774AE;'>ABS</a> \u2014 Census 2021. Iranian ancestry population, 1st gen = Iran-born, 2nd gen = Australian-born.",
@@ -731,13 +738,13 @@ occ_chart <- occ %>%
 
 occ_total <- sum(occ_chart$count)
 occ_chart$pct <- round(occ_chart$count / occ_total * 100, 1)
-# Shorten long labels for y-axis
+# Shorten long labels for y-axis (mobile-friendly)
 occ_chart$label <- occ_chart$occupation
 occ_chart$label <- gsub(" Workers$", "", occ_chart$label)
-occ_chart$label <- gsub("Community and Personal Service", "Community & Personal Service", occ_chart$label)
-occ_chart$label <- gsub("Clerical and Administrative", "Clerical & Administrative", occ_chart$label)
+occ_chart$label <- gsub("Community and Personal Service", "Community Services", occ_chart$label)
+occ_chart$label <- gsub("Clerical and Administrative", "Clerical & Admin.", occ_chart$label)
 occ_chart$label <- gsub("Technicians and Trades", "Technicians & Trades", occ_chart$label)
-occ_chart$label <- gsub("Machinery Operators and Drivers", "Machinery Operators & Drivers", occ_chart$label)
+occ_chart$label <- gsub("Machinery Operators and Drivers", "Machinery Operators", occ_chart$label)
 occ_chart$label <- factor(occ_chart$label, levels = rev(occ_chart$label))
 
 # Categorical: occupations are distinct categories
@@ -771,16 +778,16 @@ ind_chart$pct <- round(ind_chart$count / ind_total * 100, 1)
 ind_chart$label <- gsub(", Forestry and Fishing", "", ind_chart$industry)
 ind_chart$label <- gsub(", Gas, Water and Waste Services", "/Gas/Water", ind_chart$label)
 ind_chart$label <- gsub(", Postal and Warehousing", "/Postal", ind_chart$label)
-ind_chart$label <- gsub(" and Telecommunications", " & Telecom", ind_chart$label)
-ind_chart$label <- gsub(" and Insurance Services", " & Insurance", ind_chart$label)
+ind_chart$label <- gsub("Information Media and Telecommunications", "Info & Telecom", ind_chart$label)
+ind_chart$label <- gsub("Financial and Insurance Services", "Finance & Insurance", ind_chart$label)
 ind_chart$label <- gsub(", Hiring and Real Estate Services", "/Real Estate", ind_chart$label)
-ind_chart$label <- gsub(", Scientific and Technical Services", "/Scientific/Technical", ind_chart$label)
-ind_chart$label <- gsub(" and Support Services", " & Support", ind_chart$label)
-ind_chart$label <- gsub(" and Safety", " & Safety", ind_chart$label)
-ind_chart$label <- gsub(" and Training", " & Training", ind_chart$label)
-ind_chart$label <- gsub(" and Social Assistance", " & Social Asst.", ind_chart$label)
-ind_chart$label <- gsub(" and Recreation Services", " & Recreation", ind_chart$label)
-ind_chart$label <- gsub(" and Food Services", " & Food", ind_chart$label)
+ind_chart$label <- gsub("Professional, Scientific and Technical Services", "Professional & Technical", ind_chart$label)
+ind_chart$label <- gsub("Administrative and Support Services", "Admin. & Support", ind_chart$label)
+ind_chart$label <- gsub("Public Administration and Safety", "Public Admin. & Safety", ind_chart$label)
+ind_chart$label <- gsub("Education and Training", "Education & Training", ind_chart$label)
+ind_chart$label <- gsub("Health Care and Social Assistance", "Health & Social Asst.", ind_chart$label)
+ind_chart$label <- gsub("Arts and Recreation Services", "Arts & Recreation", ind_chart$label)
+ind_chart$label <- gsub("Accommodation and Food Services", "Accommodation & Food", ind_chart$label)
 ind_chart$label <- factor(ind_chart$label, levels = rev(ind_chart$label))
 
 # Categorical: industries are distinct categories
@@ -918,20 +925,36 @@ inc_ordered$cumsum <- cumsum(inc_ordered$count)
 median_idx <- which(inc_ordered$cumsum >= inc_stated / 2)[1]
 median_band <- inc_ordered$income_band_weekly[median_idx]
 
+# Occupation + income distribution shares for the factoid cards
+occ_full       <- read.csv(file.path(DATA_DIR, "au_occupation.csv"), stringsAsFactors = FALSE)
+occ_work       <- occ_full[!occ_full$occupation %in%
+  c("Not stated", "Not applicable", "Inadequately described"), ]
+prof_pct       <- round(occ_work$count[occ_work$occupation == "Professionals"] /
+                        sum(occ_work$count) * 100)
+ind_full       <- read.csv(file.path(DATA_DIR, "au_industry.csv"), stringsAsFactors = FALSE)
+ind_work       <- ind_full[!ind_full$industry %in%
+  c("Not stated", "Not applicable", "Inadequately described"), ]
+ind_work       <- ind_work[order(-ind_work$count), ]
+top_ind        <- ind_work$industry[1]
+top_ind_pct    <- round(ind_work$count[1] / sum(ind_work$count) * 100)
+
+inc_dec <- read.csv(file.path(DATA_DIR, "au_income_deciles.csv"), stringsAsFactors = FALSE)
+bottom20_pct <- round(sum(inc_dec$pct[inc_dec$decile <= 2]))
+top20_pct    <- round(sum(inc_dec$pct[inc_dec$decile >= 9]))
+
 # --- Assemble work/income page ---
 workinc_body <- paste0(
   '<div class="page-content">',
-  # Text cards
-  '<div class="text-card pt1" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', participation_rate),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Labour Force Participation</div>',
-  '<div style="font-size:12px; color:#888; margin-top:6px;">Iran-born residents aged 15+, ABS Census 2021.</div>',
-  '</div>',
-  '<div class="text-card pt2" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s</div>', median_band),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Median Weekly Income</div>',
-  '<div style="font-size:12px; color:#888; margin-top:6px;">Iran-born residents aged 15+, ABS Census 2021.</div>',
-  '</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iran-born Australians work as professionals &mdash; the largest occupation group.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% are employed in the largest industry, %s. Overall labour-force participation is %s%%.</div>
+  </div>', prof_pct, top_ind_pct, top_ind, participation_rate),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians fall in the bottom two national income deciles; %d%% are in the top two.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Median weekly personal income band: %s.</div>
+  </div>', bottom20_pct, top20_pct, median_band),
 
   # Chart cell 1: tabbed (Occupation | Industry | Labour Force Status)
   '<div class="chart-card pc1">',

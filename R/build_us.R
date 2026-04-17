@@ -173,7 +173,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .page-content { grid-template-columns:1fr; }
   .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
   .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
-  .headline .number { font-size:28px; }
+  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
 }
@@ -183,7 +183,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 @media (max-width:480px) {
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
-  .headline .number { font-size:24px; }
+  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
 </style>
@@ -256,6 +256,11 @@ citizen$CITIZEN2 <- factor(citizen$CITIZEN2, levels = cit_order)
 citizen <- citizen[order(citizen$CITIZEN2), ]
 
 cit_total <- sum(citizen$n)
+citizen$pct <- round(citizen$n / cit_total * 100)
+pct_nat    <- citizen$pct[citizen$CITIZEN2 == "Naturalized citizen"]
+pct_usborn <- citizen$pct[citizen$CITIZEN2 == "Born in the US"]
+pct_noncit <- citizen$pct[citizen$CITIZEN2 == "Not a citizen"]
+
 p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
     marker = list(color = c("#2774AE", "#5a9bd5", "#e07b54")),
     text = ~sprintf("<b>%s</b><br>%s (%s%%)", CITIZEN2,
@@ -271,9 +276,14 @@ p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
 
 writeLines(page_template("Immigration & Citizenship", paste0(
   '<div class="page-content">',
-  sprintf('<div class="text-card pt1">Multiple waves of migration have built the first-generation Iranian-American population. About half of Iran-born residents arrived in %d or later.</div>',
-    fg_median_year),
-  '<div class="text-card pt2">Most Iranian-Americans are either naturalized citizens or born in the US.</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Half of first-generation Iranian-Americans in the U.S. arrived in %d or later.</div>
+  </div>', fg_median_year, fg_median_year),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">Nearly 9 in 10</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranian-Americans are U.S. citizens &mdash; %d%% naturalized and %d%% born in the United States.</div>
+  </div>', pct_nat, pct_usborn),
   '<div class="chart-card pc1">', plotly_div("immig", plotly_to_json(p_immig), "430px", source = SRC_IMMIG), '</div>',
   '<div class="chart-card pc2">', plotly_div("citizen", plotly_to_json(p_citizen), source = SRC_CITIZEN), '</div>',
   '</div>'
@@ -393,9 +403,27 @@ cat_leg <- make_html_legend(cat_colors)
 
 writeLines(page_template("US: Immigration History", paste0(
   '<div class="page-content">',
-  sprintf('<div class="text-card pt1"><p style="font-size:16px;line-height:1.5;margin:0 0 8px;">Between 1970 and 2023, <b>%s Iranians</b> were granted U.S. lawful permanent residence.</p><p style="font-size:13px;color:#555;margin:0 0 6px;">These figures count green cards granted, not the number of Iranians currently living in the United States.</p><ul style="margin:4px 0 0 18px;padding:0;font-size:13px;line-height:1.6;text-align:left;color:#555;"><li>Some people arrived from abroad already approved for permanent residence</li><li>Others were already in the United States on temporary visas and later received green cards</li><li>A person who first entered as a student could later receive permanent residence through family, employment, or another category</li><li>The total is larger than today\u2019s Iran-born population because it adds up grants over five decades, including people who later died or left the country</li></ul></div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranians granted U.S. permanent residence between 1970 and 2023.</div>
+    <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45; margin-top:16px;">About these figures</div>
+    <ul style="margin:8px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Counts green cards granted, not the current Iran-born population</li>
+      <li>Five decades of grants &mdash; includes people who later died, returned, or moved elsewhere</li>
+      <li>Many recipients first entered on temporary visas (student, work) before adjusting</li>
+    </ul>
+  </div>',
     format(sum(lpr$total), big.mark = ",")),
-  '<div class="text-card pt2"><p style="margin:0 0 6px;">Green cards are grouped by the pathway through which permanent residence was granted:</p><ul style="margin:4px 0 8px 18px;padding:0;font-size:13px;line-height:1.5;text-align:left;"><li><b>Family</b> \u2014 through immediate relatives or family sponsorship</li><li><b>Employment</b> \u2014 through employment-based immigration</li><li><b>Refugee/Asylee</b> \u2014 refugees and asylees adjusting to permanent residence</li><li><b>Diversity</b> \u2014 through the annual visa lottery open to countries with low immigration rates</li></ul><p style="font-size:13px;color:#555;margin:0;">Family remained the largest category, though its share declined after 1992. The 1989\u20131991 spike reflects legalization under the 1986 Immigration Reform and Control Act (IRCA).</p></div>',
+  '<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">Green card pathways</div>
+    <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.6;">
+      <li><b>Family</b> \u2014 immediate relatives or family sponsorship</li>
+      <li><b>Employment</b> \u2014 employer or skill-based admission</li>
+      <li><b>Refugee/Asylee</b> \u2014 adjusting from refugee or asylee status</li>
+      <li><b>Diversity</b> \u2014 annual visa lottery for countries with low U.S. immigration</li>
+    </ul>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Family has been the largest category throughout; the 1989\u201391 spike reflects a 1986 law that granted permanent residence to many previously undocumented immigrants.</div>
+  </div>',
   '<div class="chart-card pc1">', plotly_div("lpr-total", plotly_to_json(p_lpr_total), "450px", source = SRC_LPR), '</div>',
   '<div class="chart-card pc2">', plotly_div("lpr-cat", plotly_to_json(p_lpr_cat), "450px", source = SRC_LPR, legend_html = cat_leg, highlight_hover = TRUE),
   '<script>(function(){var el=document.getElementById("lpr-cat");if(el){el.removeAllListeners("plotly_hover");el.removeAllListeners("plotly_unhover");el.removeAllListeners("plotly_click");}})();</script>',
@@ -504,10 +532,32 @@ cat("Building us-education...\n")
 e1 <- list(gen_1_wide = read_csv(file.path(DATA_DIR, "gen_1_wide.csv"), show_col_types = FALSE))
 e2 <- list(gen_2_wide = read_csv(file.path(DATA_DIR, "gen_2_wide.csv"), show_col_types = FALSE))
 
+{
+  bap_share <- function(df, age, gender) {
+    sub <- df %>% filter(age_group == age)
+    tot <- sum(sub[[gender]])
+    sum(sub[[gender]][sub$educ_factor %in% c("BA degree","Graduate degree")]) / tot * 100
+  }
+  g1_young_f <- round(bap_share(e1$gen_1_wide, "25-34", "Female"))
+  g1_young_m <- round(bap_share(e1$gen_1_wide, "25-34", "Male"))
+  g1_old_f   <- round(bap_share(e1$gen_1_wide, "75-84", "Female"))
+  g1_old_m   <- round(bap_share(e1$gen_1_wide, "75-84", "Male"))
+  g2_mid_f   <- round(bap_share(e2$gen_2_wide, "35-44", "Female"))
+  g2_mid_m   <- round(bap_share(e2$gen_2_wide, "35-44", "Male"))
+  NULL
+}
 writeLines(page_template("Education", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">While first-generation, older Iranian-Americans experienced a pronounced gender gap in education, this disparity has reversed among younger first-generation Iranian-Americans, where women now exceed men in educational attainment.</div>',
-  '<div class="text-card pt2">Today, second-generation Iranian-American women are more likely than their male counterparts to hold a bachelor&rsquo;s degree or higher.</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American women ages 25&ndash;34 hold a bachelor&rsquo;s degree or higher &mdash; now ahead of men (%d%%).</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Among older first-generation (ages 75&ndash;84): %d%% of men hold a BA+ vs only %d%% of women.</div>
+  </div>', g1_young_f, g1_young_m, g1_old_m, g1_old_f),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American women ages 35&ndash;44 hold a bachelor&rsquo;s degree or higher &mdash; vs %d%% of men.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Both generations now show women outpacing men in higher education.</div>
+  </div>', g2_mid_f, g2_mid_m),
   '<div class="chart-card pc1">',
   '<div class="section-title">Educational Attainment of Iranian-Americans: First Generation</div>',
   make_butterfly_educ(e1$gen_1_wide, "1st Generation", FALSE, "500px", "ed1"),
@@ -613,10 +663,33 @@ cat("Building us-work...\n")
 
 ec <- list(class = read_csv(file.path(DATA_DIR, "class.csv"), show_col_types = FALSE))
 
+# Compute gen x gender x sector shares for factoid cards
+work_share <- function(df, g, gen_) {
+  sub <- df %>% filter(class_wkrd != "N/A", class_wkrd != "Unpaid family member", gen == gen_, gender == g)
+  tot <- sum(sub$n)
+  list(
+    self = round(sum(sub$n[sub$class_wkrd == "Self-employed"]) / tot * 100),
+    np   = round(sum(sub$n[sub$class_wkrd == "Non-profit employee"]) / tot * 100),
+    priv = round(sum(sub$n[sub$class_wkrd == "Private sector employee"]) / tot * 100)
+  )
+}
+g1_m <- work_share(ec$class, "Male", "1st gen")
+g1_f <- work_share(ec$class, "Female", "1st gen")
+g2_m <- work_share(ec$class, "Male", "2nd gen")
+g2_f <- work_share(ec$class, "Female", "2nd gen")
+
 writeLines(page_template("Work", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">Iranian-Americans are most commonly employed in the private sector, regardless of gender, though men have higher rates of self-employment while women work more in non-profits.</div>',
-  '<div class="text-card pt2">First-generation Iranian-Americans show stronger age-related employment differences than the second generation.</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American men are self-employed &mdash; nearly double the rate for women (%d%%).</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Women are roughly twice as likely as men to work in non-profits (%d%% vs %d%%).</div>
+  </div>', g1_m$self, g1_f$self, g1_f$np, g1_m$np),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American men work in the private sector &mdash; up from %d%% in the first generation.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Self-employment falls to %d%% for men and %d%% for women; the gender gap narrows.</div>
+  </div>', g2_m$priv, g1_m$priv, g2_m$self, g2_f$self),
   '<div class="chart-card pc1">',
   '<div class="section-title">Employment of Iranian-Americans: First Generation</div>',
   make_butterfly_work(ec$class, "1st gen", "1st Generation", FALSE, "500px", "wk1"),
@@ -739,20 +812,26 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
 writeLines(page_template("Marriage", paste0(
   '<div class="page-content">',
   {
-    raw_all <- em$spouse_gender
-    total_w <- sum(raw_all$PERWT)
-    iran_pct <- round(sum(raw_all$PERWT[raw_all$spouse_iran == "Yes"]) / total_w * 100)
-    sprintf('<div class="text-card pt1">Among roughly %s Iranian-Americans in marriages or domestic partnerships, about %d%% have partners of Iranian origin. Both opposite-sex and same-sex partners, married or unmarried, are counted.</div>',
-      format(round(total_w, -3), big.mark = ","), iran_pct)
-  },
-  {
     raw <- em$spouse_gender
     g1 <- raw %>% dplyr::filter(gen == "1st gen", !is.na(age_group))
     g1_pct <- round(sum(g1$PERWT[g1$spouse_iran == "Yes"]) / sum(g1$PERWT) * 100)
     g2 <- raw %>% dplyr::filter(gen == "2nd gen", !is.na(age_group))
+    g2_iran <- round(sum(g2$PERWT[g2$spouse_iran == "Yes"]) / sum(g2$PERWT) * 100)
     g2_white <- round(sum(g2$PERWT[g2$spouse == "Other White"]) / sum(g2$PERWT) * 100)
-    sprintf('<div class="text-card pt2">Partnership patterns vary by generation. Among first-generation Iranian-Americans, about %d%% have an Iranian partner. Among the second generation, about %d%% have a White non-Hispanic partner, a pattern consistent with other second-generation immigrant groups. Second-generation outmarriage rates are <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE;">comparable to those of other second-generation Asian Americans</a>.</div>',
-      g1_pct, g2_white)
+    paste0(
+      sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Americans in partnerships have an Iranian partner.</div>
+  </div>', g1_pct),
+      sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-Americans in partnerships have an Iranian partner.</div>
+    <ul style="margin:10px auto 0; padding-left:18px; max-width:400px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% partner with White, non-Hispanic Americans</li>
+      <li>Similar to <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/" target="_blank" style="color:#2774AE; text-decoration:none; border-bottom:1px solid rgba(39,116,174,0.4);">other second-generation Asian Americans</a></li>
+    </ul>
+  </div>', g2_iran, g2_white)
+    )
   },
   '<div class="chart-card pc1">',
   '<div class="section-title">Spouse/Partner Ethnicity of Iranian-Americans: First Generation</div>',
@@ -869,16 +948,22 @@ decile_share <- function(gen_val, target_decile) {
   round(d$share[d$decile == target_decile], 1)
 }
 fg_d10 <- decile_share("1st gen", "D10")
+fg_d1  <- decile_share("1st gen", "D1")
 sg_d10 <- decile_share("2nd gen", "D10")
 sg_d1  <- decile_share("2nd gen", "D1")
 
 writeLines(page_template("Income", paste0(
   '<div class="page-content">',
-  sprintf('<div class="text-card pt1">First-generation Iranian-Americans (ages 25&ndash;54) are concentrated in the upper income deciles, with %s%% in the top decile&mdash;%s the national baseline of 10%%.</div>',
-    format(fg_d10, nsmall = 0),
-    ifelse(fg_d10 >= 20, "more than double", "well above")),
-  sprintf('<div class="text-card pt2">Second-generation Iranian-Americans (ages 25&ndash;54) are even more concentrated at the top, with %s%% in the highest income decile and %s%% in the lowest.</div>',
-    format(sg_d10, nsmall = 0), format(sg_d1, nsmall = 0)),
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile &mdash; more than double the national baseline of 10%%.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Only %s%% fall in the lowest decile.</div>
+  </div>', round(fg_d10), format(fg_d1, nsmall = 1)),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile &mdash; even more concentrated at the top than the first generation.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Just %s%% fall in the lowest decile.</div>
+  </div>', round(sg_d10), format(sg_d1, nsmall = 1)),
   '<div class="chart-card pc1">', make_income_chart(inc, "1st gen", "First Generation", "inc1"), '</div>',
   '<div class="chart-card pc2">', make_income_chart(inc, "2nd gen", "Second Generation", "inc2"), '</div>',
   '</div>'
@@ -1056,7 +1141,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center;
   border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
 .tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;

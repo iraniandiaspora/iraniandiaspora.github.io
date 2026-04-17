@@ -17,7 +17,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
@@ -42,7 +44,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .p4-t1,.p4-t2,.p4-t3,.p4-t4,.p4-c1,.p4-c2 { grid-area:auto; }
   .p4-c1 { order:1; } .p4-t1 { order:2; } .p4-t2 { order:3; }
   .p4-c2 { order:4; } .p4-t3 { order:5; } .p4-t4 { order:6; }
-  .headline .number { font-size:28px; }
+  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
@@ -60,7 +62,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 @media (max-width:480px) {
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
-  .headline .number { font-size:24px; }
+  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
 </style>

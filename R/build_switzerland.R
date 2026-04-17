@@ -151,7 +151,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
@@ -228,35 +230,49 @@ p_trend <- plot_ly(trend, x = ~year, y = ~total, type = "scatter",
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-# --- Annual arrivals 2011-2024 (bars + cumulative % line) ---------------------
+# --- Annual arrivals 2011-2024 (bars + stock-share % line) ---------------------
+# The cumulative line is computed against the *stock* of Iran-born residents
+# (ch_trend), not against arrivals alone. Iran-born residents existed in
+# Switzerland well before 2011, so a cumsum(arrivals) starting at 0 would
+# misleadingly imply no Iranians were present in 2010. Instead: at year y,
+# line value = stock[y] / stock[latest] * 100 = "share of current stock
+# already present by end of year y". Anchor the line at 2010 to show the
+# pre-chart baseline (~47%).
 arrivals <- arrivals[order(arrivals$year), ]
+trend <- trend[order(trend$year), ]
 total_arr <- sum(arrivals$count)
-arrivals$cumulative <- cumsum(arrivals$count)
-arrivals$cum_pct <- round(arrivals$cumulative / total_arr * 100, 1)
+stock_final <- trend$total[trend$year == max(trend$year)]
+# Line is anchored at arrivals years (2011-2024). At year Y, value =
+# stock[Y] / stock[latest] * 100 = "share of current stock already present
+# by end of year Y". The first point (2011) naturally lands above zero
+# because a substantial Iran-born community existed before the chart
+# starts; the line has no 2010 point so it aligns with the first bar.
+stock_line <- merge(data.frame(year = arrivals$year), trend, by = "year", all.x = TRUE)
+stock_line <- stock_line[order(stock_line$year), ]
+stock_line$cum_pct <- round(stock_line$total / stock_final * 100, 1)
 max_bar <- max(arrivals$count)
 
 p_arrivals <- plot_ly() %>%
   add_bars(data = arrivals, x = ~year, y = ~count,
     marker = list(color = "#2774AE",
       line = list(color = "#1a4e72", width = 0.3)),
-    text = sprintf("<b>%d</b><br>%s arrivals<br>Cumulative: %.0f%%",
-      arrivals$year, format(arrivals$count, big.mark = ","),
-      arrivals$cum_pct),
+    text = sprintf("<b>%d</b><br>%s arrivals",
+      arrivals$year, format(arrivals$count, big.mark = ",")),
     hoverinfo = "text", textposition = "none", showlegend = FALSE, name = "Arrivals") %>%
-  add_trace(data = arrivals, x = ~year,
+  add_trace(data = stock_line, x = ~year,
     y = ~cum_pct / 100 * max_bar,
     type = "scatter", mode = "lines",
     yaxis = "y2",
     line = list(color = "lightblue", width = 2),
-    text = sprintf("<b>%d:</b> %.0f%% cumulative",
-      arrivals$year, arrivals$cum_pct),
-    hoverinfo = "text", showlegend = FALSE, name = "Cumulative",
+    text = sprintf("<b>By end of %d:</b> %.0f%% of 2024 Iran-born stock already present",
+      stock_line$year, stock_line$cum_pct),
+    hoverinfo = "text", showlegend = FALSE, name = "Share of current stock",
     inherit = FALSE) %>%
   layout(
     title = list(
       text = "<b>Iran-Born Annual Immigration<br>to Switzerland, 2011\u20132024</b>",
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", dtick = 2),
+    xaxis = list(title = "", dtick = 2, range = c(2010.5, 2024.5)),
     yaxis = list(title = "", tickformat = ","),
     yaxis2 = list(overlaying = "y", side = "right", showgrid = FALSE,
       range = c(0, max_bar * 1.05),
@@ -285,7 +301,7 @@ p_canton_map <- plot_ly() %>%
     colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),
                       c(0.08, "#6baed6"), c(0.35, "#2171b5"), c(1, "#08306b")),
     showscale = TRUE,
-    colorbar = list(title = "", tickformat = ",", len = 0.6, thickness = 12),
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(style = "carto-positron",
