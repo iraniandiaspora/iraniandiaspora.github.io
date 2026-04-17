@@ -151,7 +151,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
@@ -227,7 +229,8 @@ if (has_geojson) {
       hoverinfo = "text",
       colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),
                         c(0.08, "#6baed6"), c(0.35, "#2171b5"), c(1, "#08306b")),
-      showscale = FALSE,
+      showscale = TRUE,
+      colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
       marker = list(line = list(color = "white", width = 1), opacity = 0.92)
     ) %>% layout(
       mapbox = list(
@@ -550,20 +553,29 @@ CBS_INC_SOURCE <- paste0("Source: ", CBS_LINK,
 
 latest_inc <- income[income$year == max(income$year[!is.na(income$iran_avg_income_k)]), ]
 inc_ratio  <- round(latest_inc$iran_avg_income_k / latest_inc$nl_avg_income_k * 100)
+# Low-income trend (share of Iranian-origin households under the
+# national low-income threshold). Has fallen substantially since the
+# early 2010s peak.
+li_latest_yr <- max(income$year[!is.na(income$iran_low_income_pct)])
+li_latest    <- round(income$iran_low_income_pct[income$year == li_latest_yr])
+li_peak_row  <- income[which.max(income$iran_low_income_pct), ]
+li_peak_yr   <- li_peak_row$year
+li_peak      <- round(li_peak_row$iran_low_income_pct)
 
 workinc_body <- paste0(
   '<div class="page-content">',
-  # Text cards
-  '<div class="text-card pt1" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%d%%</div>', latest$participation_rate),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Net Labour Force Participation</div>',
-  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Iranian-origin residents aged 15\u201374, %d.</div>', latest$year),
-  '</div>',
-  '<div class="text-card pt2" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%d%%</div>', inc_ratio),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Of National Average Income</div>',
-  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Iranian-origin household disposable income as share of NL average, %d.</div>', latest_inc$year),
-  '</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents aged 15&ndash;74 in the Netherlands are in the labour force (%d).</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Of those employed, %d%% hold permanent contracts, %d%% flexible, and %d%% are self-employed.</div>
+  </div>', latest$participation_rate, latest$year,
+    latest$permanent_pct, latest$flexible_pct, latest$selfemployed_pct),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranian-origin households in the Netherlands earn about %d%% of the national average household disposable income (%d).</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">The share of Iranian-origin households below the low-income threshold has fallen from %d%% in %d to %d%% in %d.</div>
+  </div>', inc_ratio, inc_ratio, latest_inc$year,
+    li_peak, li_peak_yr, li_latest, li_latest_yr),
 
   # Chart cell 1: tabbed (Participation | Employment Type)
   '<div class="chart-card pc1">',

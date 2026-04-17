@@ -133,7 +133,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
@@ -234,6 +236,30 @@ p_bl <- plot_ly(bl, y = ~bundesland, x = ~iran_born, type = "bar",
     bargap = 0.35
   ) %>% config(displayModeBar = FALSE)
 
+# --- Bundesland choropleth map ------------------------------------------------
+at_geojson <- jsonlite::fromJSON(file.path(DATA_DIR, "at_bundesland.geojson"),
+                                 simplifyVector = FALSE)
+
+p_bl_map <- plot_ly() %>%
+  add_trace(type = "choroplethmapbox",
+    geojson = at_geojson,
+    locations = bl$bundesland, z = bl$iran_born,
+    featureidkey = "properties.name",
+    text = sprintf("<b>%s</b><br>%s Iran-born (%s%%)",
+      bl$bundesland, format(bl$iran_born, big.mark = ","), bl$pct),
+    hoverinfo = "text",
+    colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),
+                      c(0.08, "#6baed6"), c(0.35, "#2171b5"), c(1, "#08306b")),
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
+    marker = list(line = list(color = "white", width = 1), opacity = 0.85)
+  ) %>% layout(
+    mapbox = list(style = "carto-positron",
+      center = list(lon = 13.5, lat = 47.6), zoom = 5.9),
+    margin = list(t = 10, b = 10, l = 0, r = 0),
+    paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
+
 # --- Sex breakdown boxes (from Bundesland census data) -------------------------
 at_male   <- sum(bl$male)
 at_female <- sum(bl$female)
@@ -281,10 +307,15 @@ pop_body <- paste0(
   '</div>',
   '</div>',
 
-  # Bottom: geographic distribution (full width, like Italy map)
+  # Bottom row: Bundesland bar (left) + choropleth map (right)
+  '<div class="chart-row">',
+  '<div class="chart-card">',
+  plotly_div("at-bundesland", plotly_to_json(p_bl), "430px", source = CENSUS_SOURCE),
+  '</div>',
   '<div class="chart-card">',
   '<div class="section-title" style="margin-top:0;">Geographic Distribution in Austria</div>',
-  plotly_div("at-bundesland", plotly_to_json(p_bl), "380px", source = CENSUS_SOURCE),
+  plotly_div("at-map", plotly_to_json(p_bl_map), "430px", source = CENSUS_SOURCE),
+  '</div>',
   '</div>'
 )
 

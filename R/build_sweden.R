@@ -133,7 +133,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
@@ -286,7 +288,8 @@ p_county <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),
                       c(0.08, "#6baed6"), c(0.35, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(style = "carto-positron",

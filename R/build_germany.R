@@ -169,7 +169,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
@@ -186,7 +188,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .page-content { grid-template-columns:1fr; }
   .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
   .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
-  .headline .number { font-size:28px; }
+  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
@@ -199,7 +201,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 @media (max-width:480px) {
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
-  .headline .number { font-size:24px; }
+  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
   .measure-num { font-size:24px !important; }
 }
@@ -320,7 +322,8 @@ p_de_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"), c(0.1, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(color = "white", width = 1), opacity = 0.9)
   ) %>% layout(
     mapbox = list(
@@ -521,10 +524,28 @@ p_citizen <- plot_ly(data.frame(
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
 
+# Dynamic shares for the factoid cards
+de_cit_pct <- round(hl_deu / hl_total * 100)
+dur_10plus_k <- sum(duration$value_k[duration$bucket %in% c(
+  "10_to_15","15_to_20","20_to_25","25_to_30","30_to_40","40_plus")], na.rm = TRUE)
+dur_30plus_k <- sum(duration$value_k[duration$bucket %in% c(
+  "30_to_40","40_plus")], na.rm = TRUE)
+fg_k <- hl_fg / 1000
+dur_10plus_pct <- round(dur_10plus_k / fg_k * 100)
+dur_30plus_pct <- round(dur_30plus_k / fg_k * 100)
+
 immig_body <- paste0(
   '<div class="text-row">',
-  '<div class="text-card">About 167,000 Iranian-origin residents hold German citizenship (roughly 52% of the total), and about 152,000 are still Iranian nationals. There were 7,840 Iranian naturalizations recorded in 2024.</div>',
-  '<div class="text-card">Annual Iranian arrivals to Germany averaged 3,000\u20138,000 per year through the 1990s and 2000s, rising to above 21,000 in 2016 and again in 2023. About 44% of first-generation residents came through the asylum system.</div>',
+  sprintf('<div class="text-card" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold German citizenship &mdash; about %s people.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %s hold Iranian citizenship. 7,840 Iranian naturalizations were recorded in 2024.</div>
+  </div>', de_cit_pct, format(hl_deu, big.mark = ","), format(hl_for, big.mark = ",")),
+  sprintf('<div class="text-card" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian residents have lived in Germany for a decade or more.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Roughly %d%% have lived in Germany for 30 or more years.</div>
+  </div>', dur_10plus_pct, dur_30plus_pct),
   '</div>',
 
   '<div class="chart-row">',
@@ -703,7 +724,7 @@ ind <- emp %>% filter(section == "industry", gen == "all_gens") %>%
            category == "Produzierendes Gewerbe, Baugewerbe" ~ "Industry & construction",
            category == "Handel, Gastgewerbe und Verkehr" ~ "Trade, hospitality & transport",
            category == "\u00d6ffentliche Verwaltung" ~ "Public administration",
-           category == "Sonstige Dienstleistungen" ~ "Other services (incl. health, education)",
+           category == "Sonstige Dienstleistungen" ~ "Other services",
            TRUE ~ category
          )) %>%
   arrange(desc(value), is_suppressed)
@@ -715,6 +736,9 @@ ind$hover <- ifelse(ind$is_suppressed,
   sprintf("<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000", ind$label),
   sprintf("<b>%s</b><br>%s (%.1f%% of all employed)", ind$label,
           format(ind$value, big.mark = ","), ind$pct))
+# Horizontal bars: suppressed rows at the bottom, then non-suppressed
+# sorted ascending so the longest bar appears at the top.
+ind <- ind %>% arrange(desc(is_suppressed), value)
 ind$label <- factor(ind$label, levels = ind$label)
 # Warm-earth palette for the industry chart; matches the labour-force
 # chart in the same tab card. Suppressed sectors are grey.
@@ -723,16 +747,18 @@ n_visible <- sum(!ind$is_suppressed)
 ind$fill_color <- c(ind_palette_visible[seq_len(n_visible)],
                     rep("#c8c8c8", nrow(ind) - n_visible))
 
-p_industry <- plot_ly(ind, x = ~label, y = ~display_value, type = "bar",
+p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
+    orientation = "h",
     marker = list(color = ~fill_color),
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Origin Employment by Industry</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -15, tickfont = list(size = 10)),
-    yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 55, b = 130),
+    xaxis = list(title = "", tickformat = ","),
+    yaxis = list(title = "", tickfont = list(size = 11),
+      automargin = TRUE),
+    margin = list(t = 55, b = 40, l = 200),
     plot_bgcolor = "white", paper_bgcolor = "white",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
@@ -798,11 +824,33 @@ low_share    <- sum(inc$pct[inc$bracket %in% c("Under \u20ac500", "\u20ac500\u20
 # =====================================================
 cat("Building de-workinc...\n")
 
+# Dynamic shares for work factoid card
+emp_all <- emp %>% filter(gen == "all_gens")
+employed_k   <- emp_all$value_k[grepl("^Erwerbstätige$", emp_all$category)][1]
+unemployed_k <- emp_all$value_k[grepl("Erwerbslose|^Arbeitslose", emp_all$category)][1]
+nilf_k       <- emp_all$value_k[grepl("Nichterwerbspersonen", emp_all$category)][1]
+services_k   <- sum(emp_all$value_k[emp_all$category %in% c(
+  "Handel, Gastgewerbe und Verkehr", "Sonstige Dienstleistungen")], na.rm = TRUE)
+services_pct <- round(services_k / employed_k * 100)
+total_15plus_k <- hl_total / 1000
+emp_pct      <- round(employed_k / total_15plus_k * 100)
+unemp_pct    <- round(unemployed_k / total_15plus_k * 100)
+nilf_pct     <- round(nilf_k / total_15plus_k * 100)
+
 workinc_body <- paste0(
   '<div class="text-row">',
-  '<div class="text-card">About 170,000 Iranian-origin residents aged 15 and over are employed, with roughly 16,000 unemployed and 133,000 not in the labour force (including students, retirees, and carers). Employment is concentrated in the broad services sector, which includes health care, education, and professional services.</div>',
-  sprintf('<div class="text-card">Among employed Iranian-origin residents, about %.0f%% report monthly net personal income between %s1,000 and %s2,500. Roughly %.0f%% earn %s3,000 or more per month, and about %.0f%% earn under %s1,000.</div>',
-    middle_share, "\u20ac", "\u20ac", top_share, "\u20ac", low_share, "\u20ac"),
+  sprintf('<div class="text-card" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-origin residents work in the broad services sector (trade, hospitality, transport, and other services).</div>',
+    services_pct),
+  sprintf('    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% of all Iranian-origin residents aged 15+ are employed; %d%% are unemployed and %d%% are not in the labour force (students, retirees, carers).</div>
+  </div>',
+    emp_pct, unemp_pct, nilf_pct),
+  sprintf('<div class="text-card" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-origin residents earn between %s1,000 and %s2,500 net per month.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %.0f%% earn %s3,000 or more per month; %.0f%% earn under %s1,000.</div>
+  </div>', middle_share, "\u20ac", "\u20ac", top_share, "\u20ac", low_share, "\u20ac"),
   '</div>',
   '<div class="chart-row">',
   # LEFT: work with 2 tabs (labour force status + industry)
@@ -900,10 +948,30 @@ lang_leg <- make_html_legend(lang_colors, break_after = 2)
 # =====================================================
 cat("Building de-langedu...\n")
 
+# Dynamic shares for the factoid cards
+lang_total <- lang$value_k[lang$language == "Zu Hause vorwiegend gesprochene Sprache Insgesamt" & lang$gen == "all_gens"]
+persian_k <- lang$value_k[lang$language == "Persisch" & lang$gen == "all_gens"]
+only_de_k <- lang$value_k[lang$language == "nur Deutsch" & lang$gen == "all_gens"]
+persian_pct <- round(persian_k / lang_total * 100)
+only_de_pct <- round(only_de_k / lang_total * 100)
+
+abitur_k <- school$value_k[school$school_level == "Abitur" & school$gen == "all_gens"]
+abitur_pct <- round(abitur_k / hl_total * 1000 * 100)
+academic_k <- prof$value_k[prof$prof_level == "akademischer Abschluss" & prof$gen == "all_gens"]
+academic_pct <- round(academic_k / hl_total * 1000 * 100)
+
 langedu_body <- paste0(
   '<div class="text-row">',
-  '<div class="text-card">Among all Iranian-origin residents, 21% speak only German at home and another 9% speak predominantly German. Roughly 70% use a non-German language as their main household language \u2014 most often Persian, with an estimated 176,000 speakers (55% of all Iranian-origin residents).</div>',
-  '<div class="text-card">Half of all Iranian-origin residents in Germany have the Abitur, the secondary-school diploma that qualifies for university entry. Roughly 108,000 hold a vocational or academic degree, with 34% holding an academic degree specifically.</div>',
+  sprintf('<div class="text-card" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents speak Persian as the main language at home &mdash; about %s people.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Another %d%% speak only German at home, and 9%% use mainly German.</div>
+  </div>', persian_pct, format(persian_k * 1000, big.mark = ","), only_de_pct),
+  sprintf('<div class="text-card" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold the Abitur, the secondary-school qualification that grants university entry.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %d%% (~%s) hold an academic degree.</div>
+  </div>', abitur_pct, academic_pct, format(academic_k * 1000, big.mark = ",")),
   '</div>',
   '<div class="chart-row" style="align-items:stretch;">',
   # LEFT: language chart (standalone, no persian sidebar)

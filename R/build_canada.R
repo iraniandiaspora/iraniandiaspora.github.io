@@ -188,7 +188,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:36px; font-weight:700; color:#1a4e72; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
@@ -213,7 +215,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .p4-t1,.p4-t2,.p4-t3,.p4-t4,.p4-c1,.p4-c2 { grid-area:auto; }
   .p4-c1 { order:1; } .p4-t1 { order:2; } .p4-t2 { order:3; }
   .p4-c2 { order:4; } .p4-t3 { order:5; } .p4-t4 { order:6; }
-  .headline .number { font-size:28px; }
+  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
@@ -231,7 +233,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 @media (max-width:480px) {
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
-  .headline .number { font-size:24px; }
+  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
 </style>
@@ -362,7 +364,8 @@ p_prov_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.01, "#c6dbef"), c(0.1, "#6baed6"),
       c(0.5, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
@@ -404,7 +407,8 @@ p_ont_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#c6dbef"), c(0.05, "#9ecae1"), c(0.15, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
   ) %>%
   layout(
@@ -786,10 +790,16 @@ cit_not_citizen_pct <- round(
 
 writeLines(page_template("Canada: Immigration & Citizenship", paste0(
   '<div class="page-content">',
-  sprintf('<div class="text-card pt1">Iranian immigration to Canada surged in the 2000s and 2010s. About half of first-generation Iranian-Canadians arrived in %d or later, while the 1980s revolution-and-war era accounts for only %d%% of the current first-generation population.</div>',
-    im_median_year, im_1980s_share),
-  sprintf('<div class="text-card pt2">About %d%% of Iranian-Canadians are naturalized citizens, while %d%% have not yet obtained citizenship. Economic immigration has been the primary pathway since the 1990s.</div>',
-    cit_naturalized_pct, cit_not_citizen_pct),
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Half of first-generation Iranian-Canadians arrived in %d or later.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Only %d%% arrived during the 1980s.</div>
+  </div>', im_median_year, im_median_year, im_1980s_share),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-Canadians are naturalized Canadian citizens.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% have not yet obtained citizenship. Economic immigration has been the most common pathway since the 1990s.</div>
+  </div>', cit_naturalized_pct, cit_not_citizen_pct),
   '<div class="chart-card pc1">', plotly_div("ca-immig", plotly_to_json(p_ca_immig), "430px", source = PUMF_SRC_IMMIG), '</div>',
   '<div class="chart-card pc2">', cit_div, '</div>',
   '</div>'
@@ -930,10 +940,36 @@ make_fos_butterfly <- function(fos_data, gen_label, id_prefix, height = "350px",
   plotly_div(id_prefix, plotly_to_json(p), height, source = source, legend_html = leg, highlight_hover = TRUE)
 }
 
+# Dynamic shares for the two text cards
+grad_pct <- function(cohort, gender) {
+  v <- ed1$percentage[ed1$age_cohort == cohort & ed1$gender_label == gender & ed1$education_level == "Graduate degree"]
+  if (length(v) == 0) NA_real_ else round(v[1])
+}
+ed_w_30 <- grad_pct("30-34", "Women")
+ed_m_30 <- grad_pct("30-34", "Men")
+ed_m_55 <- grad_pct("55-64", "Men")
+ed_w_55 <- grad_pct("55-64", "Women")
+fos_pct <- function(gender, field) {
+  v <- fos$percentage[fos$gender_label == gender & fos$field_category == field & fos$generation == "First-Generation"]
+  if (length(v) == 0) NA_real_ else round(v[1])
+}
+fos_m_stem <- fos_pct("Men", "Science, Technology, Engineering & Math")
+fos_w_stem <- fos_pct("Women", "Science, Technology, Engineering & Math")
+fos_w_ssh  <- fos_pct("Women", "Social Sciences & Humanities")
+fos_w_hlth <- fos_pct("Women", "Health")
+
 writeLines(page_template("Canada: Education", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">First-generation Iranian-Canadians age 30&ndash;44 show very high graduate degree attainment (44&ndash;48%), with women exceeding men among 30&ndash;34 year-olds. Among those 55+, men are more likely to hold graduate degrees.</div>',
-  '<div class="text-card pt2">62% of first-generation men studied Science, Technology, Engineering, or Math fields, compared to 33% of women. Women are more concentrated in Social Sciences &amp; Humanities (25%) and Health (16%).</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Canadian women aged 30&ndash;34 hold a graduate degree &mdash; slightly ahead of men (%d%%).</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Among those 55&ndash;64, men are more likely to hold graduate degrees (%d%% vs %d%%).</div>
+  </div>', ed_w_30, ed_m_30, ed_m_55, ed_w_55),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Canadian men studied STEM fields &mdash; vs %d%% of women.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Women are more concentrated in social sciences &amp; humanities (%d%%) and health (%d%%).</div>
+  </div>', fos_m_stem, fos_w_stem, fos_w_ssh, fos_w_hlth),
   '<div class="chart-card pc1">',
   '<div class="section-title">Educational Attainment of Iranian-Canadians: First Generation</div>',
   make_ca_educ_butterfly(ed1, "1st Gen", "ca-ed1"),
@@ -1083,12 +1119,45 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
   plotly_div(id_prefix, plotly_to_json(p), height, source = source, legend_html = leg, highlight_hover = TRUE)
 }
 
+# Dynamic headline shares for the 2x2 work cards
+work_share <- function(gen, gender, sector, age = NULL) {
+  d <- work %>% filter(generation == gen, gender_label == gender, industry_category == sector)
+  if (!is.null(age)) d <- d %>% filter(age_cohort == age)
+  if (nrow(d) == 0) return(NA_real_)
+  round(mean(d$percentage))
+}
+g1m_pt  <- work_share("First-Generation",  "Men",   "Professional & Technical",     "35-44")
+g1m_mc  <- work_share("First-Generation",  "Men",   "Manufacturing & Construction", "35-44")
+g1w_ts  <- work_share("First-Generation",  "Women", "Trade & Services",             "35-44")
+g1w_pt  <- work_share("First-Generation",  "Women", "Professional & Technical",     "35-44")
+g1w_he  <- work_share("First-Generation",  "Women", "Health & Education",           "35-44")
+g2m_pt  <- work_share("Second-Generation", "Men",   "Professional & Technical")
+g2m_ts  <- work_share("Second-Generation", "Men",   "Trade & Services")
+g2w_pt  <- work_share("Second-Generation", "Women", "Professional & Technical")
+g2w_he  <- work_share("Second-Generation", "Women", "Health & Education")
+
+card4 <- function(cls, big, sentence, note) {
+  sprintf('<div class="text-card %s" style="text-align:center;">
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:14px; font-weight:500; color:#333; margin-top:10px; line-height:1.45;">%s</div>
+    <div style="font-size:12.5px; color:#555; margin-top:10px; line-height:1.5;">%s</div>
+  </div>', cls, big, sentence, note)
+}
+
 writeLines(page_template("Canada: Work", paste0(
   '<div class="page-content-4">',
-  '<div class="text-card p4-t1">First-generation men are heavily represented in Manufacturing &amp; Construction across older age groups (roughly a third of men ages 45&ndash;74) and in Professional &amp; Technical sectors in mid-career (about 32% of men ages 35&ndash;44).</div>',
-  '<div class="text-card p4-t2">First-generation women work primarily in Trade &amp; Services (30&ndash;43%) and Health &amp; Education (24&ndash;33%), with higher Health &amp; Education shares among older cohorts.</div>',
-  '<div class="text-card p4-t3">Second-generation men show similar sector distribution to the first generation, with Professional &amp; Technical (36%) and Trade &amp; Services (28%) leading.</div>',
-  '<div class="text-card p4-t4">Second-generation women are concentrated in Professional &amp; Technical (39%), with Health &amp; Education and Trade &amp; Services tied at about 18% each.</div>',
+  card4("p4-t1", sprintf("%d%%", g1m_pt),
+    sprintf("of first-generation men aged 35&ndash;44 work in Professional &amp; Technical fields."),
+    sprintf("Manufacturing &amp; Construction ties at %d%%.", g1m_mc)),
+  card4("p4-t2", sprintf("%d%%", g1w_ts),
+    sprintf("of first-generation women aged 35&ndash;44 work in Trade &amp; Services &mdash; the largest sector."),
+    sprintf("Professional &amp; Technical (%d%%) and Health &amp; Education (%d%%) are close behind.", g1w_pt, g1w_he)),
+  card4("p4-t3", sprintf("%d%%", g2m_pt),
+    "of second-generation men work in Professional &amp; Technical fields.",
+    sprintf("Trade &amp; Services follows at %d%%.", g2m_ts)),
+  card4("p4-t4", sprintf("%d%%", g2w_pt),
+    "of second-generation women work in Professional &amp; Technical fields.",
+    sprintf("Health &amp; Education (%d%%) is the second-largest sector.", g2w_he)),
   # First-gen: tabs for Employment Categories / Industry Sectors
   '<div class="chart-card p4-c1">',
   '<div class="section-title">Work of Iranian-Canadians: First Generation</div>',
@@ -1217,10 +1286,25 @@ p_inc_age <- p_inc_age %>% layout(
 
 inc_age_leg <- make_html_legend(age_band_colors, break_after = 3)
 
+# Dynamic shares for the income cards
+ca_d1  <- round(inc1$percentage[inc1$income_category == "Decile 1"])
+ca_d10 <- round(inc1$percentage[inc1$income_category == "Decile 10"])
+ca_100k_peak <- round(max(inc_age$pct[inc_age$income_band == "CA$100k+"], na.rm = TRUE))
+ca_100k_peak_age <- inc_age$age_group[inc_age$income_band == "CA$100k+"][
+  which.max(inc_age$pct[inc_age$income_band == "CA$100k+"])]
+
 writeLines(page_template("Canada: Income", paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1">First-generation Iranian-Canadian households are concentrated at the bottom of the national income distribution: 19% fall in the lowest decile, nearly double the 10% national baseline. Only 7% reach the top decile. This contrasts with the United States, where first-generation Iranian-Americans are overrepresented at the top.</div>',
-  '<div class="text-card pt2">Among first-generation Iranian-Canadian earners, the share making CA$100,000 or more is highest at ages 35&ndash;54. The individual pre-tax income distribution differs from the household income pattern, where Iranian-Canadians are concentrated at the bottom.</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Canadian households fall in the lowest Canadian income decile &mdash; nearly double the 10%% national baseline.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Only %d%% reach the top decile.</div>
+  </div>', ca_d1, ca_d10),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Canadian earners aged %s make CA$100,000 or more &mdash; the peak age bracket for high earners.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Reports each individual&rsquo;s own pre-tax earnings by age. Household income, by contrast, sums every earner in a household into one total before ranking it against the national distribution.</div>
+  </div>', ca_100k_peak, ca_100k_peak_age),
   '<div class="chart-card pc1">', plotly_div("ca-inc1", plotly_to_json(p_inc_decile), "500px", source = PUMF_SRC_INCOME), '</div>',
   '<div class="chart-card pc2">', plotly_div("ca-inc-age", plotly_to_json(p_inc_age), "400px", source = PUMF_SRC_INCOME_AGE, legend_html = inc_age_leg, highlight_hover = TRUE), '</div>',
   '</div>'

@@ -150,7 +150,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .text-card { background:white; border-radius:8px; padding:20px; border:1px solid #e0e0e0; font-size:14px; color:#444; line-height:1.7; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
@@ -233,7 +235,8 @@ p_uk_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"), c(0.08, "#6baed6"),
       c(0.35, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(color = "white", width = 1), opacity = 0.92)
   ) %>% layout(
     mapbox = list(style = "carto-positron",
@@ -462,18 +465,27 @@ employment_rate <- round(employed / active_total * 100, 1)
 degree_plus <- qual$count[qual$category == "Level 4+ (Degree or higher)"]
 degree_pct <- round(degree_plus / qual_total * 100, 1)
 
+# Additional shares for the factoid notes
+inactive_pct <- round(inactive / (active_total + inactive) * 100)
+student_pct  <- round(students / (active_total + inactive) * 100)
+econ_total   <- active_total + inactive
+unemp_pct    <- round(unemployed / active_total * 100)
+
+no_qual <- qual$count[qual$category == "No qualifications"]
+no_qual_pct <- round(no_qual / qual_total * 100)
+
 workedu_body <- paste0(
   '<div class="page-content">',
-  '<div class="text-card pt1" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', employment_rate),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Employment Rate</div>',
-  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Among economically active Iran-born residents aged 16+ in England and Wales, 2021.</div>'),
-  '</div>',
-  '<div class="text-card pt2" style="text-align:center;">',
-  sprintf('<div style="font-size:32px; font-weight:700; color:#1a4e72;">%s%%</div>', degree_pct),
-  '<div style="font-size:14px; color:#555; margin-top:4px; font-weight:600;">Bachelor\u2019s Degree or Higher</div>',
-  sprintf('<div style="font-size:12px; color:#888; margin-top:6px; line-height:1.5;">Iran-born residents aged 16+ in England and Wales, 2021.</div>'),
-  '</div>',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of economically active Iran-born residents aged 16+ in England and Wales are employed.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Another %d%% of the Iran-born 16+ population are economically inactive (including %d%% students).</div>
+  </div>', employment_rate, inactive_pct, student_pct),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born residents aged 16+ in England and Wales hold a bachelor&rsquo;s degree or higher.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %d%% report no formal qualifications.</div>
+  </div>', degree_pct, no_qual_pct),
   '<div class="chart-card pc1">',
   plotly_div("uk-econ", plotly_to_json(p_econ), "380px", source = ONS_CUSTOM),
   '</div>',

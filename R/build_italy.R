@@ -107,7 +107,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
@@ -221,7 +223,7 @@ if (has_geojson) {
       colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),
                         c(0.08, "#6baed6"), c(0.35, "#2171b5"), c(1, "#08306b")),
       showscale = TRUE,
-      colorbar = list(title = "", tickformat = ",", len = 0.6, thickness = 12),
+      colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
       marker = list(line = list(color = "white", width = 1), opacity = 0.85)
     ) %>% layout(
       mapbox = list(style = "carto-positron",
@@ -262,7 +264,7 @@ top_region_pct <- round(max(region$iran_born) / it_total * 100)
 
 # --- Assemble it-population page ----------------------------------------------
 pop_body <- paste0(
-  # Top row: headline + sex boxes (left) + trend (right)
+  # Top row: headline (left) + sex boxes (right)
   '<div class="chart-row">',
   '<div class="headline">',
   '<div class="label">Estimated Iran-Born Population in Italy</div>',
@@ -276,18 +278,22 @@ pop_body <- paste0(
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Italian-born children of Iran-born parents are not counted.</p>',
   '</div>',
+  '</div>',
+  '<div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">',
   sex_boxes,
   sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0 0; padding-right:2px;">%s</p>', ISTAT_SOURCE),
   '</div>',
+  '</div>',
+
+  # Bottom row: trend (left) + map (right)
+  '<div class="chart-row">',
   '<div class="chart-card">',
   plotly_div("it-hist", plotly_to_json(p_hist), "430px", source = HIST_SOURCE),
   '</div>',
-  '</div>',
-
-  # Bottom row: map full width
   '<div class="chart-card">',
   '<div class="section-title" style="margin-top:0;">Geographic Distribution in Italy</div>',
   map_html,
+  '</div>',
   '</div>'
 )
 

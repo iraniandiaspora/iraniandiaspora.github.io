@@ -151,7 +151,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
@@ -285,7 +287,8 @@ p_region <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),
                       c(0.08, "#6baed6"), c(0.35, "#2171b5"), c(1, "#08306b")),
-    showscale = FALSE,
+    showscale = TRUE,
+    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(style = "carto-positron",
@@ -380,7 +383,7 @@ p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
       industry$pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Origin Full-Time Employees<br>by Industry in Denmark, Q4 2024</b>",
+    title = list(text = "<b>Iranian-Origin Full-Time Employees<br>by Industry in Denmark, 2024</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 10)),
@@ -393,17 +396,15 @@ top3 <- industry[order(-industry$count), ][1:3, ]
 
 workinc_body <- paste0(
   '<div class="chart-row">',
-  '<div class="headline" style="display:flex; flex-direction:column; justify-content:center;">',
-  '<div class="number">', format(total_employed, big.mark = ","), '</div>',
-  '<div class="label">Full-Time Equivalent Employees</div>',
-  '<div style="margin:14px auto 0; max-width:380px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
-  sprintf('<p>Iranian-origin full-time equivalent employees in Denmark, Q4 2024. The three largest sectors are %s (%.0f%%), %s (%.0f%%), and %s (%.0f%%).</p>',
-    top3$sector_en[1], top3$pct[1],
+  sprintf('<div class="text-card pt1" style="text-align:center; display:flex; flex-direction:column; justify-content:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin full-time equivalent employees in Denmark work in %s.</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:380px; margin-left:auto; margin-right:auto;">Next largest sectors: %s (%.0f%%) and %s (%.0f%%).</div>
+    <div style="font-size:11px; color:#999; margin-top:14px; line-height:1.5; max-width:380px; margin-left:auto; margin-right:auto;">Based on Register-based Labour Force Statistics (RAS). Self-employed are not included.</div>
+  </div>',
+    top3$pct[1], top3$sector_en[1],
     top3$sector_en[2], top3$pct[2],
     top3$sector_en[3], top3$pct[3]),
-  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Counts are full-time equivalent employees aged 15\u201364 from the Register-based Labour Force Statistics (RAS). Self-employed are not included.</p>',
-  '</div>',
-  '</div>',
   '<div class="chart-card">',
   plotly_div("dk-industry", plotly_to_json(p_industry), "520px", source = DST_EMP_SOURCE),
   '</div>',

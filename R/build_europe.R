@@ -148,12 +148,14 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
-.headline .number { font-size:48px; font-weight:700; color:#1a4e72; line-height:1.1; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:6px; }
 @media (max-width:900px) {
   body { padding:10px 15px; }
   .text-row, .chart-row { grid-template-columns:1fr !important; }
-  .headline .number { font-size:36px; }
+  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
 }
@@ -426,6 +428,7 @@ MIKRO_LINK <- "<a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Be
 ONS_LINK <- "<a href='https://www.nomisweb.co.uk/sources/census_2021' target='_blank' style='color:#2774AE;'>ONS Census 2021</a>"
 NRS_LINK <- "<a href='https://www.scotlandscensus.gov.uk/' target='_blank' style='color:#2774AE;'>NRS Scotland's Census 2022</a>"
 NISRA_LINK <- "<a href='https://www.nisra.gov.uk/statistics/census/2021-census' target='_blank' style='color:#2774AE;'>NISRA NI Census 2021</a>"
+BFS_LINK <- "<a href='https://www.bfs.admin.ch/bfs/en/home/statistics/population.html' target='_blank' style='color:#2774AE;'>Swiss Federal Statistical Office (BFS)</a>"
 UK_COMBINED_LINK <- paste0(ONS_LINK, " (England &amp; Wales), ", NRS_LINK, ", and ", NISRA_LINK)
 
 source_note <- sprintf(
@@ -444,9 +447,10 @@ body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they were born in Iran and currently live in one of:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>', EUROSTAT_LINK, '</strong> <span style="color:#888;">&mdash; 9 European countries (country-of-birth tables)</span></li>',
+  '<li><strong>', EUROSTAT_LINK, '</strong> <span style="color:#888;">&mdash; 8 European countries (country-of-birth tables)</span></li>',
   '<li><strong>', MIKRO_LINK, '</strong> <span style="color:#888;">&mdash; Germany</span></li>',
   '<li><strong>', ONS_LINK, ', ', NRS_LINK, ', ', NISRA_LINK, '</strong> <span style="color:#888;">&mdash; United Kingdom (combined)</span></li>',
+  '<li><strong>', BFS_LINK, '</strong> <span style="color:#888;">&mdash; Switzerland (STATPOP register)</span></li>',
   '</ul>',
   '</div>',
   '</div>',
