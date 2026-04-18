@@ -5,7 +5,7 @@
 # Input:  data/switzerland/*.csv, data/switzerland/ch_cantons.geojson
 # Output: docs/pages/ch-population.html
 #
-# Extract first via: python3 R/ch_export/extract_bfs.py
+# Extract first via: Rscript R/ch_export/extract_bfs.R
 
 suppressPackageStartupMessages({
   library(plotly)
@@ -41,10 +41,10 @@ plotly_to_json <- function(p) {
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL) {
   init_js <- sprintf(
-    'var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
+    'var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   chart <- sprintf(
-    '<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
+    '<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
   if (!is.null(legend_html)) {
     chart <- paste0(chart, '\n', legend_html)
@@ -305,7 +305,7 @@ p_canton_map <- plot_ly() %>%
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(style = "carto-positron",
-      center = list(lon = 8.2, lat = 46.8), zoom = 6.3),
+      center = list(lon = 8.2, lat = 46.8), zoom = 5.8),
     margin = list(t = 10, b = 10, l = 0, r = 0),
     paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)

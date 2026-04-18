@@ -53,31 +53,7 @@ trend$total <- trend$gen1 + trend$gen2
 write.csv(trend, file.path(OUT_DIR, "se_trend.csv"), row.names = FALSE)
 cat("  se_trend.csv\n")
 
-# ---- 2. Population pyramid (2024, aggregate single-year to 5-year groups) ----
-agesex <- read.csv(file.path(SCB_DIR, "iran_agesex_2000_2024.csv"),
-                   stringsAsFactors = FALSE, check.names = FALSE,
-                   fileEncoding = "UTF-8")
-
-agesex$count <- as.integer(agesex[["Number of persons 2024"]])
-agesex$age_num <- suppressWarnings(as.integer(sub(" .*", "", agesex$age)))
-# Drop rows where age_num is NA (header/total rows)
-agesex <- agesex[!is.na(agesex$age_num) & !is.na(agesex$count), ]
-agesex$sex_clean <- ifelse(agesex$sex == "men", "Male", "Female")
-
-# 5-year age groups: 0-4, 5-9, ..., 90-94, 95+
-breaks <- c(seq(0, 95, 5), Inf)
-labels <- c(paste(seq(0, 90, 5), seq(4, 94, 5), sep = "-"), "95+")
-agesex$age_group <- cut(agesex$age_num, breaks = breaks, right = FALSE, labels = labels)
-
-pyramid <- aggregate(count ~ age_group + sex_clean, data = agesex, FUN = sum)
-names(pyramid) <- c("age_group", "sex", "count")
-pyramid$age_lower <- as.integer(sub("-.*|\\+", "", pyramid$age_group))
-pyramid <- pyramid[order(pyramid$age_lower, pyramid$sex), ]
-pyramid$age_lower <- NULL
-write.csv(pyramid, file.path(OUT_DIR, "se_pyramid.csv"), row.names = FALSE)
-cat("  se_pyramid.csv\n")
-
-# ---- 3. County-level counts (2024, Iran-born only) ----
+# ---- 2. County-level counts (2024, Iran-born only) ----
 .reg_lines <- readLines(file.path(SCB_DIR, "iran_by_region_2024.csv"),
                         encoding = "latin1", warn = FALSE)
 regions <- read.csv(textConnection(.reg_lines),
@@ -97,7 +73,7 @@ row.names(counties) <- NULL
 write.csv(counties, file.path(OUT_DIR, "se_county.csv"), row.names = FALSE)
 cat(sprintf("  se_county.csv (%d counties)\n", nrow(counties)))
 
-# ---- 4. Years since immigration (2024, aggregate across age/sex) ----
+# ---- 3. Years since immigration (2024, aggregate across age/sex) ----
 yrssince <- read.csv(file.path(SCB_DIR, "iran_yrssince_agesex_2024.csv"),
                      stringsAsFactors = FALSE, check.names = FALSE,
                      fileEncoding = "latin1")
@@ -134,10 +110,8 @@ for (i in seq_len(nrow(dur_agg))) {
 write.csv(dur_agg, file.path(OUT_DIR, "se_yrssince.csv"), row.names = FALSE)
 cat("  se_yrssince.csv\n")
 
-# ---- 5. Historical trend from agesex totals (2000-2024 Iran-born only) ----
+# ---- 4. Historical trend from agesex totals (2000-2024 Iran-born only) ----
 # Complement the 2018-2025 ursprung trend with longer Iran-born series
-hist_year_cols <- grep("^Number of persons", names(agesex), value = TRUE)
-# Already aggregated agesex to pyramid, so re-read for yearly totals
 agesex_full <- read.csv(file.path(SCB_DIR, "iran_agesex_2000_2024.csv"),
                         stringsAsFactors = FALSE, check.names = FALSE,
                         fileEncoding = "latin1")

@@ -40,7 +40,6 @@ BE,Belgium,2023,14315,Eurostat migr_pop3ctb
 BE,Belgium,2024,16704,Eurostat migr_pop3ctb
 BE,Belgium,2025,17480,Eurostat migr_pop3ctb
 CH,Switzerland,2001,5284,Eurostat migr_pop3ctb
-CH,Switzerland,2010,8030,BFS STATPOP
 CH,Switzerland,2011,8030,Eurostat migr_pop3ctb
 CH,Switzerland,2012,8521,Eurostat migr_pop3ctb
 CH,Switzerland,2013,9091,Eurostat migr_pop3ctb
@@ -52,9 +51,6 @@ CH,Switzerland,2018,12584,Eurostat migr_pop3ctb
 CH,Switzerland,2019,13035,Eurostat migr_pop3ctb
 CH,Switzerland,2020,13657,Eurostat migr_pop3ctb
 CH,Switzerland,2021,14241,Eurostat migr_pop3ctb
-CH,Switzerland,2022,15545,BFS STATPOP
-CH,Switzerland,2023,16556,BFS STATPOP
-CH,Switzerland,2024,17213,BFS STATPOP
 DE,Germany,2024,250000,"Destatis Mikrozensus 2024, Table 12211-53"
 DK,Denmark,2000,11085,Eurostat migr_pop3ctb
 DK,Denmark,2001,11291,Eurostat migr_pop3ctb
@@ -78,12 +74,44 @@ DK,Denmark,2019,16893,Eurostat migr_pop3ctb
 DK,Denmark,2020,16998,Eurostat migr_pop3ctb
 DK,Denmark,2021,17367,Eurostat migr_pop3ctb
 DK,Denmark,2022,17838,Eurostat migr_pop3ctb
-FR,France,1999,18376,Eurostat migr_pop3ctb
-FR,France,2005,20772,Eurostat migr_pop3ctb
-FR,France,2015,22543,Eurostat migr_pop3ctb
-FR,France,2016,22845,Eurostat migr_pop3ctb
-FR,France,2017,23599,Eurostat migr_pop3ctb
-FR,France,2018,24178,Eurostat migr_pop3ctb
+FI,Finland,2001,2095,Eurostat migr_pop3ctb
+FI,Finland,2002,2280,Eurostat migr_pop3ctb
+FI,Finland,2003,2526,Eurostat migr_pop3ctb
+FI,Finland,2004,2712,Eurostat migr_pop3ctb
+FI,Finland,2005,2956,Eurostat migr_pop3ctb
+FI,Finland,2006,3189,Eurostat migr_pop3ctb
+FI,Finland,2007,3442,Eurostat migr_pop3ctb
+FI,Finland,2008,3604,Eurostat migr_pop3ctb
+FI,Finland,2009,3803,Eurostat migr_pop3ctb
+FI,Finland,2010,3924,Eurostat migr_pop3ctb
+FI,Finland,2011,4125,Eurostat migr_pop3ctb
+FI,Finland,2012,4445,Eurostat migr_pop3ctb
+FI,Finland,2013,4864,Eurostat migr_pop3ctb
+FI,Finland,2014,5333,Eurostat migr_pop3ctb
+FI,Finland,2015,5813,Eurostat migr_pop3ctb
+FI,Finland,2016,6102,Eurostat migr_pop3ctb
+FI,Finland,2017,6799,Eurostat migr_pop3ctb
+FI,Finland,2018,7184,Eurostat migr_pop3ctb
+FI,Finland,2019,7439,Eurostat migr_pop3ctb
+FI,Finland,2020,7876,Eurostat migr_pop3ctb
+FI,Finland,2021,8257,Eurostat migr_pop3ctb
+FI,Finland,2022,8861,Eurostat migr_pop3ctb
+FI,Finland,2023,9800,Eurostat migr_pop3ctb
+FI,Finland,2024,11055,Eurostat migr_pop3ctb
+FI,Finland,2025,12287,Eurostat migr_pop3ctb
+FR,France,2006,19000,INSEE Recensement de la population
+FR,France,2007,19500,INSEE Recensement de la population
+FR,France,2008,19500,INSEE Recensement de la population
+FR,France,2009,19300,INSEE Recensement de la population
+FR,France,2010,19500,INSEE Recensement de la population
+FR,France,2011,19600,INSEE Recensement de la population
+FR,France,2012,19500,INSEE Recensement de la population
+FR,France,2013,19800,INSEE Recensement de la population
+FR,France,2014,20000,INSEE Recensement de la population
+FR,France,2015,20300,INSEE Recensement de la population
+FR,France,2016,20600,INSEE Recensement de la population
+FR,France,2017,21300,INSEE Recensement de la population
+FR,France,2019,23800,INSEE Recensement de la population
 IT,Italy,2002,7197,Eurostat migr_pop3ctb
 IT,Italy,2003,7153,Eurostat migr_pop3ctb
 IT,Italy,2004,7691,Eurostat migr_pop3ctb

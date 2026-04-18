@@ -49,32 +49,7 @@ row.names(trend_wide) <- NULL
 write.csv(trend_wide, file.path(OUT_DIR, "dk_trend.csv"), row.names = FALSE)
 cat("  dk_trend.csv\n")
 
-# ---- 3. Population pyramid (2026, single-year age x sex x gen) ----
-pyr_raw <- read.csv(file.path(DST_DIR, "iran_age_sex_2026.csv"),
-                    sep = ";", stringsAsFactors = FALSE, fileEncoding = "UTF-8")
-# ALDER;KØN;HERKOMST;IELAND;TID;INDHOLD
-pyr_raw$age_num <- as.integer(sub(" .*", "", pyr_raw$ALDER))
-pyr_raw$count <- as.integer(pyr_raw$INDHOLD)
-pyr_raw$sex <- ifelse(grepl("^M ", pyr_raw[["KØN"]]), "Male", "Female")
-
-# Aggregate across HERKOMST (immigrants + descendants combined)
-pyr_all <- aggregate(count ~ age_num + sex, data = pyr_raw, FUN = sum)
-pyr_all <- pyr_all[!is.na(pyr_all$age_num), ]
-
-# 5-year age groups
-breaks <- c(seq(0, 95, 5), Inf)
-labels <- c(paste(seq(0, 90, 5), seq(4, 94, 5), sep = "-"), "95+")
-pyr_all$age_group <- cut(pyr_all$age_num, breaks = breaks, right = FALSE, labels = labels)
-
-pyramid <- aggregate(count ~ age_group + sex, data = pyr_all, FUN = sum)
-pyramid$age_lower <- as.integer(sub("-.*|\\+", "", pyramid$age_group))
-pyramid <- pyramid[order(pyramid$age_lower, pyramid$sex), ]
-pyramid$age_lower <- NULL
-row.names(pyramid) <- NULL
-write.csv(pyramid, file.path(OUT_DIR, "dk_pyramid.csv"), row.names = FALSE)
-cat("  dk_pyramid.csv\n")
-
-# ---- 4. Region-level counts (5 regions, 2026) ----
+# ---- 3. Region-level counts (5 regions, 2026) ----
 reg_raw <- read.csv(file.path(DST_DIR, "iran_by_region_2026_folk1c.csv"),
                     sep = ";", stringsAsFactors = FALSE, fileEncoding = "UTF-8")
 # OMRÅDE;HERKOMST;IELAND;KØN;ALDER;TID;INDHOLD
@@ -94,7 +69,7 @@ names(region_agg) <- c("region_code", "region_name", "count")
 write.csv(region_agg, file.path(OUT_DIR, "dk_region.csv"), row.names = FALSE)
 cat(sprintf("  dk_region.csv (%d regions)\n", nrow(region_agg)))
 
-# ---- 5. Employment by industry (Q4 2024) ----
+# ---- 4. Employment by industry (Q4 2024) ----
 ind_raw <- read.csv(file.path(DST_DIR, "iran_industry_2024q4.csv"),
                     sep = ";", stringsAsFactors = FALSE, fileEncoding = "UTF-8")
 # TAL;BRANCHEDB0738;OPRINDLAND;KØN;TID;INDHOLD
@@ -113,26 +88,6 @@ sectors$pct <- round(sectors$count / sectors$total_employed * 100, 1)
 
 write.csv(sectors, file.path(OUT_DIR, "dk_industry.csv"), row.names = FALSE)
 cat(sprintf("  dk_industry.csv (%d sectors)\n", nrow(sectors)))
-
-# ---- 6. Sex-split time series for trend detail ----
-herkomst <- read.csv(file.path(DST_DIR, "iran_herkomst_ts.csv"),
-                     sep = ";", stringsAsFactors = FALSE, fileEncoding = "UTF-8")
-# IELAND;HERKOMST;KØN;TID;INDHOLD
-herkomst$year <- as.integer(sub(" .*", "", herkomst$TID))
-herkomst$count <- as.integer(herkomst$INDHOLD)
-herkomst$sex <- ifelse(grepl("^M ", herkomst[["KØN"]]), "Male", "Female")
-herkomst$gen <- ifelse(grepl("Efterkommere", herkomst$HERKOMST), "gen2", "gen1")
-
-# Wide format: year, gen1_male, gen1_female, gen2_male, gen2_female
-sex_ts <- aggregate(count ~ year + gen + sex, data = herkomst, FUN = sum)
-sex_ts$key <- paste0(sex_ts$gen, "_", tolower(sex_ts$sex))
-sex_wide <- reshape(sex_ts[, c("year", "key", "count")],
-                    idvar = "year", timevar = "key", direction = "wide")
-names(sex_wide) <- sub("count\\.", "", names(sex_wide))
-sex_wide <- sex_wide[order(sex_wide$year), ]
-row.names(sex_wide) <- NULL
-write.csv(sex_wide, file.path(OUT_DIR, "dk_sex_trend.csv"), row.names = FALSE)
-cat("  dk_sex_trend.csv\n")
 
 cat(sprintf("\nDenmark: %s Iranian-origin (%s immigrants + %s descendants, %d)\n",
   format(total, big.mark = ","), format(gen1, big.mark = ","),

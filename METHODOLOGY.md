@@ -41,13 +41,14 @@ Prior to 1992, immigration law did not separate family and employment preference
 
 ## Europe Overview
 
-The Europe overview page combines three source families to show Iran-born populations across 11 countries:
+The Europe overview page combines four source families to show Iran-born populations across 12 countries:
 
-- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for nine countries (Austria, Belgium, Denmark, France, Italy, Netherlands, Norway, Sweden, Switzerland), with annual data back to 1998.
+- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for ten countries (Austria, Belgium, Denmark, Finland, Italy, Netherlands, Norway, Spain, Sweden, Switzerland), with annual data back to 1998.
 - **Destatis Mikrozensus 2024** – for Germany, because Eurostat does not publish Iran-born counts for Germany.
 - **National censuses** – for the United Kingdom (combined from ONS, NRS, and NISRA as described below).
+- **[INSEE Recensement de la population](https://www.insee.fr/)** – for France, because INSEE uses a narrower "immigré" definition that is not directly comparable to Eurostat's foreign-born definition.
 
-All figures on the overview page count people born in Iran. Second-generation European-born children are not included in the overview totals because Eurostat does not publish a harmonized second-generation count across countries.
+All figures on the overview page count people born in Iran. Second-generation European-born children are not included in the overview totals because Eurostat does not publish a harmonized second-generation count across countries. Türkiye is not part of the Europe overview; it has its own section below.
 
 ## Germany
 
@@ -138,6 +139,30 @@ Iran-born residents are identified in the population register maintained by the 
 The register tracks country of birth but not parental birthplace; Swiss-born children of Iran-born parents are not counted. The geographic distribution covers all 26 cantons. The trend chart covers 2010–2024, with an additional chart showing annual immigration from Iran (2011–2024).
 
 **Data access:** BFS population data are publicly available from [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home.html).
+
+## France
+
+Iran-born residents are identified in the [INSEE](https://www.insee.fr/) Recensement de la population using the "immigré" definition: a person born abroad with foreign nationality at birth. This definition is narrower than Eurostat's foreign-born concept, so France's values are not strictly comparable with the other Eurostat-sourced European countries on the overview chart. The headline figure of 23,800 is the most recent published Iran-specific figure (2019).
+
+French law (Loi Informatique et Libertés, Art. 8) prohibits collecting ethnicity or ancestry statistics, so French-born children of Iran-born parents are not separately identifiable in published tables. INSEE publishes detailed country-of-birth tables with a multi-year lag; the next vintage (2021 reference year) is published but was not reachable at build time.
+
+**Data access:** INSEE country-of-birth tables are linked from [insee.fr](https://www.insee.fr/fr/statistiques/6478089).
+
+## Finland
+
+Iran-born residents are identified in the population register maintained by [Statistics Finland](https://stat.fi/en/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). A person is counted as Iran-born based on their registered country of birth. The headline figure of 12,287 is the most recent annual stock (2025). The trend chart covers 2001–2025. Finnish-born children of Iran-born parents are not counted.
+
+**Data access:** Eurostat population-by-country-of-birth tables are publicly available via the [Eurostat Data Browser](https://ec.europa.eu/eurostat/databrowser/).
+
+## Türkiye
+
+Iran-born residents are identified in the address-based population register (ADNKS) maintained by [TÜİK](https://data.tuik.gov.tr/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). The headline figure of 134,402 is the most recent annual stock (2025), down from a 2023 peak of 151,348. The trend chart covers 2019–2025; 2021–2022 figures are not published due to reporting delays during COVID, and that gap is rendered as a visible break in the chart. Türkiye-born children of Iran-born parents are not counted.
+
+The Immigration page shows Iranian passport holders resident in Türkiye (2014–2025), which grew roughly sevenfold between 2014 (17,000) and the 2023 peak (117,000) before easing to 95,924 in 2025. The difference between Iran-born and Iranian-citizen stock approximates — but does not exactly measure — naturalization to Turkish citizenship, because it also includes Iran-born non-Iranian nationals.
+
+Provincial (il-level) breakdowns, education, employment, and income cross-tabulations for Iran-born residents are not in public tables and would require custom data requests to TÜİK.
+
+**Data access:** Eurostat population tables are publicly available via the [Eurostat Data Browser](https://ec.europa.eu/eurostat/databrowser/). TÜİK International Migration Statistics are at [data.tuik.gov.tr](https://data.tuik.gov.tr/).
 
 ## Canada
 

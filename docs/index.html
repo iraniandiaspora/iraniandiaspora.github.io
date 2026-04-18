@@ -26,6 +26,7 @@
       <button class="tab-button" onclick="showTab('europe', this)">Europe</button>
       <button class="tab-button" onclick="showTab('canada', this)">Canada</button>
       <button class="tab-button" onclick="showTab('israel', this)">Israel</button>
+      <button class="tab-button" onclick="showTab('turkey', this)">T&uuml;rkiye</button>
       <button class="tab-button" onclick="showTab('australia', this)">Australia</button>
       <button class="tab-button" onclick="showTab('bibliography', this)">Bibliography</button>
       <button class="tab-button" onclick="showTab('about', this)">About</button>
@@ -58,6 +59,14 @@
   </div>
 
   <!-- Australia Submenu -->
+  <!-- T&uuml;rkiye Submenu -->
+  <div id="turkey-submenu" class="submenu">
+    <div class="submenu-wrapper">
+      <button class="sub-tab" data-tab="tr-population" onclick="showSubTab('tr-population', this)">Population</button>
+      <button class="sub-tab" data-tab="tr-immigration" onclick="showSubTab('tr-immigration', this)">Immigration</button>
+    </div>
+  </div>
+
   <div id="australia-submenu" class="submenu">
     <div class="submenu-wrapper">
       <button class="sub-tab" data-tab="au-population" onclick="showSubTab('au-population', this)">Population</button>
@@ -80,7 +89,9 @@
       <button class="country-tab" data-country="norway" onclick="showEuropeCountry('norway', this)">Norway</button>
       <button class="country-tab" data-country="austria" onclick="showEuropeCountry('austria', this)">Austria</button>
       <button class="country-tab" data-country="italy" onclick="showEuropeCountry('italy', this)">Italy</button>
+      <button class="country-tab" data-country="france" onclick="showEuropeCountry('france', this)">France</button>
       <button class="country-tab" data-country="switzerland" onclick="showEuropeCountry('switzerland', this)">Switzerland</button>
+      <button class="country-tab" data-country="finland" onclick="showEuropeCountry('finland', this)">Finland</button>
     </div>
     <!-- Row 2a: Overview page row (single page) -->
     <div id="europe-overview-pages" class="submenu-wrapper submenu-pages active" data-country="overview">
@@ -124,9 +135,17 @@
     <div id="europe-italy-pages" class="submenu-wrapper submenu-pages" data-country="italy">
       <button class="sub-tab" data-tab="it-population" onclick="showSubTab('it-population', this)">Population</button>
     </div>
-    <!-- Row 2j: Switzerland page row -->
+    <!-- Row 2j: France page row -->
+    <div id="europe-france-pages" class="submenu-wrapper submenu-pages" data-country="france">
+      <button class="sub-tab" data-tab="fr-population" onclick="showSubTab('fr-population', this)">Population</button>
+    </div>
+    <!-- Row 2k: Switzerland page row -->
     <div id="europe-switzerland-pages" class="submenu-wrapper submenu-pages" data-country="switzerland">
       <button class="sub-tab" data-tab="ch-population" onclick="showSubTab('ch-population', this)">Population</button>
+    </div>
+    <!-- Row 2l: Finland page row -->
+    <div id="europe-finland-pages" class="submenu-wrapper submenu-pages" data-country="finland">
+      <button class="sub-tab" data-tab="fi-population" onclick="showSubTab('fi-population', this)">Population</button>
     </div>
   </div>
 </div>
@@ -217,6 +236,14 @@
   <iframe data-src="pages/de-workinc.html" title="Germany Work and Income"></iframe>
 </div>
 
+<!-- T&uuml;rkiye Pages (Europe tab) -->
+<div id="page-tr-population" class="tab-content">
+  <iframe data-src="pages/tr-population.html" title="T&uuml;rkiye Population"></iframe>
+</div>
+<div id="page-tr-immigration" class="tab-content">
+  <iframe data-src="pages/tr-immigration.html" title="T&uuml;rkiye Immigration"></iframe>
+</div>
+
 <!-- United Kingdom Pages (Europe tab) -->
 <div id="page-uk-population" class="tab-content">
   <iframe data-src="pages/uk-population.html" title="UK Population"></iframe>
@@ -262,8 +289,16 @@
 </div>
 
 <!-- Switzerland Pages (Europe tab) -->
+<div id="page-fr-population" class="tab-content">
+  <iframe data-src="pages/fr-population.html" title="France Population"></iframe>
+</div>
+
 <div id="page-ch-population" class="tab-content">
   <iframe data-src="pages/ch-population.html" title="Switzerland Population"></iframe>
+</div>
+
+<div id="page-fi-population" class="tab-content">
+  <iframe data-src="pages/fi-population.html" title="Finland Population"></iframe>
 </div>
 
 <!-- Bibliography -->
@@ -287,7 +322,8 @@
     <div style="border-left:3px solid #2774AE; padding-left:16px; margin-bottom:20px;">
       <p style="font-weight:600; margin-bottom:4px;">April 2026</p>
       <ul style="margin:0 0 0 16px; line-height:1.8;">
-        <li>Added <strong>Europe</strong> with data for eleven countries: Germany, the United Kingdom, the Netherlands, Sweden, Denmark, Norway, Austria, Italy, and Switzerland, with a cross-country overview</li>
+        <li>Added <strong>Europe</strong> with data for twelve countries: Germany, the United Kingdom, the Netherlands, Sweden, Denmark, Norway, Austria, Italy, France, Switzerland, Belgium, and Finland, with a cross-country overview</li>
+        <li>Added <strong>T&uuml;rkiye</strong> with population and immigration data from the TÜİK address-based register</li>
         <li>Added <strong>Australia</strong> with population, immigration, education, and employment data from the 2021 Australian Census</li>
         <li>Added U.S. <strong>immigration history</strong> with permanent resident admissions by category from 1970 to 2023</li>
         <li>Updated U.S. data to the <strong>2020&ndash;2024 American Community Survey</strong>, with a revised population estimate of <strong>794,915</strong></li>
@@ -405,7 +441,8 @@ function showTab(tabName, element, skipHash) {
   const caMenu = document.getElementById('canada-submenu');
   const auMenu = document.getElementById('australia-submenu');
   const euMenu = document.getElementById('europe-submenu');
-  const allMenus = [usMenu, caMenu, auMenu, euMenu];
+  const trMenu = document.getElementById('turkey-submenu');
+  const allMenus = [usMenu, caMenu, auMenu, euMenu, trMenu];
   if (tabName === 'united-states') {
     allMenus.forEach(m => m.style.display = 'none');
     usMenu.style.display = 'block';
@@ -423,6 +460,12 @@ function showTab(tabName, element, skipHash) {
     auMenu.style.display = 'block';
     const firstSub = document.querySelector('#australia-submenu .sub-tab');
     if (firstSub && !skipHash) { firstSub.classList.add('active'); showSubTab('au-population', firstSub); }
+    else if (firstSub) { firstSub.classList.add('active'); }
+  } else if (tabName === 'turkey') {
+    allMenus.forEach(m => m.style.display = 'none');
+    trMenu.style.display = 'block';
+    const firstSub = document.querySelector('#turkey-submenu .sub-tab');
+    if (firstSub && !skipHash) { firstSub.classList.add('active'); showSubTab('tr-population', firstSub); }
     else if (firstSub) { firstSub.classList.add('active'); }
   } else if (tabName === 'europe') {
     allMenus.forEach(m => m.style.display = 'none');
@@ -523,17 +566,18 @@ function navigateToHash() {
   if (!hash) { showTab('global', document.querySelector('.navbar .tab-button:nth-child(1)')); return; }
   // Map sub-tab prefixes to parent tabs
   var parentMap = { 'us-': 'united-states', 'ca-': 'canada', 'au-': 'australia', 'il-': 'israel',
+                    'tr-': 'turkey',
                     'eu-': 'europe',
                     'de-': 'europe', 'uk-': 'europe', 'nl-': 'europe',
                     'se-': 'europe', 'no-': 'europe', 'dk-': 'europe',
                     'fr-': 'europe', 'at-': 'europe', 'be-': 'europe',
-                    'it-': 'europe', 'ch-': 'europe' };
+                    'it-': 'europe', 'ch-': 'europe', 'fi-': 'europe' };
   // For Europe, also map prefix to which country row to show
   var europeCountryMap = { 'eu-': 'overview',
                            'de-': 'germany', 'uk-': 'uk', 'nl-': 'netherlands',
                            'se-': 'sweden', 'no-': 'norway', 'dk-': 'denmark',
                            'fr-': 'france', 'at-': 'austria', 'be-': 'belgium',
-                           'it-': 'italy', 'ch-': 'switzerland' };
+                           'it-': 'italy', 'ch-': 'switzerland', 'fi-': 'finland' };
   var parentTab = null;
   var europeCountry = null;
   for (var prefix in parentMap) {

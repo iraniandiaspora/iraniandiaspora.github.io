@@ -28,8 +28,30 @@ eurostat_csv <- "../_data/eurostat/iran_born_eurostat.csv"
 out_csv      <- "data/europe/iran_born_combined.csv"
 
 # Load Eurostat ------------------------------------------------------------
+# France is dropped from the Eurostat series and replaced with INSEE below —
+# INSEE "immigré" definition differs from Eurostat foreign-born, and INSEE
+# publishes a denser annual series (2006-2019) for France specifically.
 euro <- read_csv(eurostat_csv, show_col_types = FALSE) %>%
+  filter(geo != "FR") %>%    # FR handled below with INSEE
+  filter(geo != "TR") %>%    # Türkiye is its own top-level tab, not in Europe
   mutate(source = "Eurostat migr_pop3ctb")
+
+# France (INSEE Recensement de la population) ------------------------------
+# Annual "immigrés" series 2006-2017 from pays_naissance_detaille_2017.xlsx
+# (INSEE table 4510549), plus 2019 revised snapshot from asie_pays_naissance_2019
+# (INSEE table 6478089). 2018 is not published as an Iran-specific figure in
+# these INSEE tables; the gap is rendered as a line break in the France page
+# chart. Values are INSEE "immigrés" (foreign-born, foreign nationality at
+# birth), NOT directly comparable with Eurostat migr_pop3ctb for other
+# countries — noted in the Europe overview chart footnote.
+fr_trend <- read_csv("data/france/fr_trend.csv", show_col_types = FALSE)
+fr_data <- tibble(
+  geo = "FR",
+  country = "France",
+  year = fr_trend$year,
+  value = fr_trend$iran_born,
+  source = "INSEE Recensement de la population"
+)
 
 # Germany (Mikrozensus 2024) -----------------------------------------------
 # 250,000 = first-generation Iran-born, including naturalized Germans.
@@ -56,7 +78,7 @@ uk_data <- tibble(
 )
 
 # Combine ------------------------------------------------------------------
-combined <- bind_rows(euro, de_data, uk_data) %>%
+combined <- bind_rows(euro, de_data, uk_data, fr_data) %>%
   arrange(geo, year)
 
 # Write --------------------------------------------------------------------

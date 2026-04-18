@@ -41,10 +41,10 @@ plotly_to_json <- function(p) {
 
 plotly_div <- function(id, json, height = "500px", source = NULL) {
   init_js <- sprintf(
-    'var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
+    'var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   chart <- sprintf(
-    '<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
+    '<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
   if (!is.null(source)) {
     chart <- paste0(chart, sprintf(
@@ -255,7 +255,7 @@ p_bl_map <- plot_ly() %>%
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(style = "carto-positron",
-      center = list(lon = 13.5, lat = 47.6), zoom = 5.9),
+      center = list(lon = 13.5, lat = 47.6), zoom = 5.4),
     margin = list(t = 10, b = 10, l = 0, r = 0),
     paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
@@ -285,7 +285,7 @@ sex_boxes <- paste0(
 
 # --- Assemble at-population page (Italy format) --------------------------------
 pop_body <- paste0(
-  # Top row: headline + sex boxes (left) + trend line chart (right)
+  # Top row: headline (left) + sex boxes card (right)
   '<div class="chart-row">',
   '<div class="headline">',
   '<div class="label">Estimated Iran-Born Population in Austria</div>',
@@ -299,18 +299,17 @@ pop_body <- paste0(
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Austrian-born children of Iran-born parents are not counted as Iran-born in population statistics. This count reflects first-generation residents only.</p>',
   '</div>',
+  '</div>',
+  '<div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">',
   sex_boxes,
   sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0 0; padding-right:2px;">%s</p>', CENSUS_SOURCE),
   '</div>',
-  '<div class="chart-card">',
-  plotly_div("at-hist", plotly_to_json(p_hist), "430px", source = TREND_SOURCE),
-  '</div>',
   '</div>',
 
-  # Bottom row: Bundesland bar (left) + choropleth map (right)
+  # Bottom row: trend line chart (left) + choropleth map (right)
   '<div class="chart-row">',
   '<div class="chart-card">',
-  plotly_div("at-bundesland", plotly_to_json(p_bl), "430px", source = CENSUS_SOURCE),
+  plotly_div("at-hist", plotly_to_json(p_hist), "430px", source = TREND_SOURCE),
   '</div>',
   '<div class="chart-card">',
   '<div class="section-title" style="margin-top:0;">Geographic Distribution in Austria</div>',

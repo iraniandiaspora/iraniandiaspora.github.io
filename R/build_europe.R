@@ -50,12 +50,12 @@ plotly_to_json <- function(plot_obj) {
   list(
     data   = toJSON(b$data, auto_unbox = TRUE, null = "null", na = "null"),
     layout = toJSON(b$layout, auto_unbox = TRUE, null = "null", na = "null"),
-    config = toJSON(list(responsive = TRUE, displayModeBar = FALSE), auto_unbox = TRUE)
+    config = toJSON(list(responsive = TRUE, displayModeBar = FALSE, showTips = TRUE), auto_unbox = TRUE)
   )
 }
 
 plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);',
+  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
@@ -78,7 +78,7 @@ el.on("plotly_unhover",hlOff);
 var _lastLg=null;
 el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});', id))
   }
-  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>\n<script>(function(){%s})();</script>',
+  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
   if (!is.null(legend_html)) chart <- paste0(chart, '\n', legend_html)
   if (!is.null(source)) chart <- paste0(chart, sprintf('\n<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">%s</p>', source))
@@ -183,8 +183,8 @@ combined <- read.csv("data/europe/iran_born_combined.csv", stringsAsFactors = FA
 # ISO-3 codes for plotly's built-in country boundaries
 iso3_map <- c(
   AT = "AUT", BE = "BEL", CH = "CHE", DE = "DEU", DK = "DNK",
-  ES = "ESP", FR = "FRA", IT = "ITA", NL = "NLD", NO = "NOR",
-  SE = "SWE", UK = "GBR"
+  ES = "ESP", FI = "FIN", FR = "FRA", IT = "ITA", NL = "NLD",
+  NO = "NOR", SE = "SWE", UK = "GBR"
 )
 
 # Latest year per country
@@ -290,9 +290,10 @@ coverage <- combined %>%
   group_by(geo, country) %>%
   summarise(n = n(), .groups = "drop")
 
-# Eurostat-only countries with long time series (Germany and UK not in Eurostat)
+# Eurostat-only countries with long time series (Germany/UK/France not in Eurostat;
+# Türkiye is its own top-level tab, not shown on this Europe overview)
 eurostat_only <- latest %>%
-  filter(!geo %in% c("DE", "UK")) %>%
+  filter(!geo %in% c("DE", "UK", "FR")) %>%
   left_join(coverage, by = c("geo", "country")) %>%
   filter(n >= 15) %>%
   arrange(desc(value))
@@ -379,6 +380,34 @@ last_points <- rbind(last_points, data.frame(
   stringsAsFactors = FALSE
 ))
 
+# France: INSEE annual "immigré" series, 2006-2019 (2018 not published).
+# Drawn as a dashed line to flag the different definition vs Eurostat — same
+# visual convention as the UK line, different dash style and marker symbol.
+fr_ts <- combined %>% filter(geo == "FR") %>% arrange(year)
+p_ts <- p_ts %>% add_trace(
+  data = fr_ts,
+  x = ~year, y = ~value,
+  type = "scatter", mode = "lines+markers",
+  line = list(color = "#8a3a8f", width = 2, dash = "dash"),
+  marker = list(color = "#8a3a8f", size = 6, symbol = "square"),
+  text = ~sprintf("<b>France</b> %d<br>%s Iran-born (INSEE immigr\u00e9 definition)",
+    year, format(value, big.mark = ",")),
+  hoverinfo = "text",
+  showlegend = FALSE
+)
+fr_tail <- tail(fr_ts, 1)
+# France's line ends at 2019, but the label sits near x=2025 alongside the other
+# right-edge labels so the word "France" doesn't get crossed by the NO/IT/DK
+# lines that continue through 2019-2025.
+last_points <- rbind(last_points, data.frame(
+  geo = "FR",
+  country = "France (2019)",
+  x = 2025,
+  y = fr_tail$value,
+  color = "#8a3a8f",
+  stringsAsFactors = FALSE
+))
+
 # The Netherlands / Austria lines land close together at the right edge.
 # Nudge overlapping labels vertically so they don't collide. Sort by y and
 # bump any label that is within MIN_GAP of the previous one.
@@ -457,7 +486,14 @@ body <- paste0(
   '<div class="chart-card">',
   '<div class="section-title" style="margin-top:0;">Where Iran-Born Residents Live in Europe</div>',
   plotly_div("eu-map", plotly_to_json(p_map), "430px",
-    source = source_note),
+    source = source_note,
+    legend_html = make_html_legend(c(
+      "Under 20,000" = "#9ecae1",
+      "20,000 \u2013 35,000" = "#6baed6",
+      "35,000 \u2013 70,000" = "#2171b5",
+      "70,000 \u2013 120,000" = "#08519c",
+      "120,000 or more" = "#08306b"
+    ))),
   '</div>',
   '</div>',
 
@@ -469,7 +505,7 @@ body <- paste0(
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",
-    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. The United Kingdom is shown as a dashed line at its three decennial census points (2001, 2011, and 2021/22 \u2014 the last combines E&amp;W 2021 ONS and NI 2021 NISRA with Scotland 2022 NRS). Germany is not shown on this chart because Eurostat does not publish Iran-born counts for Germany; see the Germany pages for the national Mikrozensus figures.")),
+    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. The United Kingdom is shown as a dashed line at its three decennial census points (2001, 2011, and 2021/22 \u2014 the last combines E&amp;W 2021 ONS and NI 2021 NISRA with Scotland 2022 NRS). France is shown as a dashed line from INSEE Recensement de la population, 2006\u20132019 (with a 2018 gap). INSEE uses the \u201Cimmigr\u00e9\u201D definition (foreign-born with foreign nationality at birth), which is narrower than Eurostat\u2019s foreign-born definition, so French values here are not strictly comparable with the Eurostat series. Germany is not shown on this chart because Eurostat does not publish Iran-born counts for Germany; see the Germany pages for the national Mikrozensus figures.")),
   '</div>',
   '</div>'
 )
