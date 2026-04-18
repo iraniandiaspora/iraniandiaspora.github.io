@@ -53,8 +53,8 @@ plotly_to_json <- function(p, inject_hoveron = FALSE) {
 }
 
 plotly_div <- function(id, json, height = "500px") {
-  sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:pan-y;"></div>
-<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox"});var l=%s;Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
+  sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
 }
 
 iframe_resize_script <- '
@@ -391,10 +391,10 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 <div class="text-card global-text2" style="text-align:center;">
   <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">About these figures</div>
   <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-    <li>Born in Iran, living in another country</li>
-    <li>Drawn from each country&rsquo;s census or population register</li>
-    <li>Second-generation Iranians (born abroad) are not counted</li>
-    <li>Some countries (notably Gulf states) do not publish these figures</li>
+    <li>Each figure counts people born in Iran who live in another country</li>
+    <li>Drawn from each country&rsquo;s census or population register, so definitions and reference years vary</li>
+    <li>Second-generation Iranians (children born abroad to Iran-born parents) are not counted</li>
+    <li>Some countries (notably the Persian Gulf states) do not publish country-of-birth statistics, so their Iranian populations are not reflected here</li>
   </ul>
 </div>
 <div class="chart-card global-area" style="overflow:visible;">

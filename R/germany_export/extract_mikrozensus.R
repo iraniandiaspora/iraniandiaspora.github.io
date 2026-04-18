@@ -99,60 +99,7 @@ write.csv(headline, file.path(out_dir, "de_headline.csv"), row.names = FALSE)
 cat("  de_headline.csv (", nrow(headline), " rows)\n", sep = "")
 
 # ---------------------------------------------------------
-# 2. AGE GROUPS by gender (pyramid)
-#    From 12211-06 (female) and 12211-07 (male).
-# ---------------------------------------------------------
-# "Davon im Alter von ... bis unter ... Jahren unter 5" etc. are the 5-year bins.
-# We want both gen levels so the page can show the pyramid for all + 1st gen.
-parse_pyramid <- function(sheet, sex) {
-  d <- read_mz_sheet(sheet) %>% iran_only()
-  d %>%
-    mutate(
-      gen = gen_label(val2),
-      age_raw = val1,
-      # Extract bin label: "Davon im Alter von ... bis unter ... Jahren unter 5" -> "under 5"
-      age_bin = case_when(
-        age_raw == "Insgesamt" ~ "all",
-        grepl("^Nachrichtlich:", age_raw) ~ NA_character_,  # memo rows
-        age_raw == "unter 15 Jahre" ~ NA_character_,
-        age_raw == "18 Jahre und mehr" ~ NA_character_,
-        age_raw == "15 bis unter 65 Jahre" ~ NA_character_,
-        age_raw == "65 Jahre und mehr" ~ NA_character_,
-        grepl("unter 5$", age_raw) ~ "0-4",
-        grepl("^5 bis unter 10", age_raw) ~ "5-9",
-        grepl("^10 bis unter 15", age_raw) ~ "10-14",
-        grepl("^15 bis unter 20", age_raw) ~ "15-19",
-        grepl("^20 bis unter 25", age_raw) ~ "20-24",
-        grepl("^25 bis unter 30", age_raw) ~ "25-29",
-        grepl("^30 bis unter 35", age_raw) ~ "30-34",
-        grepl("^35 bis unter 40", age_raw) ~ "35-39",
-        grepl("^40 bis unter 45", age_raw) ~ "40-44",
-        grepl("^45 bis unter 50", age_raw) ~ "45-49",
-        grepl("^50 bis unter 55", age_raw) ~ "50-54",
-        grepl("^55 bis unter 60", age_raw) ~ "55-59",
-        grepl("^60 bis unter 65", age_raw) ~ "60-64",
-        grepl("^65 bis unter 70", age_raw) ~ "65-69",
-        grepl("^70 bis unter 75", age_raw) ~ "70-74",
-        grepl("^75 bis unter 80", age_raw) ~ "75-79",
-        grepl("^80 bis unter 85", age_raw) ~ "80-84",
-        grepl("^85 bis unter 90", age_raw) ~ "85-89",
-        grepl("^90 bis unter 95", age_raw) ~ "90-94",
-        grepl("95 und mehr", age_raw) ~ "95+",
-        TRUE ~ NA_character_
-      ),
-      sex = sex
-    ) %>%
-    filter(!is.na(age_bin), !is.na(gen)) %>%
-    select(sex, gen, age_bin, value_k, suppressed, low_rel)
-}
-pyr_f <- parse_pyramid("csv-12211-06", "female")
-pyr_m <- parse_pyramid("csv-12211-07", "male")
-pyramid <- bind_rows(pyr_f, pyr_m)
-write.csv(pyramid, file.path(out_dir, "de_pyramid.csv"), row.names = FALSE)
-cat("  de_pyramid.csv (", nrow(pyramid), " rows)\n", sep = "")
-
-# ---------------------------------------------------------
-# 3. BUNDESLAND map (16 states) from 12211-14
+# 2. BUNDESLAND map (16 states) from 12211-14
 # ---------------------------------------------------------
 # val1 = admin unit, but includes "Deutschland", "Früheres Bundesgebiet mit Berlin",
 # "Neue Länder ohne Berlin" -- filter those out.
@@ -171,7 +118,7 @@ write.csv(bund_out, file.path(out_dir, "de_bundesland.csv"), row.names = FALSE)
 cat("  de_bundesland.csv (", nrow(bund_out), " rows)\n", sep = "")
 
 # ---------------------------------------------------------
-# 4. SCHOOL QUALIFICATION (Abitur etc.) from 12211-21
+# 3. SCHOOL QUALIFICATION (Abitur etc.) from 12211-21
 # ---------------------------------------------------------
 school <- read_mz_sheet("csv-12211-21") %>% iran_only()
 school_out <- school %>%
@@ -182,7 +129,7 @@ write.csv(school_out, file.path(out_dir, "de_school.csv"), row.names = FALSE)
 cat("  de_school.csv (", nrow(school_out), " rows)\n", sep = "")
 
 # ---------------------------------------------------------
-# 5. PROFESSIONAL/ACADEMIC QUALIFICATION from 12211-24
+# 4. PROFESSIONAL/ACADEMIC QUALIFICATION from 12211-24
 # ---------------------------------------------------------
 prof <- read_mz_sheet("csv-12211-24") %>% iran_only()
 prof_out <- prof %>%
@@ -193,7 +140,7 @@ write.csv(prof_out, file.path(out_dir, "de_profqual.csv"), row.names = FALSE)
 cat("  de_profqual.csv (", nrow(prof_out), " rows)\n", sep = "")
 
 # ---------------------------------------------------------
-# 6. EMPLOYMENT / INDUSTRY / INCOME from 12211-38
+# 5. EMPLOYMENT / INDUSTRY / INCOME from 12211-38
 # ---------------------------------------------------------
 # val1 has all employment dimensions mashed into one column. Tag each row by
 # logical section so the builder can pick out what it wants.
@@ -227,7 +174,7 @@ cat("  de_employment.csv (", nrow(emp_out), " rows)\n", sep = "")
 #  — the dashboard's income chart uses individual-level data from table 38 instead.)
 
 # ---------------------------------------------------------
-# 7. LANGUAGE AT HOME from 12211-47
+# 6. LANGUAGE AT HOME from 12211-47
 # ---------------------------------------------------------
 lang <- read_mz_sheet("csv-12211-47") %>% iran_only()
 lang_out <- lang %>%
@@ -238,7 +185,7 @@ write.csv(lang_out, file.path(out_dir, "de_language.csv"), row.names = FALSE)
 cat("  de_language.csv (", nrow(lang_out), " rows)\n", sep = "")
 
 # ---------------------------------------------------------
-# 8. IMMIGRATION MOTIVE from 12211-50 (1st-gen immigrants only)
+# 7. IMMIGRATION MOTIVE from 12211-50 (1st-gen immigrants only)
 # ---------------------------------------------------------
 # 10-col table: val1 = motive, val2 = Iran. Only 1st gen since Zugewanderte.
 motive <- read_mz_sheet("csv-12211-50") %>% iran_only()
@@ -248,7 +195,7 @@ write.csv(motive_out, file.path(out_dir, "de_motive.csv"), row.names = FALSE)
 cat("  de_motive.csv (", nrow(motive_out), " rows)\n", sep = "")
 
 # ---------------------------------------------------------
-# 9. RESIDENCE DURATION + AGE AT ENTRY from 12211-08
+# 8. RESIDENCE DURATION from 12211-08
 # ---------------------------------------------------------
 # 10-col table: val1 has both "Alter bei Einreise" bins (age at arrival) and
 # "mit einer Aufenthaltsdauer..." bins (years of residence in Germany), val2 = Iran.
@@ -300,25 +247,8 @@ duration_out <- dur_rows %>%
 write.csv(duration_out, file.path(out_dir, "de_duration.csv"), row.names = FALSE)
 cat("  de_duration.csv (", nrow(duration_out), " rows)\n", sep = "")
 
-age_entry_out <- dur_rows %>%
-  filter(section == "age_at_entry") %>%
-  mutate(bucket = case_when(
-    val1 == "unter 5" ~ "under_5",
-    val1 == "5 bis unter 10" ~ "5_to_10",
-    val1 == "10 bis unter 15" ~ "10_to_15",
-    val1 == "15 bis unter 18" ~ "15_to_18",
-    val1 == "18 bis unter 25" ~ "18_to_25",
-    val1 == "25 bis unter 65" ~ "25_to_65",
-    val1 == "65 und mehr" ~ "65_plus",
-    TRUE ~ NA_character_
-  )) %>%
-  filter(!is.na(bucket)) %>%
-  select(bucket, value_k, suppressed, low_rel)
-write.csv(age_entry_out, file.path(out_dir, "de_age_at_entry.csv"), row.names = FALSE)
-cat("  de_age_at_entry.csv (", nrow(age_entry_out), " rows)\n", sep = "")
-
 # ---------------------------------------------------------
-# 10. NATURALIZATION FLOW from 12211-19
+# 9. NATURALIZATION FLOW from 12211-19
 # ---------------------------------------------------------
 # 10-col table: val1 = year of naturalization, val2 = prior citizenship = Iran.
 nat <- read_mz_sheet("csv-12211-19") %>% iran_only()

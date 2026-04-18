@@ -92,38 +92,7 @@ province <- province[order(-province$count), ]
 write.csv(province, file.path(OUT_DIR, "nl_province.csv"), row.names = FALSE)
 cat("  nl_province.csv\n")
 
-# ---- 4. Age-sex pyramid (85458NED, 2025, national) ----
-raw_age <- fromJSON(file.path(CBS_DIR, "iran_by_age_sex_2025.json"))$value
-raw_age$RegioS   <- trimws(raw_age$RegioS)
-raw_age$Geslacht <- trimws(raw_age$Geslacht)
-raw_age$Leeftijd <- trimws(raw_age$Leeftijd)
-
-# National only, male/female only, exclude total age and 100+
-nat_age <- raw_age[raw_age$RegioS == "NL01" &
-                   raw_age$Geslacht %in% c("3000", "4000") &
-                   !raw_age$Leeftijd %in% c("10000", "22200"), ]
-
-age_lookup <- c(
-  "70100" = "0-4",   "70200" = "5-9",   "70300" = "10-14", "70400" = "15-19",
-  "70500" = "20-24", "70600" = "25-29", "70700" = "30-34", "70800" = "35-39",
-  "70900" = "40-44", "71000" = "45-49", "71100" = "50-54", "71200" = "55-59",
-  "71300" = "60-64", "71400" = "65-69", "71500" = "70-74", "71600" = "75-79",
-  "71700" = "80-84", "71800" = "85-89", "71900" = "90-94", "72000" = "95-99")
-sex_lookup <- c("3000" = "Male", "4000" = "Female")
-
-pyramid <- data.frame(
-  age_group = age_lookup[nat_age$Leeftijd],
-  sex = sex_lookup[nat_age$Geslacht],
-  count = cbs_int(nat_age$Bevolking_1),
-  age_lower = as.integer(sub("-.*", "", age_lookup[nat_age$Leeftijd])),
-  stringsAsFactors = FALSE
-)
-pyramid <- pyramid[order(pyramid$age_lower, pyramid$sex), ]
-pyramid$age_lower <- NULL
-write.csv(pyramid, file.path(OUT_DIR, "nl_pyramid.csv"), row.names = FALSE)
-cat("  nl_pyramid.csv\n")
-
-# ---- 5. Labour force (84729NED, 2021-2024) ----
+# ---- 4. Labour force (84729NED, 2021-2024) ----
 raw_lf <- fromJSON(file.path(CBS_DIR, "iran_labourforce.json"))$value
 
 labourforce <- data.frame(

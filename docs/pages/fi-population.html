@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Finland: Population</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
+.headline .label { font-size:14px; color:#666; margin-top:4px; }
+@media (max-width:900px) {
+  body { padding:10px 15px; }
+  .chart-row, .text-row { grid-template-columns:1fr !important; }
+  .headline .number { font-size:34px; }
+  .headline { padding:20px 15px; }
+  .section-title { font-size:14px; }
+}
+@media (max-width:480px) {
+  body { padding:8px 10px; }
+  .headline .number { font-size:28px; }
+  .chart-card { padding:10px; }
+  .text-card { font-size:13px; padding:14px; }
+}
+</style>
+</head>
+<body>
+<div class="chart-row"><div class="headline"><div class="label">Estimated Iran-Born Population in Finland</div><div class="number">12,287</div><div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the population register maintained by <a href='https://stat.fi/en/' target='_blank' style='color:#2774AE;'>Statistics Finland</a>, 2025</div><div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;"><p style="margin-bottom:8px;">Finland uses a continuous population register. A person is counted as Iran-born based on:</p><ul style="padding-left:20px; margin:0; line-height:2;"><li><strong>Country of birth</strong> <span style="color:#888;">&mdash; recorded in the Digital and Population Data Services Agency (DVV) register</span></li></ul><p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Finnish-born children of Iran-born parents are not counted here. This figure reflects first-generation residents only.</p></div></div><div class="chart-card"><div id="fi-hist" style="width:100%;height:430px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":30,"l":60,"t":50,"r":10},"title":{"text":"<b>Iran-Born Population in Finland,<br>2001–2025<\/b>","font":{"size":15,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","dtick":4},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":",","rangemode":"tozero"},"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","showlegend":false,"font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("fi-hist",[{"x":[2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024,2025],"y":[2095,2280,2526,2712,2956,3189,3442,3604,3803,3924,4125,4445,4864,5333,5813,6102,6799,7184,7439,7876,8257,8861,9800,11055,12287],"marker":{"color":"#2774AE","line":{"color":"#1a4e72","width":0.4}},"text":["<b>2001<\/b><br> 2,095 Iran-born","<b>2002<\/b><br> 2,280 Iran-born","<b>2003<\/b><br> 2,526 Iran-born","<b>2004<\/b><br> 2,712 Iran-born","<b>2005<\/b><br> 2,956 Iran-born","<b>2006<\/b><br> 3,189 Iran-born","<b>2007<\/b><br> 3,442 Iran-born","<b>2008<\/b><br> 3,604 Iran-born","<b>2009<\/b><br> 3,803 Iran-born","<b>2010<\/b><br> 3,924 Iran-born","<b>2011<\/b><br> 4,125 Iran-born","<b>2012<\/b><br> 4,445 Iran-born","<b>2013<\/b><br> 4,864 Iran-born","<b>2014<\/b><br> 5,333 Iran-born","<b>2015<\/b><br> 5,813 Iran-born","<b>2016<\/b><br> 6,102 Iran-born","<b>2017<\/b><br> 6,799 Iran-born","<b>2018<\/b><br> 7,184 Iran-born","<b>2019<\/b><br> 7,439 Iran-born","<b>2020<\/b><br> 7,876 Iran-born","<b>2021<\/b><br> 8,257 Iran-born","<b>2022<\/b><br> 8,861 Iran-born","<b>2023<\/b><br> 9,800 Iran-born","<b>2024<\/b><br>11,055 Iran-born","<b>2025<\/b><br>12,287 Iran-born"],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"textposition":["none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none"],"showlegend":false,"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/' target='_blank' style='color:#2774AE;'>Eurostat</a> &mdash; Iran-born population stock, 2001–2025</p></div></div>
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+</body>
+</html>
