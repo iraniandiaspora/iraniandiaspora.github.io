@@ -33,7 +33,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 18 coun
 | United States | American Community Survey (ACS) PUMS; INS/DHS Yearbook of Immigration Statistics | 2020–2024; 1970–2023 |
 | Canada | Census Public Use Microdata File (PUMF) | 2021 |
 | Australia | Australian Bureau of Statistics (ABS) Census; ABS TableBuilder Pro | 2021 |
-| Europe overview | Eurostat migr_pop3ctb (9 countries) + Destatis (Germany) + ONS/NRS/NISRA (UK) | 1998–2025 |
+| Europe overview | Eurostat migr_pop3ctb (8 countries) + Destatis (Germany) + ONS/NRS/NISRA (UK) + BFS (Switzerland) + INSEE (France) | 1998–2025 |
 | Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2024; 1991–2023 |
 | United Kingdom | ONS Census 2021 (England &amp; Wales); Scotland's Census 2022; NISRA Census 2021; ONS custom dataset | 2021–2022 |
 | Netherlands | CBS StatLine population register, Labour Force Survey, household income | 1999–2025 |

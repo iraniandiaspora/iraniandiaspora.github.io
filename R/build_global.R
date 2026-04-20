@@ -18,78 +18,11 @@ library(dplyr)
 library(readr)
 library(jsonlite)
 
+# Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
+# iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
+source("R/_helpers.R")
+
 DATA_DIR <- "data/global"
-
-# --- Helpers (same as build_all.R) ---
-strip_internal_classes <- function(x) {
-  if (is.list(x)) {
-    if (inherits(x, "zcolor")) class(x) <- "list"
-    return(lapply(x, strip_internal_classes))
-  }
-  if (inherits(x, "zcolor")) class(x) <- NULL
-  x
-}
-
-plotly_to_json <- function(p, inject_hoveron = FALSE) {
-  b <- plotly_build(p)
-  b$x$data <- strip_internal_classes(b$x$data)
-  b$x$layout <- strip_internal_classes(b$x$layout)
-  if (is.null(b$x$layout$font)) b$x$layout$font <- list()
-  b$x$layout$font$family <- "Montserrat, sans-serif"
-  b$x$layout$hoverlabel <- list(
-    bgcolor = "white", bordercolor = "#ccc",
-    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
-  # Inject hoveron="fills+points" into traces with fill
-  if (inject_hoveron) {
-    for (i in seq_along(b$x$data)) {
-      if (!is.null(b$x$data[[i]]$fill)) {
-        b$x$data[[i]]$hoveron <- "fills+points"
-      }
-    }
-  }
-  list(data = toJSON(b$x$data, auto_unbox = TRUE),
-       layout = toJSON(b$x$layout, auto_unbox = TRUE),
-       config = toJSON(b$x$config, auto_unbox = TRUE))
-}
-
-plotly_div <- function(id, json, height = "500px") {
-  sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>
-<script>(function(){var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);})();</script>', id, height, json$config, json$layout, id, json$data)
-}
-
-iframe_resize_script <- '
-<script>
-function reportHeight() {
-  if (window.parent !== window) {
-    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
-  }
-}
-function resizeAllPlots() {
-  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-    if (window.Plotly) Plotly.Plots.resize(p);
-  });
-  reportHeight();
-}
-window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
-window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
-if (window.ResizeObserver) {
-  var ro = new ResizeObserver(function(entries) {
-    entries.forEach(function(e) {
-      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
-      if (plot && window.Plotly) Plotly.Plots.resize(plot);
-    });
-    reportHeight();
-  });
-  window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-        ro.observe(p.parentElement || p);
-      });
-    }, 500);
-  });
-}
-new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
-</script>'
 
 cat("Building global...\n")
 
@@ -333,8 +266,10 @@ bin_colors <- list(c(0, "#e8e8e8"), c(0.2, "#c6dbef"), c(0.4, "#6baed6"),
 
 p_world <- plot_ly(type = "choropleth",
   locations = stocks_2024$iso3, z = stocks_2024$bin,
-  text = sprintf("<b>%s</b><br>%s Iran-born migrants",
-    stocks_2024$destination, format(stocks_2024$pop_2024, big.mark = ",")),
+  text = ifelse(stocks_2024$destination == "Iran",
+    "<b>Iran</b><br> Estimated population: 93 million (2026)<br> Source: UN World Population Prospects 2024",
+    sprintf("<b>%s</b><br>%s Iran-born migrants",
+      stocks_2024$destination, format(stocks_2024$pop_2024, big.mark = ","))),
   hoverinfo = "text",
   colorscale = bin_colors, zmin = 0, zmax = 5, showscale = FALSE,
   marker = list(line = list(color = "white", width = 0.5))
@@ -344,7 +279,8 @@ p_world <- plot_ly(type = "choropleth",
     projection = list(type = "natural earth"), bgcolor = "white",
     landcolor = "#f0f0f0", showland = TRUE),
   margin = list(t = 10, b = 10, l = 0, r = 0),
-  paper_bgcolor = "white"
+  paper_bgcolor = "white",
+  hoverlabel = list(align = "left")
 ) %>% config(displayModeBar = FALSE)
 
 # --- Assemble page (side-by-side layout) ---
@@ -379,6 +315,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .text-card { font-size:13px; padding:14px; }
   .chart-card { padding:10px; }
 }
+', MAPBOX_ATTRIB_HIDE_CSS, '
 </style>
 </head>
 <body>
@@ -389,9 +326,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iran-born people live outside Iran as of 2024 &mdash; nearly three times the 1990 total.</div>
 </div>
 <div class="text-card global-text2" style="text-align:center;">
-  <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">About these figures</div>
+  <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">Who counts as Iranian abroad?</div>
   <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-    <li>Each figure counts people born in Iran who live in another country</li>
+    <li>Each country&rsquo;s total includes only people born in Iran</li>
     <li>Drawn from each country&rsquo;s census or population register, so definitions and reference years vary</li>
     <li>Second-generation Iranians (children born abroad to Iran-born parents) are not counted</li>
     <li>Some countries (notably the Persian Gulf states) do not publish country-of-birth statistics, so their Iranian populations are not reflected here</li>
@@ -457,10 +394,10 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   '<div style="text-align:center; font-size:16px; font-weight:600; margin:4px 0 12px;">Iranian Migrant Stock Worldwide (2024)</div>',
   '<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:12px; font-size:13px; color:#444; margin:0 0 12px; line-height:1;">',
   '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#f4c430;border-radius:2px;"></span> Iran</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#08306b;border-radius:2px;"></span> 100K\u2013450K</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#2171b5;border-radius:2px;"></span> 10K\u2013100K</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#6baed6;border-radius:2px;"></span> 1K\u201310K</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#c6dbef;border-radius:2px;"></span> 1\u20131,000</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#c6dbef;border-radius:2px;"></span> 1 \u2013 1,000</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#6baed6;border-radius:2px;"></span> 1,000 \u2013 10,000</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#2171b5;border-radius:2px;"></span> 10,000 \u2013 100,000</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#08306b;border-radius:2px;"></span> 100,000 \u2013 450,000</span>',
   '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#e8e8e8;border:1px solid #ccc;border-radius:2px;"></span> No data</span>',
   '</div>',
   plotly_div("world-map", plotly_to_json(p_world), "460px"),

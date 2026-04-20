@@ -15,48 +15,9 @@ suppressPackageStartupMessages({
 
 DATA_DIR <- "data/switzerland"
 
-# --- Helpers (canonical pattern, from build_nl.R) ----------------------------
-strip_internal_classes <- function(x) {
-  if (is.list(x)) {
-    if (inherits(x, "zcolor")) class(x) <- "list"
-    return(lapply(x, strip_internal_classes))
-  }
-  if (inherits(x, "zcolor")) class(x) <- NULL
-  x
-}
-
-plotly_to_json <- function(p) {
-  b <- plotly_build(p)
-  b$x$data   <- strip_internal_classes(b$x$data)
-  b$x$layout <- strip_internal_classes(b$x$layout)
-  if (is.null(b$x$layout$font)) b$x$layout$font <- list()
-  b$x$layout$font$family <- "Montserrat, sans-serif"
-  b$x$layout$hoverlabel <- list(
-    bgcolor = "white", bordercolor = "#ccc",
-    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
-  list(data   = toJSON(b$x$data, auto_unbox = TRUE),
-       layout = toJSON(b$x$layout, auto_unbox = TRUE),
-       config = toJSON(b$x$config, auto_unbox = TRUE))
-}
-
-plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL) {
-  init_js <- sprintf(
-    'var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
-    json$config, json$layout, id, json$data)
-  chart <- sprintf(
-    '<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
-    id, height, init_js)
-  if (!is.null(legend_html)) {
-    chart <- paste0(chart, '\n', legend_html)
-  }
-  if (!is.null(source)) {
-    chart <- paste0(chart, sprintf(
-      '\n<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">%s</p>',
-      source))
-  }
-  chart
-}
-
+# Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
+# iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
+source("R/_helpers.R")
 make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
   items <- mapply(function(col, lab) {
     sprintf('<span style="display:inline-flex;align-items:center;gap:4px;margin:0 8px;"><span style="display:inline-block;width:14px;height:14px;background:%s;border-radius:2px;flex-shrink:0;"></span><span style="font-size:12px;color:#333;">%s</span></span>', col, lab)
@@ -71,40 +32,6 @@ make_html_legend <- function(colors, labels = names(colors), break_after = NULL)
   }
   sprintf('<div style="text-align:center;margin:6px 0 2px;">%s</div>', inner)
 }
-
-iframe_resize_script <- '
-<script>
-function reportHeight() {
-  if (window.parent !== window) {
-    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
-  }
-}
-function resizeAllPlots() {
-  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-    if (window.Plotly) Plotly.Plots.resize(p);
-  });
-  reportHeight();
-}
-window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
-window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
-if (window.ResizeObserver) {
-  var ro = new ResizeObserver(function(entries) {
-    entries.forEach(function(e) {
-      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
-      if (plot && window.Plotly) Plotly.Plots.resize(plot);
-    });
-    reportHeight();
-  });
-  window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-        ro.observe(p.parentElement || p);
-      });
-    }, 500);
-  });
-}
-new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
-</script>'
 
 tab_switch_script <- '
 <script>
@@ -177,6 +104,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   .chart-card { padding:10px; }
   .text-card { font-size:13px; padding:14px; }
 }
+', MAPBOX_ATTRIB_HIDE_CSS, '
 </style>
 </head>
 <body>

@@ -11,42 +11,9 @@ library(jsonlite)
 
 DATA_DIR <- "data/australia"
 
-# --- Helpers (shared with build_canada.R / build_global.R) ---
-strip_internal_classes <- function(x) {
-  if (is.list(x)) {
-    if (inherits(x, "zcolor")) class(x) <- "list"
-    return(lapply(x, strip_internal_classes))
-  }
-  if (inherits(x, "zcolor")) class(x) <- NULL
-  x
-}
-
-plotly_to_json <- function(p) {
-  b <- plotly_build(p)
-  b$x$data <- strip_internal_classes(b$x$data)
-  b$x$layout <- strip_internal_classes(b$x$layout)
-  if (is.null(b$x$layout$font)) b$x$layout$font <- list()
-  b$x$layout$font$family <- "Montserrat, sans-serif"
-  b$x$layout$hoverlabel <- list(
-    bgcolor = "white", bordercolor = "#ccc",
-    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
-  list(data = toJSON(b$x$data, auto_unbox = TRUE),
-       layout = toJSON(b$x$layout, auto_unbox = TRUE),
-       config = toJSON(b$x$config, auto_unbox = TRUE))
-}
-
-plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
-    json$config, json$layout, id, json$data)
-  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
-    id, height, init_js)
-  if (!is.null(legend_html)) chart <- paste0(chart, '\n', legend_html)
-  if (!is.null(source)) {
-    chart <- paste0(chart, sprintf('\n<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">%s</p>', source))
-  }
-  chart
-}
-
+# Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
+# iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
+source("R/_helpers.R")
 make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
   items <- mapply(function(col, lab) {
     sprintf('<span style="display:inline-flex;align-items:center;gap:4px;margin:0 8px;"><span style="display:inline-block;width:14px;height:14px;background:%s;border-radius:2px;flex-shrink:0;"></span><span style="font-size:12px;color:#333;">%s</span></span>', col, lab)
@@ -61,40 +28,6 @@ make_html_legend <- function(colors, labels = names(colors), break_after = NULL)
   }
   sprintf('<div style="text-align:center;margin:6px 0 2px;">%s</div>', inner)
 }
-
-iframe_resize_script <- '
-<script>
-function reportHeight() {
-  if (window.parent !== window) {
-    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
-  }
-}
-function resizeAllPlots() {
-  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-    if (window.Plotly) Plotly.Plots.resize(p);
-  });
-  reportHeight();
-}
-window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
-window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
-if (window.ResizeObserver) {
-  var ro = new ResizeObserver(function(entries) {
-    entries.forEach(function(e) {
-      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
-      if (plot && window.Plotly) Plotly.Plots.resize(plot);
-    });
-    reportHeight();
-  });
-  window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-        ro.observe(p.parentElement || p);
-      });
-    }, 500);
-  });
-}
-new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
-</script>'
 
 tab_switch_script <- '
 <script>
@@ -176,6 +109,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   .chart-card { padding:10px; }
   .tab-btn { font-size:11px; padding:4px 8px; }
 }', tab_css, '
+', MAPBOX_ATTRIB_HIDE_CSS, '
 </style>
 ', extra_head, '
 </head>
@@ -226,6 +160,45 @@ measures_html <- paste0(
   '</div>'
 )
 
+# --- Regional breakdown bar chart (parallel to Canada's ca-region) ---
+# Groups the 8 states/territories into 4 regions for a compact summary
+# alongside the state-level choropleth. Eastern = NSW+VIC+QLD+ACT (the
+# populous east coast); Western = WA; Southern = SA+TAS; Northern = NT.
+# "Other Territories" (11 Iran-born) is excluded, matching the map.
+au_region_map <- c(
+  "New South Wales" = "Eastern", "Victoria" = "Eastern",
+  "Queensland" = "Eastern", "Australian Capital Territory" = "Eastern",
+  "Western Australia" = "Western",
+  "South Australia" = "Southern", "Tasmania" = "Southern",
+  "Northern Territory" = "Northern")
+
+region_totals_au <- state_pop %>%
+  filter(state != "Other Territories") %>%
+  mutate(region = au_region_map[state]) %>%
+  group_by(region) %>%
+  summarize(pop = sum(count), .groups = "drop")
+
+region_total_au <- sum(region_totals_au$pop)
+region_totals_au$pct <- round(region_totals_au$pop / region_total_au * 100, 1)
+
+region_order_au <- c("Eastern", "Western", "Southern", "Northern")
+region_totals_au$region <- factor(region_totals_au$region, levels = region_order_au)
+region_totals_au <- region_totals_au %>% arrange(region)
+
+p_region <- plot_ly(data = region_totals_au, x = ~region, y = ~pct, type = "bar",
+    marker = list(color = c("#7b5ea7", "#d4a943", "#2ca089", "#e07b54")),
+    text = ~sprintf("<b>%s Australia</b><br>%s Iran-born (%.1f%%)",
+      region, format(pop, big.mark = ","), pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(
+    title = list(text = "<b>Iran-Born Australians by<br>Region of Residence</b>",
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = ""),
+    yaxis = list(title = "", ticksuffix = "%"),
+    margin = list(t = 55, b = 50), showlegend = FALSE,
+    plot_bgcolor = "white", paper_bgcolor = "white") %>%
+  config(displayModeBar = FALSE)
+
 # --- State choropleth map ---
 # NOTE: this builder depends on the `ozmaps` package in addition to
 # plotly/dplyr/jsonlite/readxl. Install with:
@@ -263,8 +236,7 @@ p_state_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.01, "#c6dbef"), c(0.1, "#6baed6"),
       c(0.5, "#2171b5"), c(1, "#08306b")),
-    showscale = TRUE,
-    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
+    showscale = FALSE,
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
@@ -310,8 +282,7 @@ p_sydney_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#c6dbef"), c(0.05, "#9ecae1"), c(0.15, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = TRUE,
-    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
+    showscale = FALSE,
     marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
@@ -347,14 +318,13 @@ p_melbourne_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#c6dbef"), c(0.05, "#9ecae1"), c(0.15, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = TRUE,
-    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
+    showscale = FALSE,
     marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
       style = "carto-positron",
       center = list(lon = 145.0, lat = -37.85),
-      zoom = 7
+      zoom = 6.8
     ),
     margin = list(t = 10, b = 10, l = 0, r = 0),
     paper_bgcolor = "white"
@@ -418,7 +388,9 @@ pop_body <- paste0(
   '</div>',
   '</div>',
 
-  # Bottom row: map with tabs
+  # Bottom row: region chart + map with tabs (parallels Canada page layout)
+  '<div class="chart-row">',
+  '<div class="chart-card">', plotly_div("au-region", plotly_to_json(p_region), "400px", source = ABS_SOURCE), '</div>',
   '<div class="chart-card">',
   '<div class="section-title">Geographic Distribution of Iran-Born Australians</div>',
   '<div class="tab-bar">',
@@ -427,19 +399,38 @@ pop_body <- paste0(
   '<button class="tab-btn" onclick="switchTab(\'au-melb-tab\',this,\'au-geo\')">Greater Melbourne</button>',
   '</div>',
   '<div id="au-state-tab" class="tab-panel active" data-group="au-geo">',
+  '<div style="position:relative;">',
   plotly_div("au-state-map", plotly_to_json(p_state_map), "420px", source = ABS_SOURCE),
+  map_overlay_legend(c(
+    "#c6dbef" = "1 \u2013 1,000",
+    "#6baed6" = "1,000 \u2013 10,000",
+    "#08306b" = "10,000 \u2013 30,000")),
+  '</div>',
   '<script>if(window.innerWidth<900){setTimeout(function(){var el=document.getElementById("au-state-map");if(el&&window.Plotly)Plotly.relayout(el,{"mapbox.zoom":2.2,"mapbox.center.lat":-26});},500);}</script>',
   '</div>',
   '<div id="au-syd-tab" class="tab-panel" data-group="au-geo">',
+  '<div style="position:relative;">',
   plotly_div("au-syd-map", plotly_to_json(p_sydney_map), "420px",
     source = paste0(ABS_SOURCE, "<br>Local Government Areas in Greater Sydney with 10+ Iran-born residents.")),
+  map_overlay_legend(c(
+    "#c6dbef" = "1 \u2013 500",
+    "#6baed6" = "500 \u2013 1,500",
+    "#08306b" = "1,500 \u2013 4,000")),
+  '</div>',
   '</div>',
   '<div id="au-melb-tab" class="tab-panel" data-group="au-geo">',
+  '<div style="position:relative;">',
   plotly_div("au-melb-map", plotly_to_json(p_melbourne_map), "420px",
     source = paste0(ABS_SOURCE, "<br>Local Government Areas in Greater Melbourne with 10+ Iran-born residents.")),
+  map_overlay_legend(c(
+    "#c6dbef" = "1 \u2013 500",
+    "#6baed6" = "500 \u2013 1,500",
+    "#08306b" = "1,500 \u2013 3,500")),
+  '</div>',
   '<script>if(window.innerWidth<900){setTimeout(function(){var el=document.getElementById("au-melb-map");if(el&&window.Plotly)Plotly.relayout(el,{"mapbox.zoom":6.5});},500);}</script>',
   '</div>',
-  '</div>'
+  '</div>',  # end map chart-card
+  '</div>'   # end chart-row (region + map)
 )
 
 writeLines(page_template("Australia: Population", pop_body, has_tabs = TRUE), "docs/pages/au-population.html")
