@@ -43,6 +43,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
+.mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo { display:none !important; }
 </style>
 </head>
 <body>
@@ -74,7 +75,6 @@ function resizeAllPlots() {
 }
 window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
 window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
-// Watch each chart container individually for width changes
 if (window.ResizeObserver) {
   var ro = new ResizeObserver(function(entries) {
     entries.forEach(function(e) {

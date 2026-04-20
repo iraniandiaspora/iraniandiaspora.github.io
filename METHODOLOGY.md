@@ -41,11 +41,12 @@ Prior to 1992, immigration law did not separate family and employment preference
 
 ## Europe Overview
 
-The Europe overview page combines four source families to show Iran-born populations across 12 countries:
+The Europe overview page combines five source families to show Iran-born populations across 12 countries:
 
-- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for ten countries (Austria, Belgium, Denmark, Finland, Italy, Netherlands, Norway, Spain, Sweden, Switzerland), with annual data back to 1998.
+- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for eight countries (Austria, Belgium, Denmark, Finland, Italy, Netherlands, Norway, Sweden), with annual data back to 1998.
 - **Destatis Mikrozensus 2024** – for Germany, because Eurostat does not publish Iran-born counts for Germany.
 - **National censuses** – for the United Kingdom (combined from ONS, NRS, and NISRA as described below).
+- **[Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html)** – for Switzerland, using the STATPOP register.
 - **[INSEE Recensement de la population](https://www.insee.fr/)** – for France, because INSEE uses a narrower "immigré" definition that is not directly comparable to Eurostat's foreign-born definition.
 
 All figures on the overview page count people born in Iran. Second-generation European-born children are not included in the overview totals because Eurostat does not publish a harmonized second-generation count across countries. Türkiye is not part of the Europe overview; it has its own section below.
@@ -132,14 +133,6 @@ Italian-born children of Iran-born parents are not counted. The geographic distr
 
 **Data access:** ISTAT population data are available from [demo.istat.it](https://demo.istat.it/). Eurostat data are available via the [Eurostat Data Browser](https://ec.europa.eu/eurostat/databrowser/).
 
-## Switzerland
-
-Iran-born residents are identified in the population register maintained by the [Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html). A person is counted as Iran-born based on their registered country of birth. The headline figure of 17,213 is the most recent annual stock (2024).
-
-The register tracks country of birth but not parental birthplace; Swiss-born children of Iran-born parents are not counted. The geographic distribution covers all 26 cantons. The trend chart covers 2010–2024, with an additional chart showing annual immigration from Iran (2011–2024).
-
-**Data access:** BFS population data are publicly available from [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home.html).
-
 ## France
 
 Iran-born residents are identified in the [INSEE](https://www.insee.fr/) Recensement de la population using the "immigré" definition: a person born abroad with foreign nationality at birth. This definition is narrower than Eurostat's foreign-born concept, so France's values are not strictly comparable with the other Eurostat-sourced European countries on the overview chart. The headline figure of 23,800 is the most recent published Iran-specific figure (2019).
@@ -148,21 +141,19 @@ French law (Loi Informatique et Libertés, Art. 8) prohibits collecting ethnicit
 
 **Data access:** INSEE country-of-birth tables are linked from [insee.fr](https://www.insee.fr/fr/statistiques/6478089).
 
+## Switzerland
+
+Iran-born residents are identified in the population register maintained by the [Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html). A person is counted as Iran-born based on their registered country of birth. The headline figure of 17,213 is the most recent annual stock (2024).
+
+The register tracks country of birth but not parental birthplace; Swiss-born children of Iran-born parents are not counted. The geographic distribution covers all 26 cantons. The trend chart covers 2010–2024, with an additional chart showing annual immigration from Iran (2011–2024).
+
+**Data access:** BFS population data are publicly available from [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home.html).
+
 ## Finland
 
 Iran-born residents are identified in the population register maintained by [Statistics Finland](https://stat.fi/en/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). A person is counted as Iran-born based on their registered country of birth. The headline figure of 12,287 is the most recent annual stock (2025). The trend chart covers 2001–2025. Finnish-born children of Iran-born parents are not counted.
 
 **Data access:** Eurostat population-by-country-of-birth tables are publicly available via the [Eurostat Data Browser](https://ec.europa.eu/eurostat/databrowser/).
-
-## Türkiye
-
-Iran-born residents are identified in the address-based population register (ADNKS) maintained by [TÜİK](https://data.tuik.gov.tr/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). The headline figure of 134,402 is the most recent annual stock (2025), down from a 2023 peak of 151,348. The trend chart covers 2019–2025; 2021–2022 figures are not published due to reporting delays during COVID, and that gap is rendered as a visible break in the chart. Türkiye-born children of Iran-born parents are not counted.
-
-The Immigration page shows Iranian passport holders resident in Türkiye (2014–2025), which grew roughly sevenfold between 2014 (17,000) and the 2023 peak (117,000) before easing to 95,924 in 2025. The difference between Iran-born and Iranian-citizen stock approximates — but does not exactly measure — naturalization to Turkish citizenship, because it also includes Iran-born non-Iranian nationals.
-
-Provincial (il-level) breakdowns, education, employment, and income cross-tabulations for Iran-born residents are not in public tables and would require custom data requests to TÜİK.
-
-**Data access:** Eurostat population tables are publicly available via the [Eurostat Data Browser](https://ec.europa.eu/eurostat/databrowser/). TÜİK International Migration Statistics are at [data.tuik.gov.tr](https://data.tuik.gov.tr/).
 
 ## Canada
 
@@ -183,6 +174,28 @@ The PUMF does not link household members, so children of Iranian parents cannot 
 The PUMF reports household income in categorical bands rather than continuous dollar amounts. Each band is assigned its midpoint value, and national decile thresholds are computed from all PUMF records aged 25–54. This matches the U.S. approach to enable cross-country comparison. A separate chart on the income page shows individual pre-tax income by age group using a different variable and is not directly comparable to the decile chart.
 
 **Data access:** The 2021 Census PUMF can be requested through the [Canadian Census Analyser](https://dc1.chass.utoronto.ca/census/index.html).
+
+## Türkiye
+
+Iran-born residents are identified in the address-based population register (ADNKS) maintained by [TÜİK](https://data.tuik.gov.tr/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). The headline figure of 134,402 is the most recent annual stock (2025), down from a 2023 peak of 151,348. The trend chart covers 2019–2025; 2021–2022 figures are not published due to reporting delays during COVID, and that gap is rendered as a visible break in the chart. Türkiye-born children of Iran-born parents are not counted.
+
+The Immigration page shows Iranian passport holders resident in Türkiye (2014–2025), which grew roughly sevenfold between 2014 (17,000) and the 2023 peak (117,000) before easing to 95,924 in 2025. The difference between Iran-born and Iranian-citizen stock approximates — but does not exactly measure — naturalization to Turkish citizenship, because it also includes Iran-born non-Iranian nationals.
+
+Provincial (il-level) breakdowns, education, employment, and income cross-tabulations for Iran-born residents are not in public tables and would require custom data requests to TÜİK.
+
+**Data access:** Eurostat population tables are publicly available via the [Eurostat Data Browser](https://ec.europa.eu/eurostat/databrowser/). TÜİK International Migration Statistics are at [data.tuik.gov.tr](https://data.tuik.gov.tr/).
+
+## Israel
+
+Iranian-origin residents are identified in the population register maintained by the [Israel Central Bureau of Statistics (CBS)](https://www.cbs.gov.il/en). CBS uses a paternal-line, two-generation definition: a person is counted as Iranian-origin if they were born in Iran, or were born in Israel with a father born in Iran. The headline figure of 131,900 includes both generations (2024).
+
+Third-generation residents (Israeli-born with an Israeli-born father) and maternal-only lines are not counted. CBS publishes counts in thousands. The age chart presents both generations together using harmonized bins, since the Israeli-born column is open-ended above 55. A second tab shows the full age detail for the Iran-born population, including the 75+, 65–74, and 55–64 bins.
+
+The comparison chart shows the Iranian-origin group alongside other Asian-origin groups in Israel under the same definition. CBS does not publish geographic distribution by individual country of origin (only by continent), so a regional map is not included.
+
+The [UN International Migrant Stock 2024](https://www.un.org/development/desa/pd/content/international-migrant-stock) reports approximately 61,500 Iran-born residents in Israel, higher than the CBS figure of 38,200. The UN combines Israeli foreign-born data with UNHCR refugee additions and interpolates between reporting points; UN documentation does not specify which Israeli source it draws on. The dashboard uses the CBS register count as the primary figure on both the Israel page and the Global page.
+
+**Data access:** CBS data are publicly available from the [Israel Central Bureau of Statistics](https://www.cbs.gov.il/en).
 
 ## Australia
 
@@ -206,18 +219,6 @@ Year of arrival is grouped into multi-year periods before 2016 and individual ye
 The income page compares Iran-born Australians to the national distribution using personal income rather than household income. The Australian Census does not allow cross-tabulating household income with country of birth, so personal weekly income is used instead. National decile thresholds are computed from all Australians aged 25–54, and Iran-born individuals in the same age range are placed into those decile bins. The chart uses a teal color gradient to distinguish it from the household income decile charts used for the United States and Canada.
 
 **Data access:** Census tables are available from [ABS Census Data](https://www.abs.gov.au/census/find-census-data). Cross-tabulations by country of birth require [ABS TableBuilder](https://www.abs.gov.au/statistics/microdata-tablebuilder/tablebuilder) (free registration).
-
-## Israel
-
-Iranian-origin residents are identified in the population register maintained by the [Israel Central Bureau of Statistics (CBS)](https://www.cbs.gov.il/en). CBS uses a paternal-line, two-generation definition: a person is counted as Iranian-origin if they were born in Iran, or were born in Israel with a father born in Iran. The headline figure of 131,900 includes both generations (2024).
-
-Third-generation residents (Israeli-born with an Israeli-born father) and maternal-only lines are not counted. CBS publishes counts in thousands. The age chart presents both generations together using harmonized bins, since the Israeli-born column is open-ended above 55. A second tab shows the full age detail for the Iran-born population, including the 75+, 65–74, and 55–64 bins.
-
-The comparison chart shows the Iranian-origin group alongside other Asian-origin groups in Israel under the same definition. CBS does not publish geographic distribution by individual country of origin (only by continent), so a regional map is not included.
-
-The [UN International Migrant Stock 2024](https://www.un.org/development/desa/pd/content/international-migrant-stock) reports approximately 61,500 Iran-born residents in Israel, higher than the CBS figure of 38,200. The UN combines Israeli foreign-born data with UNHCR refugee additions and interpolates between reporting points; UN documentation does not specify which Israeli source it draws on. The dashboard uses the CBS register count as the primary figure on both the Israel page and the Global page.
-
-**Data access:** CBS data are publicly available from the [Israel Central Bureau of Statistics](https://www.cbs.gov.il/en).
 
 ## Data Reliability
 

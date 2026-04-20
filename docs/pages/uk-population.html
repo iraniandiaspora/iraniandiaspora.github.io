@@ -48,6 +48,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   .text-card { font-size:13px; padding:14px; }
   .tab-btn { font-size:11px; padding:4px 8px; }
 }
+.mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo { display:none !important; }
 </style>
 </head>
 <body>
@@ -93,6 +94,9 @@ if (window.ResizeObserver) {
   });
 }
 new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+
+<script>
 function switchTab(tabId,btn,groupId){
   var panels = document.querySelectorAll(".tab-panel[data-group='" + groupId + "']");
   panels.forEach(function(p) { p.classList.remove("active"); });

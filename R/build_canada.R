@@ -8,65 +8,9 @@ library(jsonlite)
 
 DATA_DIR <- "data/canada"
 
-# --- Helpers (same as build_all.R) ---
-strip_internal_classes <- function(x) {
-  if (is.list(x)) {
-    if (inherits(x, "zcolor")) class(x) <- "list"
-    return(lapply(x, strip_internal_classes))
-  }
-  if (inherits(x, "zcolor")) class(x) <- NULL
-  x
-}
-
-plotly_to_json <- function(p) {
-  b <- plotly_build(p)
-  b$x$data <- strip_internal_classes(b$x$data)
-  b$x$layout <- strip_internal_classes(b$x$layout)
-  if (is.null(b$x$layout$font)) b$x$layout$font <- list()
-  b$x$layout$font$family <- "Montserrat, sans-serif"
-  b$x$layout$hoverlabel <- list(
-    bgcolor = "white", bordercolor = "#ccc",
-    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
-  list(data = toJSON(b$x$data, auto_unbox = TRUE),
-       layout = toJSON(b$x$layout, auto_unbox = TRUE),
-       config = toJSON(b$x$config, auto_unbox = TRUE))
-}
-
-plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
-    json$config, json$layout, id, json$data)
-  if (highlight_hover) {
-    init_js <- paste0(init_js, sprintf('
-var el=document.getElementById("%s");
-function hlOn(lg){
-  el.data.forEach(function(t,i){
-    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
-  });
-  var wrap=el.closest(".chart-card");
-  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
-}
-function hlOff(){
-  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
-  var wrap=el.closest(".chart-card");
-  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
-}
-el.__hlOn=hlOn;el.__hlOff=hlOff;
-el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
-el.on("plotly_unhover",hlOff);
-var _lastLg=null;
-el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});', id))
-  }
-  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
-    id, height, init_js)
-  if (!is.null(legend_html)) {
-    chart <- paste0(chart, '\n', legend_html)
-  }
-  if (!is.null(source)) {
-    chart <- paste0(chart, sprintf('\n<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">%s</p>', source))
-  }
-  chart
-}
-
+# Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
+# iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
+source("R/_helpers.R")
 make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
   items <- mapply(function(col, lab) {
     # Escape & as &amp; in data-lg and JS string so it matches plotly legendgroup after HTML decoding
@@ -97,40 +41,6 @@ PUMF_SRC_INCOME <- paste0("Source: ", PUMF_LINK, " \u2014 2021 Canadian Census<b
   "Ages 25\u201354 (prime working years). Each decile holds 10% of all Canadian households, ranked by pre-tax household income.<br>Smaller estimates should be interpreted with caution.")
 PUMF_SRC_INCOME_AGE <- paste0("Source: ", PUMF_LINK, " \u2014 2021 Canadian Census<br>",
   "First generation, ages 25\u201374. Pre-tax personal income. Smaller estimates should be interpreted with caution.")
-
-iframe_resize_script <- '
-<script>
-function reportHeight() {
-  if (window.parent !== window) {
-    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
-  }
-}
-function resizeAllPlots() {
-  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-    if (window.Plotly) Plotly.Plots.resize(p);
-  });
-  reportHeight();
-}
-window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
-window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
-if (window.ResizeObserver) {
-  var ro = new ResizeObserver(function(entries) {
-    entries.forEach(function(e) {
-      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
-      if (plot && window.Plotly) Plotly.Plots.resize(plot);
-    });
-    reportHeight();
-  });
-  window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-        ro.observe(p.parentElement || p);
-      });
-    }, 500);
-  });
-}
-new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
-</script>'
 
 # Tab-switching JS (injected once per page that uses tabs)
 tab_switch_script <- '
@@ -236,6 +146,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
+', MAPBOX_ATTRIB_HIDE_CSS, '
 </style>
 ', extra_head, '
 </head>
@@ -364,8 +275,7 @@ p_prov_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.01, "#c6dbef"), c(0.1, "#6baed6"),
       c(0.5, "#2171b5"), c(1, "#08306b")),
-    showscale = TRUE,
-    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
+    showscale = FALSE,
     marker = list(line = list(color = "white", width = 1), opacity = 0.85)
   ) %>% layout(
     mapbox = list(
@@ -407,8 +317,7 @@ p_ont_map <- plot_ly() %>%
     hoverinfo = "text",
     colorscale = list(c(0, "#c6dbef"), c(0.05, "#9ecae1"), c(0.15, "#6baed6"),
       c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = TRUE,
-    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
+    showscale = FALSE,
     marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
   ) %>%
   layout(
@@ -421,7 +330,7 @@ p_ont_map <- plot_ly() %>%
     paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 
-writeLines(page_template("Canada: Defining the Population", paste0(
+writeLines(page_template("Canada: Population", paste0(
   '<div class="chart-row">',
   '<div class="headline">',
   '<div class="label">Estimated Iranian-Canadian Population</div>',
@@ -446,12 +355,25 @@ writeLines(page_template("Canada: Defining the Population", paste0(
   '<div class="section-title">Geographic Distribution of Iranian-Canadians</div>',
   '<div class="tab-bar"><button class="tab-btn active" onclick="switchTab(\'ca-prov-tab\',this,\'ca-geo\')">By Province</button><button class="tab-btn" onclick="switchTab(\'ca-ont-tab\',this,\'ca-geo\')">By Ontario Municipality</button></div>',
   '<div id="ca-prov-tab" class="tab-panel active" data-group="ca-geo">',
+  '<div style="position:relative;">',
   plotly_div("ca-prov-map", plotly_to_json(p_prov_map), "380px", source = PUMF_SOURCE),
+  map_overlay_legend(c(
+    "#c6dbef" = "1 \u2013 1,000",
+    "#6baed6" = "1,000 \u2013 10,000",
+    "#2171b5" = "10,000 \u2013 50,000",
+    "#08306b" = "50,000 \u2013 150,000")),
+  '</div>',
   '<script>if(window.innerWidth<900){setTimeout(function(){var el=document.getElementById("ca-prov-map");if(el&&window.Plotly)Plotly.relayout(el,{"mapbox.zoom":2.0,"mapbox.center.lat":52});},500);}</script>',
   '</div>',
   '<div id="ca-ont-tab" class="tab-panel" data-group="ca-geo">',
+  '<div style="position:relative;">',
   plotly_div("ca-ont-map", plotly_to_json(p_ont_map), "380px",
     source = "Source: <a href='https://www.statcan.gc.ca/census-recensement/2021/dp-pd/index-eng.cfm' target='_blank' style='color:#2774AE;'>Statistics Canada</a> \u2014 2021 Census (cancensus aggregate tables, Iranian ethnic origin OR born in Iran, maximum per municipality). Municipal totals differ from the province-level PUMF count because the published aggregate tables are individually suppressed for small census subdivisions and use a different counting rule than the microdata."),
+  map_overlay_legend(c(
+    "#c6dbef" = "1 \u2013 1,000",
+    "#6baed6" = "1,000 \u2013 10,000",
+    "#08306b" = "10,000 \u2013 40,000")),
+  '</div>',
   '</div>',
   '</div>',
   '</div>'

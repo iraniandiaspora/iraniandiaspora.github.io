@@ -10,67 +10,9 @@ library(jsonlite)
 
 DATA_DIR <- "data/us"
 
-# --- Helpers ---
-# Strip plotly internal classes (like zcolor) that jsonlite can't serialize
-strip_internal_classes <- function(x) {
-  if (is.list(x)) {
-    if (inherits(x, "zcolor")) class(x) <- "list"
-    return(lapply(x, strip_internal_classes))
-  }
-  if (inherits(x, "zcolor")) class(x) <- NULL
-  x
-}
-
-plotly_to_json <- function(p) {
-  b <- plotly_build(p)
-  b$x$data <- strip_internal_classes(b$x$data)
-  b$x$layout <- strip_internal_classes(b$x$layout)
-  # Ensure Montserrat font across all chart text and hover labels
-  if (is.null(b$x$layout$font)) b$x$layout$font <- list()
-  b$x$layout$font$family <- "Montserrat, sans-serif"
-  b$x$layout$hoverlabel <- list(
-    bgcolor = "white", bordercolor = "#ccc",
-    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
-  list(data = toJSON(b$x$data, auto_unbox = TRUE),
-       layout = toJSON(b$x$layout, auto_unbox = TRUE),
-       config = toJSON(b$x$config, auto_unbox = TRUE))
-}
-
-plotly_div <- function(id, json, height = "500px", source = NULL, legend_html = NULL, highlight_hover = FALSE) {
-  init_js <- sprintf('var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
-    json$config, json$layout, id, json$data)
-  if (highlight_hover) {
-    init_js <- paste0(init_js, sprintf('
-var el=document.getElementById("%s");
-function hlOn(lg){
-  el.data.forEach(function(t,i){
-    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
-  });
-  var wrap=el.closest(".chart-card");
-  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
-}
-function hlOff(){
-  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
-  var wrap=el.closest(".chart-card");
-  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
-}
-el.__hlOn=hlOn;el.__hlOff=hlOff;
-el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
-el.on("plotly_unhover",hlOff);
-var _lastLg=null;
-el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});', id))
-  }
-  chart <- sprintf('<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
-    id, height, init_js)
-  if (!is.null(legend_html)) {
-    chart <- paste0(chart, '\n', legend_html)
-  }
-  if (!is.null(source)) {
-    chart <- paste0(chart, sprintf('\n<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">%s</p>', source))
-  }
-  chart
-}
-
+# Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
+# iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
+source("R/_helpers.R")
 # Generate a horizontal HTML legend from named color vector
 # break_after: index after which to insert a line break (e.g., 3 means break after 3rd item)
 make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
@@ -104,41 +46,6 @@ SRC_WORK <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS
   "Employment type reflects primary job held in the past year.")
 SRC_INCOME <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS<br>",
   "Ages 25\u201354 (prime working years).<br>Each decile holds 10% of all U.S. households, ranked by pre-tax household income.")
-
-iframe_resize_script <- '
-<script>
-function reportHeight() {
-  if (window.parent !== window) {
-    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
-  }
-}
-function resizeAllPlots() {
-  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-    if (window.Plotly) Plotly.Plots.resize(p);
-  });
-  reportHeight();
-}
-window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
-window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
-// Watch each chart container individually for width changes
-if (window.ResizeObserver) {
-  var ro = new ResizeObserver(function(entries) {
-    entries.forEach(function(e) {
-      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
-      if (plot && window.Plotly) Plotly.Plots.resize(plot);
-    });
-    reportHeight();
-  });
-  window.addEventListener("load", function() {
-    setTimeout(function() {
-      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
-        ro.observe(p.parentElement || p);
-      });
-    }, 500);
-  });
-}
-new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
-</script>'
 
 page_template <- function(title, body_html) {
   paste0('<!DOCTYPE html>
@@ -186,6 +93,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
+', MAPBOX_ATTRIB_HIDE_CSS, '
 </style>
 </head>
 <body>
@@ -1100,7 +1008,7 @@ pop_page <- paste0('<!DOCTYPE html>
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Defining the Population</title>
+<title>Population</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="lib/plotly-3.4.0.min.js"></script>
 <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
@@ -1159,6 +1067,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   border-radius:6px; font-size:12px; box-shadow:0 1px 4px rgba(0,0,0,0.15); z-index:1; line-height:1.8; }
 .map-legend .leg-item { display:flex; align-items:center; gap:6px; }
 .map-legend .leg-swatch { width:16px; height:16px; border-radius:2px; flex-shrink:0; }
+', MAPBOX_ATTRIB_HIDE_CSS, '
 </style>
 </head>
 <body>
