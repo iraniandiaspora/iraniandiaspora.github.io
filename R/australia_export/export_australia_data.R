@@ -47,30 +47,7 @@ arrival <- readRDS(file.path(DATA_SRC, "g10_iran_arrival_national.rds")) %>%
 write.csv(arrival, file.path(OUT_DIR, "year_of_arrival.csv"), row.names = FALSE)
 cat("  year_of_arrival.csv:", nrow(arrival), "rows\n")
 
-# --- 4. Year of arrival by state ---
-arrival_state <- readRDS(file.path(DATA_SRC, "g10_iran_arrival_state.rds")) %>%
-  filter(yarp != "Total", yarp != "Not stated") %>%
-  select(state, period = yarp, count = obs_value) %>%
-  mutate(sort_key = case_when(
-    grepl("Before", period) ~ 1940,
-    grepl("^\\d{4} - \\d{4}$", period) ~ as.numeric(sub(" -.*", "", period)),
-    grepl("^Arrived (\\d{4})$", period) ~ as.numeric(sub("Arrived ", "", period)),
-    TRUE ~ 9999
-  )) %>%
-  arrange(state, sort_key) %>%
-  select(-sort_key)
-write.csv(arrival_state, file.path(OUT_DIR, "arrival_by_state.csv"), row.names = FALSE)
-cat("  arrival_by_state.csv:", nrow(arrival_state), "rows\n")
-
-# --- 5. SA2-level population (for future map) ---
-sa2 <- readRDS(file.path(DATA_SRC, "g09_iran_sa2_totals.rds")) %>%
-  filter(obs_value > 0) %>%
-  select(sa2_name = region, state, count = obs_value) %>%
-  arrange(desc(count))
-write.csv(sa2, file.path(OUT_DIR, "sa2_population.csv"), row.names = FALSE)
-cat("  sa2_population.csv:", nrow(sa2), "rows (non-zero SA2s)\n")
-
-# --- 6. LGA-level population ---
+# --- 4. LGA-level population ---
 lga <- readRDS(file.path(DATA_SRC, "g09_iran_lga_totals.rds")) %>%
   filter(obs_value > 0) %>%
   select(lga_name = region, state, count = obs_value) %>%
@@ -78,7 +55,7 @@ lga <- readRDS(file.path(DATA_SRC, "g09_iran_lga_totals.rds")) %>%
 write.csv(lga, file.path(OUT_DIR, "lga_population.csv"), row.names = FALSE)
 cat("  lga_population.csv:", nrow(lga), "rows (non-zero LGAs)\n")
 
-# --- 7. Citizenship (from cultural diversity Excel, Table 2) ---
+# --- 5. Citizenship (from cultural diversity Excel, Table 2) ---
 xlsx <- file.path(DATA_SRC, "cultural_diversity_data_summary.xlsx")
 t2 <- read_excel(xlsx, sheet = "Table 2", skip = 5)
 iran_cit <- t2[grep("^Iran$", t2[[1]]), ]
@@ -90,7 +67,7 @@ citizenship <- data.frame(
 write.csv(citizenship, file.path(OUT_DIR, "citizenship.csv"), row.names = FALSE)
 cat("  citizenship.csv: 3 rows\n")
 
-# --- 8. Iranian ancestry by state (Table 4) ---
+# --- 6. Iranian ancestry by state (Table 4) ---
 # Column order: NSW, Vic, Qld, SA, WA, Tas, NT, ACT, then total
 t4 <- read_excel(xlsx, sheet = "Table 4", skip = 5)
 iran_anc <- t4[grep("^Iranian$", t4[[1]]), ]
@@ -105,7 +82,7 @@ ancestry_state <- data.frame(
 write.csv(ancestry_state, file.path(OUT_DIR, "ancestry_by_state.csv"), row.names = FALSE)
 cat("  ancestry_by_state.csv:", nrow(ancestry_state), "rows\n")
 
-# --- 9. Persian language speakers by state (Table 5) ---
+# --- 7. Persian language speakers by state (Table 5) ---
 t5 <- read_excel(xlsx, sheet = "Table 5", skip = 5)
 persian <- t5[grep("Persian \\(excluding Dari\\)", t5[[1]]), ]
 persian_state <- data.frame(
