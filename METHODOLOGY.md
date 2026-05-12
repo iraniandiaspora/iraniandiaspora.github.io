@@ -39,6 +39,10 @@ Prior to 1992, immigration law did not separate family and employment preference
 
 **Data access:** ACS Public Use Microdata Samples are available from the [U.S. Census Bureau](https://www.census.gov/programs-surveys/acs/microdata.html) and [IPUMS USA](https://usa.ipums.org/). Immigration data are from the [DHS Yearbook of Immigration Statistics](https://ohss.dhs.gov/topics/immigration/yearbook).
 
+### Language
+
+The Language page reports the language spoken at home from the ACS Public Use Microdata Sample variable LANP. Persian (Farsi) is code 1290. Respondents are recorded as "English only" when LANP is missing because no language other than English is reported. "Other language" combines every remaining LANP code; among first-generation Iranian-Americans, Armenian (code 1288) accounts for roughly two-thirds of this bucket.
+
 ## Europe Overview
 
 The Europe overview page combines five source families to show Iran-born populations across 12 countries:
@@ -219,6 +223,12 @@ Year of arrival is grouped into multi-year periods before 2016 and individual ye
 The income page compares Iran-born Australians to the national distribution using personal income rather than household income. The Australian Census does not allow cross-tabulating household income with country of birth, so personal weekly income is used instead. National decile thresholds are computed from all Australians aged 25–54, and Iran-born individuals in the same age range are placed into those decile bins. The chart uses a teal color gradient to distinguish it from the household income decile charts used for the United States and Canada.
 
 **Data access:** Census tables are available from [ABS Census Data](https://www.abs.gov.au/census/find-census-data). Cross-tabulations by country of birth require [ABS TableBuilder](https://www.abs.gov.au/statistics/microdata-tablebuilder/tablebuilder) (free registration).
+
+## Armenia
+
+The Armenia page combines two sources. The trend line uses the [UN International Migrant Stock 2024](https://www.un.org/development/desa/pd/content/international-migrant-stock) for Iran-born estimates at five-year intervals, 1990–2024. Two additional points come from the [Statistical Committee of the Republic of Armenia (Armstat)](https://armstat.am/en/) Population Censuses: the 2011 census recorded 10,532 Iran-born residents and the 2022 census recorded 5,470. Both census points are consistent with the UN estimates within a few percent, and the decline from roughly 22,000 in 1990 to under 7,000 in 2024 is corroborated by independent register counts.
+
+**Data access:** UN Migrant Stock data are at the [UN DESA Population Division](https://www.un.org/development/desa/pd/content/international-migrant-stock). Armstat census tables are at [armstat.am](https://armstat.am/en/).
 
 ## Data Reliability
 

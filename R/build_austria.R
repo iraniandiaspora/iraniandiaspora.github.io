@@ -160,8 +160,10 @@ p_bl <- plot_ly(bl, y = ~bundesland, x = ~iran_born, type = "bar",
       text = "<b>Iran-Born by Bundesland,<br>Census 2021</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
-    yaxis = list(title = "", tickfont = list(size = 11)),
-    margin = list(t = 45, b = 30, l = 130, r = 20),
+    yaxis = list(title = "", tickfont = list(size = 11),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 45, b = 30, l = 140, r = 20),
     plot_bgcolor = "white", paper_bgcolor = "white",
     showlegend = FALSE,
     bargap = 0.35
@@ -207,6 +209,7 @@ make_gen_box <- function(val, pct_text, label, sublabel, color) {
 }
 
 sex_boxes <- paste0(
+  '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iran-Born Population by Sex</div>',
   '<div style="display:flex; gap:12px; margin-top:12px;">',
   make_gen_box(at_male, paste0(round(at_male / bl_total * 100), "% of total"),
     "Male", "Iran-born men", "#1a4e72"),

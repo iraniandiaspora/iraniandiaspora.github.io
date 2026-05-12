@@ -445,28 +445,29 @@ dur_10plus_pct <- round(dur_10plus_k / fg_k * 100)
 dur_30plus_pct <- round(dur_30plus_k / fg_k * 100)
 
 immig_body <- paste0(
-  '<div class="text-row">',
-  sprintf('<div class="text-card" style="text-align:center;">
+  '<div class="page-content">',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold German citizenship &mdash; about %s people.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %s hold Iranian citizenship. 7,840 Iranian naturalizations were recorded in 2024.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>About %s hold Iranian citizenship</li>
+      <li>7,840 Iranian naturalizations were recorded in 2024</li>
+    </ul>
   </div>', de_cit_pct, format(hl_deu, big.mark = ","), format(hl_for, big.mark = ",")),
-  sprintf('<div class="text-card" style="text-align:center;">
+  sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian residents have lived in Germany for a decade or more.</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Roughly %d%% have lived in Germany for 30 or more years.</div>
   </div>', dur_10plus_pct, dur_30plus_pct),
-  '</div>',
 
-  '<div class="chart-row">',
   # Left: citizenship chart
-  '<div class="chart-card">',
+  '<div class="chart-card pc1">',
   plotly_div("de-cit", plotly_to_json(p_citizen), "480px",
     source = MZ_SOURCE),
   '</div>',
 
   # Right: tabbed annual arrivals + motive + duration
-  '<div class="chart-card">',
+  '<div class="chart-card pc2">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'de-immig-annual\',this,\'de-immig-tabs\')">Annual Arrivals</button>',
   '<button class="tab-btn" onclick="switchTab(\'de-immig-motive\',this,\'de-immig-tabs\')">Main Reason for Coming</button>',
@@ -498,11 +499,11 @@ cat("  Done\n")
 cat("Building de-education...\n")
 
 school_cats <- c(
-  "Ohne Schulabschluss" = "No school certificate",
-  "Darunter: Hauptschule" = "Basic secondary",
-  "Realschule o. \u00e4." = "Intermediate secondary",
-  "Fachhochschulreife" = "Applied-university entrance",
-  "Abitur" = "University entrance"
+  "Ohne Schulabschluss" = "No school<br>certificate",
+  "Darunter: Hauptschule" = "Basic<br>secondary",
+  "Realschule o. \u00e4." = "Intermediate<br>secondary",
+  "Fachhochschulreife" = "Applied-university<br>entrance",
+  "Abitur" = "University<br>entrance"
 )
 school_clean <- school %>%
   mutate(cat = school_cats[school_level]) %>%
@@ -514,12 +515,14 @@ school_all <- school_clean %>% filter(gen == "all_gens") %>%
   mutate(pct = round(value / hl_total * 100, 1))
 school_all$cat <- factor(school_all$cat, levels = unname(school_cats))
 
+# Ordinal blue gradient (per dashboard-content-rules.md §7) — lightest at
+# lowest qualification, darkest at highest.
 school_colors <- c(
-  "No school certificate" = "#b0b0b0",
-  "Basic secondary" = "#e8b878",
-  "Intermediate secondary" = "#d4a943",
-  "Applied-university entrance" = "#c4793a",
-  "University entrance" = "#8a5a3a"
+  "No school<br>certificate" = "#c6dbef",
+  "Basic<br>secondary" = "#8bbdde",
+  "Intermediate<br>secondary" = "#5a9bd5",
+  "Applied-university<br>entrance" = "#2774AE",
+  "University<br>entrance" = "#1a4e72"
 )
 
 p_school <- plot_ly(school_all, x = ~cat, y = ~pct, type = "bar",
@@ -530,9 +533,9 @@ p_school <- plot_ly(school_all, x = ~cat, y = ~pct, type = "bar",
   layout(
     title = list(text = "<b>Highest School Qualification in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -15, tickfont = list(size = 10)),
+    xaxis = list(title = "", tickangle = 0, tickfont = list(size = 10)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 60)),
-    margin = list(t = 60, b = 120),
+    margin = list(t = 60, b = 70),
     plot_bgcolor = "white", paper_bgcolor = "white",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
@@ -553,10 +556,12 @@ prof_cat_order <- c("No vocational qualification", "Vocational (non-academic)", 
 prof_all$cat <- factor(prof_all$cat, levels = prof_cat_order)
 prof_all <- prof_all %>% arrange(cat)
 
+# Ordinal blue gradient (per dashboard-content-rules.md §7) — three stops
+# from no qualification (lightest) to academic degree (darkest).
 prof_colors <- c(
-  "No vocational qualification" = "#b0b0b0",
-  "Vocational (non-academic)" = "#d4a943",
-  "Academic degree" = "#8a5a3a"
+  "No vocational qualification" = "#c6dbef",
+  "Vocational (non-academic)" = "#5a9bd5",
+  "Academic degree" = "#1a4e72"
 )
 
 p_prof <- plot_ly(prof_all, x = ~cat, y = ~pct, type = "bar",
@@ -651,11 +656,14 @@ ind$hover <- ifelse(ind$is_suppressed,
 ind <- ind %>% arrange(desc(is_suppressed), value)
 ind$label <- factor(ind$label, levels = ind$label)
 # Warm-earth palette for the industry chart; matches the labour-force
-# chart in the same tab card. Suppressed sectors are grey.
-ind_palette_visible <- c("#c4793a", "#d4a943", "#8a5a3a", "#e8b878", "#b0b0b0")
-n_visible <- sum(!ind$is_suppressed)
-ind$fill_color <- c(ind_palette_visible[seq_len(n_visible)],
-                    rep("#c8c8c8", nrow(ind) - n_visible))
+# chart in the same tab card. Suppressed sectors are grey. Palette is
+# applied by suppression mask, not row index — after the arrange() above,
+# suppressed rows are at the front so positional assignment would flip
+# colors onto the wrong bars.
+ind_palette_visible <- c("#c4793a", "#d4a943", "#8a5a3a", "#e8b878", "#6a4028")
+visible_idx <- which(!ind$is_suppressed)
+ind$fill_color <- rep("#c8c8c8", nrow(ind))
+ind$fill_color[visible_idx] <- ind_palette_visible[seq_along(visible_idx)]
 
 p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
     orientation = "h",
@@ -667,8 +675,10 @@ p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 11),
-      automargin = TRUE),
-    margin = list(t = 55, b = 40, l = 200),
+      automargin = TRUE,
+      ticks = "outside", ticklen = 8,
+      tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 55, b = 40, l = 210),
     plot_bgcolor = "white", paper_bgcolor = "white",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
@@ -748,23 +758,28 @@ unemp_pct    <- round(unemployed_k / total_15plus_k * 100)
 nilf_pct     <- round(nilf_k / total_15plus_k * 100)
 
 workinc_body <- paste0(
-  '<div class="text-row">',
-  sprintf('<div class="text-card" style="text-align:center;">
+  '<div class="page-content">',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-origin residents work in the broad services sector (trade, hospitality, transport, and other services).</div>',
     services_pct),
-  sprintf('    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% of all Iranian-origin residents aged 15+ are employed; %d%% are unemployed and %d%% are not in the labour force (students, retirees, carers).</div>
+  sprintf('    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% of all Iranian-origin residents aged 15+ are employed</li>
+      <li>%d%% are unemployed</li>
+      <li>%d%% are not in the labour force (students, retirees, carers)</li>
+    </ul>
   </div>',
     emp_pct, unemp_pct, nilf_pct),
-  sprintf('<div class="text-card" style="text-align:center;">
+  sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-origin residents earn between %s1,000 and %s2,500 net per month.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %.0f%% earn %s3,000 or more per month; %.0f%% earn under %s1,000.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>About %.0f%% earn %s3,000 or more per month</li>
+      <li>About %.0f%% earn under %s1,000</li>
+    </ul>
   </div>', middle_share, "\u20ac", "\u20ac", top_share, "\u20ac", low_share, "\u20ac"),
-  '</div>',
-  '<div class="chart-row">',
   # LEFT: work with 2 tabs (labour force status + industry)
-  '<div class="chart-card">',
+  '<div class="chart-card pc1">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'de-wk-status\',this,\'de-wk-tabs\')">Labour Force Status</button>',
   '<button class="tab-btn" onclick="switchTab(\'de-wk-industry\',this,\'de-wk-tabs\')">Employment by Industry</button>',
@@ -779,7 +794,7 @@ workinc_body <- paste0(
   '</div>',
   '</div>',
   # RIGHT: income chart
-  '<div class="chart-card">',
+  '<div class="chart-card pc2">',
   plotly_div("de-income", plotly_to_json(p_income), "510px",
     source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Net monthly personal income of employed Iranian-origin residents, all generations combined.")),
   '</div>',
@@ -862,8 +877,18 @@ cat("Building de-langedu...\n")
 lang_total <- lang$value_k[lang$language == "Zu Hause vorwiegend gesprochene Sprache Insgesamt" & lang$gen == "all_gens"]
 persian_k <- lang$value_k[lang$language == "Persisch" & lang$gen == "all_gens"]
 only_de_k <- lang$value_k[lang$language == "nur Deutsch" & lang$gen == "all_gens"]
+mainly_de_k <- lang$value_k[lang$language == "vorwiegend deutsch" & lang$gen == "all_gens"]
+nonde_k <- lang$value_k[lang$language == "vorwiegend nicht-deutsch" & lang$gen == "all_gens"]
+kurdish_k <- lang$value_k[lang$language == "Kurdisch" & lang$gen == "all_gens"]
 persian_pct <- round(persian_k / lang_total * 100)
 only_de_pct <- round(only_de_k / lang_total * 100)
+mainly_de_pct <- round(mainly_de_k / lang_total * 100)
+# Non-Persian non-German share: total minus Persian minus all-German speakers.
+# Mikrozensus suppresses cells below 5,000 — the named portion (Kurdish,
+# English, Other Asian) is each ~3% with low-reliability flag; the rest
+# (Arabic, Turkish, Albanian, etc.) is suppressed under the 5K threshold.
+other_lang_pct <- round((nonde_k - persian_k) / lang_total * 100)
+kurdish_pct <- round(kurdish_k / lang_total * 100)
 
 abitur_k <- school$value_k[school$school_level == "Abitur" & school$gen == "all_gens"]
 abitur_pct <- round(abitur_k / hl_total * 1000 * 100)
@@ -871,27 +896,30 @@ academic_k <- prof$value_k[prof$prof_level == "akademischer Abschluss" & prof$ge
 academic_pct <- round(academic_k / hl_total * 1000 * 100)
 
 langedu_body <- paste0(
-  '<div class="text-row">',
-  sprintf('<div class="text-card" style="text-align:center;">
+  '<div class="page-content">',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents speak Persian as the main language at home &mdash; about %s people.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Another %d%% speak only German at home, and 9%% use mainly German.</div>
-  </div>', persian_pct, format(persian_k * 1000, big.mark = ","), only_de_pct),
-  sprintf('<div class="text-card" style="text-align:center;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% speak only German at home</li>
+      <li>%d%% speak mainly German with some other languages</li>
+      <li>%d%% speak another non-German, non-Persian language at home &mdash; Kurdish, English, and Other Asian languages each at about %d%%; smaller groups are too few to report separately</li>
+    </ul>
+  </div>', persian_pct, format(persian_k * 1000, big.mark = ","),
+     only_de_pct, mainly_de_pct, other_lang_pct, kurdish_pct),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold the Abitur, the secondary-school qualification that grants university entry.</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %d%% (~%s) hold an academic degree.</div>
   </div>', abitur_pct, academic_pct, format(academic_k * 1000, big.mark = ",")),
-  '</div>',
-  '<div class="chart-row" style="align-items:stretch;">',
   # LEFT: language chart (standalone, no persian sidebar)
-  '<div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">',
+  '<div class="chart-card pc1" style="display:flex; flex-direction:column; justify-content:center;">',
   plotly_div("de-lang", plotly_to_json(p_lang), "320px",
     source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024"),
     legend_html = lang_leg, highlight_hover = TRUE),
   '</div>',
   # RIGHT: education with 2 tabs (school qualification + vocational/academic)
-  '<div class="chart-card">',
+  '<div class="chart-card pc2">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'de-ed-school\',this,\'de-ed-tabs\')">Highest School Qualification</button>',
   '<button class="tab-btn" onclick="switchTab(\'de-ed-prof\',this,\'de-ed-tabs\')">Vocational / Academic Qualification</button>',

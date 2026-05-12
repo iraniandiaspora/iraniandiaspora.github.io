@@ -185,8 +185,10 @@ p_bar <- plot_ly(
     title = list(text = "<b>Iran-Born in Europe by Country,<br>Most Recent Year</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
-    yaxis = list(title = "", tickfont = list(size = 11)),
-    margin = list(t = 45, b = 30, l = 110, r = 20),
+    yaxis = list(title = "", tickfont = list(size = 11),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 45, b = 30, l = 120, r = 20),
     plot_bgcolor = "white",
     paper_bgcolor = "white",
     showlegend = FALSE,
@@ -195,34 +197,33 @@ p_bar <- plot_ly(
   config(displayModeBar = FALSE)
 
 # ---------- CHART 2: Time series (countries with continuous coverage) ----
-# Show only the top 6 countries by current Iran-born — more than 6 lines
-# on one chart becomes unreadable, and the smaller countries overlap.
+# Show the Eurostat-continuous countries plus Finland. Finland's 2025
+# count (~15K) is below the top-6 cutoff by value but has 25 years of
+# coverage; it sits visibly below DK and rounds out the seven-country
+# Eurostat panel.
 coverage <- combined %>%
   group_by(geo, country) %>%
   summarise(n = n(), .groups = "drop")
 
-# Eurostat-only countries with long time series (Germany/UK/France not in Eurostat;
-# Türkiye is its own top-level tab, not shown on this Europe overview)
 eurostat_only <- latest %>%
-  filter(!geo %in% c("DE", "UK", "FR")) %>%
+  filter(!geo %in% c("DE", "UK", "FR", "CH", "BE")) %>%
   left_join(coverage, by = c("geo", "country")) %>%
   filter(n >= 15) %>%
   arrange(desc(value))
 
-top6 <- head(eurostat_only, 6)
-ts_data <- combined %>% filter(geo %in% top6$geo)
+top_eurostat <- head(eurostat_only, 7)
+ts_data <- combined %>% filter(geo %in% top_eurostat$geo)
 
-# Colour each country with a distinct but complementary hue; order matches
-# the legend (largest current value first → strongest colour).
-# Top 6 by most-recent Iran-born with n>=15 years of Eurostat coverage:
-# SE, NL, AT, IT, NO, DK.
+# Colour each country with a distinct but complementary hue; the seven
+# Eurostat-continuous countries are SE, NL, AT, IT, NO, DK, FI.
 ts_colors <- c(
   "SE" = "#1a4e72",   # Sweden — dark blue
   "NL" = "#c4793a",   # Netherlands — orange
   "AT" = "#4a8c6f",   # Austria — green
   "IT" = "#8a3a8f",   # Italy — purple
   "NO" = "#5a9bd5",   # Norway — light blue
-  "DK" = "#b05050"    # Denmark — muted red
+  "DK" = "#b05050",   # Denmark — muted red
+  "FI" = "#d4a943"    # Finland — gold
 )
 
 # Direct-label each line at its rightmost point instead of using a legend —
@@ -234,7 +235,7 @@ last_points <- data.frame(
   x = integer(), y = integer(), color = character(),
   stringsAsFactors = FALSE
 )
-for (g in top6$geo) {
+for (g in top_eurostat$geo) {
   d <- ts_data %>% filter(geo == g) %>% arrange(year)
   p_ts <- p_ts %>% add_trace(
     data = d,
@@ -245,7 +246,8 @@ for (g in top6$geo) {
     text = ~sprintf("<b>%s</b> %d<br>%s Iran-born residents",
       country, year, format(value, big.mark = ",")),
     hoverinfo = "text",
-    showlegend = FALSE
+    showlegend = FALSE,
+    legendgroup = g
   )
   tail_row <- tail(d, 1)
   last_points <- rbind(last_points, data.frame(
@@ -280,7 +282,8 @@ p_ts <- p_ts %>% add_trace(
   text = ~sprintf("<b>United Kingdom</b> %s<br>%s Iran-born residents (census)",
     year_label, format(value, big.mark = ",")),
   hoverinfo = "text",
-  showlegend = FALSE
+  showlegend = FALSE,
+  legendgroup = "UK"
 )
 last_points <- rbind(last_points, data.frame(
   geo = "UK",
@@ -304,7 +307,8 @@ p_ts <- p_ts %>% add_trace(
   text = ~sprintf("<b>France</b> %d<br>%s Iran-born (INSEE immigr\u00e9 definition)",
     year, format(value, big.mark = ",")),
   hoverinfo = "text",
-  showlegend = FALSE
+  showlegend = FALSE,
+  legendgroup = "FR"
 )
 fr_tail <- tail(fr_ts, 1)
 # France's line ends at 2019, but the label sits near x=2025 alongside the other
@@ -316,6 +320,31 @@ last_points <- rbind(last_points, data.frame(
   x = 2025,
   y = fr_tail$value,
   color = "#8a3a8f",
+  stringsAsFactors = FALSE
+))
+
+# Switzerland: BFS register, 2010-2024 (continuous, but not Eurostat —
+# show dashed alongside UK/FR to flag the non-Eurostat source).
+ch_ts <- combined %>% filter(geo == "CH") %>% arrange(year)
+p_ts <- p_ts %>% add_trace(
+  data = ch_ts,
+  x = ~year, y = ~value,
+  type = "scatter", mode = "lines+markers",
+  line = list(color = "#3a6a6a", width = 2, dash = "dash"),
+  marker = list(color = "#3a6a6a", size = 5, symbol = "triangle-up"),
+  text = ~sprintf("<b>Switzerland</b> %d<br>%s Iran-born",
+    year, format(value, big.mark = ",")),
+  hoverinfo = "text",
+  showlegend = FALSE,
+  legendgroup = "CH"
+)
+ch_tail <- tail(ch_ts, 1)
+last_points <- rbind(last_points, data.frame(
+  geo = "CH",
+  country = "Switzerland",
+  x = ch_tail$year,
+  y = ch_tail$value,
+  color = "#3a6a6a",
   stringsAsFactors = FALSE
 ))
 
@@ -331,29 +360,38 @@ for (i in seq_len(nrow(last_points))[-1]) {
   }
 }
 
-p_ts <- p_ts %>% add_trace(
-  x = last_points$x,
-  y = last_points$y,
-  text = paste0(" ", last_points$country),
-  type = "scatter",
-  mode = "text",
-  textposition = "middle right",
-  textfont = list(
-    color = last_points$color,
-    size = 12,
-    family = "Montserrat"
-  ),
-  hoverinfo = "skip",
-  showlegend = FALSE,
-  cliponaxis = FALSE
-)
+# Build one text trace per country so each label can be paired with its
+# line via legendgroup. This lets the hover handler dim the OTHER labels
+# while leaving the hovered line and its label at full opacity.
+for (i in seq_len(nrow(last_points))) {
+  lp <- last_points[i, ]
+  p_ts <- p_ts %>% add_trace(
+    x = lp$x, y = lp$y,
+    text = paste0(" ", lp$country),
+    type = "scatter",
+    mode = "text",
+    textposition = "middle right",
+    textfont = list(
+      color = lp$color,
+      size = 12,
+      family = "Montserrat"
+    ),
+    hoverinfo = "skip",
+    showlegend = FALSE,
+    cliponaxis = FALSE,
+    legendgroup = lp$geo
+  )
+}
 
 p_ts <- p_ts %>% layout(
-  title = list(text = "<b>Iran-Born Population in Europe<br>Over Time, 1998\u20132025</b>",
+  title = list(text = "<b>Iran-Born Population in Europe<br>Over Time, 1968\u20132025</b>",
     font = list(size = 14, family = "Montserrat")),
-  xaxis = list(title = "", tickfont = list(size = 10), dtick = 5,
-    # Extend the x-axis past 2025 so the labels have room to render
-    range = c(1997, 2033)),
+  xaxis = list(title = "", tickfont = list(size = 10), dtick = 10,
+    # Range starts at 1965 to include the four pre-1999 France census
+    # snapshots (1968 / 1975 / 1982 / 1990). The other countries don't
+    # have data before 1998, so the left half of the chart shows only
+    # the French trajectory. Extends past 2025 so right-edge labels render.
+    range = c(1965, 2033)),
   yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
   margin = list(t = 45, b = 30, l = 60, r = 15),
   plot_bgcolor = "white",
@@ -415,7 +453,8 @@ body <- paste0(
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",
-    source = paste0("Source: ", EUROSTAT_LINK, " \u2014 six European countries with continuous annual reporting of Iran-born population. The United Kingdom is shown as a dashed line at its three decennial census points (2001, 2011, and 2021/22 \u2014 the last combines E&amp;W 2021 ONS and NI 2021 NISRA with Scotland 2022 NRS). France is shown as a dashed line from INSEE Recensement de la population, 2006\u20132019 (with a 2018 gap). INSEE uses the \u201Cimmigr\u00e9\u201D definition (foreign-born with foreign nationality at birth), which is narrower than Eurostat\u2019s foreign-born definition, so French values here are not strictly comparable with the Eurostat series. Germany is not shown on this chart because Eurostat does not publish Iran-born counts for Germany; see the Germany pages for the national Mikrozensus figures.")),
+    source = paste0("Source: ", EUROSTAT_LINK, " for the seven solid lines (Sweden, Netherlands, Austria, Italy, Norway, Denmark, Finland). United Kingdom (dotted) is from ONS/NRS/NISRA census points 2001, 2011, and 2021/22. France (dashed) is from INSEE Recensement de la population \u2014 census snapshots in 1968, 1975, 1982, 1990, 1999, then continuous 2006\u20132019. The INSEE \u201Cimmigr\u00e9\u201D definition is narrower than Eurostat\u2019s foreign-born. Switzerland (dashed) is from the BFS register, 2010\u20132024. Germany is omitted because Eurostat does not publish Iran-born counts for Germany; see the Germany pages."),
+    highlight_hover = TRUE),
   '</div>',
   '</div>'
 )

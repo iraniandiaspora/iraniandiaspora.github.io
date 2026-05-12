@@ -131,8 +131,10 @@ p_region <- plot_ly(region, y = ~reorder(region_name, iran_born), x = ~iran_born
     title = list(text = "<b>Iran-Born by Region in Italy, 2025</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 10)),
-    margin = list(t = 40, b = 30, l = 160),
+    yaxis = list(title = "", tickfont = list(size = 10),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 40, b = 30, l = 170),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -182,6 +184,7 @@ make_gen_box <- function(val, pct_text, label, sublabel, color) {
 }
 
 sex_boxes <- paste0(
+  '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iran-Born Population by Sex</div>',
   '<div style="display:flex; gap:12px; margin-top:12px;">',
   make_gen_box(it_male, paste0(round(it_male / it_total * 100), "% of total"),
     "Male", "Iran-born men", "#1a4e72"),

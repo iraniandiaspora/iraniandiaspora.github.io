@@ -255,8 +255,10 @@ p_canton_bar <- plot_ly(canton_sorted, y = ~canton_name, x = ~iran_born,
     title = list(text = "<b>Iran-Born Population<br>by Canton, 2024</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 9)),
-    margin = list(l = 160, r = 20, t = 40, b = 30),
+    yaxis = list(title = "", tickfont = list(size = 9),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(l = 170, r = 20, t = 40, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 

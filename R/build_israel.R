@@ -160,10 +160,12 @@ p_age <- plot_ly() %>%
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", autorange = TRUE, categoryorder = "array",
-      categoryarray = age_order),
+      categoryarray = age_order,
+      ticks = "outside", ticklen = 8,
+      tickcolor = "rgba(0,0,0,0)"),
     barmode = "group",
     showlegend = FALSE,
-    margin = list(t = 50, b = 30, l = 50),
+    margin = list(t = 50, b = 30, l = 60),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -191,11 +193,46 @@ p_gen1_detail <- plot_ly() %>%
     title = list(text = "<b>Iran-Born Population in Israel<br>by Age, 2024</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", categoryorder = "array", categoryarray = gen1_order),
+    yaxis = list(title = "", categoryorder = "array", categoryarray = gen1_order,
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
     showlegend = FALSE,
-    margin = list(t = 50, b = 30, l = 50),
+    margin = list(t = 50, b = 30, l = 60),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
+
+# --- Iran-born population over time (UN Migrant Stock 1990–2024) --------------
+# Bottom-right slot (replaces the Asian-origin comparison, which moves to a
+# second tab on the same card). UN line only — register figure is implicit
+# in the headline.
+un_csv <- read.csv("data/global/stocks_countries.csv", stringsAsFactors = FALSE,
+                   check.names = FALSE)
+un_row <- un_csv[un_csv$destination == "Israel" &
+                 grepl("^Iran", un_csv$origin), ]
+un_years <- as.integer(sub("^X", "", names(un_row)[grepl("^X", names(un_row))]))
+un_vals  <- as.integer(unlist(un_row[, grepl("^X", names(un_row))]))
+un_trend <- data.frame(year = un_years, iran_born = un_vals)
+
+p_un_trend <- plot_ly(un_trend, x = ~year, y = ~iran_born,
+    type = "scatter", mode = "lines+markers",
+    line = list(color = "#1a4e72", width = 2.5),
+    marker = list(color = "#1a4e72", size = 8),
+    text = ~sprintf("<b>%d</b><br>%s Iran-born",
+      year, format(iran_born, big.mark = ",")),
+    hoverinfo = "text", showlegend = FALSE) %>%
+  layout(
+    title = list(
+      text = "<b>Iran-Born Population in Israel,<br>1990–2024</b>",
+      font = list(size = 15, family = "Montserrat")),
+    xaxis = list(title = "", dtick = 5),
+    yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
+    margin = list(t = 55, b = 40, l = 60, r = 15),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+UN_SOURCE <- paste0(
+  "Source: <a href='https://www.un.org/development/desa/pd/content/international-migrant-stock' target='_blank' style='color:#2774AE;'>UN DESA</a> International Migrant Stock 2024."
+)
 
 # --- Comparison with other Asian-origin groups --------------------------------
 # Sort by total descending (already sorted). Categorical colors per country.
@@ -216,9 +253,11 @@ p_comp <- plot_ly() %>%
     title = list(text = "<b>Asian-Origin Groups in Israel, 2024</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = ""),
+    yaxis = list(title = "",
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
     showlegend = FALSE,
-    margin = list(t = 40, b = 30, l = 120),
+    margin = list(t = 40, b = 30, l = 130),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -235,6 +274,7 @@ make_gen_box <- function(val, pct_text, label, sublabel, color) {
 }
 
 gen_boxes <- paste0(
+  '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iranian-Origin Population by Generation</div>',
   '<div style="display:flex; gap:12px; margin-top:12px;">',
   make_gen_box(il_gen1, paste0(round(il_gen1 / il_total * 100), "% of total"),
     "Iran-born", "Born in Iran", "#1a4e72"),
@@ -284,9 +324,20 @@ pop_body <- paste0(
   plotly_div("il-gen1-detail", plotly_to_json(p_gen1_detail), "430px", source = CBS_SOURCE),
   '</div>',
   '</div>',
+  # Bottom-right: tabbed chart — population over time (default) +
+  # Asian-origin comparison (second tab). Per framework rules we don't
+  # add new rows; the comparative-context chart becomes a second tab.
   '<div class="chart-card">',
-  '<div class="section-title" style="margin-top:0;">Comparative Context</div>',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'il-tab-trend\',this,\'il-right-tabs\')">Population Over Time</button>',
+  '<button class="tab-btn" onclick="switchTab(\'il-tab-comp\',this,\'il-right-tabs\')">Comparative Context</button>',
+  '</div>',
+  '<div id="il-tab-trend" class="tab-panel active" data-group="il-right-tabs">',
+  plotly_div("il-un-trend", plotly_to_json(p_un_trend), "430px", source = UN_SOURCE),
+  '</div>',
+  '<div id="il-tab-comp" class="tab-panel" data-group="il-right-tabs">',
   plotly_div("il-comp", plotly_to_json(p_comp), "430px", source = CBS_SOURCE),
+  '</div>',
   '</div>',
   '</div>'
 )

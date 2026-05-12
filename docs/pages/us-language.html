@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>US: Language</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-row-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
+.source a { color:#2774AE; }
+.page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.page-content .chart-card { margin-bottom:0; }
+.pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
+.pc1 { grid-area:2/1; } .pc2 { grid-area:2/2; }
+@media (max-width:900px) {
+  body { padding:10px 15px; display:flex; flex-direction:column; }
+  .text-row, .chart-row { grid-template-columns:1fr !important; }
+  .text-row-4 { grid-template-columns:1fr 1fr; }
+  .text-row, .text-row-4 { order:1; } /* push text below charts on mobile */
+  .page-content { grid-template-columns:1fr; }
+  .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
+  .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
+  .headline .number { font-size:34px; }
+  .headline { padding:20px 15px; }
+  .section-title { font-size:14px; }
+}
+@media (max-width:600px) {
+  .text-row-4 { grid-template-columns:1fr !important; }
+}
+@media (max-width:480px) {
+  body { padding:8px 10px; }
+  .text-card { font-size:13px; padding:14px; }
+  .headline .number { font-size:28px; }
+  .chart-card { padding:10px; }
+}
+.mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo { display:none !important; }
+</style>
+</head>
+<body>
+<div class="page-content"><div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">69%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Americans speak Persian at home.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>17% speak a different non-English language at home</li>
+      <li>Largest groups: Armenian 11%, Assyrian 2%, Arabic 1%, Turkish 1%, Kurdish &lt;1%</li>
+      <li>14% speak only English at home</li>
+    </ul>
+  </div><div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">31%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-Americans speak Persian at home.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>63% speak only English at home</li>
+      <li>6% speak another non-English language at home</li>
+    </ul>
+  </div><div class="chart-card pc1"><div id="us-lang-g1" style="width:100%;height:440px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":40,"l":70,"t":55,"r":20},"barmode":"stack","title":{"text":"<b>Language at Home of Iranian-Americans:<br>First Generation<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%","range":[0,100]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","showticklabels":true,"categoryorder":"array","categoryarray":["5-24","25-44","45-64","65+"],"tickfont":{"size":12},"ticks":"outside","ticklen":8,"tickcolor":"rgba(0,0,0,0)","type":"category"},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("us-lang-g1",[{"x":[66,72,66,70],"y":["5-24","25-44","45-64","65+"],"type":"bar","name":"Persian","marker":{"color":"#2d6a4f","line":{"color":"rgba(31,119,180,1)"}},"text":["<b>Persian<\/b><br>First Generation, Ages 5-24<br>66%","<b>Persian<\/b><br>First Generation, Ages 25-44<br>72%","<b>Persian<\/b><br>First Generation, Ages 45-64<br>66%","<b>Persian<\/b><br>First Generation, Ages 65+<br>70%"],"hoverinfo":["text","text","text","text"],"textposition":["none","none","none","none"],"orientation":"h","showlegend":false,"legendgroup":"Persian","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[19,15,17,17],"y":["5-24","25-44","45-64","65+"],"type":"bar","name":"Other language","marker":{"color":"#8b6c42","line":{"color":"rgba(255,127,14,1)"}},"text":["<b>Other language<\/b><br>First Generation, Ages 5-24<br>19%","<b>Other language<\/b><br>First Generation, Ages 25-44<br>15%","<b>Other language<\/b><br>First Generation, Ages 45-64<br>17%","<b>Other language<\/b><br>First Generation, Ages 65+<br>17%"],"hoverinfo":["text","text","text","text"],"textposition":["none","none","none","none"],"orientation":"h","showlegend":false,"legendgroup":"Other language","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[15,13,17,12],"y":["5-24","25-44","45-64","65+"],"type":"bar","name":"English only","marker":{"color":"#6c757d","line":{"color":"rgba(44,160,44,1)"}},"text":["<b>English only<\/b><br>First Generation, Ages 5-24<br>15%","<b>English only<\/b><br>First Generation, Ages 25-44<br>13%","<b>English only<\/b><br>First Generation, Ages 45-64<br>17%","<b>English only<\/b><br>First Generation, Ages 65+<br>12%"],"hoverinfo":["text","text","text","text"],"textposition":["none","none","none","none"],"orientation":"h","showlegend":false,"legendgroup":"English only","error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);
+var el=document.getElementById("us-lang-g1");
+function hlOn(lg){
+  el.data.forEach(function(t,i){
+    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
+  });
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
+}
+function hlOff(){
+  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
+}
+el.__hlOn=hlOn;el.__hlOff=hlOff;
+el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
+el.on("plotly_unhover",hlOff);
+var _lastLg=null;
+el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});})();</script>
+<div style="text-align:center; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;"><span data-lg="Persian" style="display:inline-flex; align-items:center; gap:4px; margin-right:14px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#2d6a4f; border-radius:2px; display:inline-block;"></span> Persian</span><span data-lg="Other language" style="display:inline-flex; align-items:center; gap:4px; margin-right:14px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#8b6c42; border-radius:2px; display:inline-block;"></span> Other language</span><span data-lg="English only" style="display:inline-flex; align-items:center; gap:4px; margin-right:14px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#6c757d; border-radius:2px; display:inline-block;"></span> English only</span></div>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://www.census.gov/programs-surveys/acs/microdata.html' target='_blank' style='color:#2774AE;'>U.S. Census Bureau</a> — ACS 2020–2024 5-Year PUMS<br>Language spoken at home, ages 5+.</p></div><div class="chart-card pc2"><div id="us-lang-g2" style="width:100%;height:440px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":40,"l":70,"t":55,"r":20},"barmode":"stack","title":{"text":"<b>Language at Home of Iranian-Americans:<br>Second Generation<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","ticksuffix":"%","range":[0,100]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","showticklabels":true,"categoryorder":"array","categoryarray":["5-17","18-34","35+"],"tickfont":{"size":12},"ticks":"outside","ticklen":8,"tickcolor":"rgba(0,0,0,0)","type":"category"},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("us-lang-g2",[{"x":[32,32,28],"y":["5-17","18-34","35+"],"type":"bar","name":"Persian","marker":{"color":"#2d6a4f","line":{"color":"rgba(31,119,180,1)"}},"text":["<b>Persian<\/b><br>Second Generation, Ages 5-17<br>32%","<b>Persian<\/b><br>Second Generation, Ages 18-34<br>32%","<b>Persian<\/b><br>Second Generation, Ages 35+<br>28%"],"hoverinfo":["text","text","text"],"textposition":["none","none","none"],"orientation":"h","showlegend":false,"legendgroup":"Persian","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[7,6,5],"y":["5-17","18-34","35+"],"type":"bar","name":"Other language","marker":{"color":"#8b6c42","line":{"color":"rgba(255,127,14,1)"}},"text":["<b>Other language<\/b><br>Second Generation, Ages 5-17<br>7%","<b>Other language<\/b><br>Second Generation, Ages 18-34<br>6%","<b>Other language<\/b><br>Second Generation, Ages 35+<br>5%"],"hoverinfo":["text","text","text"],"textposition":["none","none","none"],"orientation":"h","showlegend":false,"legendgroup":"Other language","error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[61,62,67],"y":["5-17","18-34","35+"],"type":"bar","name":"English only","marker":{"color":"#6c757d","line":{"color":"rgba(44,160,44,1)"}},"text":["<b>English only<\/b><br>Second Generation, Ages 5-17<br>61%","<b>English only<\/b><br>Second Generation, Ages 18-34<br>62%","<b>English only<\/b><br>Second Generation, Ages 35+<br>67%"],"hoverinfo":["text","text","text"],"textposition":["none","none","none"],"orientation":"h","showlegend":false,"legendgroup":"English only","error_y":{"color":"rgba(44,160,44,1)"},"error_x":{"color":"rgba(44,160,44,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);
+var el=document.getElementById("us-lang-g2");
+function hlOn(lg){
+  el.data.forEach(function(t,i){
+    Plotly.restyle(el,{opacity:t.legendgroup===lg?1:0.15,"marker.line.width":t.legendgroup===lg?3:0,"marker.line.color":"#000"},[i]);
+  });
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=s.getAttribute("data-lg")===lg?1:0.3;});}
+}
+function hlOff(){
+  el.data.forEach(function(t,i){Plotly.restyle(el,{opacity:1,"marker.line.width":0},[i]);});
+  var wrap=el.closest(".chart-card");
+  if(wrap){wrap.querySelectorAll("[data-lg]").forEach(function(s){s.style.opacity=1;});}
+}
+el.__hlOn=hlOn;el.__hlOff=hlOff;
+el.on("plotly_hover",function(d){hlOn(d.points[0].data.legendgroup);});
+el.on("plotly_unhover",hlOff);
+var _lastLg=null;
+el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});})();</script>
+<div style="text-align:center; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;"><span data-lg="Persian" style="display:inline-flex; align-items:center; gap:4px; margin-right:14px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#2d6a4f; border-radius:2px; display:inline-block;"></span> Persian</span><span data-lg="Other language" style="display:inline-flex; align-items:center; gap:4px; margin-right:14px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#8b6c42; border-radius:2px; display:inline-block;"></span> Other language</span><span data-lg="English only" style="display:inline-flex; align-items:center; gap:4px; margin-right:14px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOn)el.__hlOn(this.getAttribute('data-lg'));" onmouseleave="var el=this.closest('.chart-card').querySelector('.js-plotly-plot');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:#6c757d; border-radius:2px; display:inline-block;"></span> English only</span></div>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://www.census.gov/programs-surveys/acs/microdata.html' target='_blank' style='color:#2774AE;'>U.S. Census Bureau</a> — ACS 2020–2024 5-Year PUMS<br>Language spoken at home, ages 5+.</p></div></div>
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+</body>
+</html>

@@ -9,18 +9,19 @@
 
 # Iranian Diaspora Dashboard
 
-Interactive data dashboard comparing Iranian diaspora populations across 18 countries and worldwide.
+Interactive data dashboard comparing Iranian diaspora populations across 19 countries and worldwide.
 
 **[iraniandiaspora.github.io](https://iraniandiaspora.github.io)**
 
 ## Live Sections
 
 - **Global** – world map and stacked area chart (UN Migrant Stock 2024)
-- **United States** – population, immigration history, admissions (1970–2023), marriage, education, work, income (7 pages)
+- **United States** – population, immigration, admissions (1970–2023), marriage, education, work, income, language (8 pages)
 - **Europe** – overview of 12 countries, plus individual pages for Germany (4), United Kingdom (2), Netherlands (2), Sweden (1), Denmark (2), Norway (1), Austria (1), Italy (1), France (1), Switzerland (1), Finland (1)
 - **Canada** – population, language/religion, immigration, education, work, income (6 pages)
 - **Türkiye** – population, immigration (2 pages)
 - **Australia** – population, immigration, education/religion, work/income (4 pages)
+- **Armenia** – population (1 page)
 - **Israel** – population (1 page)
 - **Bibliography** – curated by H.E. Chehabi and Amir Sayadabdi
 - **About** – project description and changelog
@@ -46,6 +47,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 18 coun
 | Switzerland | Swiss Federal Statistical Office (BFS) population register | 2010–2024 |
 | Finland | Statistics Finland / Eurostat population register | 2001–2025 |
 | Türkiye | TÜİK address-based population register (ADNKS), via Eurostat | 2014–2025 |
+| Armenia | UN International Migrant Stock; Armstat Population Censuses | 1990–2024; 2011 and 2022 |
 | Israel | Israel Central Bureau of Statistics (CBS) Statistical Abstract | 2024 |
 
 ## Citation

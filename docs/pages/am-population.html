@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Armenia: Population</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<style>
+body { font-family:"Montserrat",system-ui,sans-serif; color:#222; background:#f6f7f9; margin:0; padding:16px 14px 28px; box-sizing:border-box; overflow-x:hidden; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; overflow:hidden; min-width:0; }
+.headline { background:white; border-radius:8px; padding:24px 22px; border:1px solid #e0e0e0; text-align:center; display:flex; flex-direction:column; justify-content:center; }
+.headline .label { font-size:14px; color:#555; margin-bottom:4px; }
+.headline .number { font-size:46px; font-weight:700; color:#1a4e72; line-height:1.1; }
+@media (max-width:900px) {
+  .chart-row { grid-template-columns:1fr; }
+  .headline { padding:18px; }
+  .headline .number { font-size:36px; }
+  .chart-card { padding:12px; }
+}
+.mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo { display:none !important; }
+</style>
+
+</head>
+<body>
+<div class="chart-row"><div class="headline"><div class="label">Estimated Iran-Born Population in Armenia</div><div class="number">5,470</div><div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the 2022 Population Census maintained by <a href='https://armstat.am/en/?nid=82&id=2623' target='_blank' style='color:#2774AE;'>Armstat</a></div><div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;"><p style="margin-bottom:8px;">Armenia counts Iran-born residents based on:</p><ul style="padding-left:20px; margin:0; line-height:2;"><li><strong>Place of birth</strong> <span style="color:#888;">&mdash; recorded in the 2022 census short form</span></li></ul><p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Armenia does not separately identify children of Iran-born parents.</p><p style="margin-top:8px; font-size:11px; color:#999; line-height:1.5;">Of the 5,470 Iran-born residents in 2022:</p><ul style="padding-left:18px; margin:4px 0 0; font-size:11px; color:#999; line-height:1.7;"><li>2,333 still held an Iranian passport</li><li>249 held both Iranian and Armenian citizenship</li><li>The remaining 2,888 had naturalized as Armenian citizens</li></ul><p style="margin-top:8px; font-size:11px; color:#999; line-height:1.5;">The UN Migrant Stock series uses interpolation between census years and gives a slightly higher 2024 estimate of 6,793.</p></div></div><div class="chart-card"><div id="am-hist" style="width:100%;height:430px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":60,"l":60,"t":55,"r":40},"title":{"text":"<b>Iran-Born Population in Armenia,<br>1990–2024<\/b>","font":{"size":15,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","dtick":5},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":",","rangemode":"tozero"},"legend":{"orientation":"h","x":0.5,"xanchor":"center","y":-0.18,"font":{"size":12}},"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","showlegend":true,"font":{"family":"Montserrat, sans-serif"},"hoverlabel":{"bgcolor":"white","bordercolor":"#ccc","font":{"family":"Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("am-hist",[{"x":[1990,1995,2000,2005,2010,2015,2020,2024],"y":[22245,19417,16665,13705,11117,8510,6065,6793],"type":"scatter","mode":"lines+markers","name":"UN Migrant Stock","line":{"color":"#1a4e72","width":2.5},"marker":{"color":"#1a4e72","size":8,"line":{"color":"rgba(31,119,180,1)"}},"text":["<b>1990<\/b><br>22,245 Iran-born (UN estimate)","<b>1995<\/b><br>19,417 Iran-born (UN estimate)","<b>2000<\/b><br>16,665 Iran-born (UN estimate)","<b>2005<\/b><br>13,705 Iran-born (UN estimate)","<b>2010<\/b><br>11,117 Iran-born (UN estimate)","<b>2015<\/b><br> 8,510 Iran-born (UN estimate)","<b>2020<\/b><br> 6,065 Iran-born (UN estimate)","<b>2024<\/b><br> 6,793 Iran-born (UN estimate)"],"hoverinfo":["text","text","text","text","text","text","text","text"],"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[2011,2022],"y":[10532,5470],"type":"scatter","mode":"markers","name":"Armstat census","marker":{"color":"#c4793a","size":12,"symbol":"diamond","line":{"color":"#1a4e72","width":1.5}},"text":["<b>2011<\/b><br>10,532 Iran-born (Armstat census)","<b>2022<\/b><br> 5,470 Iran-born (Armstat census)"],"hoverinfo":["text","text"],"error_y":{"color":"rgba(255,127,14,1)"},"error_x":{"color":"rgba(255,127,14,1)"},"line":{"color":"rgba(255,127,14,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">Source: <a href='https://www.un.org/development/desa/pd/content/international-migrant-stock' target='_blank' style='color:#2774AE;'>UN DESA</a> International Migrant Stock 2024 and <a href='https://armstat.am/en/?nid=82&id=2623' target='_blank' style='color:#2774AE;'>Armstat</a> Population Censuses 2011 and 2022.</p></div></div>
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+</body>
+</html>

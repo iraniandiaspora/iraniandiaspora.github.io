@@ -2,9 +2,15 @@
 # Run from deployment repo root:
 #   Rscript R/fr_export/extract_insee.R
 #
-# Inputs (in ../_data/france/insee/):
-#   pays_naissance_detaille_2017.xlsx  - annual series 2006-2017
-#   asie_pays_naissance_2019.xlsx      - 2019, 2014, 2009 snapshots
+# Input (in ../_data/france/insee/):
+#   pays_naissance_detaille_1968_2019.xlsx  - INSEE table 6478091
+#     "Séries longues depuis 1968", 2019 cycle. Two sheets:
+#       - "1968-1999": 5 historical census snapshots
+#       - "2006-2019": continuous annual series
+#     Pre-2006 censuses (1968, 1975, 1982, 1990, 1999) were periodic;
+#     INSEE switched to a rolling annual census in 2004, so the modern
+#     series starts at 2006. The gap 1999–2006 is genuine — do not
+#     interpolate.
 #
 # Outputs (written to data/france/):
 #   fr_trend.csv     - year, iran_born (INSEE immigré definition)
@@ -23,51 +29,36 @@ suppressPackageStartupMessages({
 OUT_DIR <- "data/france"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
-INSEE_2017 <- "../_data/france/insee/pays_naissance_detaille_2017.xlsx"
-INSEE_2019 <- "../_data/france/insee/asie_pays_naissance_2019.xlsx"
+INSEE_LONG <- "../_data/france/insee/pays_naissance_detaille_1968_2019.xlsx"
 
-# --- 1. Annual series 2006-2017 from INSEE 2017 file --------------------------
-cat("Reading INSEE 2017 file (annual 2006-2017)...\n")
-d17 <- suppressMessages(read_excel(INSEE_2017, sheet = 1, col_names = FALSE))
+# Generic reader: row 3 has year headers in cols 2..N, Iran row starts with "Iran".
+read_iran_row <- function(file, sheet) {
+  d <- suppressMessages(read_excel(file, sheet = sheet, col_names = FALSE))
+  year_row <- as.integer(unlist(d[3, -1]))
+  iran_idx <- which(apply(d, 1, function(r) any(grepl("^Iran", r, ignore.case = TRUE))))
+  stopifnot(length(iran_idx) == 1)
+  iran_vals <- suppressWarnings(as.integer(unlist(d[iran_idx, -1])))
+  tibble(year = year_row, iran_born = iran_vals) %>%
+    filter(!is.na(year), !is.na(iran_born))
+}
 
-# Header year row is row 3, columns 2 onward. Iran row contains "Iran" in col 1.
-year_row <- as.integer(unlist(d17[3, -1]))
-iran_idx <- which(apply(d17, 1, function(r) any(grepl("^Iran", r, ignore.case = TRUE))))
-stopifnot(length(iran_idx) == 1)
-iran_vals <- suppressWarnings(as.integer(unlist(d17[iran_idx, -1])))
+cat("Reading 1968-1999 snapshots...\n")
+hist_snap <- read_iran_row(INSEE_LONG, "1968-1999")
+print(hist_snap)
 
-trend_2017 <- tibble(year = year_row, iran_born = iran_vals) %>%
-  filter(!is.na(year), !is.na(iran_born)) %>%
-  arrange(year)
-cat(sprintf("  %d rows (%d-%d)\n", nrow(trend_2017),
-            min(trend_2017$year), max(trend_2017$year)))
+cat("Reading 2006-2019 annual series...\n")
+recent <- read_iran_row(INSEE_LONG, "2006-2019")
 
-# --- 2. 2019 snapshot from INSEE 2019 file ------------------------------------
-cat("Reading INSEE 2019 file (2019 headline + 2014, 2009)...\n")
-d19 <- suppressMessages(read_excel(INSEE_2019, sheet = 1, col_names = FALSE))
-year_row_19 <- as.integer(unlist(d19[3, -1]))
-iran_idx_19 <- which(apply(d19, 1, function(r) any(grepl("^Iran", r, ignore.case = TRUE))))
-stopifnot(length(iran_idx_19) == 1)
-iran_vals_19 <- suppressWarnings(as.integer(unlist(d19[iran_idx_19, -1])))
-snap_19 <- tibble(year = year_row_19, iran_born = iran_vals_19) %>%
-  filter(!is.na(year), !is.na(iran_born))
-print(snap_19)
-
-# --- 3. Combine: take INSEE 2019 file's value for any overlapping year --------
-# (the 2019 file reflects later INSEE revisions)
-trend <- bind_rows(
-  trend_2017 %>% filter(!year %in% snap_19$year),
-  snap_19
-) %>% arrange(year)
-
+trend <- bind_rows(hist_snap, recent) %>% arrange(year)
 cat("\nFinal France trend:\n")
 print(trend)
 
 write.csv(trend, file.path(OUT_DIR, "fr_trend.csv"), row.names = FALSE)
-cat(sprintf("Wrote %s (%d rows)\n",
-            file.path(OUT_DIR, "fr_trend.csv"), nrow(trend)))
+cat(sprintf("Wrote %s (%d rows, %d-%d)\n",
+            file.path(OUT_DIR, "fr_trend.csv"), nrow(trend),
+            min(trend$year), max(trend$year)))
 
-# --- 4. Headline ---------------------------------------------------------------
+# --- Headline ----------------------------------------------------------------
 latest <- trend[which.max(trend$year), ]
 headline <- tibble(category = "total",
                    year = latest$year,
