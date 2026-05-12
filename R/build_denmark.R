@@ -238,6 +238,7 @@ make_gen_box <- function(val, pct_text, label, sublabel, color) {
 }
 
 gen_boxes <- paste0(
+  '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iranian-Origin Population by Generation</div>',
   '<div style="display:flex; gap:12px; margin-top:12px;">',
   make_gen_box(dk_gen1, paste0(round(dk_gen1 / dk_total * 100), "% of total"),
     "Immigrants", "Born in Iran", "#1a4e72"),
@@ -314,8 +315,10 @@ p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
     title = list(text = "<b>Iranian-Origin Full-Time Employees<br>by Industry in Denmark, 2024</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 10)),
-    margin = list(l = 140, r = 20, t = 40, b = 30),
+    yaxis = list(title = "", tickfont = list(size = 10),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(l = 150, r = 20, t = 40, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -327,7 +330,11 @@ workinc_body <- paste0(
   sprintf('<div class="text-card pt1" style="text-align:center; display:flex; flex-direction:column; justify-content:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin full-time equivalent employees in Denmark work in %s.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:380px; margin-left:auto; margin-right:auto;">Next largest sectors: %s (%.0f%%) and %s (%.0f%%).</div>
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:380px; margin-left:auto; margin-right:auto;">Next largest sectors:</div>
+    <ul style="margin:6px auto 0; padding-left:18px; max-width:380px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%s (%.0f%%)</li>
+      <li>%s (%.0f%%)</li>
+    </ul>
     <div style="font-size:11px; color:#999; margin-top:14px; line-height:1.5; max-width:380px; margin-left:auto; margin-right:auto;">Based on Register-based Labour Force Statistics (RAS). Self-employed are not included.</div>
   </div>',
     top3$pct[1], top3$sector_en[1],

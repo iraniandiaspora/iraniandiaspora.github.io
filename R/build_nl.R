@@ -182,8 +182,10 @@ if (has_geojson) {
     hoverinfo = "text", textposition = "none") %>%
     layout(
       xaxis = list(title = "", tickformat = ","),
-      yaxis = list(title = ""),
-      margin = list(l = 120, r = 20, t = 10, b = 20),
+      yaxis = list(title = "",
+                   ticks = "outside", ticklen = 8,
+                   tickcolor = "rgba(0,0,0,0)"),
+      margin = list(l = 130, r = 20, t = 10, b = 20),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
   map_html <- plotly_div("nl-prov-bar", plotly_to_json(p_nl_bar), "500px",
@@ -295,6 +297,7 @@ make_gen_box <- function(val, pct_text, label, sublabel, color) {
 }
 
 gen_boxes <- paste0(
+  '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iranian-Origin Population by Generation</div>',
   '<div style="display:flex; gap:12px; margin-top:12px;">',
   make_gen_box(nl_gen1, paste0(round(nl_gen1 / nl_total * 100), "% of total"),
     "First generation", "Born in Iran", "#1a4e72"),
@@ -495,14 +498,18 @@ workinc_body <- paste0(
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents aged 15&ndash;74 in the Netherlands are in the labour force (%d).</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Of those employed, %d%% hold permanent contracts, %d%% flexible, and %d%% are self-employed.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% of those employed hold permanent contracts</li>
+      <li>%d%% hold flexible contracts</li>
+      <li>%d%% are self-employed</li>
+    </ul>
   </div>', latest$participation_rate, latest$year,
     latest$permanent_pct, latest$flexible_pct, latest$selfemployed_pct),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranian-origin households in the Netherlands earn about %d%% of the national average household disposable income (%d).</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of the Dutch national average household disposable income, for Iranian-origin households (%d).</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">The share of Iranian-origin households below the low-income threshold has fallen from %d%% in %d to %d%% in %d.</div>
-  </div>', inc_ratio, inc_ratio, latest_inc$year,
+  </div>', inc_ratio, latest_inc$year,
     li_peak, li_peak_yr, li_latest, li_latest_yr),
 
   # Chart cell 1: tabbed (Participation | Employment Type)

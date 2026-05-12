@@ -5,6 +5,7 @@
 
 library(plotly)
 library(dplyr)
+library(tidyr)
 library(readr)
 library(jsonlite)
 
@@ -44,6 +45,8 @@ SRC_EDUC <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS
   "Ages 25+, when most have completed their education.")
 SRC_WORK <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS<br>",
   "Employment type reflects primary job held in the past year.")
+SRC_LANG <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS<br>",
+  "Language spoken at home, ages 5+.")
 SRC_INCOME <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS<br>",
   "Ages 25\u201354 (prime working years).<br>Each decile holds 10% of all U.S. households, ranked by pre-tax household income.")
 
@@ -317,8 +320,8 @@ writeLines(page_template("US: Immigration History", paste0(
     <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45; margin-top:16px;">About these figures</div>
     <ul style="margin:8px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>Counts green cards granted, not the current Iran-born population</li>
-      <li>Five decades of grants &mdash; includes people who later died, returned, or moved elsewhere</li>
-      <li>Many recipients first entered on temporary visas (student, work) before adjusting</li>
+      <li>Includes people who later died, returned, or moved elsewhere</li>
+      <li>Many recipients first entered on temporary visas (student, work) before receiving permanent residence in a subsequent year</li>
     </ul>
   </div>',
     format(sum(lpr$total), big.mark = ",")),
@@ -327,10 +330,13 @@ writeLines(page_template("US: Immigration History", paste0(
     <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.6;">
       <li><b>Family</b> \u2014 immediate relatives or family sponsorship</li>
       <li><b>Employment</b> \u2014 employer or skill-based admission</li>
-      <li><b>Refugee/Asylee</b> \u2014 adjusting from refugee or asylee status</li>
+      <li><b>Refugee/Asylee</b> \u2014 prior refugee or asylee status</li>
       <li><b>Diversity</b> \u2014 annual visa lottery for countries with low U.S. immigration</li>
     </ul>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Family has been the largest category throughout; the 1989\u201391 spike reflects a 1986 law that granted permanent residence to many previously undocumented immigrants.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Family has been the largest category throughout</li>
+      <li>The 1989\u201391 surge includes IRCA legalization \u2014 a one-time program from a 1986 law that granted permanent residence to many previously undocumented immigrants</li>
+    </ul>
   </div>',
   '<div class="chart-card pc1">', plotly_div("lpr-total", plotly_to_json(p_lpr_total), "450px", source = SRC_LPR), '</div>',
   '<div class="chart-card pc2">', plotly_div("lpr-cat", plotly_to_json(p_lpr_cat), "450px", source = SRC_LPR, legend_html = cat_leg, highlight_hover = TRUE),
@@ -865,17 +871,172 @@ writeLines(page_template("Income", paste0(
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile &mdash; more than double the national baseline of 10%%.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Only %s%% fall in the lowest decile.</div>
-  </div>', round(fg_d10), format(fg_d1, nsmall = 1)),
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Only %d%% fall in the lowest decile.</div>
+  </div>', round(fg_d10), round(fg_d1)),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile &mdash; even more concentrated at the top than the first generation.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Just %s%% fall in the lowest decile.</div>
-  </div>', round(sg_d10), format(sg_d1, nsmall = 1)),
+    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Just %d%% fall in the lowest decile.</div>
+  </div>', round(sg_d10), round(sg_d1)),
   '<div class="chart-card pc1">', make_income_chart(inc, "1st gen", "First Generation", "inc1"), '</div>',
   '<div class="chart-card pc2">', make_income_chart(inc, "2nd gen", "Second Generation", "inc2"), '</div>',
   '</div>'
 )), "docs/pages/us-income.html")
+cat("  Done\n")
+
+
+# =====================================================
+# US LANGUAGE — Persian-language retention
+# =====================================================
+cat("Building us-language...\n")
+
+lang_age <- read_csv(file.path(DATA_DIR, "language_age.csv"),
+                     show_col_types = FALSE)
+
+# --- Stacked-bar language-at-home composition, one chart per generation -----
+# Mirrors the ca-langrelig pattern: horizontal 100% stacked bars across
+# age cohorts. Categories and colors are kept to three to match the
+# resolution of ACS LANP (which doesn't distinguish mother tongue), and
+# the "Other language" bucket is intentionally unlabeled per
+# .claude/rules/dashboard-content-rules.md §4b (no speculative gloss on
+# coded data — among Iran-born the bucket includes Armenian, Kurdish,
+# Other Indo-Iranian, Assyrian Neo-Aramaic, French, and other smaller
+# categories).
+lang_cat_levels <- c("Persian", "Other language", "English only")
+lang_cat_colors <- c(
+  "Persian"        = "#2d6a4f",  # Canada "Persian (mother tongue), Persian (at home)"
+  "Other language" = "#8b6c42",  # Canada "Minority (mother tongue), same (at home)"
+  "English only"   = "#6c757d"   # Canada "English (mother tongue), English (at home)"
+)
+
+# Pre-pivot to long format for plotly
+lang_long <- lang_age %>%
+  select(gen, age_cohort, population, pct_persian, pct_other, pct_english_only,
+         persian, other, english_only) %>%
+  pivot_longer(
+    cols = c(pct_persian, pct_other, pct_english_only),
+    names_to = "lang_cat", values_to = "pct"
+  ) %>%
+  mutate(lang_cat = case_when(
+    lang_cat == "pct_persian"      ~ "Persian",
+    lang_cat == "pct_other"        ~ "Other language",
+    lang_cat == "pct_english_only" ~ "English only"
+  ),
+  count = case_when(
+    lang_cat == "Persian"        ~ persian,
+    lang_cat == "Other language" ~ other,
+    lang_cat == "English only"   ~ english_only
+  )) %>%
+  select(gen, age_cohort, lang_cat, count, pct, population)
+
+make_lang_stack <- function(gen_value, cohort_levels, gen_label) {
+  sub <- lang_long %>%
+    filter(gen == gen_value) %>%
+    mutate(age_cohort = factor(age_cohort, levels = cohort_levels),
+           lang_cat   = factor(lang_cat,   levels = lang_cat_levels)) %>%
+    arrange(age_cohort, lang_cat)
+  p <- plot_ly()
+  for (lc in lang_cat_levels) {
+    # Precompute hover text into the row data — referencing `lc` via the
+    # plotly `~text` formula captures by reference and yields the loop's
+    # final value on every trace.
+    s <- sub %>% filter(lang_cat == lc) %>%
+      mutate(hover_text = sprintf(
+        "<b>%s</b><br>%s, Ages %s<br>%d%%",
+        lc, gen_label, age_cohort, pct))
+    p <- p %>% add_bars(
+      data = s, y = ~age_cohort, x = ~pct, name = lc,
+      marker = list(color = lang_cat_colors[[lc]]),
+      text = ~hover_text,
+      hoverinfo = "text", textposition = "none",
+      orientation = "h", showlegend = FALSE, legendgroup = lc)
+  }
+  p %>% layout(
+    barmode = "stack",
+    title = list(
+      text = sprintf("<b>Language at Home of Iranian-Americans:<br>%s</b>", gen_label),
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = "", ticksuffix = "%", range = c(0, 100)),
+    yaxis = list(title = "", showticklabels = TRUE,
+                 categoryorder = "array", categoryarray = cohort_levels,
+                 tickfont = list(size = 12),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 55, b = 40, l = 70, r = 20),
+    showlegend = FALSE,
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+}
+
+g1_cohorts <- c("5-24", "25-44", "45-64", "65+")
+g2_cohorts <- c("5-17", "18-34", "35+")
+
+p_lang_g1 <- make_lang_stack("1st generation", g1_cohorts, "First Generation")
+p_lang_g2 <- make_lang_stack("2nd generation", g2_cohorts, "Second Generation")
+lang_leg  <- make_html_legend(lang_cat_colors)
+
+# Overall by-generation percentages (population-weighted). Cohort variation
+# is small (1st gen Persian 66-72%, 2nd gen 28-32%) so the factoids report
+# one number per generation rather than picking a specific age cohort.
+gen_totals <- lang_age %>% group_by(gen) %>%
+  summarize(
+    pop = sum(population),
+    persian = sum(persian),
+    other = sum(other),
+    english_only = sum(english_only),
+    pct_persian = round(persian / pop * 100),
+    pct_other = round(other / pop * 100),
+    pct_english_only = round(english_only / pop * 100),
+    .groups = "drop")
+g1_pct <- gen_totals %>% filter(gen == "1st generation")
+g2_pct <- gen_totals %>% filter(gen == "2nd generation")
+
+# Top non-Persian, non-English languages among 1st gen. Codebook labels
+# only (see .claude/rules/us-pipeline.md). The CSV is built by
+# pipelines/us/export_language.R.
+lang_other <- read_csv(file.path(DATA_DIR, "language_top_other.csv"),
+                       show_col_types = FALSE)
+# Display each share rounded to a whole percent; anything that rounds to
+# zero is shown as "<1%" rather than "0%" so the magnitude isn't misread.
+lang_other_str <- paste(
+  ifelse(lang_other$pct_of_1st_gen == 0,
+    sprintf("%s &lt;1%%", lang_other$language),
+    sprintf("%s %d%%", lang_other$language, lang_other$pct_of_1st_gen)),
+  collapse = ", "
+)
+
+lang_body <- paste0(
+  '<div class="page-content">',
+  sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Americans speak Persian at home.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% speak a different non-English language at home</li>
+      <li>Largest groups: %s</li>
+      <li>%d%% speak only English at home</li>
+    </ul>
+  </div>', g1_pct$pct_persian, g1_pct$pct_other, lang_other_str, g1_pct$pct_english_only),
+  sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-Americans speak Persian at home.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% speak only English at home</li>
+      <li>%d%% speak another non-English language at home</li>
+    </ul>
+  </div>', g2_pct$pct_persian, g2_pct$pct_english_only, g2_pct$pct_other),
+  '<div class="chart-card pc1">',
+  plotly_div("us-lang-g1", plotly_to_json(p_lang_g1), "440px",
+             source = SRC_LANG, legend_html = lang_leg, highlight_hover = TRUE),
+  '</div>',
+  '<div class="chart-card pc2">',
+  plotly_div("us-lang-g2", plotly_to_json(p_lang_g2), "440px",
+             source = SRC_LANG, legend_html = lang_leg, highlight_hover = TRUE),
+  '</div>',
+  '</div>'
+)
+
+writeLines(page_template("US: Language", lang_body),
+           "docs/pages/us-language.html")
 cat("  Done\n")
 
 

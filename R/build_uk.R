@@ -302,8 +302,10 @@ pop_body <- paste0(
       title = list(text = "<b>Religion of Iran-Born Residents<br>in England and Wales, 2021</b>",
         font = list(size = 14, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
-      yaxis = list(title = "", tickfont = list(size = 11)),
-      margin = list(l = 110, r = 20, t = 55, b = 30),
+      yaxis = list(title = "", tickfont = list(size = 11),
+                   ticks = "outside", ticklen = 8,
+                   tickcolor = "rgba(0,0,0,0)"),
+      margin = list(l = 120, r = 20, t = 55, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
   }), "430px", source = ONS_CUSTOM),
@@ -413,12 +415,12 @@ no_qual_pct <- round(no_qual / qual_total * 100)
 workedu_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of economically active Iran-born residents aged 16+ in England and Wales are employed.</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Another %d%% of the Iran-born 16+ population are economically inactive (including %d%% students).</div>
   </div>', employment_rate, inactive_pct, student_pct),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born residents aged 16+ in England and Wales hold a bachelor&rsquo;s degree or higher.</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %d%% report no formal qualifications.</div>
   </div>', degree_pct, no_qual_pct),

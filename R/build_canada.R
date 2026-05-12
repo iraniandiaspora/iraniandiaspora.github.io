@@ -522,16 +522,59 @@ p_relig <- p_relig %>% layout(
 
 relig_leg <- make_html_legend(relig_colors, break_after = 3)
 
+# --- Factoid cards (4-card grid, same pattern as ca-work) -------------------
+# card4() helper is shared with ca-work below.
+card4 <- function(cls, big, sentence, note) {
+  sprintf('<div class="text-card %s" style="text-align:center;">
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:14px; font-weight:500; color:#333; margin-top:10px; line-height:1.45;">%s</div>
+    <div style="font-size:12.5px; color:#555; margin-top:10px; line-height:1.5;">%s</div>
+  </div>', cls, big, sentence, note)
+}
+
+lang_share <- function(gen, cat) {
+  v <- lang_all$percentage[lang_all$gen_label == gen & lang_all$short_cat == cat]
+  if (length(v) == 0) 0 else round(sum(v))
+}
+relig_share <- function(gen, cat) {
+  v <- relig_all$percentage[relig_all$gen_label == gen & relig_all$short_cat == cat]
+  if (length(v) == 0) 0 else round(sum(v))
+}
+
+# Language shares: "Persian at home" = mother-tongue-Persian + home-Persian.
+# Shift to Eng/Fr = mother-tongue-Persian shifted to Eng/Fr home + English MT/English home.
+g1_persian   <- lang_share("1st Generation",  "Persian (mother tongue), Persian (at home)")
+g1_engfr     <- lang_share("1st Generation",  "Persian (mother tongue), Eng/Fr (at home)") +
+                lang_share("1st Generation",  "English (mother tongue), English (at home)")
+g2_persian   <- lang_share("2nd+ Generation", "Persian (mother tongue), Persian (at home)")
+g2_engfr     <- lang_share("2nd+ Generation", "Persian (mother tongue), Eng/Fr (at home)") +
+                lang_share("2nd+ Generation", "English (mother tongue), English (at home)")
+
+# Religion shares
+g1_muslim     <- relig_share("1st Generation",  "Muslim")
+g1_noreligion <- relig_share("1st Generation",  "No religion/Secular")
+g2_muslim     <- relig_share("2nd+ Generation", "Muslim")
+g2_noreligion <- relig_share("2nd+ Generation", "No religion/Secular")
+g2_christian  <- relig_share("2nd+ Generation", "Christian")
+
 writeLines(page_template("Canada: Language & Religion", paste0(
   '<div class="page-content-4">',
-  '<div class="text-card p4-t1">59% of first-generation Iranian-Canadians report Persian as their primary home language, while 20% report English or French.</div>',
-  '<div class="text-card p4-t2">Among second+ generation, 39% maintain Persian at home, while 28% report English as their primary household language.</div>',
-  '<div class="text-card p4-t3">Nearly half (49%) of first-generation Iranian-Canadians identify as Muslim, while 40% report no religion or a secular identity.</div>',
-  '<div class="text-card p4-t4">Among the second+ generation, 58% report no religion or a secular identity, and 31% identify as Muslim.</div>',
+  card4("p4-t1", sprintf("%d%%", g1_persian),
+    "of first-generation Iranian-Canadians still speak Persian at home.",
+    sprintf("Another %d%% have shifted to English or French at home.", g1_engfr)),
+  card4("p4-t2", sprintf("%d%%", g2_persian),
+    "of second-generation Iranian-Canadians still speak Persian at home.",
+    sprintf("English or French at home rises to %d%%.", g2_engfr)),
+  card4("p4-t3", sprintf("%d%%", g1_muslim),
+    "of first-generation Iranian-Canadians identify as Muslim.",
+    sprintf("Another %d%% report no religion or a secular identity.", g1_noreligion)),
+  card4("p4-t4", sprintf("%d%%", g2_noreligion),
+    "of second-generation Iranian-Canadians report no religion or a secular identity.",
+    sprintf("Muslim %d%%, Christian %d%%.", g2_muslim, g2_christian)),
   '<div class="chart-card p4-c1">', plotly_div("lang", plotly_to_json(p_lang), "300px", source = PUMF_SOURCE, legend_html = lang_leg, highlight_hover = TRUE), '</div>',
   '<div class="chart-card p4-c2">', plotly_div("relig", plotly_to_json(p_relig), "300px", source = PUMF_SOURCE, legend_html = relig_leg, highlight_hover = TRUE), '</div>',
   '</div>'
-)), "docs/pages/ca-langrelig.html")
+), has_tabs = FALSE), "docs/pages/ca-langrelig.html")
 cat("  Done\n")
 
 
@@ -720,7 +763,10 @@ writeLines(page_template("Canada: Immigration & Citizenship", paste0(
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-Canadians are naturalized Canadian citizens.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% have not yet obtained citizenship. Economic immigration has been the most common pathway since the 1990s.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% have not yet obtained citizenship</li>
+      <li>Economic immigration has been the most common pathway since the 1990s</li>
+    </ul>
   </div>', cit_naturalized_pct, cit_not_citizen_pct),
   '<div class="chart-card pc1">', plotly_div("ca-immig", plotly_to_json(p_ca_immig), "430px", source = PUMF_SRC_IMMIG), '</div>',
   '<div class="chart-card pc2">', cit_div, '</div>',
@@ -1058,13 +1104,7 @@ g2m_ts  <- work_share("Second-Generation", "Men",   "Trade & Services")
 g2w_pt  <- work_share("Second-Generation", "Women", "Professional & Technical")
 g2w_he  <- work_share("Second-Generation", "Women", "Health & Education")
 
-card4 <- function(cls, big, sentence, note) {
-  sprintf('<div class="text-card %s" style="text-align:center;">
-    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
-    <div style="font-size:14px; font-weight:500; color:#333; margin-top:10px; line-height:1.45;">%s</div>
-    <div style="font-size:12.5px; color:#555; margin-top:10px; line-height:1.5;">%s</div>
-  </div>', cls, big, sentence, note)
-}
+# card4() helper is defined above in the ca-langrelig section.
 
 writeLines(page_template("Canada: Work", paste0(
   '<div class="page-content-4">',

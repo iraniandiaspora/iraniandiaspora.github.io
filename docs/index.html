@@ -28,6 +28,7 @@
       <button class="tab-button" onclick="showTab('turkey', this)">T&uuml;rkiye</button>
       <button class="tab-button" onclick="showTab('israel', this)">Israel</button>
       <button class="tab-button" onclick="showTab('australia', this)">Australia</button>
+      <button class="tab-button" onclick="showTab('armenia', this)">Armenia</button>
       <button class="tab-button" onclick="showTab('bibliography', this)">Bibliography</button>
       <button class="tab-button" onclick="showTab('about', this)">About</button>
     </nav>
@@ -40,6 +41,7 @@
       <button class="sub-tab" data-tab="us-immigration" onclick="showSubTab('us-immigration', this)">Immigration &amp; Citizenship</button>
       <button class="sub-tab" data-tab="us-admissions" onclick="showSubTab('us-admissions', this)">Immigration History</button>
       <button class="sub-tab" data-tab="us-marriage" onclick="showSubTab('us-marriage', this)">Marriage</button>
+      <button class="sub-tab" data-tab="us-language" onclick="showSubTab('us-language', this)">Language</button>
       <button class="sub-tab" data-tab="us-education" onclick="showSubTab('us-education', this)">Education</button>
       <button class="sub-tab" data-tab="us-work" onclick="showSubTab('us-work', this)">Work</button>
       <button class="sub-tab" data-tab="us-income" onclick="showSubTab('us-income', this)">Income</button>
@@ -168,6 +170,9 @@
 <div id="page-us-marriage" class="tab-content">
   <iframe data-src="pages/us-marriage.html" title="US Marriage"></iframe>
 </div>
+<div id="page-us-language" class="tab-content">
+  <iframe data-src="pages/us-language.html" title="US Language"></iframe>
+</div>
 <div id="page-us-education" class="tab-content">
   <iframe data-src="pages/us-education.html" title="US Education"></iframe>
 </div>
@@ -215,6 +220,11 @@
 <!-- Israel Page -->
 <div id="page-israel" class="tab-content">
   <iframe data-src="pages/il-population.html" title="Israel Population"></iframe>
+</div>
+
+<!-- Armenia Page -->
+<div id="page-armenia" class="tab-content">
+  <iframe data-src="pages/am-population.html" title="Armenia Population"></iframe>
 </div>
 
 <!-- Europe Overview Page -->
@@ -317,11 +327,37 @@
       <a href="mailto:cnes@international.ucla.edu">cnes@international.ucla.edu</a>.
     </p>
 
+    <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">How to cite</h3>
+    <p style="margin-left:24px; text-indent:-24px; line-height:1.8;">Harris, Kevan, Roxanne Corbeil, and Gilad Wenig. 2024. <em>Iranian Diaspora Dashboard</em>. UCLA Center for Near Eastern Studies. <a href="https://iraniandiaspora.github.io" style="color:#2774AE;">https://iraniandiaspora.github.io</a></p>
+    <p style="font-size:12px; color:#888; margin-top:8px;">Charts and original analysis are licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:#2774AE;">CC BY 4.0</a>. Underlying data are subject to their original terms of use from the U.S. Census Bureau, DHS, Statistics Canada, ABS, Destatis, BAMF, ONS, CBS Netherlands, SCB, DST, SSB, Statistik Austria, ISTAT, BFS, CBS Israel, Eurostat, and the United Nations.</p>
+
+    <style>
+      details.changelog-entry { margin-bottom:14px; padding-left:16px; border-left:3px solid #d4dfeb; }
+      details.changelog-entry[open] { border-left-color:#1a4e72; }
+      details.changelog-entry summary { font-weight:600; cursor:pointer; padding:4px 0; list-style:none; color:#333; }
+      details.changelog-entry summary::-webkit-details-marker { display:none; }
+      details.changelog-entry summary::before { content:"▸ "; color:#888; transition:transform 0.15s; display:inline-block; }
+      details.changelog-entry[open] summary::before { content:"▾ "; color:#1a4e72; }
+      details.changelog-entry summary:hover { color:#1a4e72; }
+      details.changelog-entry ul { margin:8px 0 12px 18px; line-height:1.8; }
+    </style>
+
     <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">What&rsquo;s changed</h3>
 
-    <div style="border-left:3px solid #2774AE; padding-left:16px; margin-bottom:20px;">
-      <p style="font-weight:600; margin-bottom:4px;">April 2026</p>
-      <ul style="margin:0 0 0 16px; line-height:1.8;">
+    <details class="changelog-entry" open>
+      <summary>May 2026</summary>
+      <ul>
+        <li>Added <strong>Armenia</strong> with population data from the 2011 and 2022 Armenian Censuses</li>
+        <li>Added <strong>U.S. language</strong>, with Persian-at-home retention by generation from the American Community Survey</li>
+        <li>Added <strong>Finland</strong> with population and location data</li>
+        <li>Added historical population data to <strong>France</strong> via the INSEE census</li>
+        <li>Added an Iranian residence-permit breakdown for <strong>T&uuml;rkiye</strong></li>
+      </ul>
+    </details>
+
+    <details class="changelog-entry">
+      <summary>April 2026</summary>
+      <ul>
         <li>Added <strong>Europe</strong> with data for twelve countries: Germany, the United Kingdom, the Netherlands, Sweden, Denmark, Norway, Austria, Italy, France, Switzerland, Belgium, and Finland, with a cross-country overview</li>
         <li>Added <strong>T&uuml;rkiye</strong> with population and immigration data from the TÜİK address-based register</li>
         <li>Added <strong>Australia</strong> with population, immigration, education, and employment data from the 2021 Australian Census</li>
@@ -330,24 +366,21 @@
         <li>Added <strong>Israel</strong> with population data from the Israeli Statistical Abstract</li>
         <li>Redesigned the site for improved speed, interactivity, and mobile viewing</li>
       </ul>
-    </div>
+    </details>
 
-    <div style="border-left:3px solid #5a9bd5; padding-left:16px; margin-bottom:20px;">
-      <p style="font-weight:600; margin-bottom:4px;">September 2025</p>
-      <ul style="margin:0 0 0 16px; line-height:1.8;">
+    <details class="changelog-entry">
+      <summary>September 2025</summary>
+      <ul>
         <li>Added <strong>Canada</strong> with population, language, religion, education, employment, and income data from the 2021 Canadian Census</li>
       </ul>
-    </div>
+    </details>
 
-    <div style="border-left:3px solid #8bbdde; padding-left:16px; margin-bottom:20px;">
-      <p style="font-weight:600; margin-bottom:4px;">April 2024</p>
-      <ul style="margin:0 0 0 16px; line-height:1.8;">
+    <details class="changelog-entry">
+      <summary>April 2024</summary>
+      <ul>
         <li>Dashboard launched with <strong>United States</strong> and <strong>Global</strong> data</li>
       </ul>
-    </div>
-    <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">How to cite</h3>
-    <p style="margin-left:24px; text-indent:-24px; line-height:1.8;">Harris, Kevan, Roxanne Corbeil, and Gilad Wenig. 2024. <em>Iranian Diaspora Dashboard</em>. UCLA Center for Near Eastern Studies. <a href="https://iraniandiaspora.github.io" style="color:#2774AE;">https://iraniandiaspora.github.io</a></p>
-    <p style="font-size:12px; color:#888; margin-top:8px;">Charts and original analysis are licensed under <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:#2774AE;">CC BY 4.0</a>. Underlying data are subject to their original terms of use from the U.S. Census Bureau, DHS, Statistics Canada, ABS, Destatis, BAMF, ONS, CBS Netherlands, SCB, DST, SSB, Statistik Austria, ISTAT, BFS, CBS Israel, Eurostat, and the United Nations.</p>
+    </details>
   </div>
 </div>
 
@@ -362,11 +395,16 @@
 
 <script>
 // Lazy-load: swap data-src → src on first activation so iframes don't all load at once
+// Cache-buster bumped with each release so the browser fetches the new
+// iframe pages instead of showing a stale cached copy. Bump on any
+// release that changes any docs/pages/*.html.
+var SITE_VERSION = 'v2.7';
 function activateIframe(container) {
   if (!container) return;
   var iframe = container.querySelector('iframe');
   if (iframe && !iframe.src && iframe.dataset.src) {
-    iframe.src = iframe.dataset.src;
+    var src = iframe.dataset.src;
+    iframe.src = src + (src.indexOf('?') === -1 ? '?' : '&') + 'v=' + SITE_VERSION;
   }
 }
 
@@ -566,7 +604,7 @@ function navigateToHash() {
   if (!hash) { showTab('global', document.querySelector('.navbar .tab-button:nth-child(1)')); return; }
   // Map sub-tab prefixes to parent tabs
   var parentMap = { 'us-': 'united-states', 'ca-': 'canada', 'au-': 'australia', 'il-': 'israel',
-                    'tr-': 'turkey',
+                    'tr-': 'turkey', 'am-': 'armenia',
                     'eu-': 'europe',
                     'de-': 'europe', 'uk-': 'europe', 'nl-': 'europe',
                     'se-': 'europe', 'no-': 'europe', 'dk-': 'europe',

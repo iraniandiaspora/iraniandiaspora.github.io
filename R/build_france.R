@@ -77,7 +77,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 
 # --- Source citation strings ---
 INSEE_LINK <- "<a href='https://www.insee.fr/fr/statistiques/6478089' target='_blank' style='color:#2774AE;'>INSEE</a>"
-INSEE_SOURCE <- paste0("Source: ", INSEE_LINK, " &mdash; Recensement de la population, Iran-born residents 2006\u20132019")
+INSEE_SOURCE <- paste0("Source: ", INSEE_LINK, " &mdash; Recensement de la population, Iran-born residents 1968\u20132019 (periodic censuses 1968\u20131999, annual from 2006)")
 
 # --- Load data ---------------------------------------------------------------
 cat("Loading France extracts...\n")

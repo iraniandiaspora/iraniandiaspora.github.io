@@ -242,6 +242,7 @@ make_gen_box <- function(val, pct_text, label, sublabel, color) {
 }
 
 gen_boxes <- paste0(
+  '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iranian-Origin Population by Generation</div>',
   '<div style="display:flex; gap:12px; margin-top:12px;">',
   make_gen_box(se_gen1, paste0(round(se_gen1 / se_total * 100), "% of total"),
     "First generation", "Born in Iran", "#1a4e72"),

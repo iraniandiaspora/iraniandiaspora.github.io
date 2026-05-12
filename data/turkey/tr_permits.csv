@@ -1,0 +1,6 @@
+permit_type,permit_type_tr,count,source_chart,as_of
+total,total,76789,goc_04,2026-05-07
+short_term,KISA DÖNEM,27063,goc_05,2026-05-07
+student,ÖĞRENCİ,26533,goc_06,2026-05-07
+family,AİLE,10774,goc_07,2026-05-07
+other_long_term,DİĞER (residual),12419,computed (total - others),2026-05-07

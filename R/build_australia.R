@@ -568,7 +568,7 @@ immig_body <- paste0(
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Arrivals have continued at about 2,500&ndash;3,500 per year since 2016.</div>
   </div>', peak_period_pct),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians hold Australian citizenship.</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Eligible residents can apply for citizenship after four years in Australia.</div>
   </div>', cit_pct),
@@ -627,8 +627,10 @@ p_edu <- plot_ly(edu_chart, y = ~label, x = ~count, type = "bar",
       text = "<b>Highest Educational Attainment<br>of Iran-Born Australians, 2021</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 11)),
-    margin = list(l = 200, r = 20, t = 55, b = 30),
+    yaxis = list(title = "", tickfont = list(size = 11),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(l = 210, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -678,14 +680,17 @@ second_gen_count <- second_gen$count[1]
 edu_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australian adults (15+) hold a bachelor&rsquo;s degree or higher.</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% hold a postgraduate degree &mdash; about half of all bachelor&rsquo;s-or-higher holders.</div>
   </div>', bachelors_pct, postgrad_pct),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s%%</div>
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-ancestry Australians report no religious affiliation.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Islam %s%%, Christianity 12%%.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Islam %.0f%%</li>
+      <li>Christianity 12%%</li>
+    </ul>
   </div>', no_relig_pct, islam_pct),
   '<div class="chart-card pc1">', plotly_div("au-edu", plotly_to_json(p_edu), "430px", source = ABS_SOURCE), '</div>',
   '<div class="chart-card pc2">', plotly_div("au-rel", plotly_to_json(p_rel), "430px",
@@ -752,8 +757,10 @@ p_occ <- plot_ly(occ_chart, y = ~label, x = ~count, type = "bar",
       text = "<b>Occupation of Iran-Born Workers<br>in Australia, 2021</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 11)),
-    margin = list(l = 220, r = 20, t = 55, b = 30),
+    yaxis = list(title = "", tickfont = list(size = 11),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(l = 230, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -795,8 +802,10 @@ p_ind <- plot_ly(ind_chart, y = ~label, x = ~count, type = "bar",
       text = "<b>Industry of Employment<br>of Iran-Born Workers in Australia, 2021</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 10)),
-    margin = list(l = 185, r = 20, t = 55, b = 30),
+    yaxis = list(title = "", tickfont = list(size = 10),
+                 ticks = "outside", ticklen = 8,
+                 tickcolor = "rgba(0,0,0,0)"),
+    margin = list(l = 195, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -939,7 +948,10 @@ workinc_body <- paste0(
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iran-born Australians work as professionals &mdash; the largest occupation group.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%d%% are employed in the largest industry, %s. Overall labour-force participation is %s%%.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% work in %s &mdash; the largest industry</li>
+      <li>Overall labour-force participation is %.0f%%</li>
+    </ul>
   </div>', prof_pct, top_ind_pct, top_ind, participation_rate),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>

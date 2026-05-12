@@ -65,21 +65,41 @@ extract_age_snapshot <- function(path, age_codes) {
 }
 
 # --- 1. Annual trend + sex split -----------------------------------------------
-cat("Extracting Iran-born stock by sex...\n")
+# Combines Eurostat migr_pop3ctb (2019, 2020, 2023, 2024, 2025) with a TÜİK
+# Nüfus Portalı supplement for the 2021/2022 reporting gap. See
+# ../_data/turkey/tuik/README.md for the year-label convention shift.
+cat("Extracting Iran-born stock by sex (Eurostat + TÜİK supplement)...\n")
 tot <- extract_time_series(file.path(IN_DIR, "iran_born_total.json"))
 mal <- extract_time_series(file.path(IN_DIR, "iran_born_male.json"))
 fem <- extract_time_series(file.path(IN_DIR, "iran_born_female.json"))
 names(tot)[2] <- "total"
 names(mal)[2] <- "male"
 names(fem)[2] <- "female"
-trend <- tot %>% left_join(mal, by = "year") %>% left_join(fem, by = "year")
+trend <- tot %>% left_join(mal, by = "year") %>% left_join(fem, by = "year") %>%
+  mutate(source = "eurostat")
+
+tuik_born <- read.csv("../_data/turkey/tuik/iran_born_supplement.csv",
+                     stringsAsFactors = FALSE) %>%
+  select(year, total, male, female) %>%
+  mutate(source = "tuik")
+
+trend <- bind_rows(trend, tuik_born) %>%
+  arrange(year)
 write.csv(trend, file.path(OUT_DIR, "tr_trend.csv"), row.names = FALSE)
 print(trend)
 
 # --- 2. Iranian citizens (passport holders) -----------------------------------
-cat("\nExtracting Iranian citizens stock...\n")
+cat("\nExtracting Iranian citizens stock (Eurostat + TÜİK supplement)...\n")
 cit <- extract_time_series(file.path(IN_DIR, "iran_citizens_total.json"))
 names(cit)[2] <- "iranian_citizens"
+cit <- cit %>% mutate(source = "eurostat")
+
+tuik_cit <- read.csv("../_data/turkey/tuik/iran_citizens_supplement.csv",
+                     stringsAsFactors = FALSE) %>%
+  select(year, iranian_citizens) %>%
+  mutate(source = "tuik")
+
+cit <- bind_rows(cit, tuik_cit) %>% arrange(year)
 write.csv(cit, file.path(OUT_DIR, "tr_citizens.csv"), row.names = FALSE)
 print(cit)
 
