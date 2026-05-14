@@ -297,7 +297,7 @@ last_points <- rbind(last_points, data.frame(
 # France: INSEE annual "immigré" series, 2006-2019 (2018 not published).
 # Drawn as a dashed line to flag the different definition vs Eurostat — same
 # visual convention as the UK line, different dash style and marker symbol.
-fr_ts <- combined %>% filter(geo == "FR") %>% arrange(year)
+fr_ts <- combined %>% filter(geo == "FR", year >= 1999) %>% arrange(year)
 p_ts <- p_ts %>% add_trace(
   data = fr_ts,
   x = ~year, y = ~value,
@@ -384,14 +384,13 @@ for (i in seq_len(nrow(last_points))) {
 }
 
 p_ts <- p_ts %>% layout(
-  title = list(text = "<b>Iran-Born Population in Europe<br>Over Time, 1968\u20132025</b>",
+  title = list(text = "<b>Iran-Born Population in Europe<br>Over Time, 1999\u20132025</b>",
     font = list(size = 14, family = "Montserrat")),
-  xaxis = list(title = "", tickfont = list(size = 10), dtick = 10,
-    # Range starts at 1965 to include the four pre-1999 France census
-    # snapshots (1968 / 1975 / 1982 / 1990). The other countries don't
-    # have data before 1998, so the left half of the chart shows only
-    # the French trajectory. Extends past 2025 so right-edge labels render.
-    range = c(1965, 2033)),
+  xaxis = list(title = "", tickfont = list(size = 10), dtick = 5,
+    # Range starts at 1998 \u2014 earliest year any series in the chart has
+    # data (France 1999 census, Sweden/Eurostat from 1999). Extends past
+    # 2025 so the right-edge country labels render without clipping.
+    range = c(1998, 2033)),
   yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
   margin = list(t = 45, b = 30, l = 60, r = 15),
   plot_bgcolor = "white",
@@ -453,7 +452,7 @@ body <- paste0(
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",
-    source = paste0("Source: ", EUROSTAT_LINK, " for the seven solid lines (Sweden, Netherlands, Austria, Italy, Norway, Denmark, Finland). United Kingdom (dotted) is from ONS/NRS/NISRA census points 2001, 2011, and 2021/22. France (dashed) is from INSEE Recensement de la population \u2014 census snapshots in 1968, 1975, 1982, 1990, 1999, then continuous 2006\u20132019. The INSEE \u201Cimmigr\u00e9\u201D definition is narrower than Eurostat\u2019s foreign-born. Switzerland (dashed) is from the BFS register, 2010\u20132024. Germany is omitted because Eurostat does not publish Iran-born counts for Germany; see the Germany pages."),
+    source = paste0("Source: ", EUROSTAT_LINK, " for the seven solid lines (Sweden, Netherlands, Austria, Italy, Norway, Denmark, Finland). United Kingdom (dotted) is from ONS/NRS/NISRA census points 2001, 2011, and 2021/22. France (dashed) is from INSEE Recensement de la population \u2014 census snapshot 1999, then continuous 2006\u20132019. The INSEE \u201Cimmigr\u00e9\u201D definition is narrower than Eurostat\u2019s foreign-born. Switzerland (dashed) is from the BFS register, 2010\u20132024. Germany is omitted because Eurostat does not publish Iran-born counts for Germany; see the Germany pages."),
     highlight_hover = TRUE),
   '</div>',
   '</div>'
