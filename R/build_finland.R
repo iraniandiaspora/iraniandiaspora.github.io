@@ -84,7 +84,11 @@ STATFIN_LINK <- "<a href='https://stat.fi/en/' target='_blank' style='color:#277
 cat("Loading Finland extracts...\n")
 trend  <- read.csv(file.path(DATA_DIR, "fi_trend.csv"), stringsAsFactors = FALSE)
 hl     <- read.csv(file.path(DATA_DIR, "fi_headline.csv"), stringsAsFactors = FALSE)
-region <- read.csv(file.path(DATA_DIR, "fi_regions.csv"), stringsAsFactors = FALSE)
+region <- read.csv(file.path(DATA_DIR, "fi_regions.csv"), stringsAsFactors = FALSE,
+                   colClasses = c(geo_code = "character"))
+# read.csv strips quotes and would coerce "01".."09" to integers 1..9,
+# which then fail Plotly's string match against properties.maakunta = "01"..
+region$geo_code <- sprintf("%02d", as.integer(region$geo_code))
 trend  <- trend[order(trend$year), ]
 
 fi_total  <- hl$count[hl$category == "total"]
