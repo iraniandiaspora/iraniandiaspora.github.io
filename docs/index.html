@@ -650,6 +650,13 @@ document.addEventListener('DOMContentLoaded', function() {
 window.addEventListener('hashchange', navigateToHash);
 </script>
 
+<script>
+  // Strip query string (e.g. Google's ?_gl=... link-decoration params) so
+  // inbound links don't spawn a new dashboard "page" row per unique token.
+  window.goatcounter = {
+    path: function() { return location.pathname; }
+  };
+</script>
 <script data-goatcounter="https://iraniandiaspora.goatcounter.com/count"
         async src="//gc.zgo.at/count.js"></script>
 </body>
