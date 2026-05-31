@@ -45,10 +45,10 @@ The Language page reports the language spoken at home from the ACS Public Use Mi
 
 ## Europe Overview
 
-The Europe overview page combines five source families to show Iran-born populations across 12 countries:
+The Europe overview page combines five source families to show Iran-born populations across 23 countries:
 
-- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for eight countries (Austria, Belgium, Denmark, Finland, Italy, Netherlands, Norway, Sweden), with annual data back to 1998.
-- **Destatis Mikrozensus 2024** – for Germany, because Eurostat does not publish Iran-born counts for Germany.
+- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for nineteen countries (Austria, Belgium, Bulgaria, Czechia, Denmark, Estonia, Finland, Hungary, Iceland, Italy, Latvia, Lithuania, Luxembourg, Netherlands, Norway, Romania, Slovakia, Slovenia, Sweden), with annual data back to 1998.
+- **Destatis Mikrozensus 2025** – for Germany, because Eurostat does not publish Iran-born counts for Germany.
 - **National censuses** – for the United Kingdom (combined from ONS, NRS, and NISRA as described below).
 - **[Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html)** – for Switzerland, using the STATPOP register.
 - **[INSEE Recensement de la population](https://www.insee.fr/)** – for France, because INSEE uses a narrower "immigré" definition that is not directly comparable to Eurostat's foreign-born definition.
@@ -57,7 +57,7 @@ All figures on the overview page count people born in Iran. Second-generation Eu
 
 ## Germany
 
-Iranian-origin residents are identified in the 2024 [Mikrozensus](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html), an annual 1% household survey conducted by the Federal Statistical Office (Destatis). A person is counted if they were born in Iran or have at least one parent born in Iran. The headline estimate of 319,000 includes both the first generation (250,000 born in Iran) and the second generation (69,000 born in Germany to Iranian-born parents).
+Iranian-origin residents are identified in the 2025 [Mikrozensus](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html), an annual 1% household survey conducted by the Federal Statistical Office (Destatis). A person is counted if they were born in Iran or have at least one parent born in Iran. The headline estimate of 334,000 includes both the first generation (267,000 born in Iran) and the second generation (67,000 born in Germany to Iranian-born parents).
 
 Persian language is not used as a counting criterion because the language category does not distinguish Iranian Persian from Afghan Dari, and Germany has a larger Afghan-origin than Iranian-origin population.
 

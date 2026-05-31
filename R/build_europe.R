@@ -95,7 +95,11 @@ combined <- read.csv("data/europe/iran_born_combined.csv", stringsAsFactors = FA
 iso3_map <- c(
   AT = "AUT", BE = "BEL", CH = "CHE", DE = "DEU", DK = "DNK",
   ES = "ESP", FI = "FIN", FR = "FRA", IT = "ITA", NL = "NLD",
-  NO = "NOR", SE = "SWE", UK = "GBR"
+  NO = "NOR", SE = "SWE", UK = "GBR",
+  # Smaller Eurostat reporters added 2026-05-31 so visitors from these
+  # countries can find themselves on the map.
+  BG = "BGR", CZ = "CZE", EE = "EST", HU = "HUN", IS = "ISL",
+  LT = "LTU", LU = "LUX", LV = "LVA", RO = "ROU", SI = "SVN", SK = "SVK"
 )
 
 # Latest year per country
@@ -155,7 +159,8 @@ p_map <- plot_ly(type = "choropleth",
       showcountries = TRUE,
       countrycolor = "#d0d0d0",
       lataxis = list(range = c(34, 74)),
-      lonaxis = list(range = c(-13, 33))
+      # West edge extended to -25 (was -13) so Iceland is visible on the map.
+      lonaxis = list(range = c(-25, 33))
     ),
     margin = list(t = 5, b = 5, l = 0, r = 0),
     paper_bgcolor = "white"
@@ -401,7 +406,7 @@ p_ts <- p_ts %>% layout(
 
 # ---------- ASSEMBLE PAGE -------------------------------------------------
 EUROSTAT_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table' target='_blank' style='color:#2774AE;'>Eurostat</a>"
-MIKRO_LINK <- "<a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220247005.html' target='_blank' style='color:#2774AE;'>Destatis Mikrozensus 2024</a>"
+MIKRO_LINK <- "<a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220257005.html' target='_blank' style='color:#2774AE;'>Destatis Mikrozensus 2025</a>"
 ONS_LINK <- "<a href='https://www.nomisweb.co.uk/sources/census_2021' target='_blank' style='color:#2774AE;'>ONS Census 2021</a>"
 NRS_LINK <- "<a href='https://www.scotlandscensus.gov.uk/' target='_blank' style='color:#2774AE;'>NRS Scotland's Census 2022</a>"
 NISRA_LINK <- "<a href='https://www.nisra.gov.uk/statistics/census/2021-census' target='_blank' style='color:#2774AE;'>NISRA NI Census 2021</a>"
@@ -413,6 +418,9 @@ source_note <- sprintf(
   EUROSTAT_LINK, MIKRO_LINK, UK_COMBINED_LINK)
 
 n_countries <- nrow(latest)
+# Eurostat-attributed countries in the identification box. Switzerland is shown
+# under BFS below, so it is not counted here even though its row is Eurostat.
+n_eurostat_box <- sum(grepl("Eurostat", latest$source) & latest$geo != "CH")
 
 body <- paste0(
   # Top row: headline (left) + Europe choropleth map (right)
@@ -424,7 +432,7 @@ body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they were born in Iran and currently live in one of:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>', EUROSTAT_LINK, '</strong> <span style="color:#888;">&mdash; 8 European countries (country-of-birth tables)</span></li>',
+  '<li><strong>', EUROSTAT_LINK, '</strong> <span style="color:#888;">&mdash; ', n_eurostat_box, ' European countries (country-of-birth tables)</span></li>',
   '<li><strong>', MIKRO_LINK, '</strong> <span style="color:#888;">&mdash; Germany</span></li>',
   '<li><strong>', ONS_LINK, ', ', NRS_LINK, ', ', NISRA_LINK, '</strong> <span style="color:#888;">&mdash; United Kingdom (combined)</span></li>',
   '<li><strong>', BFS_LINK, '</strong> <span style="color:#888;">&mdash; Switzerland (STATPOP register)</span></li>',
@@ -447,7 +455,7 @@ body <- paste0(
   # Bottom row: horizontal bar chart (left) + time series (right)
   '<div class="chart-row">',
   '<div class="chart-card">',
-  plotly_div("eu-bar", plotly_to_json(p_bar), "460px",
+  plotly_div("eu-bar", plotly_to_json(p_bar), "660px",
     source = source_note),
   '</div>',
   '<div class="chart-card">',
