@@ -31,9 +31,21 @@ out_csv      <- "data/europe/iran_born_combined.csv"
 # France is dropped from the Eurostat series and replaced with INSEE below —
 # INSEE "immigré" definition differs from Eurostat foreign-born, and INSEE
 # publishes a denser annual series (2006-2019) for France specifically.
+# Excluded geos:
+#   FR  - handled below with INSEE (different "immigré" definition)
+#   TR  - Türkiye is its own top-level tab, not in Europe
+#   UK  - added below from the 2021/22 census; Eurostat only has stale pre-Brexit UK
+#   LI  - Liechtenstein microstate (n=22), too small to map
+# Recency filter (max year >= 2020) drops countries whose only Eurostat data is
+# stale single-year snapshots: Ireland (2011) and Poland (2009). The surviving
+# set is the 9 established countries plus the 11 smaller reporters added
+# 2026-05-31 so visitors from those countries can find themselves on the map:
+# BG, CZ, EE, HU, IS, LT, LU, LV, RO, SI, SK.
 euro <- read_csv(eurostat_csv, show_col_types = FALSE) %>%
-  filter(geo != "FR") %>%    # FR handled below with INSEE
-  filter(geo != "TR") %>%    # Türkiye is its own top-level tab, not in Europe
+  filter(!geo %in% c("FR", "TR", "UK", "LI")) %>%
+  group_by(geo) %>%
+  filter(max(year) >= 2020) %>%
+  ungroup() %>%
   mutate(source = "Eurostat migr_pop3ctb")
 
 # France (INSEE Recensement de la population) ------------------------------
@@ -53,17 +65,18 @@ fr_data <- tibble(
   source = "INSEE Recensement de la population"
 )
 
-# Germany (Mikrozensus 2024) -----------------------------------------------
-# 250,000 = first-generation Iran-born, including naturalized Germans.
-# Matches what the de-population page displays. The Mikrozensus has been
-# running annually since 1957, but only the 2024 edition is on the dashboard
-# (earlier editions are available at GESIS but are not needed for the overview).
+# Germany (Mikrozensus 2025) -----------------------------------------------
+# 267,000 = first-generation Iran-born (mit eigener Migrationserfahrung),
+# including naturalized Germans. Matches what the de-population page displays.
+# The Mikrozensus has been running annually since 1957, but only the latest
+# edition is on the dashboard (earlier editions are available at GESIS but are
+# not needed for the overview).
 de_data <- tibble(
   geo = "DE",
   country = "Germany",
-  year = 2024,
-  value = 250000,
-  source = "Destatis Mikrozensus 2024, Table 12211-53"
+  year = 2025,
+  value = 267000,
+  source = "Destatis Mikrozensus 2025, Table 12211-53"
 )
 
 # UK (ONS Census 2021 + Scotland Census 2022 + NI 2021) --------------------

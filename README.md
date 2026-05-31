@@ -17,7 +17,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 19 coun
 
 - **Global** – world map and stacked area chart (UN Migrant Stock 2024)
 - **United States** – population, immigration, admissions (1970–2023), marriage, education, work, income, language (8 pages)
-- **Europe** – overview of 12 countries, plus individual pages for Germany (4), United Kingdom (2), Netherlands (2), Sweden (1), Denmark (2), Norway (1), Austria (1), Italy (1), France (1), Switzerland (1), Finland (1)
+- **Europe** – overview of 23 countries, plus individual pages for Germany (4), United Kingdom (2), Netherlands (2), Sweden (1), Denmark (2), Norway (1), Austria (1), Italy (1), France (1), Switzerland (1), Finland (1)
 - **Canada** – population, language/religion, immigration, education, work, income (6 pages)
 - **Türkiye** – population, immigration (2 pages)
 - **Australia** – population, immigration, education/religion, work/income (4 pages)
@@ -34,8 +34,8 @@ Interactive data dashboard comparing Iranian diaspora populations across 19 coun
 | United States | American Community Survey (ACS) PUMS; INS/DHS Yearbook of Immigration Statistics | 2020–2024; 1970–2023 |
 | Canada | Census Public Use Microdata File (PUMF) | 2021 |
 | Australia | Australian Bureau of Statistics (ABS) Census; ABS TableBuilder Pro | 2021 |
-| Europe overview | Eurostat migr_pop3ctb (8 countries) + Destatis (Germany) + ONS/NRS/NISRA (UK) + BFS (Switzerland) + INSEE (France) | 1998–2025 |
-| Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2024; 1991–2023 |
+| Europe overview | Eurostat migr_pop3ctb (19 countries) + Destatis (Germany) + ONS/NRS/NISRA (UK) + BFS (Switzerland) + INSEE (France) | 1998–2025 |
+| Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2025; 1991–2023 |
 | United Kingdom | ONS Census 2021 (England &amp; Wales); Scotland's Census 2022; NISRA Census 2021; ONS custom dataset | 2021–2022 |
 | Netherlands | CBS StatLine population register, Labour Force Survey, household income | 1999–2025 |
 | Sweden | Statistics Sweden (SCB) population register; Eurostat | 1998–2025 |

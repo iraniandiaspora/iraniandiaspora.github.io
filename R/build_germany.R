@@ -1,4 +1,4 @@
-# Build all Germany pages from Mikrozensus 2024 Iran extracts + BAMF/IW figures.
+# Build all Germany pages from Mikrozensus 2025 Iran extracts + BAMF/IW figures.
 # Run from deployment repo root:
 #   Rscript R/build_germany.R
 #
@@ -128,8 +128,8 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 }
 
 # --- Source citation strings ---
-MZ_LINK <- "<a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220247005.html' target='_blank' style='color:#2774AE;'>Destatis</a>"
-MZ_SOURCE <- paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024 Erstergebnisse<br>",
+MZ_LINK <- "<a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220257005.html' target='_blank' style='color:#2774AE;'>Destatis</a>"
+MZ_SOURCE <- paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025 Erstergebnisse<br>",
   "German household survey. Counts residents with migration background (first or second generation), Iran.")
 
 blues <- c("#1a4e72", "#2774AE", "#5a9bd5", "#8bbdde", "#d4e6f1")
@@ -163,7 +163,7 @@ cat("Building de-population...\n")
 # Bundesland bar (all_gens), sorted descending.
 # Suppressed states (Destatis rule: <5K) are kept in the chart with a grey
 # fill and "Suppressed (<5K)" hover instead of being silently coerced to 0.
-# The 10 visible states sum to ~294K vs the 319K headline; the ~25K gap
+# The 10 visible states sum to ~308K vs the 334K headline; the ~26K gap
 # lives in 6 suppressed Bundesländer and is labeled as such below the chart.
 bund_all <- bund %>% filter(gen == "all_gens") %>%
   mutate(is_suppressed = is.na(value_k),
@@ -273,7 +273,7 @@ pop_body <- paste0(
   '<div class="headline">',
   '<div class="label">Estimated Iranian-Origin Population in Germany</div>',
   '<div class="number">', format(hl_total, big.mark = ","), '</div>',
-  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html" style="color:#2774AE;" target="_blank">2024 Mikrozensus</a>, an annual 1% household survey by Destatis, the German Federal Statistical Office</div>',
+  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html" style="color:#2774AE;" target="_blank">2025 Mikrozensus</a>, an annual 1% household survey by Destatis, the German Federal Statistical Office</div>',
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of two survey questions:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
@@ -292,7 +292,7 @@ pop_body <- paste0(
   '<div class="chart-card">',
   '<div class="section-title">Geographic Distribution in Germany</div>',
   plotly_div("de-bund-map", plotly_to_json(p_de_map), "450px",
-    source = paste0(MZ_SOURCE, "<br>Grey states: suppressed (<5,000). Published state counts sum to ~294,000 of the 319,000 national total.")),
+    source = paste0(MZ_SOURCE, "<br>Grey states: suppressed (<5,000). Published state counts sum to ~308,000 of the 334,000 national total.")),
   '</div>',
   '</div>'
 )
@@ -348,7 +348,7 @@ p_motive <- plot_ly(motive_clean, x = ~short, y = ~value, type = "bar",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
 
-# Residence duration — Iran-born residents, Mikrozensus 2024 Table 12211-08
+# Residence duration — Iran-born residents, Mikrozensus 2025 Table 12211-08
 # Two cohorts are visible: a recent wave (under 10 years) and an established
 # 1980s/90s cohort (25+ years).
 dur_labels <- c(
@@ -479,11 +479,11 @@ immig_body <- paste0(
   '</div>',
   '<div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs">',
   plotly_div("de-motive", plotly_to_json(p_motive), "440px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. First generation only (born in Iran).")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. First generation only (born in Iran).")),
   '</div>',
   '<div id="de-immig-duration" class="tab-panel" data-group="de-immig-tabs">',
   plotly_div("de-duration", plotly_to_json(p_duration), "430px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Iran-born residents only.")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Iran-born residents only.")),
   '</div>',
   '</div>',
   '</div>'
@@ -786,17 +786,17 @@ workinc_body <- paste0(
   '</div>',
   '<div id="de-wk-status" class="tab-panel active" data-group="de-wk-tabs">',
   plotly_div("de-empstatus", plotly_to_json(p_emp_status), "460px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025")),
   '</div>',
   '<div id="de-wk-industry" class="tab-panel" data-group="de-wk-tabs">',
   plotly_div("de-industry", plotly_to_json(p_industry), "460px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Iranian-origin residents employed across five broad sectors. Agriculture and Public administration are suppressed by Destatis (shown in grey). Percentages are computed against the full published employed total (~170,000), so visible bars do not sum to 100%.")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Iranian-origin residents employed across five broad sectors. Agriculture and Public administration are suppressed by Destatis (shown in grey). Percentages are computed against the full published employed total (~175,000), so visible bars do not sum to 100%.")),
   '</div>',
   '</div>',
   # RIGHT: income chart
   '<div class="chart-card pc2">',
   plotly_div("de-income", plotly_to_json(p_income), "510px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024. Net monthly personal income of employed Iranian-origin residents, all generations combined.")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Net monthly personal income of employed Iranian-origin residents, all generations combined.")),
   '</div>',
   '</div>'
 )
@@ -915,7 +915,7 @@ langedu_body <- paste0(
   # LEFT: language chart (standalone, no persian sidebar)
   '<div class="chart-card pc1" style="display:flex; flex-direction:column; justify-content:center;">',
   plotly_div("de-lang", plotly_to_json(p_lang), "320px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024"),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025"),
     legend_html = lang_leg, highlight_hover = TRUE),
   '</div>',
   # RIGHT: education with 2 tabs (school qualification + vocational/academic)
@@ -926,11 +926,11 @@ langedu_body <- paste0(
   '</div>',
   '<div id="de-ed-school" class="tab-panel active" data-group="de-ed-tabs">',
   plotly_div("de-school", plotly_to_json(p_school), "450px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025")),
   '</div>',
   '<div id="de-ed-prof" class="tab-panel" data-group="de-ed-tabs">',
   plotly_div("de-prof", plotly_to_json(p_prof), "450px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2024")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025")),
   '</div>',
   '</div>',
   '</div>'

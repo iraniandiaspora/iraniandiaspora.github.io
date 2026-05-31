@@ -1,9 +1,20 @@
-# Extract Iran rows from Mikrozensus 2024 Erstergebnisse .xlsx into tidy CSVs
+# Extract Iran rows from Mikrozensus 2025 Erstergebnisse .xlsx into tidy CSVs
 # Run from the deployment repo root:
 #   Rscript R/germany_export/extract_mikrozensus.R
 #
-# Input:  ../_data/germany/mikrozensus_2024/mikrozensus_2024_erstergebnisse.xlsx
-#         (11 MB xlsx from Destatis, stored in the shared Dropbox _data dir)
+# Input:  ../_data/germany/mikrozensus_2025/mikrozensus_2025_erstergebnisse.xlsx
+#         (20 MB xlsx from Destatis, stored in the shared Dropbox _data dir)
+#
+# Vintage bump 2026-05-31 (Mikrozensus 2024 -> 2025 Erstergebnisse). The 2025
+# edition kept the csv-12211-NN table numbers stable but made three changes:
+#   1. Iran is relabelled "Iran, Islamische Republik" (was "Iran").
+#   2. A JAHR (year) dimension was added as the first variable; the
+#      Erstergebnisse carry a single year, but read_mz_sheet defensively keeps
+#      only the latest year if more than one appears.
+#   3. Most tables are now split into three sheets (total + male + female);
+#      we read the "total" sheet (the same -NN numbers as before).
+# Headline category strings (table 53) and the duration/employment/income
+# bucket labels (tables 08/38) are unchanged from 2024.
 # Output: data/germany/*.csv (one per dashboard chart, checked into this repo)
 #
 # Mikrozensus CSV-sheet schema:
@@ -17,7 +28,7 @@ suppressPackageStartupMessages({
   library(tidyr)
 })
 
-f <- "../_data/germany/mikrozensus_2024/mikrozensus_2024_erstergebnisse.xlsx"
+f <- "../_data/germany/mikrozensus_2025/mikrozensus_2025_erstergebnisse.xlsx"
 out_dir <- "data/germany"
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
@@ -48,6 +59,14 @@ read_mz_sheet <- function(sheet) {
   d <- d[!is.na(d$code), ]
   d <- d[d$code != "Ende der Tabelle.", ]
 
+  # 2025 edition adds a JAHR dimension in val0. The Erstergebnisse carry a
+  # single year, but keep only the latest if more than one is ever present.
+  yrs <- unique(suppressWarnings(as.integer(d$val0)))
+  yrs <- yrs[!is.na(yrs)]
+  if (length(yrs) > 1) {
+    d <- d[suppressWarnings(as.integer(d$val0)) == max(yrs), ]
+  }
+
   # Parse value: "/" -> NA, "-" -> 0, strip parentheses markers, convert to integer (thousands)
   d$value_raw <- d$value
   d$value_k <- suppressWarnings(as.numeric(d$value))  # thousands
@@ -60,8 +79,10 @@ read_mz_sheet <- function(sheet) {
 }
 
 # Filter to Iran rows. Iran can appear in val2 (10-col tables) or val3 (12-col tables).
+# 2025 edition relabelled the Geburtsland value "Iran" -> "Iran, Islamische Republik".
 iran_only <- function(d) {
-  d %>% filter(val2 == "Iran" | val3 == "Iran")
+  d %>% filter(grepl("^Iran, Islamische Republik", val2) |
+               grepl("^Iran, Islamische Republik", val3))
 }
 
 # Gen label helper: the migration-status split lives in val2 (12-col tables).
@@ -69,8 +90,8 @@ iran_only <- function(d) {
 # Total (1st+2nd): "Bevölkerung mit Migrationshintergrund"
 gen_label <- function(val2) {
   case_when(
-    val2 == "Bevölkerung mit eigener Migrationserfahrung" ~ "first_gen",
-    val2 == "Bevölkerung mit Migrationshintergrund"       ~ "all_gens",
+    grepl("eigener Migrationserfahrung", val2) ~ "first_gen",
+    grepl("Migrationshintergrund", val2)       ~ "all_gens",
     TRUE ~ NA_character_
   )
 }
