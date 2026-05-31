@@ -170,7 +170,10 @@ p_map <- plot_ly(type = "choropleth",
 # ---------- CHART 3: Horizontal bar chart (bottom-right) -----------------
 # Smaller, horizontal orientation so country names read cleanly.
 # Reverse factor order so largest value is on top of the chart.
-bar_df <- latest %>% arrange(value)
+# Only substantial populations (>= 10,000) get a bar. The 11 smaller Eurostat
+# reporters stay on the map (where finding your country is the point); on a
+# 0-267k axis their bars are invisible slivers and hurt the ranking's legibility.
+bar_df <- latest %>% filter(value >= 10000) %>% arrange(value)
 bar_df$country <- factor(bar_df$country, levels = bar_df$country)
 
 p_bar <- plot_ly(
@@ -455,8 +458,8 @@ body <- paste0(
   # Bottom row: horizontal bar chart (left) + time series (right)
   '<div class="chart-row">',
   '<div class="chart-card">',
-  plotly_div("eu-bar", plotly_to_json(p_bar), "660px",
-    source = source_note),
+  plotly_div("eu-bar", plotly_to_json(p_bar), "470px",
+    source = paste0(source_note, " Countries with fewer than 10,000 Iran-born residents are shown on the map but omitted from this ranking.")),
   '</div>',
   '<div class="chart-card">',
   plotly_div("eu-timeseries", plotly_to_json(p_ts), "460px",

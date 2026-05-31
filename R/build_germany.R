@@ -694,7 +694,8 @@ cat("  (de-work charts prepared, will be combined with income)\n")
 cat("Building de-income...\n")
 
 inc <- emp %>% filter(section == "income", gen == "all_gens") %>%
-  mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000,
+  mutate(is_suppressed = is.na(value_k),
+         value = ifelse(is_suppressed, 0, value_k) * 1000,
          bracket = case_when(
            grepl("unter 500", category) ~ "Under \u20ac500",
            category == "500 - 1 000" ~ "\u20ac500\u2013\u20ac1,000",
@@ -718,11 +719,21 @@ inc$bracket <- factor(inc$bracket, levels = inc_order)
 inc <- inc %>% arrange(bracket)
 
 inc_colors <- c("#d4e6f1", "#bcdcec", "#a3d2e6", "#8bbdde", "#5a9bd5", "#2774AE", "#1a4e72", "#0d2f4a")
+# Suppressed brackets (Destatis <5,000) get a small grey stub + "suppressed"
+# hover so the axis slot reads as suppressed rather than a blank/broken bar.
+# Same convention as the state and industry charts above. In 2025 the
+# "Under €500" bracket is suppressed (was 7K in 2024).
+inc$bar_color <- inc_colors[as.integer(inc$bracket)]
+inc$bar_color[inc$is_suppressed] <- "#c8c8c8"
+inc$display_pct <- ifelse(inc$is_suppressed, 1.2, inc$pct)
+inc$hover <- ifelse(inc$is_suppressed,
+  sprintf("<b>%s per month</b><br>Suppressed (fewer than 5,000)", inc$bracket),
+  sprintf("<b>%s per month</b><br>%s workers (%.1f%%)", inc$bracket,
+          format(inc$value, big.mark = ","), inc$pct))
 
-p_income <- plot_ly(inc, x = ~bracket, y = ~pct, type = "bar",
-    marker = list(color = inc_colors),
-    text = ~sprintf("<b>%s per month</b><br>%s workers (%.1f%%)",
-      bracket, format(value, big.mark = ","), pct),
+p_income <- plot_ly(inc, x = ~bracket, y = ~display_pct, type = "bar",
+    marker = list(color = inc$bar_color),
+    text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers in Germany</b>",
@@ -796,7 +807,7 @@ workinc_body <- paste0(
   # RIGHT: income chart
   '<div class="chart-card pc2">',
   plotly_div("de-income", plotly_to_json(p_income), "510px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Net monthly personal income of employed Iranian-origin residents, all generations combined.")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Net monthly personal income of employed Iranian-origin residents, all generations combined. The under-\u20ac500 bracket is suppressed by Destatis (<5,000), shown in grey.")),
   '</div>',
   '</div>'
 )
