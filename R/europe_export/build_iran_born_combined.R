@@ -2,7 +2,7 @@
 #
 # Sources:
 #   1. Eurostat migr_pop3ctb (population by country of birth) for 11 countries,
-#      1998-2025. Extracted separately via _data/eurostat/extract_eurostat_iran.py
+#      1998-2025. Extracted separately via pipelines/europe/extract_eurostat_iran.py
 #      and imported here as iran_born_eurostat.csv.
 #   2. Germany Mikrozensus 2024 Erstergebnisse (Destatis, Table 12211-53) —
 #      used instead of Eurostat because Eurostat doesn't publish Iran-born for

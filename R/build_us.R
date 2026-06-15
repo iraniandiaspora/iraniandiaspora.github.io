@@ -1045,42 +1045,56 @@ cat("  Done\n")
 # =====================================================
 cat("Building us-population...\n")
 
-# Waterfall
+# Waterfall + criteria grid (How We Count). The waterfall is a plotly chart;
+# the ✓/✗ criteria grid is an HTML table rendered beneath it (criteria_table()
+# in _helpers.R) so the zebra row striping spans the row labels too — plotly
+# can't shade behind axis labels because they live in the margin. Columns align
+# with the bars via xaxis range c(0.5, n+0.5) + matching left margin.
 wf <- read_csv(file.path(DATA_DIR, "waterfall_components.csv"), show_col_types = FALSE)
 wf$ymin <- wf$cumulative - wf$weighted_n
 wf$ymax <- wf$cumulative
-wf$label <- format(wf$weighted_n, big.mark = ",")
-# Clear x-axis labels
-wf$short_label <- c("Birthplace +\nAncestry", "Birthplace\nonly",
-                     "Ancestry\nonly", "Children in\nIranian households",
-                     "Race\nonly")
-# Longer hover labels with context
-wf$hover_label <- c("Born in Iran +<br>Iranian ancestry",
-                     "Born in Iran<br>(ancestry not reported)",
-                     "Iranian ancestry<br>(U.S.-born)",
-                     "Children in Iranian households<br>(ancestry not reported for them)",
-                     "Reported Iranian<br>as race")
+wf$xnum <- seq_len(nrow(wf))
+
+# Decode the four criteria from the component string (drives grid + hover).
+wf$is_birth    <- grepl("BPL|Born in Iran", wf$component)
+wf$is_ancestry <- grepl("Ancestry", wf$component)
+wf$is_children <- grepl("Children", wf$component)
+wf$is_race     <- grepl("race", wf$component, ignore.case = TRUE)
+chk <- function(b) ifelse(b, "✓", "✗")
+wf$grp <- ifelse(wf$is_birth, "First generation",
+           ifelse(wf$is_children, "Second generation",
+            ifelse(wf$is_ancestry, "Iranian ancestry", "Reported Iranian as race")))
+wf$hover <- sprintf(
+  "<b>%s</b><br>%s Born in Iran<br>%s Iranian ancestry<br>%s Iranian race write-in<br>%s Iranian parent<br><br>%s people · %.1f%% of total<br>Running total: %s",
+  wf$grp, chk(wf$is_birth), chk(wf$is_ancestry), chk(wf$is_race), chk(wf$is_children),
+  format(wf$weighted_n, big.mark = ","), wf$pct, format(wf$cumulative, big.mark = ","))
 
 # Color scheme: blue gradient for core (1-3), then distinct colors for additions
 wf_colors <- c("#1a4e72", "#2774AE", "#5a9bd5", "#4a8c6f", "#c4793a")
 
+US_LBL_PX <- 86
 p_waterfall <- plot_ly() %>%
-  add_bars(data = wf, x = ~short_label, y = ~weighted_n, base = ~ymin,
+  add_bars(x = wf$xnum, y = wf$weighted_n, base = wf$ymin,
     marker = list(color = wf_colors),
-    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)<br>Cumulative: %s",
-      wf$hover_label, format(weighted_n, big.mark = ","), pct, format(cumulative, big.mark = ",")),
-    hoverinfo = "text", textposition = "none") %>%
+    text = wf$hover, hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Americans: How We Count</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 10), tickangle = 0,
-      categoryorder = "array",
-      categoryarray = wf$short_label),
-    yaxis = list(title = "", tickformat = ","),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE,
+      zeroline = FALSE, fixedrange = TRUE, range = c(0.5, nrow(wf) + 0.5)),
+    yaxis = list(title = "", tickformat = ",", fixedrange = TRUE),
     showlegend = FALSE,
-    margin = list(t = 50, b = 110, l = 60),
+    margin = list(t = 50, b = 6, l = US_LBL_PX, r = 20),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
+
+# Criteria grid below the bars (top -> bottom matches the identification box).
+us_matrix_html <- criteria_table(list(
+  list(label = "Born in<br>Iran",          vals = wf$is_birth),
+  list(label = "Iranian<br>ancestry",      vals = wf$is_ancestry),
+  list(label = "Iranian race<br>write-in", vals = wf$is_race),
+  list(label = "Iranian<br>parent",        vals = wf$is_children)),
+  n_cols = nrow(wf), label_px = US_LBL_PX)
 
 # Region bar chart — reuse iran_data already loaded above
 region_dat <- iran_data %>%
@@ -1249,9 +1263,10 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
     </ul>
   </div>
 </div>
-<div class="chart-card">', plotly_div("waterfall", plotly_to_json(p_waterfall), "400px", source = SRC_POP_1YR),
-'<script>if(window.innerWidth<900){setTimeout(function(){var el=document.getElementById("waterfall");if(el&&window.Plotly)Plotly.relayout(el,{"xaxis.tickangle":-45,"margin.b":130});},400);}</script>',
-'</div>
+<div class="chart-card">', plotly_div("waterfall", plotly_to_json(p_waterfall), "300px"),
+us_matrix_html,
+'<p style="font-size:11px; color:#666; text-align:right; margin:6px 0 0; padding-right:2px;">', SRC_POP_1YR, '</p>
+</div>
 </div>
 
 <!-- Bottom row: region bar + map -->

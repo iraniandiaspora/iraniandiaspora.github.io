@@ -170,38 +170,54 @@ cat("Building ca-population...\n")
 pop <- read.csv(file.path(DATA_DIR, "population/iranian_population_final_breakdown_complete.csv"))
 pop_included <- pop %>% filter(Included_in_Total == "Yes")
 
-# --- Waterfall chart (compound definition, same style as US/AU) ---
+# --- "How We Count": waterfall + criteria grid -------------------------------
+# The waterfall is a plotly chart; the ✓/✗ criteria grid is an HTML table
+# rendered beneath it (criteria_table() in _helpers.R) so the zebra row striping
+# spans the row labels too. Columns align with the bars via xaxis range
+# c(0.5, n+0.5) + matching left margin.
 wf <- pop_included
 wf$cumulative <- cumsum(wf$Population)
 wf$ymin <- wf$cumulative - wf$Population
-wf$short_label <- c("Born + Iranian\n+ Persian",
-                     "Born + Iranian\n(no Persian)",
-                     "Born + Persian\n(no Iranian)",
-                     "Born only\n(neither)",
-                     "2nd gen +\nIranian + Persian",
-                     "2nd gen +\nIranian only",
-                     "2nd gen +\nPersian only")
+wf$xnum <- seq_len(nrow(wf))
+
+# Decode the three binary criteria from the Category string (drives grid + hover).
+wf$is_born    <- grepl("^Born in Iran", wf$Category)
+wf$is_ethnic  <- grepl("Iranian Ethnic", wf$Category) & !grepl("No Iranian Ethnic", wf$Category)
+wf$is_persian <- grepl("Persian", wf$Category) & !grepl("No Persian", wf$Category)
+chk <- function(b) ifelse(b, "✓", "✗")
+wf$hover <- sprintf(
+  "<b>%s</b><br>%s Born in Iran<br>%s Iranian ethnic origin<br>%s Persian language<br><br>%s people · %.1f%% of total<br>Running total: %s",
+  ifelse(wf$is_born, "First generation", "Second generation"),
+  chk(wf$is_born), chk(wf$is_ethnic), chk(wf$is_persian),
+  format(wf$Population, big.mark = ","),
+  wf$Percentage_of_Total,
+  format(wf$cumulative, big.mark = ","))
 
 # Same color scheme as US/AU waterfall
 wf_colors <- c("#1a4e72", "#2774AE", "#5a9bd5", "#4a8c6f", "#c4793a", "#d4a943", "#7b5ea7")
 
+CA_LBL_PX <- 78
 p_waterfall <- plot_ly() %>%
-  add_bars(data = wf, x = ~short_label, y = ~Population, base = ~ymin,
+  add_bars(x = wf$xnum, y = wf$Population, base = wf$ymin,
     marker = list(color = wf_colors),
-    text = sprintf("<b>%s</b><br>%s (%.1f%%)<br>Cumulative: %s",
-      wf$Category, format(wf$Population, big.mark = ","),
-      wf$Percentage_of_Total, format(wf$cumulative, big.mark = ",")),
-    hoverinfo = "text", textposition = "none") %>%
+    text = wf$hover, hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Canadians: How We Count</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 9), tickangle = 0,
-      categoryorder = "array", categoryarray = wf$short_label),
-    yaxis = list(title = "", tickformat = ","),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE,
+      zeroline = FALSE, fixedrange = TRUE, range = c(0.5, nrow(wf) + 0.5)),
+    yaxis = list(title = "", tickformat = ",", fixedrange = TRUE),
     showlegend = FALSE,
-    margin = list(t = 50, b = 110, l = 60),
+    margin = list(t = 50, b = 6, l = CA_LBL_PX, r = 20),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
+
+# Criteria grid below the bars (top -> bottom matches the identification box).
+ca_matrix_html <- criteria_table(list(
+  list(label = "Born in<br>Iran",      vals = wf$is_born),
+  list(label = "Iranian<br>ethnicity", vals = wf$is_ethnic),
+  list(label = "Persian<br>language",  vals = wf$is_persian)),
+  n_cols = nrow(wf), label_px = CA_LBL_PX)
 
 # Region bar chart — built from iranians_by_province.csv so it shares the
 # denominator used by the province map below. Previously this pulled from
@@ -346,7 +362,9 @@ writeLines(page_template("Canada: Population", paste0(
   '</div>',
   '</div>',
   '<div class="chart-card">',
-  plotly_div("ca-waterfall", plotly_to_json(p_waterfall), "430px", source = PUMF_SOURCE),
+  plotly_div("ca-waterfall", plotly_to_json(p_waterfall), "300px"),
+  ca_matrix_html,
+  sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:6px 0 0; padding-right:2px;">%s</p>', PUMF_SOURCE),
   '</div>',
   '</div>',
   '<div class="chart-row">',

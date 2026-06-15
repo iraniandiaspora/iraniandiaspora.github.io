@@ -111,6 +111,38 @@ el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg=
   chart
 }
 
+# --- criteria_table -----------------------------------------------------------
+# The "How We Count" criteria grid, rendered as an HTML table placed directly
+# BELOW the waterfall plotly chart (not as a plotly subplot). This gives true
+# full-row zebra striping that includes the row labels (which plotly cannot do —
+# its axis tick-labels live in the margin and can't be shaded), line-broken
+# labels, and ✓/✗ cells.
+#
+# Column alignment with the bars: build the waterfall with xaxis
+# `range = c(0.5, n_cols + 0.5)`, left margin = `label_px`, right margin = 20.
+# Then the bars sit at fractions (i-0.5)/n of the plot area, exactly matching
+# this table's n equal data columns (label column = label_px, wrapper
+# padding-right = 20). Holds at any width, so it stays aligned on mobile.
+#
+# rows: list of list(label = "<html, may use <br>>", vals = <logical, length n_cols>)
+criteria_table <- function(rows, n_cols, label_px = 84, sym_px = 16) {
+  body <- vapply(seq_along(rows), function(i) {
+    r <- rows[[i]]
+    bg <- if (i %% 2 == 1) " background:#f1f3f5;" else ""
+    cells <- paste0(vapply(r$vals, function(v) sprintf(
+      '<td style="text-align:center; padding:6px 0; font-size:%dpx; color:%s;">%s</td>',
+      sym_px, if (isTRUE(v)) "#2f2f2f" else "#c4c4c4", if (isTRUE(v)) "✓" else "✗"),
+      character(1)), collapse = "")
+    sprintf(paste0('<tr style="%s"><td style="text-align:right; padding:6px 9px 6px 4px;',
+      ' font-size:11px; color:#333; line-height:1.2;">%s</td>%s</tr>'),
+      bg, r$label, cells)
+  }, character(1))
+  sprintf(paste0('<div style="padding-right:20px;"><table style="width:100%%;',
+    ' table-layout:fixed; border-collapse:collapse;">',
+    '<colgroup><col style="width:%dpx;">%s</colgroup><tbody>%s</tbody></table></div>'),
+    label_px, paste(rep("<col>", n_cols), collapse = ""), paste(body, collapse = ""))
+}
+
 # --- iframe_resize_script -----------------------------------------------------
 # Every page is embedded via <iframe> in docs/index.html and posts its body
 # height back to the parent so the iframe auto-sizes. Also re-invokes
