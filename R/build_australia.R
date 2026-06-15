@@ -330,34 +330,55 @@ p_melbourne_map <- plot_ly() %>%
     paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 
-# --- Waterfall chart (compound definition) ---
+# --- "How We Count": waterfall + criteria grid -------------------------------
+# The waterfall is a plotly chart; the ✓/✗ criteria grid is an HTML table
+# rendered beneath it (criteria_table() in _helpers.R) so the zebra row striping
+# spans the row labels too. Columns align with the bars via xaxis range
+# c(0.5, n+0.5) + matching left margin.
 wf <- read.csv(file.path(DATA_DIR, "au_compound.csv"), stringsAsFactors = FALSE)
 wf$ymin <- wf$cumulative - wf$count
 wf$ymax <- wf$cumulative
-wf$short_label <- c("Birth +\nAncestry +\nLanguage", "Birth +\nAncestry", "Birth +\nLanguage",
-                     "Ancestry +\nLanguage", "Birth\nonly", "Ancestry\nonly", "Language\nonly",
-                     "Children of\nIran-born\nparents")
+wf$xnum <- seq_len(nrow(wf))
+
+# Decode the four criteria from the component string (drives grid + hover).
+wf$is_birth    <- grepl("Born in Iran", wf$component)
+wf$is_ancestry <- grepl("Iranian ancestry", wf$component)
+wf$is_language <- grepl("Persian speaker", wf$component)
+wf$is_parent   <- grepl("Iran-born parent", wf$component)
+chk <- function(b) ifelse(b, "✓", "✗")
+wf$grp <- ifelse(wf$is_birth, "First generation",
+           ifelse(wf$is_parent, "Second generation", "Iranian ancestry or language"))
+wf$hover <- sprintf(
+  "<b>%s</b><br>%s Born in Iran<br>%s Iranian ancestry<br>%s Persian language<br>%s Iran-born parent<br><br>%s people · %.1f%% of total<br>Running total: %s",
+  wf$grp, chk(wf$is_birth), chk(wf$is_ancestry), chk(wf$is_language), chk(wf$is_parent),
+  format(wf$count, big.mark = ","), wf$pct, format(wf$cumulative, big.mark = ","))
 
 # Same color scheme as US waterfall: blue gradient for core, then distinct
 wf_colors <- c("#1a4e72", "#2774AE", "#5a9bd5", "#4a8c6f", "#c4793a", "#d4a943", "#7b5ea7", "#e07b54")
 
+AU_LBL_PX <- 80
 p_waterfall <- plot_ly() %>%
-  add_bars(data = wf, x = ~short_label, y = ~count, base = ~ymin,
+  add_bars(x = wf$xnum, y = wf$count, base = wf$ymin,
     marker = list(color = wf_colors),
-    text = sprintf("<b>%s</b><br>%s (%.1f%%)<br>Cumulative: %s",
-      wf$component, format(wf$count, big.mark = ","), wf$pct,
-      format(wf$cumulative, big.mark = ",")),
-    hoverinfo = "text", textposition = "none") %>%
+    text = wf$hover, hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Australians: How We Count</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 9), tickangle = 0,
-      categoryorder = "array", categoryarray = wf$short_label),
-    yaxis = list(title = "", tickformat = ","),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE,
+      zeroline = FALSE, fixedrange = TRUE, range = c(0.5, nrow(wf) + 0.5)),
+    yaxis = list(title = "", tickformat = ",", fixedrange = TRUE),
     showlegend = FALSE,
-    margin = list(t = 50, b = 110, l = 60),
+    margin = list(t = 50, b = 6, l = AU_LBL_PX, r = 20),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
+
+# Criteria grid below the bars (top -> bottom matches the identification box).
+au_matrix_html <- criteria_table(list(
+  list(label = "Born in<br>Iran",      vals = wf$is_birth),
+  list(label = "Iranian<br>ancestry",  vals = wf$is_ancestry),
+  list(label = "Persian<br>language",  vals = wf$is_language),
+  list(label = "Iran-born<br>parent",  vals = wf$is_parent)),
+  n_cols = nrow(wf), label_px = AU_LBL_PX, sym_px = 15)
 
 compound_total <- wf$cumulative[nrow(wf)]
 
@@ -383,8 +404,9 @@ pop_body <- paste0(
   '</div>',
   '</div>',
   '<div class="chart-card">',
-  plotly_div("au-waterfall", plotly_to_json(p_waterfall), "430px",
-    source = "Source: <a href='https://www.abs.gov.au/census' target='_blank' style='color:#2774AE;'>ABS</a> \u2014 Census of Population and Housing, 2021. Cell counts are randomly adjusted by ABS to prevent identification of individuals; totals may not sum exactly."),
+  plotly_div("au-waterfall", plotly_to_json(p_waterfall), "320px"),
+  au_matrix_html,
+  '<p style="font-size:11px; color:#666; text-align:right; margin:6px 0 0; padding-right:2px;">Source: <a href=\'https://www.abs.gov.au/census\' target=\'_blank\' style=\'color:#2774AE;\'>ABS</a> \u2014 Census of Population and Housing, 2021. Cell counts are randomly adjusted by ABS to prevent identification of individuals; totals may not sum exactly.</p>',
   '</div>',
   '</div>',
 
