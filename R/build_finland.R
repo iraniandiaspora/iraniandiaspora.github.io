@@ -57,13 +57,11 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 @media (max-width:900px) {
   body { padding:10px 15px; }
   .chart-row, .text-row { grid-template-columns:1fr !important; }
-  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
 }
 @media (max-width:480px) {
   body { padding:8px 10px; }
-  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
   .text-card { font-size:13px; padding:14px; }
 }

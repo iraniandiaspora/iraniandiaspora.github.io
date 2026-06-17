@@ -39,7 +39,6 @@ body { font-family:"Montserrat",system-ui,sans-serif; color:#222; background:#f6
 @media (max-width:900px) {
   .chart-row { grid-template-columns:1fr; }
   .headline { padding:18px; }
-  .headline .number { font-size:36px; }
   .chart-card { padding:12px; }
 }
 ', MAPBOX_ATTRIB_HIDE_CSS, '
