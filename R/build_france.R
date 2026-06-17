@@ -55,13 +55,11 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   .page-content { grid-template-columns:1fr; }
   .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
   .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
-  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
 }
 @media (max-width:480px) {
   body { padding:8px 10px; }
-  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
   .text-card { font-size:13px; padding:14px; }
 }

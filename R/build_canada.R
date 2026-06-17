@@ -125,7 +125,6 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   .p4-t1,.p4-t2,.p4-t3,.p4-t4,.p4-c1,.p4-c2 { grid-area:auto; }
   .p4-c1 { order:1; } .p4-t1 { order:2; } .p4-t2 { order:3; }
   .p4-c2 { order:4; } .p4-t3 { order:5; } .p4-t4 { order:6; }
-  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
@@ -143,7 +142,6 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 @media (max-width:480px) {
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
-  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
 ', MAPBOX_ATTRIB_HIDE_CSS, '
