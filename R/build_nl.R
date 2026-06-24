@@ -115,7 +115,12 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 
 # --- Source citation strings ---
 CBS_LINK <- "<a href='https://opendata.cbs.nl/statline/' target='_blank' style='color:#2774AE;'>CBS StatLine</a>"
+# Population-by-origin table (85384NED) is published for 1 January 2026; the
+# regional map (85458NED), residence duration (85371NED), labour (84729NED) and
+# income (85397NED) tables are still on their 2025/2024 CBS release. Keep the
+# source labels matched to each chart's actual vintage.
 CBS_SOURCE <- paste0("Source: ", CBS_LINK, " &mdash; Statistics Netherlands, Population Register 2025")
+CBS_POP_SOURCE <- paste0("Source: ", CBS_LINK, " &mdash; Statistics Netherlands, Population Register, January 2026")
 CBS_LF_SOURCE <- paste0("Source: ", CBS_LINK, " &mdash; Statistics Netherlands, Labour Force Survey 2021&ndash;2024")
 
 # --- Load data ---------------------------------------------------------------
@@ -128,6 +133,11 @@ lf    <- read.csv(file.path(DATA_DIR, "nl_labourforce.csv"), stringsAsFactors = 
 nl_total <- hl$count[hl$category == "total"]
 nl_gen1  <- hl$count[hl$category == "gen1"]
 nl_gen2  <- hl$count[hl$category == "gen2"]
+
+# Province/map shares divide by the 2025 provincial total (the vintage the map
+# depicts), not the 2026 headline total, so hover percentages stay internally
+# consistent (the 12 provinces sum to the 2025 national figure).
+prov_total <- sum(prov$count)
 
 
 # =============================================================================
@@ -151,7 +161,7 @@ if (has_geojson) {
       text = sprintf("<b>%s</b><br>%s Iranian-origin<br>%.1f%% of total",
         prov$province_name,
         format(prov$count, big.mark = ","),
-        prov$count / nl_total * 100),
+        prov$count / prov_total * 100),
       hoverinfo = "text",
       colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),
                         c(0.08, "#6baed6"), c(0.35, "#2171b5"), c(1, "#08306b")),
@@ -176,7 +186,7 @@ if (has_geojson) {
   p_nl_bar <- plot_ly(prov, y = ~province_name, x = ~count, type = "bar",
     orientation = "h", marker = list(color = "#2774AE"),
     text = sprintf("<b>%s</b><br>%s (%.1f%%)", prov$province_name,
-      format(prov$count, big.mark = ","), prov$count / nl_total * 100),
+      format(prov$count, big.mark = ","), prov$count / prov_total * 100),
     hoverinfo = "text", textposition = "none") %>%
     layout(
       xaxis = list(title = "", tickformat = ","),
@@ -307,7 +317,7 @@ gen_boxes <- paste0(
 # Top row: headline (left) + generation grid (right)
 # Bottom row: historical trend (left) + province map (right)
 randstad <- sum(prov$count[prov$province_code %in% c("PV27", "PV28", "PV26")])
-randstad_pct <- round(randstad / nl_total * 100)
+randstad_pct <- round(randstad / prov_total * 100)
 
 # No legend override needed — single trace with showlegend=FALSE
 
@@ -318,7 +328,7 @@ pop_body <- paste0(
   '<div class="label">Estimated Iranian-Origin Population in the Netherlands</div>',
   '<div class="number">', format(nl_total, big.mark = ","), '</div>',
   '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on population registers maintained by ',
-  CBS_LINK, ', Statistics Netherlands, January 2025</div>',
+  CBS_LINK, ', Statistics Netherlands, January 2026</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">The Netherlands uses population registers rather than a traditional census. A person is classified as Iranian-origin if they meet at least one of:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
@@ -330,7 +340,7 @@ pop_body <- paste0(
   '</div>',
   '<div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">',
   gen_boxes,
-  sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0 0; padding-right:2px;">%s</p>', CBS_SOURCE),
+  sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0 0; padding-right:2px;">%s</p>', CBS_POP_SOURCE),
   '</div>',
   '</div>',
 

@@ -26,8 +26,8 @@ cbs_int <- function(x) {
   as.integer(x)
 }
 
-# ---- 1. Headline (85384NED, 2025) ----
-raw_hl <- fromJSON(file.path(CBS_DIR, "iran_85384_2025.json"))$value
+# ---- 1. Headline (85384NED, 2026) ----
+raw_hl <- fromJSON(file.path(CBS_DIR, "iran_85384_2026.json"))$value
 # Geboorteland: T001638=Total, A051735=NL-born (2nd gen), A051736=Foreign-born (1st gen)
 # GeboortelandOuders: T001638=Total
 total_v <- cbs_int(raw_hl$Bevolking_1[raw_hl$Geboorteland == "T001638" &
