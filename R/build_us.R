@@ -83,7 +83,6 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .page-content { grid-template-columns:1fr; }
   .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
   .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
-  .headline .number { font-size:34px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
 }
@@ -93,7 +92,6 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 @media (max-width:480px) {
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
-  .headline .number { font-size:28px; }
   .chart-card { padding:10px; }
 }
 ', MAPBOX_ATTRIB_HIDE_CSS, '
@@ -203,17 +201,17 @@ cat("  Done\n")
 
 
 # =====================================================
-# US ADMISSIONS HISTORY (INS/DHS official records, 1970-2023)
+# US ADMISSIONS HISTORY (INS/DHS official records, 1970-2024)
 # =====================================================
 cat("Building us-admissions...\n")
 
-# Official admissions from INS Annual Reports (1970-1977) + INS/DHS yearbooks (1978-2023)
-lpr <- read_csv(file.path(DATA_DIR, "iran_lpr_1970_2023.csv"), show_col_types = FALSE)
+# Official admissions from INS Annual Reports (1970-1977) + INS/DHS yearbooks (1978-2024)
+lpr <- read_csv(file.path(DATA_DIR, "iran_lpr_1970_2024.csv"), show_col_types = FALSE)
 lpr[is.na(lpr)] <- 0
 
-SRC_LPR <- "Source: INS Annual Reports (1970\u20131977); INS Statistical Yearbooks (1978\u20132004); DHS Yearbook of Immigration Statistics (2005\u20132023)"
+SRC_LPR <- "Source: INS Annual Reports (1970\u20131977); INS Statistical Yearbooks (1978\u20132004); DHS Yearbook of Immigration Statistics (2005\u20132024)"
 
-# --- Chart 1: Total admissions line chart (1978-2023) ---
+# --- Chart 1: Total admissions line chart (1978-2024) ---
 lpr$hover_total <- sprintf("<b>%d</b><br>Granted: %s",
   lpr$year, format(lpr$total, big.mark = ","))
 
@@ -223,7 +221,7 @@ p_lpr_total <- plot_ly(data = lpr, x = ~year, y = ~total,
     marker = list(color = "#1a4e72", size = 3),
     text = ~hover_total, hoverinfo = "text", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Iranians Granted<br>US Permanent Resident Status,<br>1970\u20132023</b>",
+    title = list(text = "<b>Iranians Granted<br>US Permanent Resident Status,<br>1970\u20132024</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
@@ -233,7 +231,7 @@ p_lpr_total <- plot_ly(data = lpr, x = ~year, y = ~total,
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-# --- Chart 2: Stacked bar by category (full period 1978-2023) ---
+# --- Chart 2: Stacked bar by category (full period 1978-2024) ---
 # Stacked bars instead of stacked area for reliable hover behavior.
 # Pre-1992: employment is 0 (included in family), diversity is 0
 # Post-1992: all 5 categories separated
@@ -294,7 +292,7 @@ p_lpr_cat <- p_lpr_cat %>%
   layout(
     barmode = "overlay",
     hovermode = "x unified",
-    title = list(text = "<b>Iranian US Permanent Residence Grants<br>by Category, 1970\u20132023</b>",
+    title = list(text = "<b>Iranian US Permanent Residence Grants<br>by Category, 1970\u20132024</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
@@ -316,7 +314,7 @@ writeLines(page_template("US: Immigration History", paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranians granted U.S. permanent residence between 1970 and 2023.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranians granted U.S. permanent residence between 1970 and 2024.</div>
     <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45; margin-top:16px;">About these figures</div>
     <ul style="margin:8px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>Counts green cards granted, not the current Iran-born population</li>

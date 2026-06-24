@@ -382,7 +382,7 @@ p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
 
-# Annual arrivals chart — Iranian Zuzüge 1991-2023 from BAMF/Destatis
+# Annual arrivals chart — Iranian Zuzüge 1991-2024 from BAMF/Destatis
 # Migrationsberichte. This is a flow series (annual arrivals in that year),
 # not a stock-based cohort view. No cumulative line here — unlike the US
 # (FY1978+) or Canada, the data starts at 1991 when Germany already had
@@ -399,7 +399,7 @@ p_annual <- plot_ly() %>%
     name = "Annual arrivals"
   ) %>%
   layout(
-    title = list(text = "<b>Annual Iranian Arrivals to Germany,<br>1991\u20132023</b>",
+    title = list(text = "<b>Annual Iranian Arrivals to Germany,<br>1991\u20132024</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10), dtick = 4),
     yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
@@ -473,7 +473,7 @@ immig_body <- paste0(
   '</div>',
   '<div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs">',
   plotly_div("de-annual", plotly_to_json(p_annual), "430px",
-    source = "Source: BAMF Migrationsb&#228;richte (2005, 2015, 2020, 2023 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here."),
+    source = "Source: BAMF Migrationsb&#228;richte (2005, 2015, 2020, 2023, 2024 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here."),
   '</div>',
   '<div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs">',
   plotly_div("de-motive", plotly_to_json(p_motive), "440px",
