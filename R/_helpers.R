@@ -16,6 +16,28 @@
 #                               attribution button on choroplethmapbox layers;
 #                               inject into each page's <style> block
 
+# --- Categorical color palette (Okabe-Ito) ------------------------------------
+# ONE shared qualitative palette for EVERY categorical multi-category bar
+# (industry, occupation, etc.) site-wide. Okabe-Ito is the colorblind-safe
+# Nature Methods standard. Ordered for bars on white: strong, brand-aligned
+# hues first; pale yellow and black last (only reached when many categories
+# are shown).
+# RULE: cap categories at 8 and bucket the smallest tail into a single "Other"
+# row (CAT_OTHER gray) — qualitative palettes stop being distinguishable past
+# ~8 colors, so NEVER recycle a hue. Germany's suppressed-cell gray (#c8c8c8)
+# is a SEPARATE signal ("<5,000, not published"), not part of this palette.
+OKABE_ITO <- c("#0072B2", "#E69F00", "#009E73", "#CC79A7",
+               "#56B4E9", "#D55E00", "#F0E442", "#000000")
+CAT_OTHER  <- "#b0b0b0"   # "Other" bucket / neutral category
+
+# cat_colors(n): n distinct categorical colors from the shared palette. Builders
+# must bucket data to <= 8 rows first; for n > 8 this returns the first 7 hues
+# plus CAT_OTHER in slot 8 (pair with an "Other" data row) so colors never repeat.
+cat_colors <- function(n) {
+  if (n <= 8) return(OKABE_ITO[seq_len(n)])
+  c(OKABE_ITO[1:7], CAT_OTHER)
+}
+
 # --- strip_internal_classes ---------------------------------------------------
 # plotly_build() decorates some list elements with S3 classes like "zcolor"
 # that trip up jsonlite::toJSON. Walk the structure and drop those classes.

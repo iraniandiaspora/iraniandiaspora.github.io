@@ -189,7 +189,7 @@ p_region <- plot_ly(data = region_totals_au, x = ~region, y = ~pct, type = "bar"
       region, format(pop, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iran-Born Australians by<br>Region of Residence</b>",
+    title = list(text = "<b>Iran-Born Australians by<br>Region of Residence, 2021</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""),
     yaxis = list(title = "", ticksuffix = "%"),
@@ -562,7 +562,7 @@ p_cit <- plot_ly(data = cit_data, x = ~status, y = ~count, type = "bar",
       gsub("\n", " ", status), format(count, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship Status<br>of Iran-Born Australians</b>",
+    title = list(text = "<b>Citizenship Status<br>of Iran-Born Australians, 2021</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""),
     yaxis = list(title = "", tickformat = ","),
@@ -763,11 +763,10 @@ occ_chart$label <- gsub("Technicians and Trades", "Technicians & Trades", occ_ch
 occ_chart$label <- gsub("Machinery Operators and Drivers", "Machinery Operators", occ_chart$label)
 occ_chart$label <- factor(occ_chart$label, levels = rev(occ_chart$label))
 
-# Categorical: occupations are distinct categories
-occ_colors <- c("#1a4e72", "#2774AE", "#4a8c6f", "#c4793a",
-                "#d4a943", "#7b5ea7", "#2ca089", "#e07b54")
+# Shared Okabe-Ito categorical palette (8 ANZSCO occupation groups)
+occ_colors <- cat_colors(nrow(occ_chart))
 p_occ <- plot_ly(occ_chart, y = ~label, x = ~count, type = "bar",
-    orientation = "h", marker = list(color = occ_colors[seq_len(nrow(occ_chart))]),
+    orientation = "h", marker = list(color = occ_colors),
     text = sprintf("<b>%s</b><br>%s (%.1f%%)",
       occ_chart$occupation,
       format(occ_chart$count, big.mark = ","), occ_chart$pct),
@@ -808,9 +807,11 @@ ind_chart$label <- gsub("Arts and Recreation Services", "Arts & Recreation", ind
 ind_chart$label <- gsub("Accommodation and Food Services", "Accommodation & Food", ind_chart$label)
 ind_chart$label <- factor(ind_chart$label, levels = rev(ind_chart$label))
 
-# Categorical: industries are distinct categories
-ind_colors <- rep(c("#1a4e72", "#2774AE", "#4a8c6f", "#c4793a", "#d4a943",
-                    "#7b5ea7", "#2ca089", "#e07b54"), length.out = nrow(ind_chart))
+# Shared Okabe-Ito categorical palette for the 8 largest sectors; smaller
+# sectors muted to grey so the palette never repeats a hue (best practice caps
+# categorical color at ~8). Color is decorative — the y-axis labels identify
+# every bar. ind_chart is in descending-count order, so the top 8 get color.
+ind_colors <- c(OKABE_ITO, rep(CAT_OTHER, max(0, nrow(ind_chart) - 8)))[seq_len(nrow(ind_chart))]
 p_ind <- plot_ly(ind_chart, y = ~label, x = ~count, type = "bar",
     orientation = "h", marker = list(color = ind_colors),
     text = sprintf("<b>%s</b><br>%s (%.1f%%)",
@@ -887,7 +888,7 @@ p_dec <- plot_ly(data = dec, x = ~label, y = ~pct, type = "scatter", mode = "mar
     hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
     title = list(
-      text = "<b>Position in Australian<br>Personal Income Distribution:<br>Iran-Born (Ages 25\u201354)</b>",
+      text = "<b>Position in Australian<br>Personal Income Distribution:<br>Iran-Born (Ages 25\u201354), 2021</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
       categoryorder = "array", categoryarray = decile_labels),
@@ -975,8 +976,11 @@ workinc_body <- paste0(
   </div>', prof_pct, top_ind_pct, top_ind, participation_rate),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians fall in the bottom two national income deciles; %d%% are in the top two.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Median weekly personal income band: %s.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians fall in the bottom two national income deciles.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% are in the top two deciles</li>
+      <li>Median weekly personal income band: %s</li>
+    </ul>
   </div>', bottom20_pct, top20_pct, median_band),
 
   # Chart cell 1: tabbed (Occupation | Industry | Labour Force Status)

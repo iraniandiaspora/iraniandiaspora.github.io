@@ -140,35 +140,61 @@ county$county_name <- sub(" - .*", "", county$county_name)
 # =============================================================================
 cat("Building no-population...\n")
 
-# --- Historical sex time series 1970-2026 (stacked area by gender) -----------
-p_hist <- plot_ly() %>%
-  add_trace(data = hist_sex, x = ~year, y = ~male, type = "scatter",
-    mode = "lines", stackgroup = "one", fillcolor = "rgba(26,78,114,0.7)",
-    line = list(color = "#1a4e72", width = 1),
-    name = "Male",
-    text = sprintf("<b>%d</b><br>Male: %s<br>Female: %s<br>Total: %s",
-      hist_sex$year, format(hist_sex$male, big.mark = ","),
-      format(hist_sex$female, big.mark = ","),
-      format(hist_sex$total, big.mark = ",")),
-    hoverinfo = "text") %>%
-  add_trace(data = hist_sex, x = ~year, y = ~female, type = "scatter",
-    mode = "lines", stackgroup = "one", fillcolor = "rgba(90,155,213,0.7)",
-    line = list(color = "#5a9bd5", width = 1),
-    name = "Female",
-    text = sprintf("<b>%d</b><br>Female: %s",
-      hist_sex$year, format(hist_sex$female, big.mark = ",")),
-    hoverinfo = "text") %>%
+# --- Historical total Iran-born 1970-2026 (single line) ----------------------
+# Single total line: the value of this series is its length (1970-2026), which
+# shows when the Iran-born population took off. The sex split was dropped (no
+# other country breaks population by sex, and it added no information); the
+# generation breakdown lives in its own tab (gen data only goes back to 2010).
+no_hist_max <- max(hist_sex$year)
+p_hist <- plot_ly(hist_sex, x = ~year, y = ~total, type = "scatter",
+    mode = "lines+markers",
+    line = list(color = "#1a4e72", width = 2.5),
+    marker = list(color = "#1a4e72", size = 5),
+    text = ~sprintf("<b>%d</b><br>Iran-born: %s", year, format(total, big.mark = ",")),
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Iran-Born Population in Norway,<br>1970\u20132026</b>",
+    title = list(text = sprintf("<b>Iran-Born Population in Norway,<br>1970\u2013%d</b>", no_hist_max),
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", dtick = 5),
-    yaxis = list(title = "", tickformat = ","),
+    xaxis = list(title = "", dtick = 10),
+    yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
     showlegend = FALSE,
     margin = list(t = 40, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-no_pop_leg <- make_html_legend(c("Male" = "#1a4e72", "Female" = "#5a9bd5"))
+# --- Generation split (stacked area) -----------------------------------------
+# Norway's register splits 1st gen (Iran-born) from 2nd gen (Norwegian-born to
+# Iran-born parents) only from 2010 onward. Stacked area shows each generation's
+# relative size; the total-line tab carries the long pre-2010 history. Both
+# traces share one hover so the mouseover is consistent (the old by-sex chart
+# showed different fields on each band).
+gen_trend <- trend[trend$year <= data_yr, ]
+no_gen_min <- min(gen_trend$year); no_gen_max <- max(gen_trend$year)
+no_gen_hover <- sprintf(
+  "<b>%d</b><br>First generation: %s<br>Second generation: %s<br>Total: %s",
+  gen_trend$year, format(gen_trend$gen1, big.mark = ","),
+  format(gen_trend$gen2, big.mark = ","), format(gen_trend$total, big.mark = ","))
+p_gen <- plot_ly(gen_trend) %>%
+  add_trace(x = ~year, y = ~gen1, type = "scatter", mode = "lines",
+    stackgroup = "one", name = "First generation",
+    fillcolor = "rgba(26,78,114,0.75)", line = list(color = "#1a4e72", width = 1),
+    text = no_gen_hover, hoverinfo = "text") %>%
+  add_trace(x = ~year, y = ~gen2, type = "scatter", mode = "lines",
+    stackgroup = "one", name = "Second generation",
+    fillcolor = "rgba(90,155,213,0.75)", line = list(color = "#5a9bd5", width = 1),
+    text = no_gen_hover, hoverinfo = "text") %>%
+  layout(
+    title = list(text = sprintf("<b>Iranian-Origin Population in Norway<br>by Generation, %d\u2013%d</b>", no_gen_min, no_gen_max),
+      font = list(size = 14, family = "Montserrat")),
+    xaxis = list(title = "", dtick = 5),
+    yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
+    showlegend = FALSE,
+    margin = list(t = 40, b = 30),
+    plot_bgcolor = "white", paper_bgcolor = "white"
+  ) %>% config(displayModeBar = FALSE)
+
+no_gen_leg <- make_html_legend(c("First generation" = "#1a4e72",
+                                 "Second generation" = "#5a9bd5"))
 
 # --- Employment rate trend (2001-2025) ----------------------------------------
 p_employ <- plot_ly() %>%
@@ -284,12 +310,16 @@ pop_body <- paste0(
   '<div class="chart-row">',
   '<div class="chart-card">',
   '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'no-tab-hist\',this,\'pop-tabs\')">Population Since 1970</button>',
+  '<button class="tab-btn active" onclick="switchTab(\'no-tab-hist\',this,\'pop-tabs\')">Population Over Time</button>',
+  '<button class="tab-btn" onclick="switchTab(\'no-tab-gen\',this,\'pop-tabs\')">By Generation</button>',
   '<button class="tab-btn" onclick="switchTab(\'no-tab-emp\',this,\'pop-tabs\')">Employment Rate</button>',
   '</div>',
   '<div id="no-tab-hist" class="tab-panel active" data-group="pop-tabs">',
-  plotly_div("no-hist", plotly_to_json(p_hist), "400px", source = SSB_SOURCE,
-    legend_html = no_pop_leg),
+  plotly_div("no-hist", plotly_to_json(p_hist), "400px", source = SSB_SOURCE),
+  '</div>',
+  '<div id="no-tab-gen" class="tab-panel" data-group="pop-tabs">',
+  plotly_div("no-gen", plotly_to_json(p_gen), "400px", source = SSB_SOURCE,
+    legend_html = no_gen_leg),
   '</div>',
   '<div id="no-tab-emp" class="tab-panel" data-group="pop-tabs">',
   plotly_div("no-employ", plotly_to_json(p_employ), "400px", source = SSB_EMP_SOURCE,

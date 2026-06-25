@@ -257,7 +257,7 @@ p_region <- plot_ly(data = region_totals, x = ~region, y = ~pct, type = "bar",
       format(round(pop), big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Canadians by<br>Region of Residence</b>",
+    title = list(text = "<b>Iranian-Canadians by<br>Region of Residence, 2021</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""),
     yaxis = list(title = "", ticksuffix = "%"),
@@ -469,7 +469,7 @@ for (cat_name in lang_cats) {
 p_lang <- p_lang %>% layout(
   barmode = "stack",
   hoverlabel = list(showarrow = FALSE),
-  title = list(text = "<b>Language of Iranian-Canadians<br>by Generation</b>",
+  title = list(text = "<b>Language of Iranian-Canadians<br>by Generation, 2021</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_levels),
@@ -527,7 +527,7 @@ for (cat_name in relig_cats) {
 p_relig <- p_relig %>% layout(
   barmode = "stack",
   hoverlabel = list(showarrow = FALSE),
-  title = list(text = "<b>Religious Identification<br>of Iranian-Canadians by Generation</b>",
+  title = list(text = "<b>Religious Identification<br>of Iranian-Canadians by Generation, 2021</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_levels),
@@ -607,10 +607,13 @@ immig_cat <- read.csv(file.path(DATA_DIR, "immigration/iranian_immigration_categ
 # Annual immigration chart: wide bars for pre-1995 periods, narrow bars for annual
 immig_annual <- immig_annual %>% arrange(year)
 
-# Cumulative line (based on period_total, not per-year average)
-immig_annual$cumulative <- cumsum(immig_annual$period_total / immig_annual$period_years)
-# Recalculate: cumulative of actual counts
-immig_annual$cumulative <- cumsum(immig_annual$count)
+# Cumulative from TRUE arrivals (full period totals for the wide pre-1995 bins,
+# annual counts otherwise) — NOT the per-year-averaged `count`, which understated
+# each multi-year cohort's contribution to the curve. The same bug was caught and
+# fixed for Australia in 2026-04; it had never been propagated here.
+immig_annual$true_arrivals <- ifelse(immig_annual$is_period,
+  immig_annual$period_total, immig_annual$count)
+immig_annual$cumulative <- cumsum(immig_annual$true_arrivals)
 immig_annual$cum_pct <- round(immig_annual$cumulative / max(immig_annual$cumulative) * 100, 1)
 
 # Bar widths: 5 years wide for periods, 1 year for annual
@@ -680,7 +683,7 @@ p_ca_cit <- plot_ly(data = cit1, x = ~short_label, y = ~count, type = "bar",
     text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", status, format(round(count), big.mark = ","), percentage),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship Status:<br>All Iranian-Canadians</b>", font = list(size = 16, family = "Montserrat")),
+    title = list(text = "<b>Citizenship Status:<br>All Iranian-Canadians, 2021</b>", font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10),
       categoryorder = "array", categoryarray = cit1_order),
     yaxis = list(title = "", tickformat = ","),
@@ -1202,7 +1205,7 @@ p_inc_decile <- plot_ly(data = inc1, x = ~short_label, y = ~percentage, type = "
     marker = list(size = 0, opacity = 0),
     hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Position in Canadian<br>Household Income Distribution:<br>First Generation (Ages 25-54)</b>",
+    title = list(text = "<b>Position in Canadian<br>Household Income Distribution:<br>First Generation (Ages 25–54), 2021</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
       categoryorder = "array", categoryarray = inc1$short_label),
@@ -1254,7 +1257,7 @@ for (band in age_band_order) {
 }
 p_inc_age <- p_inc_age %>% layout(
   barmode = "stack",
-  title = list(text = "<b>Personal Income by Age:<br>First-Generation Iranian-Canadians</b>",
+  title = list(text = "<b>Personal Income by Age:<br>First-Generation Iranian-Canadians, 2021</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(age_levels_inc)),
@@ -1280,7 +1283,7 @@ writeLines(page_template("Canada: Income", paste0(
   </div>', ca_d1, ca_d10),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Canadian earners aged %s make CA$100,000 or more &mdash; the peak age bracket for high earners.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-Canadian earners aged %s make CA$100,000 or more &mdash; the highest share of any age group.</div>
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Reports each individual&rsquo;s own pre-tax earnings by age. Household income, by contrast, sums every earner in a household into one total before ranking it against the national distribution.</div>
   </div>', ca_100k_peak, ca_100k_peak_age),
   '<div class="chart-card pc1">', plotly_div("ca-inc1", plotly_to_json(p_inc_decile), "500px", source = PUMF_SRC_INCOME), '</div>',

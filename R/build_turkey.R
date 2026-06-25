@@ -133,12 +133,13 @@ tr_min_yr <- min(trend$year)
 cat("Building tr-population...\n")
 
 # --- Figure 1: Annual Iran-born stock 2019-2025 (bar) -------------------------
-p_hist <- plot_ly(trend, x = ~year, y = ~total, type = "bar",
-    marker = list(color = "#2774AE",
-                  line = list(color = "#1a4e72", width = 0.4)),
+p_hist <- plot_ly(trend, x = ~year, y = ~total, type = "scatter",
+    mode = "lines+markers",
+    line = list(color = "#1a4e72", width = 2.5),
+    marker = list(color = "#1a4e72", size = 6),
     text = sprintf("<b>%d</b><br>%s Iran-born",
       trend$year, format(trend$total, big.mark = ",")),
-    hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(
       text = sprintf("<b>Iran-Born Population in T\u00fcrkiye,<br>%d\u2013%d</b>",
@@ -372,7 +373,7 @@ imm_body <- paste0(
   # pt1: factoid above pc1 (citizens trend). Iranian-citizen growth 2014\u2192peak.
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s\u00d7</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranian citizens resident in T\u00fcrkiye grew %s-fold between 2014 (%s) and the %d peak (%s).</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranian citizens resident in T\u00fcrkiye grew %s-fold between 2014 (%s) and %d (%s), their highest year.</div>
   </div>',
     cit_growth, cit_growth,
     format(cit_2014, big.mark = ","),

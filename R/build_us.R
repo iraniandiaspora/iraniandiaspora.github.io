@@ -140,7 +140,7 @@ p_immig <- plot_ly() %>%
   add_bars(data = immig, x = ~YRIMMIG, y = ~n, marker = list(color = "#2774AE"),
     text = ~sprintf("<b>Year:</b> %d<br><b>Arrivals:</b> %s<br><b>Cumulative:</b> %s (%s%%)",
       YRIMMIG, format(n, big.mark = ","), format(cumulative_immigrants, big.mark = ","), cum_pct),
-    hoverinfo = "text", showlegend = FALSE) %>%
+    hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
   add_lines(data = immig, x = ~YRIMMIG,
     y = ~cumulative_immigrants / max(cumulative_immigrants) * max(n),
     yaxis = "y2", line = list(color = "lightblue", width = 2),
@@ -176,7 +176,7 @@ p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
       format(n, big.mark = ","), round(n / cit_total * 100)),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Americans by<br>Citizenship Status</b>",
+    title = list(text = "<b>Iranian-Americans by<br>Citizenship Status, 2020–2024</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""), yaxis = list(title = "", tickformat = ","),
     margin = list(t = 55, b = 60),
@@ -819,7 +819,7 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
       marker = list(size = 0, opacity = 0),
       hoverinfo = "skip", showlegend = FALSE) %>%
     layout(
-      title = list(text = sprintf("<b>Position in U.S.<br>Household Income Distribution:<br>%s (Ages 25-54)</b>", gen_label),
+      title = list(text = sprintf("<b>Position in U.S.<br>Household Income Distribution:<br>%s (Ages 25–54), 2020–2024</b>", gen_label),
         font = list(size = 15, family = "Montserrat")),
       xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
         categoryorder = "array", categoryarray = decile_labels),
@@ -1114,7 +1114,7 @@ p_region <- plot_ly(data = region_dat, x = ~REGION, y = ~pop, type = "bar",
       REGION, format(pop, big.mark = ","), round(pop / total_pop * 100)),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Americans by US Region</b>",
+    title = list(text = "<b>Iranian-Americans by US Region, 2020–2024</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""), yaxis = list(title = "", tickformat = ","),
     margin = list(t = 60, b = 40),
