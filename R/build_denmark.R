@@ -299,9 +299,12 @@ industry <- industry[order(industry$count), ]  # ascending for horizontal bar
 industry$sector_en <- factor(industry$sector_en, levels = industry$sector_en)
 total_employed <- industry$total_employed[1]
 
-# Categorical colors for distinct industry sectors
-dk_ind_colors <- rep(c("#1a4e72", "#2774AE", "#4a8c6f", "#c4793a", "#d4a943",
-                       "#7b5ea7", "#2ca089", "#e07b54"), length.out = nrow(industry))
+# Shared Okabe-Ito categorical palette for the 8 largest sectors; smaller
+# sectors muted to grey so the palette never repeats a hue (best practice caps
+# categorical color at ~8). `industry` is ascending-count, so the LAST 8 rows
+# are the largest — those get color, the smaller head is grey.
+n_ind <- nrow(industry)
+dk_ind_colors <- c(rep(CAT_OTHER, max(0, n_ind - 8)), rev(OKABE_ITO)[seq_len(min(8, n_ind))])
 p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
     orientation = "h", marker = list(color = dk_ind_colors),
     text = sprintf("<b>%s</b><br>%s employees (%.1f%%)",

@@ -211,30 +211,55 @@ p_age <- plot_ly() %>%
 age_leg <- make_html_legend(c("Male" = "#2171b5", "Female" = "#c4793a"))
 
 # --- Year of arrival bars + cumulative line ---
-# Use categorical x-axis (period labels) for even bar spacing
+# Numeric calendar x-axis with per-year-average heights and proportional bar
+# widths (the Australia method), so the wide census decades do not visually
+# swamp the narrow 2-3 year bins at the recent end. The cumulative-% line is
+# computed from the true (un-averaged) counts. Census bins span unequal numbers
+# of years: parse each into [low, high] arrival years to get span and center.
 arrival <- arrival %>% arrange(mid_year)
-arrival$label <- factor(arrival$label, levels = arrival$label)
+arr_bounds <- function(period, mid) {
+  if (grepl("before", period, ignore.case = TRUE)) {
+    c(low = mid - 5, high = mid + 4)        # open tail: nominal 10-year span
+  } else {
+    yy <- as.integer(regmatches(period, gregexpr("[0-9]{4}", period))[[1]])
+    c(low = yy[1], high = yy[length(yy)])
+  }
+}
+bd <- t(mapply(arr_bounds, arrival$period, arrival$mid_year))
+arrival$arr_low  <- bd[, "low"]
+arrival$arr_high <- bd[, "high"]
+arrival$span     <- arrival$arr_high - arrival$arr_low + 1
+arrival$center   <- (arrival$arr_low + arrival$arr_high) / 2
+arrival$annual_avg <- round(arrival$count / arrival$span)
+arrival$bar_width  <- arrival$span * 0.9
+arrival$hover <- sprintf("<b>%s</b><br>%s arrivals (%s/year avg)<br>Cumulative: %.1f%%",
+  arrival$label, format(arrival$count, big.mark = ","),
+  format(arrival$annual_avg, big.mark = ","), arrival$cum_pct)
 
 p_arrival <- plot_ly() %>%
-  add_bars(data = arrival, x = ~label, y = ~count,
+  add_bars(data = arrival, x = ~center, y = ~annual_avg, width = ~bar_width,
     marker = list(color = "#2774AE"),
-    text = sprintf("<b>%s</b><br>%s arrivals<br>Cumulative: %.1f%%",
-      arrival$label, format(arrival$count, big.mark = ","), arrival$cum_pct),
-    hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
-  add_trace(data = arrival, x = ~label, y = ~cum_pct, type = "scatter",
+    text = ~hover, hoverinfo = "text", textposition = "none",
+    showlegend = FALSE) %>%
+  add_trace(data = arrival, x = ~center, y = ~cum_pct, type = "scatter",
     mode = "lines", yaxis = "y2",
     line = list(color = "lightblue", width = 2),
     hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Year of Arrival in the UK,<br>Iran-Born Residents</b>",
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -45, tickfont = list(size = 9)),
+    xaxis = list(title = "", dtick = 10, range = c(1939, 2024),
+      tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
     yaxis2 = list(title = "", overlaying = "y", side = "right",
       ticksuffix = "%", range = c(0, 105), showgrid = FALSE,
       tickfont = list(size = 10, color = "#888")),
-    margin = list(t = 55, b = 80, r = 40),
-    plot_bgcolor = "white", paper_bgcolor = "white"
+    margin = list(t = 55, b = 55, r = 40),
+    plot_bgcolor = "white", paper_bgcolor = "white",
+    annotations = list(
+      list(text = "Census cohorts span different numbers of years; bars show arrivals averaged per year.",
+        x = 0.5, y = -0.15, xref = "paper", yref = "paper", showarrow = FALSE,
+        font = list(size = 9, color = "#888"), xanchor = "center"))
   ) %>% config(displayModeBar = FALSE)
 
 # --- Assemble uk-population ---

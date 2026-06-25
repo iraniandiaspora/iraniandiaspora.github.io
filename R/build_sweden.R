@@ -103,7 +103,7 @@ SCB_LINK <- "<a href='https://www.scb.se/en/' target='_blank' style='color:#2774
 SCB_SOURCE <- paste0("Source: ", SCB_LINK, " &mdash; Population Register, 2025")
 SCB_POP_SOURCE <- paste0("Source: ", SCB_LINK, " &mdash; Population by country of birth, 2024")
 EURO_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/' target='_blank' style='color:#2774AE;'>Eurostat</a>"
-HIST_SOURCE <- paste0("Source: ", EURO_LINK, ", Iran-born population stock")
+HIST_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Iran-born population stock, 2000–2024")
 
 # --- Load data ---------------------------------------------------------------
 cat("Loading Sweden SCB extracts...\n")
@@ -173,31 +173,75 @@ p_hist <- plot_ly(euro_se, x = ~year, y = ~iran_born, type = "scatter",
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-# --- Years since immigration chart -------------------------------------------
+# --- Year of arrival chart (US model: calendar x-axis + cumulative line) ------
+# SCB reports "years since immigration" in single-year bins (0-9), 5-year bins
+# (10-49), and an open 50+ bin. We reframe to year of arrival to match the
+# US/NL/AU pattern. The 5-year and open bins are normalized to a per-year
+# average height with proportional bar width (the Australia method) so a
+# multi-year cohort cannot visually swamp a single year; the cumulative-%
+# line is computed from the true (un-averaged) counts. Data are 2024 vintage.
 yrs <- yrssince[!is.na(yrssince$count), ]
-# Create display labels
-yrs$label <- yrs$duration
-yrs$label <- sub(" years$", "y", yrs$label)
-yrs$label <- sub(" year$", "y", yrs$label)
-yrs$label <- sub("50 \\+ y", "50+y", yrs$label)
 
-total_yrs <- sum(yrs$count)
-yrs$pct <- round(yrs$count / total_yrs * 100, 1)
+parse_arrival <- function(dur) {
+  if (grepl("^50", dur)) {                 # "50 + years" -> open tail
+    list(span = 5L, low = 1970L, high = 1974L, label = "Before 1975")
+  } else if (grepl("-", dur)) {            # "10-14 years" -> 5-year bin
+    b <- as.integer(strsplit(sub(" years", "", dur), "-")[[1]])
+    list(span = b[2] - b[1] + 1L, low = 2024L - b[2], high = 2024L - b[1],
+         label = sprintf("%d–%d", 2024L - b[2], 2024L - b[1]))
+  } else {                                 # "N year(s)" -> single year
+    n <- as.integer(sub(" .*", "", dur))
+    list(span = 1L, low = 2024L - n, high = 2024L - n,
+         label = as.character(2024L - n))
+  }
+}
+pa <- lapply(yrs$duration, parse_arrival)
+yrs$span      <- vapply(pa, `[[`, integer(1), "span")
+yrs$arr_low   <- vapply(pa, `[[`, integer(1), "low")
+yrs$arr_high  <- vapply(pa, `[[`, integer(1), "high")
+yrs$arr_lab   <- vapply(pa, `[[`, character(1), "label")
+yrs$center    <- (yrs$arr_low + yrs$arr_high) / 2
+yrs$is_period <- yrs$span > 1L
+yrs$annual_avg <- round(yrs$count / yrs$span)
+yrs$bar_width  <- ifelse(yrs$is_period, yrs$span * 0.9, 0.8)
+yrs$bar_color  <- ifelse(yrs$is_period, "#5a9bd5", "#2774AE")
 
-p_yrssince <- plot_ly(yrs, x = ~seq_len(nrow(yrs)) - 1L, y = ~count, type = "bar",
-    marker = list(color = "#2774AE"),
-    text = sprintf("<b>%s</b><br>%s (%s%%)",
-      yrs$duration, format(yrs$count, big.mark = ","), yrs$pct),
-    hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
+# Cumulative share from TRUE counts, oldest arrival cohort first
+yrs <- yrs[order(yrs$center), ]
+yrs$cum_true <- cumsum(yrs$count)
+yrs$cum_pct  <- round(yrs$cum_true / sum(yrs$count) * 100, 1)
+
+yrs$hover <- ifelse(yrs$is_period,
+  sprintf("<b>%s</b><br>%s arrivals (%s/year avg)<br>Cumulative: %.1f%%",
+    yrs$arr_lab, format(yrs$count, big.mark = ","),
+    format(yrs$annual_avg, big.mark = ","), yrs$cum_pct),
+  sprintf("<b>%s</b><br>%s arrivals<br>Cumulative: %.1f%%",
+    yrs$arr_lab, format(yrs$count, big.mark = ","), yrs$cum_pct))
+
+p_yrssince <- plot_ly() %>%
+  add_bars(data = yrs, x = ~center, y = ~annual_avg, width = ~bar_width,
+    marker = list(color = ~bar_color),
+    text = ~hover, hoverinfo = "text", textposition = "none",
+    showlegend = FALSE) %>%
+  add_trace(data = yrs, x = ~center, y = ~cum_pct, type = "scatter",
+    mode = "lines", yaxis = "y2",
+    line = list(color = "lightblue", width = 2),
+    hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Iran-Born by Years Since Immigration,<br>Sweden 2024</b>",
+    title = list(text = "<b>Iran-Born Residents in Sweden<br>by Year of Arrival</b>",
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -45, tickfont = list(size = 9),
-      tickvals = seq(0, nrow(yrs) - 1),
-      ticktext = yrs$label),
+    xaxis = list(title = "", dtick = 10, range = c(1967, 2026),
+      tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 40, b = 70),
-    plot_bgcolor = "white", paper_bgcolor = "white"
+    yaxis2 = list(title = "", overlaying = "y", side = "right",
+      ticksuffix = "%", range = c(0, 105), showgrid = FALSE,
+      tickfont = list(size = 10, color = "#888")),
+    margin = list(t = 40, b = 55, r = 45),
+    plot_bgcolor = "white", paper_bgcolor = "white",
+    annotations = list(
+      list(text = "Arrivals before 2015 are grouped into 5-year periods, shown as a per-year average.",
+        x = 0.5, y = -0.15, xref = "paper", yref = "paper", showarrow = FALSE,
+        font = list(size = 9, color = "#888"), xanchor = "center"))
   ) %>% config(displayModeBar = FALSE)
 
 # --- County choropleth map ---------------------------------------------------
@@ -281,7 +325,7 @@ pop_body <- paste0(
   '<div class="chart-card">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'se-tab-hist\',this,\'pop-tabs\')">Population Over Time</button>',
-  '<button class="tab-btn" onclick="switchTab(\'se-tab-yrs\',this,\'pop-tabs\')">Years Since Immigration</button>',
+  '<button class="tab-btn" onclick="switchTab(\'se-tab-yrs\',this,\'pop-tabs\')">Year of Arrival</button>',
   '</div>',
   '<div id="se-tab-hist" class="tab-panel active" data-group="pop-tabs">',
   plotly_div("se-hist", plotly_to_json(p_hist), "430px", source = HIST_SOURCE),

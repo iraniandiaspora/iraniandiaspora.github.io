@@ -101,27 +101,30 @@ TREND_SOURCE <- sprintf(
   "Source: %s &mdash; Iranian-origin population by generation, %d–%d",
   STATFIN_LINK, fi_min_yr, data_yr)
 MAP_SOURCE <- paste0(
-  "Source: ", STATFIN_LINK, " &mdash; Iran-born population by region")
+  "Source: ", STATFIN_LINK, " &mdash; Iran-born population by region, ", data_yr)
 
 # =============================================================================
 # FI-POPULATION
 # =============================================================================
 cat("Building fi-population...\n")
 
-# --- Stacked-bar trend: 1st gen + 2nd gen by year ----------------------------
+# --- Stacked-area trend: 1st gen + 2nd gen by year ---------------------------
+# Stacked area (not bars) is the site standard for generation-split population
+# over time: it shows each generation's relative size as a continuous band.
+fi_hover <- sprintf(
+  "<b>%d</b><br>First generation: %s<br>Second generation: %s<br>Total: %s",
+  trend$year, format(trend$gen1, big.mark = ","),
+  format(trend$gen2, big.mark = ","), format(trend$gen1 + trend$gen2, big.mark = ","))
 p_hist <- plot_ly(trend) %>%
-  add_bars(x = ~year, y = ~gen1, name = "First generation",
-    marker = list(color = "#1a4e72"),
-    text = ~sprintf("<b>%d</b><br>First generation: %s",
-      year, format(gen1, big.mark = ",")),
-    hoverinfo = "text", textposition = "none") %>%
-  add_bars(x = ~year, y = ~gen2, name = "Second generation",
-    marker = list(color = "#5a9bd5"),
-    text = ~sprintf("<b>%d</b><br>Second generation: %s",
-      year, format(gen2, big.mark = ",")),
-    hoverinfo = "text", textposition = "none") %>%
+  add_trace(x = ~year, y = ~gen1, type = "scatter", mode = "lines",
+    stackgroup = "one", name = "First generation",
+    fillcolor = "rgba(26,78,114,0.75)", line = list(color = "#1a4e72", width = 1),
+    text = fi_hover, hoverinfo = "text") %>%
+  add_trace(x = ~year, y = ~gen2, type = "scatter", mode = "lines",
+    stackgroup = "one", name = "Second generation",
+    fillcolor = "rgba(90,155,213,0.75)", line = list(color = "#5a9bd5", width = 1),
+    text = fi_hover, hoverinfo = "text") %>%
   layout(
-    barmode = "stack",
     title = list(
       text = sprintf("<b>Iranian-Origin Population in Finland,<br>%d–%d</b>",
                      fi_min_yr, data_yr),

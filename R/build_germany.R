@@ -182,7 +182,7 @@ p_bund_bar <- plot_ly(bar_df, x = ~land, y = ~display_value, type = "bar",
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Origin Population<br>by German State</b>",
+    title = list(text = "<b>Iranian-Origin Population<br>by German State, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -30, tickfont = list(size = 10)),
     yaxis = list(title = "", tickformat = ","),
@@ -323,13 +323,15 @@ motive_clean$pct <- round(motive_clean$value / motive_total * 100, 1)
 motive_clean <- motive_clean %>% arrange(desc(value))
 motive_clean$short <- factor(motive_clean$short, levels = motive_clean$short)
 
+# Shared Okabe-Ito categorical palette (named map so a category keeps its color
+# regardless of sort order); the "Other" catch-all stays grey (CAT_OTHER).
 motive_colors <- c(
-  "Flight / asylum" = "#c4793a",
-  "Study / training" = "#d4a943",
-  "Family reunification" = "#8a5a3a",
-  "Work" = "#b05050",
-  "Family formation" = "#e8b878",
-  "Other" = "#b0b0b0"
+  "Flight / asylum"      = "#0072B2",
+  "Study / training"     = "#E69F00",
+  "Family reunification" = "#009E73",
+  "Work"                 = "#CC79A7",
+  "Family formation"     = "#56B4E9",
+  "Other"                = "#b0b0b0"
 )
 
 p_motive <- plot_ly(motive_clean, x = ~short, y = ~value, type = "bar",
@@ -337,7 +339,7 @@ p_motive <- plot_ly(motive_clean, x = ~short, y = ~value, type = "bar",
     text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", short, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Main Reason Iran-Born Immigrants<br>Came to Germany</b>",
+    title = list(text = "<b>Main Reason Iran-Born Immigrants<br>Came to Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -45, tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -364,7 +366,12 @@ dur_df <- duration %>%
     value = ifelse(is.na(value_k), 0, value_k) * 1000,
     label = dur_labels[bucket]
   )
-dur_df$label <- factor(dur_df$label, levels = unname(dur_labels))
+# Order DESCENDING (40+ -> <5) so the earliest-arrived cohort sits on the LEFT
+# and the most recent on the RIGHT, matching the temporal direction of every
+# year-of-arrival chart on the site. (A duration histogram's natural 0-on-left
+# order would put recent arrivals left, reversing cohort direction vs the rest
+# of the site.)
+dur_df$label <- factor(dur_df$label, levels = rev(unname(dur_labels)))
 dur_df$pct <- round(dur_df$value / hl_fg * 100, 1)
 # Monochromatic blue — consistent with other countries' duration charts.
 p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
@@ -373,13 +380,17 @@ p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
       label, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Years Iran-Born Residents<br>Have Lived in Germany</b>",
+    title = list(text = "<b>Iran-Born Residents by<br>Length of Residence in Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "Years in Germany", tickfont = list(size = 11)),
+    xaxis = list(title = "Years lived in Germany", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 65, b = 70),
+    margin = list(t = 65, b = 90),
     plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
+    showlegend = FALSE,
+    annotations = list(
+      list(text = "Bars run from earliest arrivals (left) to most recent (right).",
+        x = 0.5, y = -0.26, xref = "paper", yref = "paper", showarrow = FALSE,
+        font = list(size = 9, color = "#888"), xanchor = "center"))) %>%
   config(displayModeBar = FALSE)
 
 # Annual arrivals chart — Iranian Zuzüge 1991-2024 from BAMF/Destatis
@@ -415,15 +426,15 @@ p_citizen <- plot_ly(data.frame(
     pct    = round(c(hl_deu, hl_for) / hl_total * 100)
   ),
   x = ~status, y = ~count, type = "bar",
-  # Blue family on the left side of the Immigration page; the motive and
-  # duration charts on the right use a warm-earth palette so colors don't
-  # clash across the two sides.
+  # Citizenship is a 2-category status chart: site blue + coral (the documented
+  # citizenship palette). The motive chart uses the shared Okabe-Ito categorical
+  # palette; the duration chart is monochromatic blue.
   marker = list(color = c("#2774AE", "#e07b54")),
   text = ~sprintf("<b>%s</b><br>%s (%s%%)",
     status, format(count, big.mark = ","), pct),
   hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship of Iranian-Origin<br>Residents in Germany</b>",
+    title = list(text = "<b>Citizenship of Iranian-Origin<br>Residents in Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 12)),
     yaxis = list(title = "", tickformat = ","),
@@ -469,7 +480,7 @@ immig_body <- paste0(
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'de-immig-annual\',this,\'de-immig-tabs\')">Annual Arrivals</button>',
   '<button class="tab-btn" onclick="switchTab(\'de-immig-motive\',this,\'de-immig-tabs\')">Main Reason for Coming</button>',
-  '<button class="tab-btn" onclick="switchTab(\'de-immig-duration\',this,\'de-immig-tabs\')">Years in Germany</button>',
+  '<button class="tab-btn" onclick="switchTab(\'de-immig-duration\',this,\'de-immig-tabs\')">Length of Residence</button>',
   '</div>',
   '<div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs">',
   plotly_div("de-annual", plotly_to_json(p_annual), "430px",
@@ -529,7 +540,7 @@ p_school <- plot_ly(school_all, x = ~cat, y = ~pct, type = "bar",
       cat, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Highest School Qualification in Germany</b>",
+    title = list(text = "<b>Highest School Qualification in Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = 0, tickfont = list(size = 10)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 60)),
@@ -568,7 +579,7 @@ p_prof <- plot_ly(prof_all, x = ~cat, y = ~pct, type = "bar",
       cat, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Highest Vocational or Academic<br>Qualification in Germany</b>",
+    title = list(text = "<b>Highest Vocational or Academic<br>Qualification in Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 40)),
@@ -611,7 +622,7 @@ p_emp_status <- plot_ly(emp_bar_df, x = ~status, y = ~count, type = "bar",
       status, format(count, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Labour Force Status in Germany</b>",
+    title = list(text = "<b>Labour Force Status in Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -653,15 +664,14 @@ ind$hover <- ifelse(ind$is_suppressed,
 # sorted ascending so the longest bar appears at the top.
 ind <- ind %>% arrange(desc(is_suppressed), value)
 ind$label <- factor(ind$label, levels = ind$label)
-# Warm-earth palette for the industry chart; matches the labour-force
-# chart in the same tab card. Suppressed sectors are grey. Palette is
-# applied by suppression mask, not row index — after the arrange() above,
-# suppressed rows are at the front so positional assignment would flip
-# colors onto the wrong bars.
-ind_palette_visible <- c("#c4793a", "#d4a943", "#8a5a3a", "#e8b878", "#6a4028")
+# Shared Okabe-Ito categorical palette for the visible sectors. Suppressed
+# sectors stay grey (#c8c8c8 = "<5,000, not published" — a separate signal from
+# the palette). Colors are applied by suppression mask, not row index: after the
+# arrange() above, suppressed rows are at the front, so positional assignment
+# would otherwise put colors on the wrong bars.
 visible_idx <- which(!ind$is_suppressed)
 ind$fill_color <- rep("#c8c8c8", nrow(ind))
-ind$fill_color[visible_idx] <- ind_palette_visible[seq_along(visible_idx)]
+ind$fill_color[visible_idx] <- cat_colors(length(visible_idx))
 
 p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
     orientation = "h",
@@ -669,7 +679,7 @@ p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Origin Employment by Industry</b>",
+    title = list(text = "<b>Iranian-Origin Employment<br>by Industry in Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 11),
@@ -734,7 +744,7 @@ p_income <- plot_ly(inc, x = ~bracket, y = ~display_pct, type = "bar",
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers in Germany</b>",
+    title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers in Germany, 2025</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -25, tickfont = list(size = 10)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 25)),
@@ -863,7 +873,7 @@ for (cat_name in lang_cat_order) {
 }
 p_lang <- p_lang %>% layout(
   barmode = "stack",
-  title = list(text = "<b>Main Language Spoken at Home in Germany</b>",
+  title = list(text = "<b>Main Language Spoken at Home in Germany, 2025</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "",
@@ -912,7 +922,8 @@ langedu_body <- paste0(
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>%d%% speak only German at home</li>
       <li>%d%% speak mainly German with some other languages</li>
-      <li>%d%% speak another non-German, non-Persian language at home &mdash; Kurdish, English, and Other Asian languages each at about %d%%; smaller groups are too few to report separately</li>
+      <li>%d%% speak another non-German, non-Persian language at home</li>
+      <li>Including Kurdish, English, and Other Asian, each about %d%%</li>
     </ul>
   </div>', persian_pct, format(persian_k * 1000, big.mark = ","),
      only_de_pct, mainly_de_pct, other_lang_pct, kurdish_pct),
