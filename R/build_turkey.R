@@ -181,7 +181,7 @@ p_age <- plot_ly() %>%
   ) %>%
   layout(
     title = list(
-      text = "<b>Iran-Born in T\u00fcrkiye by Age and Sex,<br>2025</b>",
+      text = "<b>Iran-Born in T\u00fcrkiye by Age and Sex</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 10),
@@ -342,7 +342,7 @@ p_permits <- plot_ly(permit_breakdown, y = ~label, x = ~count, type = "bar",
     hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
   layout(
     title = list(
-      text = "<b>Iranian Residence Permits in Türkiye,<br>by Type (May 2026)</b>",
+      text = "<b>Iranian Residence Permits in Türkiye,<br>by Type</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 12),

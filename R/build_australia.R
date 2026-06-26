@@ -189,7 +189,7 @@ p_region <- plot_ly(data = region_totals_au, x = ~region, y = ~pct, type = "bar"
       region, format(pop, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iran-Born Australians by<br>Region of Residence, 2021</b>",
+    title = list(text = "<b>Iran-Born Australians by<br>Region of Residence</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""),
     yaxis = list(title = "", ticksuffix = "%"),
@@ -380,6 +380,41 @@ au_matrix_html <- criteria_table(list(
 
 compound_total <- wf$cumulative[nrow(wf)]
 
+# --- Generation split of the Iranian-ancestry population (added 2026-06-26) ---
+# ABS 2021 Census ANCP Iranian x BPLP country of birth (TableBuilder Pro): of
+# the 81,119 reporting Iranian ancestry, 56,289 were born in Iran, 18,133 in
+# Australia (2nd gen), 6,697 in a third country (re-migration). 1st gen = born
+# overseas. (Ancestry x birthplace IS cross-tabbable; parent x parent is not --
+# see .claude/rules/australia-pipeline.md.)
+gen <- read.csv(file.path(DATA_DIR, "au_generation.csv"), stringsAsFactors = FALSE)
+g <- function(k) gen$count[gen$component == k]
+anc_total <- g("Iranian ancestry total")
+gen2_au   <- g("Iranian ancestry born in Australia (2nd gen)")
+gen1_os   <- anc_total - gen2_au               # born overseas (Iran + third country)
+gen3rd    <- g("Iranian ancestry born elsewhere (3rd country)")
+
+make_gen_box <- function(val, pct_text, label, sublabel, color) {
+  sprintf(
+    '<div style="background:%s; border-radius:6px; padding:22px 14px; text-align:center; color:white; flex:1; min-width:0;">
+      <div style="font-size:30px; font-weight:700; line-height:1.1;">%s</div>
+      <div style="font-size:13px; margin-top:4px; font-weight:600;">%s</div>
+      <div style="font-size:12px; margin-top:2px; opacity:0.85;">%s of total</div>
+      <div style="font-size:11.5px; margin-top:6px; opacity:0.8;">%s</div>
+    </div>', color, format(val, big.mark = ","), label, pct_text, sublabel)
+}
+au_gen_boxes <- paste0(
+  '<div class="section-title" style="margin-top:0;">Iranian-Ancestry Population by Generation</div>',
+  '<div style="display:flex; gap:12px; margin:8px 0 0;">',
+  make_gen_box(gen1_os, paste0(round(gen1_os / anc_total * 100), "%"),
+    "First generation", "Born overseas", "#1a4e72"),
+  make_gen_box(gen2_au, paste0(round(gen2_au / anc_total * 100), "%"),
+    "Second generation", "Australian-born", "#5a9bd5"),
+  '</div>',
+  sprintf('<p style="font-size:12.5px; color:#555; margin:14px auto 0; max-width:430px; line-height:1.55;">Of the %s Australians who report Iranian ancestry. About %d%% of the first generation were born outside Iran (largely diaspora re-migration via India, Afghanistan and the UK).</p>',
+    format(anc_total, big.mark = ","), round(gen3rd / gen1_os * 100)),
+  '<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0;">Source: <a href=\'https://www.abs.gov.au/census\' target=\'_blank\' style=\'color:#2774AE;\'>ABS</a> &mdash; Census 2021, ancestry by country of birth.</p>'
+)
+
 # --- Assemble population page ---
 pop_body <- paste0(
   # Top row: headline + waterfall
@@ -402,9 +437,18 @@ pop_body <- paste0(
   '</div>',
   '</div>',
   '<div class="chart-card">',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'au-howcount-tab\',this,\'au-howcount\')">How We Count</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-gen-tab\',this,\'au-howcount\')">By Generation</button>',
+  '</div>',
+  '<div id="au-howcount-tab" class="tab-panel active" data-group="au-howcount">',
   plotly_div("au-waterfall", plotly_to_json(p_waterfall), "320px"),
   au_matrix_html,
   '<p style="font-size:11px; color:#666; text-align:right; margin:6px 0 0; padding-right:2px;">Source: <a href=\'https://www.abs.gov.au/census\' target=\'_blank\' style=\'color:#2774AE;\'>ABS</a> \u2014 Census of Population and Housing, 2021. Cell counts are randomly adjusted by ABS to prevent identification of individuals; totals may not sum exactly.</p>',
+  '</div>',
+  '<div id="au-gen-tab" class="tab-panel" data-group="au-howcount">',
+  au_gen_boxes,
+  '</div>',
   '</div>',
   '</div>',
 
@@ -562,7 +606,7 @@ p_cit <- plot_ly(data = cit_data, x = ~status, y = ~count, type = "bar",
       gsub("\n", " ", status), format(count, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship Status<br>of Iran-Born Australians, 2021</b>",
+    title = list(text = "<b>Citizenship Status<br>of Iran-Born Australians</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""),
     yaxis = list(title = "", tickformat = ","),
@@ -644,7 +688,7 @@ p_edu <- plot_ly(edu_chart, y = ~label, x = ~count, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(
-      text = "<b>Highest Educational Attainment<br>of Iran-Born Australians, 2021</b>",
+      text = "<b>Highest Educational Attainment<br>of Iran-Born Australians</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 11),
@@ -680,7 +724,7 @@ for (cat in rel_cats) {
 }
 p_rel <- p_rel %>% layout(
   barmode = "stack",
-  title = list(text = "<b>Religion of Iranian-Australians<br>by Generation, 2021</b>",
+  title = list(text = "<b>Religion of Iranian-Australians<br>by Generation</b>",
     font = list(size = 15, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array",
@@ -697,6 +741,45 @@ islam_pct <- 25.3
 # --- Assemble education page ---
 second_gen_count <- second_gen$count[1]
 
+# --- Language spoken at home, by generation (2021) ---------------------------
+# Mirrors the US (us-language) / Canada (ca-langrelig) pattern: a horizontal
+# 100% stacked bar of Persian / Other language / English-only, split by
+# generation, showing heritage-language retention drop. Same 3 categories and
+# colors as build_us.R. Data: ABS 2021 Census LANP x ANCP=Iranian, split by
+# BPLP (born overseas = 1st gen, born in Australia = 2nd gen), TableBuilder Pro,
+# pulled 2026-06-26. See .claude/rules/australia-pipeline.md.
+au_lang <- read.csv(file.path(DATA_DIR, "au_language.csv"), stringsAsFactors = FALSE)
+lang_cat_levels <- c("Persian", "Other language", "English only")
+lang_cat_colors <- c("Persian" = "#2d6a4f", "Other language" = "#8b6c42",
+                     "English only" = "#6c757d")
+# Plotly stacks bottom-up and lists the first y-level at the bottom; put 1st gen
+# on top by ordering 2nd gen first.
+au_lang$gen <- factor(au_lang$gen, levels = c("2nd Generation", "1st Generation"))
+au_lang$lang_cat <- factor(au_lang$lang_cat, levels = lang_cat_levels)
+
+p_language <- plot_ly()
+for (lc in lang_cat_levels) {
+  s <- au_lang[au_lang$lang_cat == lc, ]
+  s$hover <- sprintf("<b>%s</b><br>%s<br>%s people (%.0f%%)",
+    lc, s$gen, format(s$count, big.mark = ","), s$pct)
+  p_language <- p_language %>% add_bars(
+    data = s, y = ~gen, x = ~pct, name = lc,
+    marker = list(color = lang_cat_colors[[lc]]),
+    text = s$hover, hoverinfo = "text", textposition = "none",
+    orientation = "h")
+}
+p_language <- p_language %>% layout(
+  barmode = "stack",
+  title = list(text = "<b>Language Spoken at Home by<br>Iranian-Australians, by Generation</b>",
+    font = list(size = 14, family = "Montserrat")),
+  xaxis = list(title = "", ticksuffix = "%", range = c(0, 100)),
+  yaxis = list(title = "", tickfont = list(size = 12)),
+  legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.18,
+    font = list(size = 11)),
+  margin = list(l = 110, r = 20, t = 55, b = 50),
+  plot_bgcolor = "white", paper_bgcolor = "white") %>%
+  config(displayModeBar = FALSE)
+
 edu_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
@@ -712,14 +795,26 @@ edu_body <- paste0(
       <li>Christianity 12%%</li>
     </ul>
   </div>', no_relig_pct, islam_pct),
-  '<div class="chart-card pc1">', plotly_div("au-edu", plotly_to_json(p_edu), "430px", source = ABS_SOURCE), '</div>',
+  '<div class="chart-card pc1">',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'au-edu-tab\',this,\'au-edulang\')">Qualifications</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-lang-tab\',this,\'au-edulang\')">Language</button>',
+  '</div>',
+  '<div id="au-edu-tab" class="tab-panel active" data-group="au-edulang">',
+  plotly_div("au-edu", plotly_to_json(p_edu), "430px", source = ABS_SOURCE),
+  '</div>',
+  '<div id="au-lang-tab" class="tab-panel" data-group="au-edulang">',
+  plotly_div("au-language", plotly_to_json(p_language), "430px",
+    source = "Source: <a href='https://www.abs.gov.au/census' target='_blank' style='color:#2774AE;'>ABS</a> — Census 2021, language used at home by Iranian-ancestry population (1st gen = born overseas, 2nd gen = Australian-born)."),
+  '</div>',
+  '</div>',
   '<div class="chart-card pc2">', plotly_div("au-rel", plotly_to_json(p_rel), "430px",
     source = "Source: <a href='https://www.abs.gov.au/census' target='_blank' style='color:#2774AE;'>ABS</a> \u2014 Census 2021. Iranian ancestry population, 1st gen = Iran-born, 2nd gen = Australian-born.",
     legend_html = rel_leg), '</div>',
   '</div>'
 )
 
-writeLines(page_template("Australia: Education & Religion", edu_body), "docs/pages/au-education.html")
+writeLines(page_template("Australia: Education & Religion", edu_body, has_tabs = TRUE), "docs/pages/au-education.html")
 cat("  Done\n")
 
 
@@ -773,7 +868,7 @@ p_occ <- plot_ly(occ_chart, y = ~label, x = ~count, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(
-      text = "<b>Occupation of Iran-Born Workers<br>in Australia, 2021</b>",
+      text = "<b>Occupation of Iran-Born Workers<br>in Australia</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 11),
@@ -820,7 +915,7 @@ p_ind <- plot_ly(ind_chart, y = ~label, x = ~count, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(
-      text = "<b>Industry of Employment<br>of Iran-Born Workers in Australia, 2021</b>",
+      text = "<b>Industry of Employment<br>of Iran-Born Workers in Australia</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 10),
@@ -855,7 +950,7 @@ p_inc <- plot_ly(inc_chart, x = ~label, y = ~count, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(
-      text = "<b>Weekly Personal Income<br>of Iran-Born Australians, 2021</b>",
+      text = "<b>Weekly Personal Income<br>of Iran-Born Australians</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -45, tickfont = list(size = 9)),
     yaxis = list(title = "", tickformat = ","),
@@ -888,7 +983,7 @@ p_dec <- plot_ly(data = dec, x = ~label, y = ~pct, type = "scatter", mode = "mar
     hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
     title = list(
-      text = "<b>Position in Australian<br>Personal Income Distribution:<br>Iran-Born (Ages 25\u201354), 2021</b>",
+      text = "<b>Position in Australian<br>Personal Income Distribution:<br>Iran-Born (Ages 25\u201354)</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
       categoryorder = "array", categoryarray = decile_labels),
@@ -925,7 +1020,7 @@ p_lf <- plot_ly(lf_chart, x = ~label, y = ~count, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(
-      text = "<b>Labour Force Status<br>of Iran-Born Australians, 2021</b>",
+      text = "<b>Labour Force Status<br>of Iran-Born Australians</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10)),
     yaxis = list(title = "", tickformat = ","),
@@ -976,12 +1071,20 @@ workinc_body <- paste0(
   </div>', prof_pct, top_ind_pct, top_ind, participation_rate),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians fall in the bottom two national income deciles.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iran-born Australians aged 25&ndash;54 are in the bottom two deciles of <strong>personal</strong> income.</div>
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>%d%% are in the top two deciles</li>
       <li>Median weekly personal income band: %s</li>
+      <li>Iran-born <strong>household</strong> income is above the national median (A$1,927 vs A$1,746 weekly)</li>
     </ul>
   </div>', bottom20_pct, top20_pct, median_band),
+  # Household-income context above is from ABS 2021 Census QuickStats (Iran-born
+  # median weekly household income A$1,927 vs A$1,746 national). Household income
+  # cannot be crossed with country of birth in TableBuilder (dwelling vs person
+  # variable) so it is hard-coded here, not pulled. The decile chart is PERSONAL
+  # income (INCP) — the only income measure crossable with birthplace — so it is
+  # not comparable to the US/Canada household-income decile charts; the wording
+  # above makes that explicit. See .claude/rules/australia-pipeline.md.
 
   # Chart cell 1: tabbed (Occupation | Industry | Labour Force Status)
   '<div class="chart-card pc1">',

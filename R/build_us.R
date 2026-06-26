@@ -176,7 +176,7 @@ p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
       format(n, big.mark = ","), round(n / cit_total * 100)),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Americans by<br>Citizenship Status, 2020–2024</b>",
+    title = list(text = "<b>Iranian-Americans by<br>Citizenship Status</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""), yaxis = list(title = "", tickformat = ","),
     margin = list(t = 55, b = 60),
@@ -1114,7 +1114,7 @@ p_region <- plot_ly(data = region_dat, x = ~REGION, y = ~pop, type = "bar",
       REGION, format(pop, big.mark = ","), round(pop / total_pop * 100)),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Americans by US Region, 2020–2024</b>",
+    title = list(text = "<b>Iranian-Americans by US Region</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""), yaxis = list(title = "", tickformat = ","),
     margin = list(t = 60, b = 40),

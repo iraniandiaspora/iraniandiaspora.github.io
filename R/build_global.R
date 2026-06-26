@@ -163,7 +163,7 @@ for (i in seq_along(bot_groups)) {
 }
 
 p_stock <- p_stock %>% layout(
-  title = list(text = "<b>Iran-Born Migrant Population,<br>Total by Country (1990\u20132024)</b>",
+  title = list(text = "<b>Iran-Born Migrant Population,<br>Total by Country</b>",
     font = list(size = 16, family = "Montserrat", color = "#333"), x = 0.5, xanchor = "center"),
   xaxis = list(title = "", dtick = 5, tickvals = yr_nums_orig,
     ticktext = as.character(yr_nums_orig), tickfont = list(size = 12),
