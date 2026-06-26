@@ -182,7 +182,7 @@ p_bund_bar <- plot_ly(bar_df, x = ~land, y = ~display_value, type = "bar",
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Origin Population<br>by German State, 2025</b>",
+    title = list(text = "<b>Iranian-Origin Population<br>by German State</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -30, tickfont = list(size = 10)),
     yaxis = list(title = "", tickformat = ","),
@@ -339,7 +339,7 @@ p_motive <- plot_ly(motive_clean, x = ~short, y = ~value, type = "bar",
     text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", short, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Main Reason Iran-Born Immigrants<br>Came to Germany, 2025</b>",
+    title = list(text = "<b>Main Reason Iran-Born Immigrants<br>Came to Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -45, tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -380,7 +380,7 @@ p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
       label, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iran-Born Residents by<br>Length of Residence in Germany, 2025</b>",
+    title = list(text = "<b>Iran-Born Residents by<br>Length of Residence in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "Years lived in Germany", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -434,7 +434,7 @@ p_citizen <- plot_ly(data.frame(
     status, format(count, big.mark = ","), pct),
   hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship of Iranian-Origin<br>Residents in Germany, 2025</b>",
+    title = list(text = "<b>Citizenship of Iranian-Origin<br>Residents in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 12)),
     yaxis = list(title = "", tickformat = ","),
@@ -540,7 +540,7 @@ p_school <- plot_ly(school_all, x = ~cat, y = ~pct, type = "bar",
       cat, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Highest School Qualification in Germany, 2025</b>",
+    title = list(text = "<b>Highest School Qualification in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = 0, tickfont = list(size = 10)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 60)),
@@ -579,7 +579,7 @@ p_prof <- plot_ly(prof_all, x = ~cat, y = ~pct, type = "bar",
       cat, format(value, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Highest Vocational or Academic<br>Qualification in Germany, 2025</b>",
+    title = list(text = "<b>Highest Vocational or Academic<br>Qualification in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 40)),
@@ -622,7 +622,7 @@ p_emp_status <- plot_ly(emp_bar_df, x = ~status, y = ~count, type = "bar",
       status, format(count, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Labour Force Status in Germany, 2025</b>",
+    title = list(text = "<b>Labour Force Status in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -679,7 +679,7 @@ p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Origin Employment<br>by Industry in Germany, 2025</b>",
+    title = list(text = "<b>Iranian-Origin Employment<br>by Industry in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 11),
@@ -744,7 +744,7 @@ p_income <- plot_ly(inc, x = ~bracket, y = ~display_pct, type = "bar",
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers in Germany, 2025</b>",
+    title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -25, tickfont = list(size = 10)),
     yaxis = list(title = "", ticksuffix = "%", range = c(0, 25)),
@@ -873,7 +873,7 @@ for (cat_name in lang_cat_order) {
 }
 p_lang <- p_lang %>% layout(
   barmode = "stack",
-  title = list(text = "<b>Main Language Spoken at Home in Germany, 2025</b>",
+  title = list(text = "<b>Main Language Spoken at Home in Germany</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "",

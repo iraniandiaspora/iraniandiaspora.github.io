@@ -27,13 +27,13 @@ The income page compares Iranian-American households to the national distributio
 
 ### Immigration History
 
-The Immigration History page shows all Iranians granted lawful permanent resident status from fiscal year 1970 through 2023 – a total of 586,094 grants across 54 years.
+The Immigration History page shows all Iranians granted lawful permanent resident status from fiscal year 1970 through 2024 – a total of 596,144 grants across 55 years.
 
 Sources by period:
 
 - **1970–1977:** U.S. Immigration and Naturalization Service, *Annual Report* (Washington, D.C.: U.S. Government Printing Office). Admission categories differ from later years and are shown as a single combined total.
 - **1978–2004:** INS *Statistical Yearbook of the Immigration and Naturalization Service*.
-- **2005–2023:** Department of Homeland Security, Office of Immigration Statistics, [*Yearbook of Immigration Statistics*](https://ohss.dhs.gov/topics/immigration/yearbook).
+- **2005–2024:** Department of Homeland Security, Office of Immigration Statistics, [*Yearbook of Immigration Statistics*](https://ohss.dhs.gov/topics/immigration/yearbook).
 
 Prior to 1992, immigration law did not separate family and employment preferences, so these appear as a combined category for 1978–1991. Fiscal year 1976 includes the transition quarter (July–September 1976) when the federal fiscal year shifted from a July–June to an October–September cycle.
 
@@ -93,7 +93,7 @@ Age, sex, economic activity, highest qualification, year of arrival, and religio
 
 ## Netherlands
 
-Iranian-origin residents are identified in the population register maintained by [CBS Statistics Netherlands](https://opendata.cbs.nl/statline/). The Netherlands does not conduct a traditional census; population statistics are derived from the municipal personal records database (BRP). A person is classified as Iranian-origin if they were born in Iran (first generation) or were born in the Netherlands with at least one parent born in Iran (second generation). The headline figure of 62,925 includes both generations (January 2025).
+Iranian-origin residents are identified in the population register maintained by [CBS Statistics Netherlands](https://opendata.cbs.nl/statline/). The Netherlands does not conduct a traditional census; population statistics are derived from the municipal personal records database (BRP). A person is classified as Iranian-origin if they were born in Iran (first generation) or were born in the Netherlands with at least one parent born in Iran (second generation). The headline figure of 65,721 includes both generations (January 2026).
 
 Third-generation residents (Dutch-born with Dutch-born parents) are not counted as Iranian-origin. The classification is based on birth records, not self-reported ethnicity or language.
 
@@ -155,9 +155,11 @@ The register tracks country of birth but not parental birthplace; Swiss-born chi
 
 ## Finland
 
-Iran-born residents are identified in the population register maintained by [Statistics Finland](https://stat.fi/en/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). A person is counted as Iran-born based on their registered country of birth. The headline figure of 12,287 is the most recent annual stock (2025). The trend chart covers 2001–2025. Finnish-born children of Iran-born parents are not counted.
+Iranian-origin residents are identified in the population register maintained by [Statistics Finland (StatFin)](https://stat.fi/en/). A person is classified as Iranian-origin if they were born in Iran (first generation) or were born in Finland with at least one parent born in Iran (second generation), using StatFin's "background country" classification. The headline figure of 15,164 includes both generations (2025).
 
-**Data access:** Eurostat population-by-country-of-birth tables are publicly available via the [Eurostat Data Browser](https://ec.europa.eu/eurostat/databrowser/).
+Third-generation Finnish-born residents are not counted as Iranian-origin. The population-over-time chart shows the first and second generations as a stacked area over 1990–2025.
+
+**Data access:** StatFin data are publicly available via the [Statistics Finland database](https://stat.fi/en/).
 
 ## Canada
 
@@ -214,7 +216,9 @@ Iranian-origin Australians are identified in the 2021 Census of Population and H
 
 The compound total of ~110,993 counts each person once, even if they meet more than one criterion. The waterfall chart on the Population page shows how each criterion and its overlaps contribute to the total.
 
-Cross-tabulations by education, religion, occupation, industry, and income are derived from ABS TableBuilder, which provides Iran-born breakdowns not available in standard published tables. Cell counts are randomly adjusted by ABS to prevent identification of individuals.
+Within the Iranian-ancestry population (81,119), the Census separates the first generation (born overseas, 62,986) from the second generation (Australian-born, 18,133); the Population page shows this split. The Education page reports language spoken at home by generation: Persian use at home falls from 81% in the first generation to 47% in the second, while English-only use rises from 11% to 43%.
+
+Cross-tabulations by education, religion, language, occupation, industry, and income are derived from ABS TableBuilder, which provides Iran-born breakdowns not available in standard published tables. Cell counts are randomly adjusted by ABS to prevent identification of individuals.
 
 Year of arrival is grouped into multi-year periods before 2016 and individual years from 2016 onward. The chart displays period data as per-year averages for visual consistency with the annual bars.
 

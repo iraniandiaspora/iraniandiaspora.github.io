@@ -9,14 +9,14 @@
 
 # Iranian Diaspora Dashboard
 
-Interactive data dashboard comparing Iranian diaspora populations across 19 countries and worldwide.
+Interactive data dashboard comparing Iranian diaspora populations across 17 countries and worldwide.
 
 **[iraniandiaspora.github.io](https://iraniandiaspora.github.io)**
 
 ## Live Sections
 
 - **Global** – world map and stacked area chart (UN Migrant Stock 2024)
-- **United States** – population, immigration, admissions (1970–2023), marriage, education, work, income, language (8 pages)
+- **United States** – population, immigration, admissions (1970–2024), marriage, education, work, income, language (8 pages)
 - **Europe** – overview of 23 countries, plus individual pages for Germany (4), United Kingdom (2), Netherlands (2), Sweden (1), Denmark (2), Norway (1), Austria (1), Italy (1), France (1), Switzerland (1), Finland (1)
 - **Canada** – population, language/religion, immigration, education, work, income (6 pages)
 - **Türkiye** – population, immigration (2 pages)
@@ -31,11 +31,11 @@ Interactive data dashboard comparing Iranian diaspora populations across 19 coun
 | Country / Region | Source | Years |
 |---------|--------|-------|
 | Global | United Nations International Migrant Stock | 2024 |
-| United States | American Community Survey (ACS) PUMS; INS/DHS Yearbook of Immigration Statistics | 2020–2024; 1970–2023 |
+| United States | American Community Survey (ACS) PUMS; INS/DHS Yearbook of Immigration Statistics | 2020–2024; 1970–2024 |
 | Canada | Census Public Use Microdata File (PUMF) | 2021 |
 | Australia | Australian Bureau of Statistics (ABS) Census; ABS TableBuilder Pro | 2021 |
 | Europe overview | Eurostat migr_pop3ctb (19 countries) + Destatis (Germany) + ONS/NRS/NISRA (UK) + BFS (Switzerland) + INSEE (France) | 1998–2025 |
-| Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2025; 1991–2023 |
+| Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2025; 1991–2024 |
 | United Kingdom | ONS Census 2021 (England &amp; Wales); Scotland's Census 2022; NISRA Census 2021; ONS custom dataset | 2021–2022 |
 | Netherlands | CBS StatLine population register, Labour Force Survey, household income | 1999–2025 |
 | Sweden | Statistics Sweden (SCB) population register; Eurostat | 1998–2025 |
@@ -45,7 +45,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 19 coun
 | Italy | ISTAT / Eurostat population register | 2002–2025 |
 | France | INSEE Recensement de la population (immigré series) | 2006–2019 |
 | Switzerland | Swiss Federal Statistical Office (BFS) population register | 2010–2024 |
-| Finland | Statistics Finland / Eurostat population register | 2001–2025 |
+| Finland | Statistics Finland (StatFin) population register | 1990–2025 |
 | Türkiye | TÜİK address-based population register (ADNKS), via Eurostat | 2014–2025 |
 | Armenia | UN International Migrant Stock; Armstat Population Censuses | 1990–2024; 2011 and 2022 |
 | Israel | Israel Central Bureau of Statistics (CBS) Statistical Abstract | 2024 |

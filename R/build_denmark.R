@@ -313,7 +313,7 @@ p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
       industry$pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Origin Full-Time Employees<br>by Industry in Denmark, 2024</b>",
+    title = list(text = "<b>Iranian-Origin Full-Time Employees<br>by Industry in Denmark</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 10),

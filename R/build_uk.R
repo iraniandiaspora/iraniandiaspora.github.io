@@ -199,7 +199,7 @@ p_age <- plot_ly() %>%
       format(females$count, big.mark = ",")),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iran-Born in England and Wales<br>by Age and Sex, 2021</b>",
+    title = list(text = "<b>Iran-Born in England and Wales<br>by Age and Sex</b>",
       font = list(size = 14, family = "Montserrat")),
     barmode = "group",
     xaxis = list(title = "", tickangle = -30, tickfont = list(size = 10)),
@@ -322,7 +322,7 @@ pop_body <- paste0(
         relig_sorted$count / relig_total * 100),
       hoverinfo = "text", textposition = "none") %>%
     layout(
-      title = list(text = "<b>Religion of Iran-Born Residents<br>in England and Wales, 2021</b>",
+      title = list(text = "<b>Religion of Iran-Born Residents<br>in England and Wales</b>",
         font = list(size = 14, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "", tickfont = list(size = 11),
@@ -380,7 +380,7 @@ p_econ <- plot_ly(econ_agg, y = ~group, x = ~count, type = "bar",
     econ_agg$count / econ_total_16plus * 100),
   hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Economic Activity of Iran-Born<br>Residents in England and Wales, 2021</b>",
+    title = list(text = "<b>Economic Activity of Iran-Born<br>Residents in England and Wales</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 11)),
@@ -407,7 +407,7 @@ p_qual <- plot_ly(qual, y = ~category, x = ~count, type = "bar",
     qual$count / qual_total * 100),
   hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Highest Qualification of Iran-Born<br>Residents in England and Wales, 2021</b>",
+    title = list(text = "<b>Highest Qualification of Iran-Born<br>Residents in England and Wales</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", tickfont = list(size = 10)),

@@ -154,7 +154,7 @@ p_age <- plot_ly() %>%
       format(age$gen1, big.mark = ",")),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Age Distribution of Iranian-Origin<br>Population in Israel, 2024</b>",
+    title = list(text = "<b>Age Distribution of Iranian-Origin<br>Population in Israel</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", autorange = TRUE, categoryorder = "array",
@@ -188,7 +188,7 @@ p_gen1_detail <- plot_ly() %>%
       gen1_det$age_group, format(gen1_det$count, big.mark = ","), gen1_det$pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iran-Born Population in Israel<br>by Age, 2024</b>",
+    title = list(text = "<b>Iran-Born Population in Israel<br>by Age</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "", categoryorder = "array", categoryarray = gen1_order,
@@ -248,7 +248,7 @@ p_comp <- plot_ly() %>%
       format(comp$gen1, big.mark = ","), format(comp$gen2, big.mark = ",")),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Asian-Origin Groups in Israel, 2024</b>",
+    title = list(text = "<b>Asian-Origin Groups in Israel</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickformat = ","),
     yaxis = list(title = "",

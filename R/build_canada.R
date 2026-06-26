@@ -257,7 +257,7 @@ p_region <- plot_ly(data = region_totals, x = ~region, y = ~pct, type = "bar",
       format(round(pop), big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Iranian-Canadians by<br>Region of Residence, 2021</b>",
+    title = list(text = "<b>Iranian-Canadians by<br>Region of Residence</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = ""),
     yaxis = list(title = "", ticksuffix = "%"),
@@ -469,7 +469,7 @@ for (cat_name in lang_cats) {
 p_lang <- p_lang %>% layout(
   barmode = "stack",
   hoverlabel = list(showarrow = FALSE),
-  title = list(text = "<b>Language of Iranian-Canadians<br>by Generation, 2021</b>",
+  title = list(text = "<b>Language of Iranian-Canadians<br>by Generation</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_levels),
@@ -527,7 +527,7 @@ for (cat_name in relig_cats) {
 p_relig <- p_relig %>% layout(
   barmode = "stack",
   hoverlabel = list(showarrow = FALSE),
-  title = list(text = "<b>Religious Identification<br>of Iranian-Canadians by Generation, 2021</b>",
+  title = list(text = "<b>Religious Identification<br>of Iranian-Canadians by Generation</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_levels),
@@ -683,7 +683,7 @@ p_ca_cit <- plot_ly(data = cit1, x = ~short_label, y = ~count, type = "bar",
     text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", status, format(round(count), big.mark = ","), percentage),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship Status:<br>All Iranian-Canadians, 2021</b>", font = list(size = 16, family = "Montserrat")),
+    title = list(text = "<b>Citizenship Status:<br>All Iranian-Canadians</b>", font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10),
       categoryorder = "array", categoryarray = cit1_order),
     yaxis = list(title = "", tickformat = ","),
@@ -1205,7 +1205,7 @@ p_inc_decile <- plot_ly(data = inc1, x = ~short_label, y = ~percentage, type = "
     marker = list(size = 0, opacity = 0),
     hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Position in Canadian<br>Household Income Distribution:<br>First Generation (Ages 25–54), 2021</b>",
+    title = list(text = "<b>Position in Canadian<br>Household Income Distribution:<br>First Generation (Ages 25–54)</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
       categoryorder = "array", categoryarray = inc1$short_label),
@@ -1257,7 +1257,7 @@ for (band in age_band_order) {
 }
 p_inc_age <- p_inc_age %>% layout(
   barmode = "stack",
-  title = list(text = "<b>Personal Income by Age:<br>First-Generation Iranian-Canadians, 2021</b>",
+  title = list(text = "<b>Personal Income by Age:<br>First-Generation Iranian-Canadians</b>",
     font = list(size = 16, family = "Montserrat")),
   xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
   yaxis = list(title = "", categoryorder = "array", categoryarray = rev(age_levels_inc)),
