@@ -634,7 +634,7 @@ g2_f <- work_share(ec$class, "Female", "2nd gen")
 SRC_BIZ <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS; ",
                   "self-employed (class of worker), Iran-born residents aged 20+")
 SRC_OCC <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS; ",
-                  "employed Iran-born residents aged 16+")
+                  "employed Iranian-American residents (first and second generation) aged 16+")
 
 br <- read_csv(file.path(DATA_DIR, "us_business_rate.csv"), show_col_types = FALSE) %>%
   arrange(rate_pct)
@@ -681,9 +681,9 @@ oc$group <- factor(oc$group, levels = oc$group)
 oc_cols <- rev(OKABE_ITO[seq_len(nrow(oc))])
 p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h",
     marker = list(color = oc_cols),
-    text = ~sprintf("<b>%s</b><br>%.0f%% of employed Iranian immigrants", group, share_pct),
+    text = ~sprintf("<b>%s</b><br>%.0f%% of employed Iranian-Americans", group, share_pct),
     hoverinfo = "text", textposition = "none") %>%
-  layout(title = list(text = "<b>Occupations of Employed Iranian Immigrants</b>",
+  layout(title = list(text = "<b>Occupations of Employed Iranian-Americans</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
     yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
@@ -709,9 +709,9 @@ writeLines(page_template("Work", paste0(
   </div>', g1_m$self, g1_f$self, g1_f$np, g1_m$np),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian immigrants work in professional or managerial occupations.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-Americans work in professional or managerial occupations.</div>
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>%d%% are self-employed, above the %d%% rate for all U.S. immigrants</li>
+      <li>Iranian immigrants are self-employed at %d%%, above the %d%% for all U.S. immigrants</li>
       <li>Arts, food and hospitality is their most common business sector (%d%%)</li>
     </ul>
   </div>', occ_prof, biz_iran, biz_imm, biz_top),
