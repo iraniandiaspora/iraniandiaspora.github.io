@@ -345,6 +345,13 @@
     <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">What&rsquo;s changed</h3>
 
     <details class="changelog-entry" open>
+      <summary>July 2026</summary>
+      <ul>
+        <li>Added <strong>U.S. occupations and business ownership</strong> from the American Community Survey</li>
+      </ul>
+    </details>
+
+    <details class="changelog-entry">
       <summary>June 2026</summary>
       <ul>
         <li>Updated <strong>Netherlands</strong> population to 2026</li>
@@ -408,7 +415,7 @@
 // Cache-buster bumped with each release so the browser fetches the new
 // iframe pages instead of showing a stale cached copy. Bump on any
 // release that changes any docs/pages/*.html.
-var SITE_VERSION = 'v3.2';
+var SITE_VERSION = 'v3.3';
 function activateIframe(container) {
   if (!container) return;
   var iframe = container.querySelector('iframe');
