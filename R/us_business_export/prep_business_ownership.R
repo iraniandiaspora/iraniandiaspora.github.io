@@ -54,22 +54,12 @@ ind <- read_csv(file.path(SRC, "us_iranian_business_owner_extension",
   arrange(desc(share_pct))
 write_csv(ind, file.path(OUT, "us_business_industry.csv"))
 
-# ---- 3. Owner residence by metro area ---------------------------------------
-geo <- read_csv(file.path(SRC, "us_iranian_business_owner_extension",
-                          "iranian_business_owner_geography.csv"), show_col_types = FALSE) %>%
-  filter(origin == "Iran", frame == "birthplace_first_generation") %>%
-  group_by(region = destination_region) %>%
-  summarise(owners_weighted = round(sum(business_owner_weighted_n)),
-            unweighted_n = sum(business_owner_unweighted_n), .groups = "drop") %>%
-  mutate(share_pct = round(100 * owners_weighted / sum(owners_weighted), 1)) %>%
-  filter(share_pct >= 0.5) %>%              # drop trace metros (Denver n=2)
-  arrange(desc(owners_weighted))
-write_csv(geo, file.path(OUT, "us_business_geography.csv"))
+# Owner residence geography was dropped from the page (it proxies where
+# Iranians live, not a business-ownership pattern); the third us-work business
+# tab is now an all-worker occupation chart built by pipelines/us/export_occupation.R.
 
-cat("Wrote 3 CSVs to", OUT, "\n")
+cat("Wrote 2 CSVs to", OUT, "\n")
 cat("  rate:", nrow(rate), "origins; Iran =",
     rate$rate_pct[rate$is_iran], "%\n")
 cat("  industry:", nrow(ind), "sectors; top =", ind$industry[1],
     paste0("(", ind$share_pct[1], "%)"), "\n")
-cat("  geography:", nrow(geo), "metros; LA/OC share =",
-    geo$share_pct[grepl("Los Angeles", geo$region)], "%\n")
