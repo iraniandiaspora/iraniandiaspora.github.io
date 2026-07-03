@@ -50,7 +50,43 @@ SRC_LANG <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS
 SRC_INCOME <- paste0("Source: ", ACS_LINK, " \u2014 ACS 2020\u20132024 5-Year PUMS<br>",
   "Ages 25\u201354 (prime working years).<br>Each decile holds 10% of all U.S. households, ranked by pre-tax household income.")
 
-page_template <- function(title, body_html) {
+# Tab switching (mirrors build_germany.R). reportHeight() comes from
+# iframe_resize_script (already appended to every page body).
+tab_switch_script <- '
+<script>
+function switchTab(tabId, btn, groupId) {
+  var panels = document.querySelectorAll(".tab-panel[data-group=\'" + groupId + "\']");
+  panels.forEach(function(p) { p.classList.remove("active"); });
+  document.getElementById(tabId).classList.add("active");
+  var btns = btn.parentElement.querySelectorAll(".tab-btn");
+  btns.forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  var active = document.getElementById(tabId);
+  active.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) {
+      Plotly.Plots.resize(p);
+      if (p.__hlOn) {
+        p.removeAllListeners("plotly_hover");
+        p.removeAllListeners("plotly_unhover");
+        p.on("plotly_hover", function(d) { p.__hlOn(d.points[0].data.legendgroup); });
+        p.on("plotly_unhover", p.__hlOff);
+      }
+    }
+  });
+  reportHeight();
+}
+</script>'
+
+page_template <- function(title, body_html, has_tabs = FALSE) {
+  tab_css <- if (has_tabs) '
+.tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
+.tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
+  font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
+.tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:hover:not(.active) { background:#e0e0e0; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }' else ''
+  tab_js <- if (has_tabs) tab_switch_script else ''
   paste0('<!DOCTYPE html>
 <html lang="en">
 <head>
@@ -74,7 +110,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
 .pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
-.pc1 { grid-area:2/1; } .pc2 { grid-area:2/2; }
+.pc1 { grid-area:2/1; } .pc2 { grid-area:2/2; }', tab_css, '
 @media (max-width:900px) {
   body { padding:10px 15px; display:flex; flex-direction:column; }
   .text-row, .chart-row { grid-template-columns:1fr !important; }
@@ -99,6 +135,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 </head>
 <body>
 ', body_html, '
+', tab_js, '
 ', iframe_resize_script, '
 </body>
 </html>')
@@ -590,6 +627,71 @@ g1_f <- work_share(ec$class, "Female", "1st gen")
 g2_m <- work_share(ec$class, "Male", "2nd gen")
 g2_f <- work_share(ec$class, "Female", "2nd gen")
 
+# ---- Business ownership (self-employment) charts ----------------------------
+# ACS/IPUMS 2020-2024 5-year, Iran-born first generation. "Business owner" =
+# employed, aged 20+, >=15 hrs/wk, main-job class of worker = self-employed.
+# CSVs built by R/us_business_export/prep_business_ownership.R.
+SRC_BIZ <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS; ",
+                  "self-employed (class of worker), Iran-born residents aged 20+")
+
+br <- read_csv(file.path(DATA_DIR, "us_business_rate.csv"), show_col_types = FALSE) %>%
+  arrange(rate_pct)
+br$origin <- factor(br$origin, levels = br$origin)
+br$col <- ifelse(br$is_iran, "#1a4e72", ifelse(br$is_benchmark, "#c4793a", "#b0b0b0"))
+p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation = "h",
+    marker = list(color = br$col),
+    text = ~sprintf("<b>%s</b><br>%d%% self-employed", origin, rate_pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(title = list(text = "<b>Self-Employment by Country of Birth</b>",
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
+    yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 50, b = 40, l = 120, r = 20),
+    plot_bgcolor = "white", paper_bgcolor = "white") %>%
+  config(displayModeBar = FALSE)
+
+bi <- read_csv(file.path(DATA_DIR, "us_business_industry.csv"), show_col_types = FALSE) %>%
+  arrange(share_pct)
+bi$industry <- factor(bi$industry, levels = bi$industry)
+# NB: build_us.R rebinds `cat_colors` to a vector at line ~283 (us-admissions),
+# shadowing the _helpers.R function here — use OKABE_ITO directly. 8 stable
+# sectors, so no recycling. Precompute (plotly lazy-evals inline calls).
+bi_cols <- rev(OKABE_ITO[seq_len(nrow(bi))])
+p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation = "h",
+    marker = list(color = bi_cols),
+    text = ~sprintf("<b>%s</b><br>%.0f%% of Iranian-owned businesses", industry, share_pct),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(title = list(text = "<b>Industries of Iranian-Owned Businesses</b>",
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
+    yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 50, b = 40, l = 190, r = 20),
+    plot_bgcolor = "white", paper_bgcolor = "white") %>%
+  config(displayModeBar = FALSE)
+
+bg <- read_csv(file.path(DATA_DIR, "us_business_geography.csv"), show_col_types = FALSE) %>%
+  arrange(share_pct)
+bg$region <- factor(bg$region, levels = bg$region)
+bg$col <- ifelse(grepl("Other United States", bg$region), "#b0b0b0", "#2774AE")
+p_bizgeo <- plot_ly(bg, x = ~share_pct, y = ~region, type = "bar", orientation = "h",
+    marker = list(color = bg$col),
+    text = ~sprintf("<b>%s</b><br>%.1f%% of owners (%s)", region, share_pct,
+      format(owners_weighted, big.mark = ",")),
+    hoverinfo = "text", textposition = "none") %>%
+  layout(title = list(text = "<b>Where Iranian-American Business Owners Live</b>",
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
+    yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
+    margin = list(t = 50, b = 40, l = 175, r = 20),
+    plot_bgcolor = "white", paper_bgcolor = "white") %>%
+  config(displayModeBar = FALSE)
+
+# Factoid values, computed from the CSVs so the card stays in sync
+biz_iran <- br$rate_pct[br$is_iran]
+biz_imm  <- br$rate_pct[br$is_benchmark]
+biz_laoc <- round(bg$share_pct[grepl("Los Angeles", bg$region)])
+biz_top  <- round(max(bi$share_pct))
+
 writeLines(page_template("Work", paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
@@ -599,19 +701,44 @@ writeLines(page_template("Work", paste0(
   </div>', g1_m$self, g1_f$self, g1_f$np, g1_m$np),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American men work in the private sector &mdash; up from %d%% in the first generation.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Self-employment falls to %d%% for men and %d%% for women; the gender gap narrows.</div>
-  </div>', g2_m$priv, g1_m$priv, g2_m$self, g2_f$self),
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian immigrants are self-employed &mdash; higher than the rate for all U.S. immigrants (%d%%).</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%d%% of Iranian-American business owners live in Los Angeles or Orange County</li>
+      <li>Arts, food and hospitality is the most common sector (%d%%)</li>
+    </ul>
+  </div>', biz_iran, biz_imm, biz_laoc, biz_top),
   '<div class="chart-card pc1">',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'wk-1gen\',this,\'wk-gen\')">First Generation</button>',
+  '<button class="tab-btn" onclick="switchTab(\'wk-2gen\',this,\'wk-gen\')">Second Generation</button>',
+  '</div>',
+  '<div id="wk-1gen" class="tab-panel active" data-group="wk-gen">',
   '<div class="section-title">Employment of Iranian-Americans: First Generation</div>',
   make_butterfly_work(ec$class, "1st gen", "1st Generation", FALSE, "500px", "wk1"),
   '</div>',
-  '<div class="chart-card pc2">',
+  '<div id="wk-2gen" class="tab-panel" data-group="wk-gen">',
   '<div class="section-title">Employment of Iranian-Americans: Second Generation</div>',
   make_butterfly_work(ec$class, "2nd gen", "2nd Generation", TRUE, "500px", "wk2"),
   '</div>',
+  '</div>',
+  '<div class="chart-card pc2">',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'bo-rate\',this,\'bo-tabs\')">Self-Employment Rate</button>',
+  '<button class="tab-btn" onclick="switchTab(\'bo-ind\',this,\'bo-tabs\')">Top Industries</button>',
+  '<button class="tab-btn" onclick="switchTab(\'bo-geo\',this,\'bo-tabs\')">Where Owners Live</button>',
+  '</div>',
+  '<div id="bo-rate" class="tab-panel active" data-group="bo-tabs">',
+  plotly_div("biz-rate", plotly_to_json(p_bizrate), "430px", source = SRC_BIZ),
+  '</div>',
+  '<div id="bo-ind" class="tab-panel" data-group="bo-tabs">',
+  plotly_div("biz-ind", plotly_to_json(p_bizind), "400px", source = SRC_BIZ),
+  '</div>',
+  '<div id="bo-geo" class="tab-panel" data-group="bo-tabs">',
+  plotly_div("biz-geo", plotly_to_json(p_bizgeo), "430px", source = SRC_BIZ),
+  '</div>',
+  '</div>',
   '</div>'
-)), "docs/pages/us-work.html")
+), has_tabs = TRUE), "docs/pages/us-work.html")
 cat("  Done\n")
 
 # =====================================================
@@ -1053,27 +1180,26 @@ wf$ymin <- wf$cumulative - wf$weighted_n
 wf$ymax <- wf$cumulative
 wf$xnum <- seq_len(nrow(wf))
 
-# Decode the four criteria from the component string (drives grid + hover).
-wf$is_birth    <- grepl("BPL|Born in Iran", wf$component)
-wf$is_ancestry <- grepl("Ancestry", wf$component)
-wf$is_children <- grepl("Children", wf$component)
-wf$is_race     <- grepl("race", wf$component, ignore.case = TRUE)
+# Criteria come straight from the CSV (is_birth/is_ancestry/is_race/is_children).
+# The eight bars enumerate every non-empty combination of the three direct
+# criteria plus the child residual — the same combination format Canada and
+# Australia use. This makes the race write-in's real reach visible: its check
+# now appears across four bars that sum to ~396K (~50% of the total), instead of
+# the old single "race only" bar that made the write-in look like a 5.8% path.
 chk <- function(b) ifelse(b, "✓", "✗")
-wf$grp <- ifelse(wf$is_birth, "First generation",
-           ifelse(wf$is_children, "Second generation",
-            ifelse(wf$is_ancestry, "Iranian ancestry", "Reported Iranian as race")))
 wf$hover <- sprintf(
   "<b>%s</b><br>%s Born in Iran<br>%s Iranian ancestry<br>%s Iranian race write-in<br>%s Iranian parent<br><br>%s people · %.1f%% of total<br>Running total: %s",
-  wf$grp, chk(wf$is_birth), chk(wf$is_ancestry), chk(wf$is_race), chk(wf$is_children),
+  wf$component, chk(wf$is_birth), chk(wf$is_ancestry), chk(wf$is_race), chk(wf$is_children),
   format(wf$weighted_n, big.mark = ","), wf$pct, format(wf$cumulative, big.mark = ","))
 
-# Color scheme: blue gradient for core (1-3), then distinct colors for additions
-wf_colors <- c("#1a4e72", "#2774AE", "#5a9bd5", "#4a8c6f", "#c4793a")
+# Eight-bar palette (matches Australia's "How We Count")
+wf_colors <- c("#1a4e72", "#2774AE", "#5a9bd5", "#4a8c6f",
+               "#c4793a", "#d4a943", "#7b5ea7", "#e07b54")
 
-US_LBL_PX <- 86
+US_LBL_PX <- 80
 p_waterfall <- plot_ly() %>%
   add_bars(x = wf$xnum, y = wf$weighted_n, base = wf$ymin,
-    marker = list(color = wf_colors),
+    marker = list(color = wf_colors[seq_len(nrow(wf))]),
     text = wf$hover, hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Americans: How We Count</b>",
@@ -1092,7 +1218,7 @@ us_matrix_html <- criteria_table(list(
   list(label = "Iranian<br>ancestry",      vals = wf$is_ancestry),
   list(label = "Iranian race<br>write-in", vals = wf$is_race),
   list(label = "Iranian<br>parent",        vals = wf$is_children)),
-  n_cols = nrow(wf), label_px = US_LBL_PX)
+  n_cols = nrow(wf), label_px = US_LBL_PX, sym_px = 15)
 
 # Region bar chart — reuse iran_data already loaded above
 region_dat <- iran_data %>%
@@ -1261,7 +1387,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
     </ul>
   </div>
 </div>
-<div class="chart-card">', plotly_div("waterfall", plotly_to_json(p_waterfall), "300px"),
+<div class="chart-card">', plotly_div("waterfall", plotly_to_json(p_waterfall), "320px"),
 us_matrix_html,
 '<p style="font-size:11px; color:#666; text-align:right; margin:6px 0 0; padding-right:2px;">', SRC_POP_1YR, '</p>
 </div>

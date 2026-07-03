@@ -1,6 +1,9 @@
-component,weighted_n,unweighted_n,cumulative,pct,milestone,milestone_value
-Both BPL + Ancestry,302214,2945,302214,38,,NA
-Born in Iran only,127680,1233,429894,16.1,,NA
-Ancestry only,213471,2027,643365,26.9,Core (BPL+Ancestry),643365
-Children (MOMLOC/POPLOC),105465,914,748830,13.3,≈ Pew 750K,748830
-MENA race only,46085,404,794915,5.8,Grand Total,794915
+"component","is_birth","is_ancestry","is_race","is_children","weighted_n","unweighted_n","cumulative","pct"
+"Born in Iran + Ancestry + Race write-in",TRUE,TRUE,TRUE,FALSE,231649,2251,231649,29.1
+"Born in Iran + Ancestry",TRUE,TRUE,FALSE,FALSE,70565,694,302214,8.9
+"Born in Iran + Race write-in",TRUE,FALSE,TRUE,FALSE,33282,305,335496,4.2
+"Ancestry + Race write-in",FALSE,TRUE,TRUE,FALSE,84732,784,420228,10.7
+"Born in Iran only",TRUE,FALSE,FALSE,FALSE,94398,928,514626,11.9
+"Ancestry only",FALSE,TRUE,FALSE,FALSE,128739,1243,643365,16.2
+"Race write-in only",FALSE,FALSE,TRUE,FALSE,46085,404,689450,5.8
+"US-born child of Iranian parent",FALSE,FALSE,FALSE,TRUE,105465,914,794915,13.3

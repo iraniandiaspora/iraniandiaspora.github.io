@@ -1,0 +1,14 @@
+origin,rate_pct,unweighted_n,is_iran,is_benchmark
+Israel/Palestine,23,918,FALSE,FALSE
+Armenia,21,438,FALSE,FALSE
+Iran,19,2002,TRUE,FALSE
+Lebanon/Syria,19,1074,FALSE,FALSE
+Korea,17,4888,FALSE,FALSE
+Vietnam,16,5957,FALSE,FALSE
+Turkey,16,661,FALSE,FALSE
+Pakistan,15,1493,FALSE,FALSE
+Mexico,13,31558,FALSE,FALSE
+All immigrants,12,143091,FALSE,TRUE
+China,11,6506,FALSE,FALSE
+India,8,6481,FALSE,FALSE
+Philippines,6,3875,FALSE,FALSE
