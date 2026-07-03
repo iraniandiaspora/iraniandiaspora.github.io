@@ -633,6 +633,8 @@ g2_f <- work_share(ec$class, "Female", "2nd gen")
 # CSVs built by R/us_business_export/prep_business_ownership.R.
 SRC_BIZ <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS; ",
                   "self-employed (class of worker), Iran-born residents aged 20+")
+SRC_OCC <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS; ",
+                  "employed Iran-born residents aged 16+")
 
 br <- read_csv(file.path(DATA_DIR, "us_business_rate.csv"), show_col_types = FALSE) %>%
   arrange(rate_pct)
@@ -669,28 +671,34 @@ p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
-bg <- read_csv(file.path(DATA_DIR, "us_business_geography.csv"), show_col_types = FALSE) %>%
+# Occupation of ALL employed first-gen Iranians (not just the ~19% who are
+# self-employed) — the representative "what Iranians do for work" view.
+# Built by pipelines/us/export_occupation.R. 8 groups; Okabe-Ito categorical
+# (rebound `cat_colors` is a vector here — use OKABE_ITO directly, precompute).
+oc <- read_csv(file.path(DATA_DIR, "us_occupation.csv"), show_col_types = FALSE) %>%
   arrange(share_pct)
-bg$region <- factor(bg$region, levels = bg$region)
-bg$col <- ifelse(grepl("Other United States", bg$region), "#b0b0b0", "#2774AE")
-p_bizgeo <- plot_ly(bg, x = ~share_pct, y = ~region, type = "bar", orientation = "h",
-    marker = list(color = bg$col),
-    text = ~sprintf("<b>%s</b><br>%.1f%% of owners (%s)", region, share_pct,
-      format(owners_weighted, big.mark = ",")),
+oc$group <- factor(oc$group, levels = oc$group)
+oc_cols <- rev(OKABE_ITO[seq_len(nrow(oc))])
+p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h",
+    marker = list(color = oc_cols),
+    text = ~sprintf("<b>%s</b><br>%.0f%% of employed Iranian immigrants", group, share_pct),
     hoverinfo = "text", textposition = "none") %>%
-  layout(title = list(text = "<b>Where Iranian-American Business Owners Live</b>",
+  layout(title = list(text = "<b>Occupations of Employed Iranian Immigrants</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
     yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 50, b = 40, l = 175, r = 20),
+    margin = list(t = 50, b = 40, l = 210, r = 20),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
 # Factoid values, computed from the CSVs so the card stays in sync
 biz_iran <- br$rate_pct[br$is_iran]
 biz_imm  <- br$rate_pct[br$is_benchmark]
-biz_laoc <- round(bg$share_pct[grepl("Los Angeles", bg$region)])
 biz_top  <- round(max(bi$share_pct))
+# Professional/managerial share = ACS "management, business, science & arts" super-group
+occ_mbsa <- c("Management, business & finance", "Computer & engineering", "Science",
+              "Education, law, social & arts", "Health care")
+occ_prof <- round(100 * sum(oc$weighted_n[oc$group %in% occ_mbsa]) / sum(oc$weighted_n))
 
 writeLines(page_template("Work", paste0(
   '<div class="page-content">',
@@ -701,12 +709,12 @@ writeLines(page_template("Work", paste0(
   </div>', g1_m$self, g1_f$self, g1_f$np, g1_m$np),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian immigrants are self-employed &mdash; higher than the rate for all U.S. immigrants (%d%%).</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian immigrants work in professional or managerial occupations.</div>
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>%d%% of Iranian-American business owners live in Los Angeles or Orange County</li>
-      <li>Arts, food and hospitality is the most common sector (%d%%)</li>
+      <li>%d%% are self-employed, above the %d%% rate for all U.S. immigrants</li>
+      <li>Arts, food and hospitality is their most common business sector (%d%%)</li>
     </ul>
-  </div>', biz_iran, biz_imm, biz_laoc, biz_top),
+  </div>', occ_prof, biz_iran, biz_imm, biz_top),
   '<div class="chart-card pc1">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'wk-1gen\',this,\'wk-gen\')">First Generation</button>',
@@ -723,18 +731,18 @@ writeLines(page_template("Work", paste0(
   '</div>',
   '<div class="chart-card pc2">',
   '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'bo-rate\',this,\'bo-tabs\')">Self-Employment Rate</button>',
-  '<button class="tab-btn" onclick="switchTab(\'bo-ind\',this,\'bo-tabs\')">Top Industries</button>',
-  '<button class="tab-btn" onclick="switchTab(\'bo-geo\',this,\'bo-tabs\')">Where Owners Live</button>',
+  '<button class="tab-btn active" onclick="switchTab(\'bo-occ\',this,\'bo-tabs\')">Occupations</button>',
+  '<button class="tab-btn" onclick="switchTab(\'bo-rate\',this,\'bo-tabs\')">Self-Employment</button>',
+  '<button class="tab-btn" onclick="switchTab(\'bo-ind\',this,\'bo-tabs\')">Business Sectors</button>',
   '</div>',
-  '<div id="bo-rate" class="tab-panel active" data-group="bo-tabs">',
+  '<div id="bo-occ" class="tab-panel active" data-group="bo-tabs">',
+  plotly_div("us-occ", plotly_to_json(p_occ), "430px", source = SRC_OCC),
+  '</div>',
+  '<div id="bo-rate" class="tab-panel" data-group="bo-tabs">',
   plotly_div("biz-rate", plotly_to_json(p_bizrate), "430px", source = SRC_BIZ),
   '</div>',
   '<div id="bo-ind" class="tab-panel" data-group="bo-tabs">',
   plotly_div("biz-ind", plotly_to_json(p_bizind), "400px", source = SRC_BIZ),
-  '</div>',
-  '<div id="bo-geo" class="tab-panel" data-group="bo-tabs">',
-  plotly_div("biz-geo", plotly_to_json(p_bizgeo), "430px", source = SRC_BIZ),
   '</div>',
   '</div>',
   '</div>'
