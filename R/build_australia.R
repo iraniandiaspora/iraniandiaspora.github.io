@@ -381,6 +381,10 @@ au_matrix_html <- criteria_table(list(
 compound_total <- wf$cumulative[nrow(wf)]
 
 # --- Generation split of the Iranian-ancestry population (added 2026-06-26) ---
+# Rendered as a "By Generation" tab on the IMMIGRATION page (moved off the
+# population page 2026-07-03 — compound/census countries like the US and Canada
+# carry only the waterfall on population; the generation + third-country
+# re-migration story fits immigration). au_gen_boxes is consumed in immig_body.
 # ABS 2021 Census ANCP Iranian x BPLP country of birth (TableBuilder Pro): of
 # the 81,119 reporting Iranian ancestry, 56,289 were born in Iran, 18,133 in
 # Australia (2nd gen), 6,697 in a third country (re-migration). 1st gen = born
@@ -437,18 +441,9 @@ pop_body <- paste0(
   '</div>',
   '</div>',
   '<div class="chart-card">',
-  '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'au-howcount-tab\',this,\'au-howcount\')">How We Count</button>',
-  '<button class="tab-btn" onclick="switchTab(\'au-gen-tab\',this,\'au-howcount\')">By Generation</button>',
-  '</div>',
-  '<div id="au-howcount-tab" class="tab-panel active" data-group="au-howcount">',
   plotly_div("au-waterfall", plotly_to_json(p_waterfall), "320px"),
   au_matrix_html,
   '<p style="font-size:11px; color:#666; text-align:right; margin:6px 0 0; padding-right:2px;">Source: <a href=\'https://www.abs.gov.au/census\' target=\'_blank\' style=\'color:#2774AE;\'>ABS</a> \u2014 Census of Population and Housing, 2021. Cell counts are randomly adjusted by ABS to prevent identification of individuals; totals may not sum exactly.</p>',
-  '</div>',
-  '<div id="au-gen-tab" class="tab-panel" data-group="au-howcount">',
-  au_gen_boxes,
-  '</div>',
   '</div>',
   '</div>',
 
@@ -637,11 +632,22 @@ immig_body <- paste0(
     <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Eligible residents can apply for citizenship after four years in Australia.</div>
   </div>', cit_pct),
   '<div class="chart-card pc1">', plotly_div("au-arrival", plotly_to_json(p_arrival), "430px", source = ABS_SOURCE), '</div>',
-  '<div class="chart-card pc2">', plotly_div("au-cit", plotly_to_json(p_cit), "450px", source = ABS_SOURCE), '</div>',
+  '<div class="chart-card pc2">',
+  '<div class="tab-bar">',
+  '<button class="tab-btn active" onclick="switchTab(\'au-cit-tab\',this,\'au-imm2\')">Citizenship</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-imm-gen-tab\',this,\'au-imm2\')">By Generation</button>',
+  '</div>',
+  '<div id="au-cit-tab" class="tab-panel active" data-group="au-imm2">',
+  plotly_div("au-cit", plotly_to_json(p_cit), "450px", source = ABS_SOURCE),
+  '</div>',
+  '<div id="au-imm-gen-tab" class="tab-panel" data-group="au-imm2">',
+  au_gen_boxes,
+  '</div>',
+  '</div>',
   '</div>'
 )
 
-writeLines(page_template("Australia: Immigration", immig_body), "docs/pages/au-immigration.html")
+writeLines(page_template("Australia: Immigration", immig_body, has_tabs = TRUE), "docs/pages/au-immigration.html")
 cat("  Done\n")
 
 
