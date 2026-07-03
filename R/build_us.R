@@ -622,10 +622,22 @@ work_share <- function(df, g, gen_) {
     priv = round(sum(sub$n[sub$class_wkrd == "Private sector employee"]) / tot * 100)
   )
 }
-g1_m <- work_share(ec$class, "Male", "1st gen")
-g1_f <- work_share(ec$class, "Female", "1st gen")
-g2_m <- work_share(ec$class, "Male", "2nd gen")
-g2_f <- work_share(ec$class, "Female", "2nd gen")
+# Employment-class shares for the top-left card. The dominant takeaway is that
+# the private sector is the most common class for both sexes; the bullets note
+# minor gender + generation differences. csh() = share of each class among the
+# employed (drops N/A and unpaid-family), optionally filtered by sex and/or gen.
+csh <- function(df, g_ = NULL, gen_ = NULL) {
+  sub <- df %>% filter(!class_wkrd %in% c("N/A", "Unpaid family member"))
+  if (!is.null(g_))   sub <- sub %>% filter(gender == g_)
+  if (!is.null(gen_)) sub <- sub %>% filter(gen == gen_)
+  tot <- sum(sub$n)
+  f <- function(cls) round(sum(sub$n[sub$class_wkrd == cls]) / tot * 100)
+  list(priv = f("Private sector employee"), pub = f("Public sector employee"),
+       np = f("Non-profit employee"), self = f("Self-employed"))
+}
+cl_all <- csh(ec$class)
+cl_m   <- csh(ec$class, "Male");          cl_f  <- csh(ec$class, "Female")
+cl_g1  <- csh(ec$class, gen_ = "1st gen"); cl_g2 <- csh(ec$class, gen_ = "2nd gen")
 
 # ---- Business ownership (self-employment) charts ----------------------------
 # ACS/IPUMS 2020-2024 5-year, Iran-born first generation. "Business owner" =
@@ -704,9 +716,12 @@ writeLines(page_template("Work", paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American men are self-employed &mdash; nearly double the rate for women (%d%%).</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Women are roughly twice as likely as men to work in non-profits (%d%% vs %d%%).</div>
-  </div>', g1_m$self, g1_f$self, g1_f$np, g1_m$np),
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-Americans work in the private sector &mdash; the most common employment type for both men and women.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Women are more likely than men to work in the public sector (%d%% vs %d%%) or non-profits (%d%% vs %d%%)</li>
+      <li>Self-employment is more common among men (%d%% vs %d%%) and in the first generation than the second (%d%% vs %d%%)</li>
+    </ul>
+  </div>', cl_all$priv, cl_f$pub, cl_m$pub, cl_f$np, cl_m$np, cl_m$self, cl_f$self, cl_g1$self, cl_g2$self),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-Americans work in professional or managerial occupations.</div>
