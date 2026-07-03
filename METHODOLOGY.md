@@ -17,7 +17,9 @@ Iranian-Americans are identified in the American Community Survey (ACS) using fo
 3. **Race** – writes in "Iranian" under the White race category (2024 survey only)
 4. **Parental origin** – lives with a parent who meets any of the above criteria
 
-The headline estimate of 794,915 uses the 2024 ACS 1-Year survey, which is the only year that includes all four criteria. The detail pages (immigration, marriage, education, work, income) use the 2020–2024 ACS 5-Year pooled data (754,595), which excludes the race write-in because it is not available in multi-year files. The waterfall chart on the Population page shows how each criterion contributes to the total.
+The headline estimate of 794,915 uses the 2024 ACS 1-Year survey, which is the only year that includes all four criteria. The detail pages (immigration, marriage, education, work, income) use the 2020–2024 ACS 5-Year pooled data (754,595), which excludes the race write-in because it is not available in multi-year files. The waterfall chart on the Population page shows how each criterion, and its overlaps, contribute to the total.
+
+The race criterion counts people who write in "Iranian" as a single race; those who mark "Iranian" together with another race are included only when they also report Iranian birthplace or ancestry, so a small number of multiracial Iranians who identify through the race question alone are not counted.
 
 Persian language is not used as a standalone criterion because the Census language category also captures Afghan Dari speakers.
 
