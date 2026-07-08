@@ -280,9 +280,9 @@ lpr_cat <- lpr
 # (which included employment) visually matches family + employment post-1992.
 cat_names  <- c("Family", "Employment", "Refugee/Asylee", "Diversity", "Other")
 cat_cols   <- c("family", "employment", "refugee_asylee", "diversity", "other")
-cat_colors <- c("Family" = "#2774AE", "Employment" = "#8bbdde",
-                "Refugee/Asylee" = "#c0504d", "Diversity" = "#d4a943",
-                "Other" = "#999999")
+adm_cat_colors <- c("Family" = "#2774AE", "Employment" = "#8bbdde",
+                    "Refugee/Asylee" = "#c0504d", "Diversity" = "#d4a943",
+                    "Other" = "#999999")
 cat_defs   <- c("Family" = "immediate relatives and family preferences",
                 "Employment" = "employment-based immigrants and family",
                 "Refugee/Asylee" = "adjusting to permanent residence",
@@ -317,7 +317,7 @@ for (i in rev(seq_along(cat_names))) {
   p_lpr_cat <- p_lpr_cat %>%
     add_bars(x = lpr_cat$year, y = vals,
       base = cat_bases[[cat_cols[i]]],
-      marker = list(color = cat_colors[cat_names[i]],
+      marker = list(color = adm_cat_colors[cat_names[i]],
                     line = list(width = 0)),
       name = cat_names[i],
       legendgroup = cat_names[i],
@@ -345,7 +345,7 @@ p_lpr_cat <- p_lpr_cat %>%
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-cat_leg <- make_html_legend(cat_colors)
+cat_leg <- make_html_legend(adm_cat_colors)
 
 writeLines(page_template("US: Immigration History", paste0(
   '<div class="page-content">',
@@ -670,9 +670,9 @@ p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation =
 bi <- read_csv(file.path(DATA_DIR, "us_business_industry.csv"), show_col_types = FALSE) %>%
   arrange(share_pct)
 bi$industry <- factor(bi$industry, levels = bi$industry)
-# NB: build_us.R rebinds `cat_colors` to a vector at line ~283 (us-admissions),
-# shadowing the _helpers.R function here — use OKABE_ITO directly. 8 stable
-# sectors, so no recycling. Precompute (plotly lazy-evals inline calls).
+# 8 stable sectors, Okabe-Ito categorical (no recycling). Precompute the color
+# vector (plotly lazy-evals inline calls) and rev() so the largest bar gets the
+# first, strongest hue.
 bi_cols <- rev(OKABE_ITO[seq_len(nrow(bi))])
 p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation = "h",
     marker = list(color = bi_cols),
@@ -689,7 +689,7 @@ p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation
 # Occupation of ALL employed first-gen Iranians (not just the ~19% who are
 # self-employed) — the representative "what Iranians do for work" view.
 # Built by pipelines/us/export_occupation.R. 8 groups; Okabe-Ito categorical
-# (rebound `cat_colors` is a vector here — use OKABE_ITO directly, precompute).
+# (precompute the color vector — plotly lazy-evals inline calls).
 oc <- read_csv(file.path(DATA_DIR, "us_occupation.csv"), show_col_types = FALSE) %>%
   arrange(share_pct)
 oc$group <- factor(oc$group, levels = oc$group)
