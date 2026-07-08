@@ -38,6 +38,32 @@ cat_colors <- function(n) {
   c(OKABE_ITO[1:7], CAT_OTHER)
 }
 
+# --- share_of -----------------------------------------------------------------
+# Weighted percentage of the rows of `df` whose `col` value is in `levels`, out
+# of the total `weight`. `weight` is a COLUMN NAME (string). Returns an unrounded
+# percentage; round at the call site.
+#
+# FAILS LOUD if any requested level is absent from df[[col]]. This is the guard
+# against the label-mismatch bug class: a text-card helper hand-typing a category
+# label that does not match the data — e.g. matching a chart's post-rename
+# "BA degree" against a raw CSV whose column says "Bachelors degree", which
+# silently drops those rows and understates the share (shipped once, 2026-07).
+# Use ONLY where every requested level is expected to be PRESENT in df (a
+# complete cross-tab, so absence == a coding bug). Do NOT use it where an absent
+# level legitimately means zero — e.g. an employment class that happens to have
+# no members in one sex/generation subgroup; there a hard stop would be wrong.
+share_of <- function(df, col, levels, weight) {
+  miss <- setdiff(levels, unique(df[[col]]))
+  if (length(miss)) {
+    stop(sprintf("share_of(): level(s) %s absent from column '%s' (present: %s)",
+                 paste(sprintf('"%s"', miss), collapse = ", "), col,
+                 paste(sprintf('"%s"', sort(unique(df[[col]]))), collapse = ", ")),
+         call. = FALSE)
+  }
+  w <- df[[weight]]
+  sum(w[df[[col]] %in% levels]) / sum(w) * 100
+}
+
 # --- strip_internal_classes ---------------------------------------------------
 # plotly_build() decorates some list elements with S3 classes like "zcolor"
 # that trip up jsonlite::toJSON. Walk the structure and drop those classes.
