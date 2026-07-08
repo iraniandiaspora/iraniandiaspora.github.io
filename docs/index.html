@@ -5,11 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Iranian Diaspora Dashboard</title>
   <meta name="description" content="Interactive data on Iranian immigrant and diaspora populations worldwide.">
+  <meta name="theme-color" content="#2774AE">
+  <link rel="icon" href="favicon.ico" sizes="any">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <meta property="og:title" content="Iranian Diaspora Dashboard">
   <meta property="og:description" content="Interactive data on Iranian immigrant and diaspora populations worldwide.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://iraniandiaspora.github.io/">
-  <meta name="twitter:card" content="summary">
+  <meta property="og:image" content="https://iraniandiaspora.github.io/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:image" content="https://iraniandiaspora.github.io/og-image.png">
   <link rel="stylesheet" href="styles.css">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
@@ -625,13 +632,13 @@ function navigateToHash() {
                     'eu-': 'europe',
                     'de-': 'europe', 'uk-': 'europe', 'nl-': 'europe',
                     'se-': 'europe', 'no-': 'europe', 'dk-': 'europe',
-                    'fr-': 'europe', 'at-': 'europe', 'be-': 'europe',
+                    'fr-': 'europe', 'at-': 'europe',
                     'it-': 'europe', 'ch-': 'europe', 'fi-': 'europe' };
   // For Europe, also map prefix to which country row to show
   var europeCountryMap = { 'eu-': 'overview',
                            'de-': 'germany', 'uk-': 'uk', 'nl-': 'netherlands',
                            'se-': 'sweden', 'no-': 'norway', 'dk-': 'denmark',
-                           'fr-': 'france', 'at-': 'austria', 'be-': 'belgium',
+                           'fr-': 'france', 'at-': 'austria',
                            'it-': 'italy', 'ch-': 'switzerland', 'fi-': 'finland' };
   var parentTab = null;
   var europeCountry = null;
