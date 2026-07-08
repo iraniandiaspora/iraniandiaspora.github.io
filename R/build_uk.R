@@ -52,21 +52,6 @@ function switchTab(tabId,btn,groupId){
 }
 </script>'
 
-make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
-  items <- mapply(function(col, lab) {
-    sprintf('<span style="display:inline-flex;align-items:center;gap:4px;margin:0 8px;"><span style="display:inline-block;width:14px;height:14px;background:%s;border-radius:2px;flex-shrink:0;"></span><span style="font-size:12px;color:#333;">%s</span></span>', col, lab)
-  }, colors, labels, SIMPLIFY = TRUE, USE.NAMES = FALSE)
-  if (!is.null(break_after) && break_after < length(items)) {
-    row1 <- paste(items[1:break_after], collapse = "")
-    row2 <- paste(items[(break_after + 1):length(items)], collapse = "")
-    inner <- paste0('<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">', row1, '</div>',
-                    '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">', row2, '</div>')
-  } else {
-    inner <- paste(items, collapse = "")
-  }
-  sprintf('<div style="text-align:center;margin:6px 0 2px;">%s</div>', inner)
-}
-
 page_template <- function(title, body_html) {
   paste0('<!DOCTYPE html>
 <html lang="en">
