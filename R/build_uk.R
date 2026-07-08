@@ -121,6 +121,7 @@ summary_df <- read.csv("data/uk/iran_uk_summary_2021.csv", stringsAsFactors = FA
 region_df  <- read.csv("data/uk/uk_region_iran.csv", stringsAsFactors = FALSE)
 age_sex    <- read.csv("data/uk/uk_age_sex.csv", stringsAsFactors = FALSE)
 arrival    <- read.csv("data/uk/uk_year_of_arrival.csv", stringsAsFactors = FALSE)
+arrival$label <- sub("^before ", "Before ", arrival$label)  # title-case the open-tail cohort chip to match "1951 to 1960" etc.
 econ       <- read.csv("data/uk/uk_economic_activity.csv", stringsAsFactors = FALSE)
 qual       <- read.csv("data/uk/uk_qualification.csv", stringsAsFactors = FALSE)
 relig      <- read.csv("data/uk/uk_religion.csv", stringsAsFactors = FALSE)
