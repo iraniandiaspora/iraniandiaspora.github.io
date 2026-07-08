@@ -130,7 +130,7 @@ for (i in seq_along(top_groups)) {
       fill = "tonexty", fillcolor = colors[g], name = g,
       line = list(width = 0.5, color = colors[g], shape = "spline"),
       marker = list(size = 8, color = "rgba(0,0,0,0)"),
-      text = sprintf("<b>%s</b><br>%d<br>%s Iran-born migrants",
+      text = sprintf("<b>%s</b> %d<br>%s Iran-born migrants",
         g, yr_nums, format(vals, big.mark = ",")),
       hoverinfo = "text")
 }
@@ -157,7 +157,7 @@ for (i in seq_along(bot_groups)) {
       fill = "tonexty", fillcolor = colors[g], name = g,
       line = list(width = 0.5, color = colors[g], shape = "spline"),
       marker = list(size = 8, color = "rgba(0,0,0,0)"),
-      text = sprintf("<b>%s</b><br>%d<br>%s Iran-born migrants",
+      text = sprintf("<b>%s</b> %d<br>%s Iran-born migrants",
         g, yr_nums, format(vals, big.mark = ",")),
       hoverinfo = "text")
 }
@@ -267,7 +267,7 @@ bin_colors <- list(c(0, "#e8e8e8"), c(0.2, "#c6dbef"), c(0.4, "#6baed6"),
 p_world <- plot_ly(type = "choropleth",
   locations = stocks_2024$iso3, z = stocks_2024$bin,
   text = ifelse(stocks_2024$destination == "Iran",
-    "<b>Iran</b><br> Estimated population: 93 million (2026)<br> Source: UN World Population Prospects 2024",
+    "<b>Iran</b><br>Estimated population: 93 million (2026)<br>Source: UN World Population Prospects 2024",
     sprintf("<b>%s</b><br>%s Iran-born migrants",
       stocks_2024$destination, format(stocks_2024$pop_2024, big.mark = ","))),
   hoverinfo = "text",

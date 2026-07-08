@@ -38,7 +38,7 @@ function switchTab(tabId, btn, groupId) {
 # --- Source citation strings ---
 DST_LINK <- "<a href='https://www.dst.dk/en/' target='_blank' style='color:#2774AE;'>Statistics Denmark (DST)</a>"
 DST_SOURCE <- paste0("Source: ", DST_LINK, " &mdash; Population Register, 2026")
-DST_EMP_SOURCE <- paste0("Source: ", DST_LINK, " &mdash; Full-time employees (RAS), Q4 2024")
+DST_EMP_SOURCE <- paste0("Source: ", DST_LINK, " &mdash; Full-time employees, fourth quarter 2024")
 EURO_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/' target='_blank' style='color:#2774AE;'>Eurostat</a>"
 
 # --- Load data ---------------------------------------------------------------
@@ -129,7 +129,7 @@ p_region <- plot_ly() %>%
     geojson = dk_geojson,
     locations = region$join_name, z = region$count,
     featureidkey = "properties.name",
-    text = sprintf("<b>%s</b><br>%s Iranian-origin (%.1f%%)",
+    text = sprintf("<b>%s</b><br>%s Iranian-origin<br>%.1f%% of total",
       region$region_name,
       format(region$count, big.mark = ","), region$pct),
     hoverinfo = "text",

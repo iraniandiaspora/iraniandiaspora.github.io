@@ -115,26 +115,9 @@ p_hist <- plot_ly(trend, x = ~year, y = ~iran_born, type = "scatter",
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-# --- Regional horizontal bar (20 regions, descending) ------------------------
+# --- Regional shares (used by the choropleth map hover) ----------------------
 region <- region %>% arrange(iran_born)
 region$pct <- round(region$iran_born / it_total * 100, 1)
-
-p_region <- plot_ly(region, y = ~reorder(region_name, iran_born), x = ~iran_born,
-    type = "bar", orientation = "h",
-    marker = list(color = "#2774AE"),
-    text = sprintf("<b>%s</b><br>%s Iran-born (%.1f%%)",
-      region$region_name, format(region$iran_born, big.mark = ","), region$pct),
-    hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
-  layout(
-    title = list(text = "<b>Iran-Born by Region in Italy, 2025</b>",
-      font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 10),
-                 ticks = "outside", ticklen = 8,
-                 tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 40, b = 30, l = 170),
-    plot_bgcolor = "white", paper_bgcolor = "white"
-  ) %>% config(displayModeBar = FALSE)
 
 # --- Regional choropleth map -------------------------------------------------
 if (has_geojson) {
@@ -146,7 +129,7 @@ if (has_geojson) {
       locations = region$region_code,
       z = region$iran_born,
       featureidkey = "properties.reg_istat_code",
-      text = sprintf("<b>%s</b><br>%s Iran-born (%.1f%%)",
+      text = sprintf("<b>%s</b><br>%s Iran-born<br>%.1f%% of total",
         region$region_name,
         format(region$iran_born, big.mark = ","),
         region$pct),

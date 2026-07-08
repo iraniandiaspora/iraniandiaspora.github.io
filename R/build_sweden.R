@@ -40,7 +40,7 @@ SCB_LINK <- "<a href='https://www.scb.se/en/' target='_blank' style='color:#2774
 SCB_SOURCE <- paste0("Source: ", SCB_LINK, " &mdash; Population Register, 2025")
 SCB_POP_SOURCE <- paste0("Source: ", SCB_LINK, " &mdash; Population by country of birth, 2024")
 EURO_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/' target='_blank' style='color:#2774AE;'>Eurostat</a>"
-HIST_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Iran-born population stock, 2000–2024")
+HIST_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Iran-born population stock, 1999–2025; gaps filled from Statistics Sweden, 1990 and 1995 from UN DESA")
 
 # --- Load data ---------------------------------------------------------------
 cat("Loading Sweden SCB extracts...\n")
@@ -192,7 +192,7 @@ p_county <- plot_ly() %>%
     geojson = se_geojson,
     locations = county$join_name, z = county$count,
     featureidkey = "properties.name",
-    text = sprintf("<b>%s</b><br>%s Iran-born (%.1f%%)",
+    text = sprintf("<b>%s</b><br>%s Iran-born<br>%.1f%% of total",
       county$county_name,
       format(county$count, big.mark = ","), county$pct),
     hoverinfo = "text",

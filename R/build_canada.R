@@ -609,12 +609,12 @@ immig_annual$bar_width <- ifelse(immig_annual$is_period, 4.5, 0.8)
 
 # Hover text
 immig_annual$hover <- ifelse(immig_annual$is_period,
-  sprintf("<b>%s</b><br>Arrivals: %s (%s/year avg)<br>Cumulative: %.1f%%",
+  sprintf("<b>%s</b><br>%s arrivals (%s/year avg)<br>Cumulative: %.1f%%",
     immig_annual$period_label,
     format(round(immig_annual$period_total), big.mark = ","),
     format(round(immig_annual$count), big.mark = ","),
     immig_annual$cum_pct),
-  sprintf("<b>%d</b><br>Arrivals: %s<br>Cumulative: %.1f%%",
+  sprintf("<b>%d</b><br>%s arrivals<br>Cumulative: %.1f%%",
     immig_annual$year,
     format(round(immig_annual$count), big.mark = ","),
     immig_annual$cum_pct))
@@ -630,9 +630,7 @@ p_ca_immig <- plot_ly() %>%
     y = ~cumulative / max(cumulative) * max(count),
     type = "scatter", mode = "lines",
     yaxis = "y2", line = list(color = "lightblue", width = 2),
-    text = ~sprintf("<b>By %d:</b><br>%s arrivals<br>(%.1f%% of total)",
-      year, format(round(cumulative), big.mark = ","), cum_pct),
-    hoverinfo = "text", showlegend = FALSE) %>%
+    hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iranian Migration to Canada:<br>Arrivals and Cumulative Trends</b>",
       font = list(size = 16, family = "Montserrat")),
@@ -647,7 +645,7 @@ p_ca_immig <- plot_ly() %>%
     margin = list(t = 65, b = 50, r = 60),
     plot_bgcolor = "white", paper_bgcolor = "white",
     annotations = list(
-      list(text = "Note: Pre-1995 values show 5-year period arrivals, averaged per year.",
+      list(text = "Pre-1995 values show 5-year period arrivals, averaged per year.",
         x = 0.5, y = -0.15, xref = "paper", yref = "paper", showarrow = FALSE,
         font = list(size = 9, color = "#6b6b6b"), xanchor = "center"))
   ) %>% config(displayModeBar = FALSE)
@@ -671,7 +669,7 @@ p_ca_cit <- plot_ly(data = cit1, x = ~short_label, y = ~count, type = "bar",
     text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", status, format(round(count), big.mark = ","), percentage),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Citizenship Status:<br>All Iranian-Canadians</b>", font = list(size = 16, family = "Montserrat")),
+    title = list(text = "<b>Citizenship Status of<br>Iranian-Canadians</b>", font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10),
       categoryorder = "array", categoryarray = cit1_order),
     yaxis = list(title = "", tickformat = ","),

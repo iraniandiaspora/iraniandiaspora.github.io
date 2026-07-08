@@ -131,7 +131,7 @@ nireland <- summary_df$iran_born[summary_df$country == "Northern Ireland"]
 ONS_LINK  <- "<a href='https://www.nomisweb.co.uk/sources/census_2021' target='_blank' style='color:#2774AE;'>ONS Census 2021</a>"
 SCOT_LINK <- "<a href='https://www.scotlandscensus.gov.uk/' target='_blank' style='color:#2774AE;'>Scotland&rsquo;s Census 2022</a>"
 NISRA_LINK <- "<a href='https://www.nisra.gov.uk/statistics/census/2021-census' target='_blank' style='color:#2774AE;'>NISRA Census 2021</a>"
-ONS_CUSTOM <- paste0("Source: ", ONS_LINK, " \u2014 England and Wales, custom dataset")
+ONS_CUSTOM <- paste0("Source: ", ONS_LINK, " \u2014 England and Wales")
 
 # ============================================================================
 # UK-POPULATION
@@ -231,7 +231,7 @@ p_arrival <- plot_ly() %>%
     line = list(color = "lightblue", width = 2),
     hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
-    title = list(text = "<b>Year of Arrival in the UK,<br>Iran-Born Residents</b>",
+    title = list(text = "<b>Iran-Born Residents in the UK<br>by Year of Arrival</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", dtick = 10, range = c(1939, 2024),
       tickfont = list(size = 11)),
@@ -321,7 +321,7 @@ pop_body <- paste0(
   '<div class="chart-card">',
   '<div class="section-title" style="margin-top:0;">Geographic Distribution in the United Kingdom</div>',
   plotly_div("uk-region-map", plotly_to_json(p_uk_map), "430px",
-    source = paste0("Source: ", ONS_LINK, "; ", SCOT_LINK)),
+    source = paste0("Source: ", ONS_LINK, " — Census 2021 (England and Wales); ", SCOT_LINK)),
   '</div>',
   '</div>'
 )

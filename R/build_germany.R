@@ -372,7 +372,7 @@ p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
   layout(
     title = list(text = "<b>Iran-Born Residents by<br>Length of Residence in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "Years lived in Germany", tickfont = list(size = 11)),
+    xaxis = list(title = "Years Lived in Germany", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
     margin = list(t = 65, b = 90),
     plot_bgcolor = "white", paper_bgcolor = "white",
@@ -413,14 +413,14 @@ p_annual <- plot_ly() %>%
 p_citizen <- plot_ly(data.frame(
     status = c("German citizens", "Iranian nationals"),
     count  = c(hl_deu, hl_for),
-    pct    = round(c(hl_deu, hl_for) / hl_total * 100)
+    pct    = round(c(hl_deu, hl_for) / hl_total * 100, 1)
   ),
   x = ~status, y = ~count, type = "bar",
   # Citizenship is a 2-category status chart: site blue + coral (the documented
   # citizenship palette). The motive chart uses the shared Okabe-Ito categorical
   # palette; the duration chart is monochromatic blue.
   marker = list(color = c("#2774AE", "#e07b54")),
-  text = ~sprintf("<b>%s</b><br>%s (%s%%)",
+  text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
     status, format(count, big.mark = ","), pct),
   hoverinfo = "text", textposition = "none") %>%
   layout(
@@ -474,7 +474,7 @@ immig_body <- paste0(
   '</div>',
   '<div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs">',
   plotly_div("de-annual", plotly_to_json(p_annual), "430px",
-    source = "Source: BAMF Migrationsb&#228;richte (2005, 2015, 2020, 2023, 2024 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here."),
+    source = "Source: BAMF Migrationsberichte (2005, 2015, 2020, 2023, 2024 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here."),
   '</div>',
   '<div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs">',
   plotly_div("de-motive", plotly_to_json(p_motive), "440px",
@@ -725,7 +725,7 @@ inc$bar_color <- inc_colors[as.integer(inc$bracket)]
 inc$bar_color[inc$is_suppressed] <- "#c8c8c8"
 inc$display_pct <- ifelse(inc$is_suppressed, 1.2, inc$pct)
 inc$hover <- ifelse(inc$is_suppressed,
-  sprintf("<b>%s per month</b><br>Suppressed (fewer than 5,000)", inc$bracket),
+  sprintf("<b>%s per month</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000", inc$bracket),
   sprintf("<b>%s per month</b><br>%s workers (%.1f%%)", inc$bracket,
           format(inc$value, big.mark = ","), inc$pct))
 

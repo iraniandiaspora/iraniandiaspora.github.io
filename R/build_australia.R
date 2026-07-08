@@ -533,10 +533,10 @@ total_true <- sum(arr$count)
 arr$cum_pct <- round(arr$cum_true / total_true * 100, 1)
 
 arr$hover <- ifelse(arr$is_period,
-  sprintf("<b>%s</b><br>Total arrivals: %s (%s/year avg)<br>Cumulative: %.1f%%",
+  sprintf("<b>%s</b><br>%s arrivals (%s/year avg)<br>Cumulative: %.1f%%",
     arr$period, trimws(format(arr$count, big.mark = ",")),
     trimws(format(arr$annual_avg, big.mark = ",")), arr$cum_pct),
-  sprintf("<b>%d</b><br>Arrivals: %s<br>Cumulative: %.1f%%",
+  sprintf("<b>%d</b><br>%s arrivals<br>Cumulative: %.1f%%",
     arr$year, trimws(format(arr$count, big.mark = ",")), arr$cum_pct))
 
 p_arrival <- plot_ly() %>%

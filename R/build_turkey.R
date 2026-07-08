@@ -138,7 +138,7 @@ sex_boxes <- paste0(
   make_gen_box(tr_male, paste0(round(tr_male / tr_total * 100), "% of total"),
     "Male", "Iran-born men", "#1a4e72"),
   make_gen_box(tr_female, paste0(round(tr_female / tr_total * 100), "% of total"),
-    "Female", "Iran-born women", "#c4793a"),
+    "Female", "Iran-born women", "#5a9bd5"),
   '</div>')
 
 # --- Assemble tr-population page (Italy format; no map available) ------------
