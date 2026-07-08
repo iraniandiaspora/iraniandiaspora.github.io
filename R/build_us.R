@@ -483,9 +483,12 @@ e2 <- list(gen_2_wide = read_csv(file.path(DATA_DIR, "gen_2_wide.csv"), show_col
 
 {
   bap_share <- function(df, age, gender) {
+    # NB: raw gen_*_wide.csv labels the category "Bachelors degree"; the
+    # "BA degree" rename only happens inside make_butterfly_educ(). Match the
+    # raw label here or this silently counts graduate degrees only.
     sub <- df %>% filter(age_group == age)
     tot <- sum(sub[[gender]])
-    sum(sub[[gender]][sub$educ_factor %in% c("BA degree","Graduate degree")]) / tot * 100
+    sum(sub[[gender]][sub$educ_factor %in% c("Bachelors degree","Graduate degree")]) / tot * 100
   }
   g1_young_f <- round(bap_share(e1$gen_1_wide, "25-34", "Female"))
   g1_young_m <- round(bap_share(e1$gen_1_wide, "25-34", "Male"))
