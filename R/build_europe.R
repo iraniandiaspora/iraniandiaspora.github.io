@@ -29,16 +29,6 @@ suppressPackageStartupMessages({
 # Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
 # iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
 source("R/_helpers.R")
-make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
-  items <- mapply(function(col, lab) {
-    html_lab <- gsub("&", "&amp;", lab)
-    sprintf('<span data-lg="%s" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest(\'.chart-card\').querySelector(\'.js-plotly-plot\');if(el&&el.__hlOn)el.__hlOn(this.getAttribute(\'data-lg\'));" onmouseleave="var el=this.closest(\'.chart-card\').querySelector(\'.js-plotly-plot\');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:%s; border-radius:2px; display:inline-block;"></span> %s</span>',
-      lab, col, html_lab)
-  }, colors, labels, SIMPLIFY = TRUE)
-  sprintf('<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;">%s</div>',
-    paste(items, collapse = ""))
-}
-
 page_template <- function(title, body_html, extra_head = "") {
   paste0('<!DOCTYPE html>
 <html lang="en">
@@ -442,7 +432,7 @@ body <- paste0(
   '</div>',
   '<div class="chart-card">',
   '<div class="section-title" style="margin-top:0;">Where Iran-Born Residents Live in Europe</div>',
-  make_html_legend(c(
+  make_html_legend_hover(c(
     "Under 20,000" = "#9ecae1",
     "20,000 \u2013 35,000" = "#6baed6",
     "35,000 \u2013 70,000" = "#2171b5",

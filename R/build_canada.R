@@ -11,17 +11,6 @@ DATA_DIR <- "data/canada"
 # Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
 # iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
 source("R/_helpers.R")
-make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
-  items <- mapply(function(col, lab) {
-    # Escape & as &amp; in data-lg and JS string so it matches plotly legendgroup after HTML decoding
-    html_lab <- gsub("&", "&amp;", lab)
-    sprintf('<span data-lg="%s" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest(\'.chart-card\').querySelector(\'.js-plotly-plot\');if(el&&el.__hlOn)el.__hlOn(this.getAttribute(\'data-lg\'));" onmouseleave="var el=this.closest(\'.chart-card\').querySelector(\'.js-plotly-plot\');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:%s; border-radius:2px; display:inline-block;"></span> %s</span>',
-      lab, col, html_lab)
-  }, colors, labels, SIMPLIFY = TRUE)
-  sprintf('<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;">%s</div>',
-    paste(items, collapse = ""))
-}
-
 PUMF_LINK <- "<a href='https://dc1.chass.utoronto.ca/census/index.html' target='_blank' style='color:#2774AE;'>Census PUMF</a>"
 PUMF_SOURCE <- paste0("Source: ", PUMF_LINK, " \u2014 2021 Canadian Census<br>",
   "Based on a 2.7% public-use sample of census records.<br>Estimates for small sub-groups may have limited reliability.")
@@ -477,7 +466,7 @@ p_lang <- p_lang %>% layout(
   plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
-lang_leg <- make_html_legend(lang_colors, break_after = 3)
+lang_leg <- make_html_legend_hover(lang_colors, break_after = 3)
 
 # --- Religion: Horizontal 100% stacked bars by generation ---
 relig_cats <- c("Muslim", "No religion/Secular", "Christian", "Other religions", "Not stated")
@@ -535,7 +524,7 @@ p_relig <- p_relig %>% layout(
   plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
-relig_leg <- make_html_legend(relig_colors, break_after = 3)
+relig_leg <- make_html_legend_hover(relig_colors, break_after = 3)
 
 # --- Factoid cards (4-card grid, same pattern as ca-work) -------------------
 # card4() helper is shared with ca-work below.
@@ -730,7 +719,7 @@ p_ca_immtype <- p_ca_immtype %>% layout(
   plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
-immtype_leg <- make_html_legend(immtype_colors)
+immtype_leg <- make_html_legend_hover(immtype_colors)
 
 # Build citizenship chart div with tab switching
 cit_div <- paste0(
@@ -858,7 +847,7 @@ make_ca_educ_butterfly <- function(df, gen_label, id_prefix, height = "450px", s
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
-  leg <- make_html_legend(colors, break_after = 3)
+  leg <- make_html_legend_hover(colors, break_after = 3)
   plotly_div(id_prefix, plotly_to_json(p), height, source = source, legend_html = leg, highlight_hover = TRUE)
 }
 
@@ -922,7 +911,7 @@ make_fos_butterfly <- function(fos_data, gen_label, id_prefix, height = "350px",
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
-  leg <- make_html_legend(colors, break_after = 2)
+  leg <- make_html_legend_hover(colors, break_after = 2)
   plotly_div(id_prefix, plotly_to_json(p), height, source = source, legend_html = leg, highlight_hover = TRUE)
 }
 
@@ -1036,7 +1025,7 @@ make_employment_butterfly <- function(df, gen_val, gen_label, id_prefix, height 
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
-  leg <- make_html_legend(colors)
+  leg <- make_html_legend_hover(colors)
   plotly_div(id_prefix, plotly_to_json(p), height, source = source, legend_html = leg, highlight_hover = TRUE)
 }
 
@@ -1101,7 +1090,7 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
-  leg <- make_html_legend(colors, break_after = 3)
+  leg <- make_html_legend_hover(colors, break_after = 3)
   plotly_div(id_prefix, plotly_to_json(p), height, source = source, legend_html = leg, highlight_hover = TRUE)
 }
 
@@ -1264,7 +1253,7 @@ p_inc_age <- p_inc_age %>% layout(
   plot_bgcolor = "white", paper_bgcolor = "white"
 ) %>% config(displayModeBar = FALSE)
 
-inc_age_leg <- make_html_legend(age_band_colors, break_after = 3)
+inc_age_leg <- make_html_legend_hover(age_band_colors, break_after = 3)
 
 # Dynamic shares for the income cards
 ca_d1  <- round(inc1$percentage[inc1$income_category == "Decile 1"])

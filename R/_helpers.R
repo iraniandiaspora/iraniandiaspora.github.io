@@ -270,3 +270,36 @@ make_gen_box <- function(val, pct_text, label, sublabel, color) {
     </div>',
     color, format(val, big.mark = ","), label, pct_text, sublabel)
 }
+
+# --- make_html_legend --------------------------------------------------------
+# Static external legend: centered swatch+label row(s). break_after wraps
+# into two rows. Use with plotly_div(highlight_hover = FALSE).
+make_html_legend <- function(colors, labels = names(colors), break_after = NULL) {
+  items <- mapply(function(col, lab) {
+    sprintf('<span style="display:inline-flex;align-items:center;gap:4px;margin:0 8px;"><span style="display:inline-block;width:14px;height:14px;background:%s;border-radius:2px;flex-shrink:0;"></span><span style="font-size:12px;color:#333;">%s</span></span>', col, lab)
+  }, colors, labels, SIMPLIFY = TRUE, USE.NAMES = FALSE)
+  if (!is.null(break_after) && break_after < length(items)) {
+    row1 <- paste(items[1:break_after], collapse = "")
+    row2 <- paste(items[(break_after + 1):length(items)], collapse = "")
+    inner <- paste0('<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">', row1, '</div>',
+                    '<div style="display:flex;flex-wrap:wrap;justify-content:center;gap:2px;">', row2, '</div>')
+  } else {
+    inner <- paste(items, collapse = "")
+  }
+  sprintf('<div style="text-align:center;margin:6px 0 2px;">%s</div>', inner)
+}
+
+# --- make_html_legend_hover --------------------------------------------------
+# Interactive external legend: emits data-lg spans whose hover handlers call
+# el.__hlOn/__hlOff (installed by plotly_div(highlight_hover = TRUE)) to dim
+# the other traces. break_after is accepted but unused. US keeps a local
+# variant (line-break layout) that shadows nothing here.
+make_html_legend_hover <- function(colors, labels = names(colors), break_after = NULL) {
+  items <- mapply(function(col, lab) {
+    html_lab <- gsub("&", "&amp;", lab)
+    sprintf('<span data-lg="%s" style="display:inline-flex; align-items:center; gap:4px; cursor:pointer; transition:opacity 0.2s;" onmouseenter="var el=this.closest(\'.chart-card\').querySelector(\'.js-plotly-plot\');if(el&&el.__hlOn)el.__hlOn(this.getAttribute(\'data-lg\'));" onmouseleave="var el=this.closest(\'.chart-card\').querySelector(\'.js-plotly-plot\');if(el&&el.__hlOff)el.__hlOff();"><span style="width:12px; height:12px; background:%s; border-radius:2px; display:inline-block;"></span> %s</span>',
+      lab, col, html_lab)
+  }, colors, labels, SIMPLIFY = TRUE)
+  sprintf('<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;">%s</div>',
+    paste(items, collapse = ""))
+}
