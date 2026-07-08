@@ -343,7 +343,6 @@ wf$is_birth    <- grepl("Born in Iran", wf$component)
 wf$is_ancestry <- grepl("Iranian ancestry", wf$component)
 wf$is_language <- grepl("Persian speaker", wf$component)
 wf$is_parent   <- grepl("Iran-born parent", wf$component)
-chk <- function(b) ifelse(b, "✓", "✗")
 wf$grp <- ifelse(wf$is_birth, "First generation",
            ifelse(wf$is_parent, "Second generation", "Iranian ancestry or language"))
 wf$hover <- sprintf(

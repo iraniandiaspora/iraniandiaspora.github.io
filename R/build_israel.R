@@ -260,17 +260,6 @@ p_comp <- plot_ly() %>%
   ) %>% config(displayModeBar = FALSE)
 
 # --- Generation boxes --------------------------------------------------------
-make_gen_box <- function(val, pct_text, label, sublabel, color) {
-  sprintf(
-    '<div style="background:%s; border-radius:6px; padding:22px 14px; text-align:center; color:white; flex:1; min-width:0;">
-      <div style="font-size:30px; font-weight:700; line-height:1.1;">%s</div>
-      <div style="font-size:13px; margin-top:4px; font-weight:600;">%s</div>
-      <div style="font-size:12px; opacity:0.9; margin-top:2px;">%s</div>
-      <div style="font-size:11px; opacity:0.85; margin-top:3px;">%s</div>
-    </div>',
-    color, format(val, big.mark = ","), label, pct_text, sublabel)
-}
-
 gen_boxes <- paste0(
   '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iranian-Origin Population by Generation</div>',
   '<div style="display:flex; gap:12px; margin-top:12px;">',
