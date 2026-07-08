@@ -1212,7 +1212,6 @@ wf$xnum <- seq_len(nrow(wf))
 # Australia use. This makes the race write-in's real reach visible: its check
 # now appears across four bars that sum to ~396K (~50% of the total), instead of
 # the old single "race only" bar that made the write-in look like a 5.8% path.
-chk <- function(b) ifelse(b, "✓", "✗")
 wf$hover <- sprintf(
   "<b>%s</b><br>%s Born in Iran<br>%s Iranian ancestry<br>%s Iranian race write-in<br>%s Iranian parent<br><br>%s people · %.1f%% of total<br>Running total: %s",
   wf$component, chk(wf$is_birth), chk(wf$is_ancestry), chk(wf$is_race), chk(wf$is_children),

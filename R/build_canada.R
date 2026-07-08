@@ -182,7 +182,6 @@ wf$xnum <- seq_len(nrow(wf))
 wf$is_born    <- grepl("^Born in Iran", wf$Category)
 wf$is_ethnic  <- grepl("Iranian Ethnic", wf$Category) & !grepl("No Iranian Ethnic", wf$Category)
 wf$is_persian <- grepl("Persian", wf$Category) & !grepl("No Persian", wf$Category)
-chk <- function(b) ifelse(b, "✓", "✗")
 wf$hover <- sprintf(
   "<b>%s</b><br>%s Born in Iran<br>%s Iranian ethnic origin<br>%s Persian language<br><br>%s people · %.1f%% of total<br>Running total: %s",
   ifelse(wf$is_born, "First generation", "Second generation"),

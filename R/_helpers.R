@@ -251,3 +251,22 @@ map_overlay_legend <- function(items) {
     paste(rows, collapse = ""),
     '</div>')
 }
+
+# --- chk ---------------------------------------------------------------------
+# Small ✓/✗ formatter for identification / criteria tables.
+chk <- function(b) ifelse(b, "✓", "✗")
+
+# --- make_gen_box ------------------------------------------------------------
+# One of the two side-by-side colored generation boxes (1st/2nd gen, or
+# male/female) shown on population pages. Takes a pre-formatted pct_text.
+# Australia keeps a local variant with different sizing; it shadows this.
+make_gen_box <- function(val, pct_text, label, sublabel, color) {
+  sprintf(
+    '<div style="background:%s; border-radius:6px; padding:22px 14px; text-align:center; color:white; flex:1; min-width:0;">
+      <div style="font-size:30px; font-weight:700; line-height:1.1;">%s</div>
+      <div style="font-size:13px; margin-top:4px; font-weight:600;">%s</div>
+      <div style="font-size:12px; opacity:0.9; margin-top:2px;">%s</div>
+      <div style="font-size:11px; opacity:0.85; margin-top:3px;">%s</div>
+    </div>',
+    color, format(val, big.mark = ","), label, pct_text, sublabel)
+}
