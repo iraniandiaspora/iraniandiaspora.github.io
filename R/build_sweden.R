@@ -172,13 +172,13 @@ p_yrssince <- plot_ly() %>%
     yaxis = list(title = "", tickformat = ","),
     yaxis2 = list(title = "", overlaying = "y", side = "right",
       ticksuffix = "%", range = c(0, 105), showgrid = FALSE,
-      tickfont = list(size = 10, color = "#888")),
+      tickfont = list(size = 10, color = "#6b6b6b")),
     margin = list(t = 40, b = 55, r = 45),
     plot_bgcolor = "white", paper_bgcolor = "white",
     annotations = list(
       list(text = "Arrivals before 2015 are grouped into 5-year periods, shown as a per-year average.",
         x = 0.5, y = -0.15, xref = "paper", yref = "paper", showarrow = FALSE,
-        font = list(size = 9, color = "#888"), xanchor = "center"))
+        font = list(size = 9, color = "#6b6b6b"), xanchor = "center"))
   ) %>% config(displayModeBar = FALSE)
 
 # --- County choropleth map ---------------------------------------------------
@@ -234,8 +234,8 @@ pop_body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Sweden uses population registers. A person is classified as Iranian-origin if they meet at least one of:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Born in Iran</strong> <span style="color:#888;">&mdash; first generation</span></li>',
-  '<li><strong>Born in Sweden</strong> with a mother or father born in Iran <span style="color:#888;">&mdash; second generation</span></li>',
+  '<li><strong>Born in Iran</strong> <span style="color:#6b6b6b;">&mdash; first generation</span></li>',
+  '<li><strong>Born in Sweden</strong> with a mother or father born in Iran <span style="color:#6b6b6b;">&mdash; second generation</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The second generation includes children with one Swedish-born and one Iran-born parent. Third-generation residents are not counted. Classification is from birth records, not self-reported ethnicity.</p>',
   '</div>',

@@ -153,7 +153,7 @@ pop_body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">T\u00fcrkiye uses an address-based population register. A person is counted as Iran-born based on:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Country of birth</strong> <span style="color:#888;">&mdash; recorded in the address-based register (ADNKS)</span></li>',
+  '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; recorded in the address-based register (ADNKS)</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">T\u00fcrkiye-born children of Iran-born parents are not counted as Iran-born in these statistics. The figure reflects first-generation residents only.</p>',
   '<p style="margin-top:8px; font-size:11px; color:#999; line-height:1.5;">The UN International Migrant Stock reports about 200,000 Iran-born residents of T\u00fcrkiye in 2024, higher than the figure above because UN numbers add UNHCR-registered refugees and asylum seekers to the national register and are extrapolated from 2020.</p>',

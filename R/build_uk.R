@@ -238,13 +238,13 @@ p_arrival <- plot_ly() %>%
     yaxis = list(title = "", tickformat = ","),
     yaxis2 = list(title = "", overlaying = "y", side = "right",
       ticksuffix = "%", range = c(0, 105), showgrid = FALSE,
-      tickfont = list(size = 10, color = "#888")),
+      tickfont = list(size = 10, color = "#6b6b6b")),
     margin = list(t = 55, b = 55, r = 40),
     plot_bgcolor = "white", paper_bgcolor = "white",
     annotations = list(
       list(text = "Census cohorts span different numbers of years; bars show arrivals averaged per year.",
         x = 0.5, y = -0.15, xref = "paper", yref = "paper", showarrow = FALSE,
-        font = list(size = 9, color = "#888"), xanchor = "center"))
+        font = list(size = 9, color = "#6b6b6b"), xanchor = "center"))
   ) %>% config(displayModeBar = FALSE)
 
 # --- Assemble uk-population ---
@@ -259,7 +259,7 @@ pop_body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">The UK uses a decennial census. A person is counted as Iran-born based on:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Country of birth</strong> <span style="color:#888;">&mdash; &ldquo;What is your country of birth?&rdquo;</span></li>',
+  '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;What is your country of birth?&rdquo;</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted.</p>',
   '</div>',

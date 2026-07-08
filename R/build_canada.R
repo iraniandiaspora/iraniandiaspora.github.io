@@ -93,7 +93,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:14px; color:#666; margin-top:4px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
-.footnote { font-size:12px; color:#888; text-align:center; margin:8px 0; font-style:italic; }
+.footnote { font-size:12px; color:#6b6b6b; text-align:center; margin:8px 0; font-style:italic; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
 .pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
@@ -341,9 +341,9 @@ writeLines(page_template("Canada: Population", paste0(
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of three census questions:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Place of birth</strong> <span style="color:#888;">&mdash; &ldquo;Where was this person born?&rdquo;</span></li>',
-  '<li><strong>Ethnic origin</strong> <span style="color:#888;">&mdash; &ldquo;What are the ethnic or cultural origins of this person&rsquo;s ancestors?&rdquo;</span></li>',
-  '<li><strong>Mother tongue or home language</strong> <span style="color:#888;">&mdash; reports Persian as the language first learned in childhood, or as the language spoken most often at home today</span></li>',
+  '<li><strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;Where was this person born?&rdquo;</span></li>',
+  '<li><strong>Ethnic origin</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;What are the ethnic or cultural origins of this person&rsquo;s ancestors?&rdquo;</span></li>',
+  '<li><strong>Mother tongue or home language</strong> <span style="color:#6b6b6b;">&mdash; reports Persian as the language first learned in childhood, or as the language spoken most often at home today</span></li>',
   '</ul>',
   '</div>',
   '</div>',
@@ -649,7 +649,7 @@ p_ca_immig <- plot_ly() %>%
     annotations = list(
       list(text = "Note: Pre-1995 values show 5-year period arrivals, averaged per year.",
         x = 0.5, y = -0.15, xref = "paper", yref = "paper", showarrow = FALSE,
-        font = list(size = 9, color = "#888"), xanchor = "center"))
+        font = list(size = 9, color = "#6b6b6b"), xanchor = "center"))
   ) %>% config(displayModeBar = FALSE)
 
 # Citizenship status - ALL generations combined

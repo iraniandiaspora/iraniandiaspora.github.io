@@ -416,10 +416,10 @@ pop_body <- paste0(
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of four criteria:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Country of birth</strong> <span style="color:#888;">&mdash; born in Iran</span></li>',
-  '<li><strong>Ancestry</strong> <span style="color:#888;">&mdash; reports Iranian ancestry</span></li>',
-  '<li><strong>Language at home</strong> <span style="color:#888;">&mdash; speaks Persian (excluding Dari)</span></li>',
-  '<li><strong>Parental birthplace</strong> <span style="color:#888;">&mdash; Australian-born with at least one Iran-born parent</span></li>',
+  '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; born in Iran</span></li>',
+  '<li><strong>Ancestry</strong> <span style="color:#6b6b6b;">&mdash; reports Iranian ancestry</span></li>',
+  '<li><strong>Language at home</strong> <span style="color:#6b6b6b;">&mdash; speaks Persian (excluding Dari)</span></li>',
+  '<li><strong>Parental birthplace</strong> <span style="color:#6b6b6b;">&mdash; Australian-born with at least one Iran-born parent</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The compound total counts each person once, even if they meet more than one criterion.</p>',
   '</div>',
@@ -555,14 +555,14 @@ p_arrival <- plot_ly() %>%
     yaxis = list(title = "", tickformat = ","),
     yaxis2 = list(title = "", overlaying = "y", side = "right",
       ticksuffix = "%", range = c(0, 105), showgrid = FALSE,
-      tickfont = list(size = 10, color = "#888")),
+      tickfont = list(size = 10, color = "#6b6b6b")),
     margin = list(t = 65, b = 50, r = 40),
     showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white",
     annotations = list(
       list(text = "Pre-2016 values show period arrivals averaged per year. 2016\u20132021 show annual counts.",
         x = 0.5, y = -0.12, xref = "paper", yref = "paper", showarrow = FALSE,
-        font = list(size = 9, color = "#888"), xanchor = "center"))
+        font = list(size = 9, color = "#6b6b6b"), xanchor = "center"))
   ) %>% config(displayModeBar = FALSE)
 
 # --- Citizenship chart (moved from population page) ---

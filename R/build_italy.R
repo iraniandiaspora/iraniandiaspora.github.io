@@ -195,7 +195,7 @@ pop_body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Italy uses population registers. A person is counted as Iran-born based on:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Country of birth</strong> <span style="color:#888;">&mdash; recorded in municipal civil registers</span></li>',
+  '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; recorded in municipal civil registers</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Italian-born children of Iran-born parents are not counted.</p>',
   '</div>',
