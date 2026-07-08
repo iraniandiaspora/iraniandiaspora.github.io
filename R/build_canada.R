@@ -630,7 +630,9 @@ p_ca_immig <- plot_ly() %>%
     y = ~cumulative / max(cumulative) * max(count),
     type = "scatter", mode = "lines",
     yaxis = "y2", line = list(color = "lightblue", width = 2),
-    hoverinfo = "skip", showlegend = FALSE) %>%
+    text = ~sprintf("<b>%s</b><br>%.1f%% of today's Iran-born population had arrived",
+      ifelse(is_period, period_label, as.character(year)), cum_pct),
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iranian Migration to Canada:<br>Arrivals and Cumulative Trends</b>",
       font = list(size = 16, family = "Montserrat")),

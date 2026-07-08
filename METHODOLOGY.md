@@ -99,7 +99,7 @@ Iranian-origin residents are identified in the population register maintained by
 
 Third-generation residents (Dutch-born with Dutch-born parents) are not counted as Iranian-origin. The classification is based on birth records, not self-reported ethnicity or language.
 
-The population-over-time chart uses Eurostat data (Iran-born stock, 1999–2025) because CBS only began publishing Iran-specific population counts in 2022. The implied-arrival-year chart derives arrival timing from single-year residence duration in the population register; it shows who is currently present, not total historical arrivals.
+The population-over-time chart uses Eurostat data (Iran-born stock, 1999–2025) because CBS only began publishing Iran-specific population counts in 2022. The year-of-arrival chart derives arrival timing from single-year residence duration in the population register; it shows who is currently present, not total historical arrivals.
 
 Labour force participation and employment type come from the CBS Labour Force Survey (2021–2024). Income data come from the CBS household income and wealth tables (2011–2024). Average disposable income figures are in nominal euros. The low-income threshold is inflation-adjusted by CBS, so the low-income share is comparable across years.
 

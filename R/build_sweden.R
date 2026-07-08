@@ -163,7 +163,9 @@ p_yrssince <- plot_ly() %>%
   add_trace(data = yrs, x = ~center, y = ~cum_pct, type = "scatter",
     mode = "lines", yaxis = "y2",
     line = list(color = "lightblue", width = 2),
-    hoverinfo = "skip", showlegend = FALSE) %>%
+    text = ~sprintf("<b>%s</b><br>%.1f%% of today's Iran-born population had arrived",
+      arr_lab, cum_pct),
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iran-Born Residents in Sweden<br>by Year of Arrival</b>",
       font = list(size = 14, family = "Montserrat")),

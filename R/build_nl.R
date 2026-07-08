@@ -190,7 +190,9 @@ p_arrival <- plot_ly() %>%
     type = "scatter", mode = "lines",
     yaxis = "y2",
     line = list(color = "lightblue", width = 2),
-    hoverinfo = "skip", showlegend = FALSE, name = "Cumulative",
+    text = sprintf("<b>%s</b><br>%.1f%% of today's Iran-born population had arrived",
+      arrival_agg$label, arrival_agg$cum_pct),
+    hoverinfo = "text", showlegend = FALSE, name = "Cumulative",
     inherit = FALSE) %>%
   layout(
     title = list(
