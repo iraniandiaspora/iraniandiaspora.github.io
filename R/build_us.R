@@ -181,7 +181,9 @@ p_immig <- plot_ly() %>%
   add_lines(data = immig, x = ~YRIMMIG,
     y = ~cumulative_immigrants / max(cumulative_immigrants) * max(n),
     yaxis = "y2", line = list(color = "lightblue", width = 2),
-    hoverinfo = "skip", showlegend = FALSE) %>%
+    text = ~sprintf("<b>%d</b><br>%.1f%% of today's Iran-born population had arrived",
+      YRIMMIG, cum_pct),
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iranian Migration to the US:<br>Annual Arrivals and Cumulative Trends</b>",
       font = list(size = 16, family = "Montserrat")),

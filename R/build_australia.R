@@ -546,7 +546,9 @@ p_arrival <- plot_ly() %>%
   add_trace(data = arr, x = ~year, y = ~cum_pct, type = "scatter",
     mode = "lines", yaxis = "y2",
     line = list(color = "lightblue", width = 2),
-    hoverinfo = "skip", showlegend = FALSE) %>%
+    text = ~sprintf("<b>%s</b><br>%.1f%% of today's Iran-born population had arrived",
+      ifelse(is_period, period, as.character(year)), cum_pct),
+    hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iranian Migration to Australia:<br>Arrivals by Period</b>",
       font = list(size = 16, family = "Montserrat")),
