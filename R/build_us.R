@@ -1335,9 +1335,9 @@ pop_page <- paste0('<!DOCTYPE html>
 <title>Population</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="lib/plotly-3.4.0.min.js"></script>
-<link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.css">
-<script src="https://unpkg.com/maplibre-gl@4.7.1/dist/maplibre-gl.js"></script>
-<script src="https://unpkg.com/pmtiles@3.2.1/dist/pmtiles.js"></script>
+<link rel="stylesheet" href="lib/maplibre-gl-4.7.1.css">
+<script src="lib/maplibre-gl-4.7.1.js"></script>
+<script src="lib/pmtiles-3.2.1.js"></script>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
