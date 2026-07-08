@@ -211,3 +211,8 @@ html, body {
   .sub-tab { font-size: 11px; padding: 4px 6px; }
   .country-tab { font-size: 10px; padding: 3px 8px; letter-spacing: 0.2px; }
 }
+
+/* Respect users who ask for less motion (tab/iframe transitions above). */
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; scroll-behavior: auto !important; }
+}
