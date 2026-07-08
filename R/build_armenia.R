@@ -120,7 +120,7 @@ pop_body <- paste0(
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Armenia counts Iran-born residents based on:</p>',
   '<ul style="padding-left:20px; margin:0; line-height:2;">',
-  '<li><strong>Place of birth</strong> <span style="color:#888;">&mdash; recorded in the 2022 census short form</span></li>',
+  '<li><strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; recorded in the 2022 census short form</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">Armenia does not separately identify children of Iran-born parents.</p>',
   sprintf('<p style="margin-top:8px; font-size:11px; color:#999; line-height:1.5;">Of the %s Iran-born residents in 2022:</p>',

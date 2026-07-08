@@ -347,7 +347,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
       }), collapse = "\n"),
     '</div>
   </div>
-  <p style="font-size:10px; color:#888; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a>. Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.</p>
+  <p style="font-size:10px; color:#6b6b6b; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a>. Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.</p>
   <script>(function(){
     var el=document.getElementById("stock-area");
     if(!el)return;
@@ -402,7 +402,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#e8e8e8;border:1px solid #ccc;border-radius:2px;"></span> No data</span>',
   '</div>',
   plotly_div("world-map", plotly_to_json(p_world), "460px"),
-  '<p style="font-size:10px; color:#888; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a><br>Based on foreign-born population data from national censuses and population registers.</p>
+  '<p style="font-size:10px; color:#6b6b6b; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a><br>Based on foreign-born population data from national censuses and population registers.</p>
 </div>
 </div>
 

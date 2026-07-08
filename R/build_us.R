@@ -338,7 +338,7 @@ p_lpr_cat <- p_lpr_cat %>%
     annotations = list(
       list(x = 0.5, y = -0.12, xref = "paper", yref = "paper",
            text = "1970\u20131977: total grants only (no category breakdown in source). 1978\u20131991: family and employment combined in published tabulations.",
-           showarrow = FALSE, font = list(size = 9, color = "#888"),
+           showarrow = FALSE, font = list(size = 9, color = "#6b6b6b"),
            xanchor = "center")
     ),
     margin = list(t = 55, b = 55),
@@ -1405,10 +1405,10 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   <div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">
     <p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of four survey questions:</p>
     <ul style="padding-left:20px; margin:0; line-height:2;">
-      <li><strong>Place of birth</strong> <span style="color:#888;">&mdash; &ldquo;Where was this person born?&rdquo;</span></li>
-      <li><strong>Ancestry</strong> <span style="color:#888;">&mdash; &ldquo;What is this person&rsquo;s ancestry or ethnic origin?&rdquo;</span></li>
-      <li><strong>Race</strong> <span style="color:#888;">&mdash; &ldquo;Iranian&rdquo; written in under &ldquo;White&rdquo;</span></li>
-      <li><strong>Parental origin</strong> <span style="color:#888;">&mdash; lives with a parent who meets any of the above</span></li>
+      <li><strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;Where was this person born?&rdquo;</span></li>
+      <li><strong>Ancestry</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;What is this person&rsquo;s ancestry or ethnic origin?&rdquo;</span></li>
+      <li><strong>Race</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;Iranian&rdquo; written in under &ldquo;White&rdquo;</span></li>
+      <li><strong>Parental origin</strong> <span style="color:#6b6b6b;">&mdash; lives with a parent who meets any of the above</span></li>
     </ul>
   </div>
 </div>
