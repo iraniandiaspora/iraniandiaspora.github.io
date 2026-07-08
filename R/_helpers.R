@@ -355,7 +355,7 @@ page_template <- function(title, body_html, has_tabs = FALSE) {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>', title, '</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="lib/plotly-3.4.0.min.js"></script>
+', plotly_script(body_html), '
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
@@ -399,4 +399,18 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 ', iframe_resize_script, '
 </body>
 </html>')
+}
+
+# --- plotly_script -----------------------------------------------------------
+# Choose the Plotly bundle for a page. The full 4.85 MB build is only needed for
+# map traces (choropleth / choroplethmapbox) or a maplibre/pmtiles map; every
+# other page uses only bar + scatter, which the ~1.1 MB plotly-basic build
+# renders with the SAME v3.4.0 engine (pixel-identical). Auto-detects from the
+# page body so a page that later gains a map upgrades itself — no per-call flag.
+plotly_script <- function(body_html) {
+  needs_full <- grepl('"type":"choropleth', body_html, fixed = TRUE) ||
+                grepl('maplibre', body_html, fixed = TRUE) ||
+                grepl('pmtiles', body_html, fixed = TRUE)
+  src <- if (needs_full) 'lib/plotly-3.4.0.min.js' else 'lib/plotly-basic-3.4.0.min.js'
+  sprintf('<script src="%s"></script>', src)
 }

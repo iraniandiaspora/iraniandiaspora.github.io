@@ -48,7 +48,7 @@ page_template <- function(title, body_html, has_tabs = FALSE, extra_head = "") {
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>', title, '</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="lib/plotly-3.4.0.min.js"></script>
+', plotly_script(body_html), '
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
 body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }

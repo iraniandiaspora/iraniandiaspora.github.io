@@ -28,7 +28,7 @@ page_template <- function(title, body_html, has_tabs = FALSE) {
 <title>', title, '</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
-<script src="lib/plotly-3.4.0.min.js"></script>
+', plotly_script(body_html), '
 <style>
 body { font-family:"Montserrat",system-ui,sans-serif; color:#222; background:#f6f7f9; margin:0; padding:16px 14px 28px; box-sizing:border-box; overflow-x:hidden; }
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
