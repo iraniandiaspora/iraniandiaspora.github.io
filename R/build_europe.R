@@ -172,7 +172,7 @@ p_bar <- plot_ly(
     orientation = "h",
     marker = list(color = "#2774AE",
                   line = list(color = "#1a4e72", width = 0.4)),
-    text = ~sprintf("<b>%s</b><br>%s Iran-born (%d)",
+    text = ~sprintf("<b>%s</b><br>%s Iran-born residents<br>Most recent year: %d",
       country, format(value, big.mark = ","), year),
     hoverinfo = "text",
     textposition = "none"

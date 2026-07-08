@@ -175,15 +175,13 @@ fg_median_year <- fg_yrim$YRIMMIG_num[which(fg_yrim$cum >= 0.5)[1]]
 
 p_immig <- plot_ly() %>%
   add_bars(data = immig, x = ~YRIMMIG, y = ~n, marker = list(color = "#2774AE"),
-    text = ~sprintf("<b>Year:</b> %d<br><b>Arrivals:</b> %s<br><b>Cumulative:</b> %s (%s%%)",
-      YRIMMIG, format(n, big.mark = ","), format(cumulative_immigrants, big.mark = ","), cum_pct),
+    text = ~sprintf("<b>%d</b><br>%s arrivals<br>Cumulative: %.1f%%",
+      YRIMMIG, format(n, big.mark = ","), cum_pct),
     hoverinfo = "text", textposition = "none", showlegend = FALSE) %>%
   add_lines(data = immig, x = ~YRIMMIG,
     y = ~cumulative_immigrants / max(cumulative_immigrants) * max(n),
     yaxis = "y2", line = list(color = "lightblue", width = 2),
-    text = ~sprintf("<b>By %d:</b><br>%s arrivals<br>(%s%% of total)",
-      YRIMMIG, format(cumulative_immigrants, big.mark = ","), cum_pct),
-    hoverinfo = "text", showlegend = FALSE) %>%
+    hoverinfo = "skip", showlegend = FALSE) %>%
   layout(
     title = list(text = "<b>Iranian Migration to the US:<br>Annual Arrivals and Cumulative Trends</b>",
       font = list(size = 16, family = "Montserrat")),
@@ -209,8 +207,8 @@ pct_noncit <- citizen$pct[citizen$CITIZEN2 == "Not a citizen"]
 
 p_citizen <- plot_ly(data = citizen, x = ~CITIZEN2, y = ~n, type = "bar",
     marker = list(color = c("#2774AE", "#5a9bd5", "#e07b54")),
-    text = ~sprintf("<b>%s</b><br>%s (%s%%)", CITIZEN2,
-      format(n, big.mark = ","), round(n / cit_total * 100)),
+    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", CITIZEN2,
+      format(n, big.mark = ","), n / cit_total * 100),
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = "<b>Iranian-Americans by<br>Citizenship Status</b>",
@@ -646,10 +644,10 @@ cl_g1  <- csh(ec$class, gen_ = "1st gen"); cl_g2 <- csh(ec$class, gen_ = "2nd ge
 # ACS/IPUMS 2020-2024 5-year, Iran-born first generation. "Business owner" =
 # employed, aged 20+, >=15 hrs/wk, main-job class of worker = self-employed.
 # CSVs built by R/us_business_export/prep_business_ownership.R.
-SRC_BIZ <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS; ",
-                  "self-employed (class of worker), Iran-born residents aged 20+")
-SRC_OCC <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS; ",
-                  "employed Iranian-American residents (first and second generation) aged 16+")
+SRC_BIZ <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS<br>",
+                  "Self-employed (class of worker), Iran-born residents aged 20+.")
+SRC_OCC <- paste0("Source: ", ACS_LINK, " — ACS 2020–2024 5-Year PUMS<br>",
+                  "Employed Iranian-American residents (first and second generation) aged 16+.")
 
 br <- read_csv(file.path(DATA_DIR, "us_business_rate.csv"), show_col_types = FALSE) %>%
   arrange(rate_pct)
@@ -958,7 +956,7 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
   p <- plot_ly(data = d, x = ~label, y = ~share, type = "scatter", mode = "markers+lines",
     marker = list(color = "#4A90D9", size = 8),
     line = list(color = "#4A90D9", width = 1),
-    text = ~sprintf("<b>Decile:</b> %s<br><b>Sample size (n):</b> %s<br><b>Share:</b> %.1f%%",
+    text = ~sprintf("<b>Decile:</b> %s<br><b>Households in sample:</b> %s<br><b>Share:</b> %.1f%%",
       label, format(n, big.mark = ","), share),
     hoverinfo = "text", textposition = "none") %>%
     # Shaded area
@@ -972,7 +970,7 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
       marker = list(size = 0, opacity = 0),
       hoverinfo = "skip", showlegend = FALSE) %>%
     layout(
-      title = list(text = sprintf("<b>Position in U.S.<br>Household Income Distribution:<br>%s (Ages 25–54), 2020–2024</b>", gen_label),
+      title = list(text = sprintf("<b>Position in US<br>Household Income Distribution:<br>%s (Ages 25–54)</b>", gen_label),
         font = list(size = 15, family = "Montserrat")),
       xaxis = list(title = "Income Decile (Lowest to Highest)", titlefont = list(size = 11),
         categoryorder = "array", categoryarray = decile_labels),

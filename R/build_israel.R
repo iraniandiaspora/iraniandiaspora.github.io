@@ -106,7 +106,7 @@ gen1_colors <- c("#d4e6f1", "#c6dbef", "#8bbdde", "#5a9bd5", "#2774AE",
 p_gen1_detail <- plot_ly() %>%
   add_trace(y = gen1_det$age_group, x = gen1_det$count, type = "bar", orientation = "h",
     marker = list(color = gen1_colors),
-    text = sprintf("<b>%s</b><br>%s (%s%%)",
+    text = sprintf("<b>%s</b><br>%s (%.1f%%)",
       gen1_det$age_group, format(gen1_det$count, big.mark = ","), gen1_det$pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
@@ -151,7 +151,7 @@ p_un_trend <- plot_ly(un_trend, x = ~year, y = ~iran_born,
   ) %>% config(displayModeBar = FALSE)
 
 UN_SOURCE <- paste0(
-  "Source: <a href='https://www.un.org/development/desa/pd/content/international-migrant-stock' target='_blank' style='color:#2774AE;'>UN DESA</a> International Migrant Stock 2024."
+  "Source: <a href='https://www.un.org/development/desa/pd/content/international-migrant-stock' target='_blank' style='color:#2774AE;'>UN DESA</a> — International Migrant Stock 2024"
 )
 
 # --- Comparison with other Asian-origin groups --------------------------------
@@ -165,7 +165,7 @@ comp$country <- factor(comp$country, levels = rev(comp$country))
 p_comp <- plot_ly() %>%
   add_trace(y = comp$country, x = comp$total, type = "bar", orientation = "h",
     marker = list(color = comp$color),
-    text = sprintf("<b>%s</b><br>Total: %s<br>1st gen: %s<br>2nd gen: %s",
+    text = sprintf("<b>%s</b><br>Total: %s<br>First generation: %s<br>Second generation: %s",
       comp$country, format(comp$total, big.mark = ","),
       format(comp$gen1, big.mark = ","), format(comp$gen2, big.mark = ",")),
     hoverinfo = "text", textposition = "none") %>%

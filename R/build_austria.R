@@ -38,7 +38,7 @@ function switchTab(tabId, btn, groupId) {
 # --- Source citation strings ---
 STAT_AT_LINK <- "<a href='https://www.statistik.at/en/' target='_blank' style='color:#2774AE;'>Statistics Austria</a>"
 EURO_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/' target='_blank' style='color:#2774AE;'>Eurostat</a>"
-TREND_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Iran-born population stock, 1990\u20132025")
+TREND_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Iran-born population stock, 2000\u20132025; 1990 and 1995 from UN DESA")
 
 # --- Load data ---------------------------------------------------------------
 cat("Loading Austria trend data...\n")
@@ -82,28 +82,6 @@ bl$pct <- round(bl$iran_born / bl_total * 100, 1)
 
 CENSUS_SOURCE <- paste0("Source: ", EURO_LINK, " &mdash; Census 2021, Iran-born by region")
 
-p_bl <- plot_ly(bl, y = ~bundesland, x = ~iran_born, type = "bar",
-    orientation = "h",
-    marker = list(color = "#2774AE",
-                  line = list(color = "#1a4e72", width = 0.4)),
-    text = ~sprintf("<b>%s</b><br>%s Iran-born (%s%%)",
-      bundesland, format(iran_born, big.mark = ","), pct),
-    hoverinfo = "text",
-    textposition = "none") %>%
-  layout(
-    title = list(
-      text = "<b>Iran-Born by Bundesland,<br>Census 2021</b>",
-      font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
-    yaxis = list(title = "", tickfont = list(size = 11),
-                 ticks = "outside", ticklen = 8,
-                 tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 45, b = 30, l = 140, r = 20),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE,
-    bargap = 0.35
-  ) %>% config(displayModeBar = FALSE)
-
 # --- Bundesland choropleth map ------------------------------------------------
 at_geojson <- jsonlite::fromJSON(file.path(DATA_DIR, "at_bundesland.geojson"),
                                  simplifyVector = FALSE)
@@ -113,7 +91,7 @@ p_bl_map <- plot_ly() %>%
     geojson = at_geojson,
     locations = bl$bundesland, z = bl$iran_born,
     featureidkey = "properties.name",
-    text = sprintf("<b>%s</b><br>%s Iran-born (%s%%)",
+    text = sprintf("<b>%s</b><br>%s Iran-born<br>%.1f%% of total",
       bl$bundesland, format(bl$iran_born, big.mark = ","), bl$pct),
     hoverinfo = "text",
     colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"),

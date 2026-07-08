@@ -38,7 +38,7 @@ function switchTab(tabId, btn, groupId) {
 # --- Source citation strings ---
 SSB_LINK <- "<a href='https://www.ssb.no/en/' target='_blank' style='color:#2774AE;'>Statistics Norway (SSB)</a>"
 SSB_SOURCE <- paste0("Source: ", SSB_LINK, " &mdash; Population Register, 2026")
-SSB_EMP_SOURCE <- paste0("Source: ", SSB_LINK, " &mdash; Employed immigrants, 4th quarter, 2001\u20132025")
+SSB_EMP_SOURCE <- paste0("Source: ", SSB_LINK, " &mdash; Employed immigrants, fourth quarter, 2001\u20132025")
 
 # --- Load data ---------------------------------------------------------------
 cat("Loading Norway SSB extracts...\n")
@@ -72,7 +72,7 @@ p_hist <- plot_ly(hist_sex, x = ~year, y = ~total, type = "scatter",
     mode = "lines+markers",
     line = list(color = "#1a4e72", width = 2.5),
     marker = list(color = "#1a4e72", size = 5),
-    text = ~sprintf("<b>%d</b><br>Iran-born: %s", year, format(total, big.mark = ",")),
+    text = ~sprintf("<b>%d</b><br>%s Iran-born", year, format(total, big.mark = ",")),
     hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = sprintf("<b>Iran-Born Population in Norway,<br>1970\u2013%d</b>", no_hist_max),
@@ -93,16 +93,16 @@ p_hist <- plot_ly(hist_sex, x = ~year, y = ~total, type = "scatter",
 gen_trend <- trend[trend$year <= data_yr, ]
 no_gen_min <- min(gen_trend$year); no_gen_max <- max(gen_trend$year)
 no_gen_hover <- sprintf(
-  "<b>%d</b><br>First generation: %s<br>Second generation: %s<br>Total: %s",
+  "<b>%d</b><br>Immigrants: %s<br>Norwegian-born: %s<br>Total: %s",
   gen_trend$year, format(gen_trend$gen1, big.mark = ","),
   format(gen_trend$gen2, big.mark = ","), format(gen_trend$total, big.mark = ","))
 p_gen <- plot_ly(gen_trend) %>%
   add_trace(x = ~year, y = ~gen1, type = "scatter", mode = "lines",
-    stackgroup = "one", name = "First generation",
+    stackgroup = "one", name = "Immigrants",
     fillcolor = "rgba(26,78,114,0.75)", line = list(color = "#1a4e72", width = 1),
     text = no_gen_hover, hoverinfo = "text") %>%
   add_trace(x = ~year, y = ~gen2, type = "scatter", mode = "lines",
-    stackgroup = "one", name = "Second generation",
+    stackgroup = "one", name = "Norwegian-born",
     fillcolor = "rgba(90,155,213,0.75)", line = list(color = "#5a9bd5", width = 1),
     text = no_gen_hover, hoverinfo = "text") %>%
   layout(
@@ -115,8 +115,8 @@ p_gen <- plot_ly(gen_trend) %>%
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
-no_gen_leg <- make_html_legend(c("First generation" = "#1a4e72",
-                                 "Second generation" = "#5a9bd5"))
+no_gen_leg <- make_html_legend(c("Immigrants" = "#1a4e72",
+                                 "Norwegian-born" = "#5a9bd5"))
 
 # --- Employment rate trend (2001-2025) ----------------------------------------
 p_employ <- plot_ly() %>%
@@ -139,7 +139,7 @@ p_employ <- plot_ly() %>%
     text = sprintf("<b>%d</b><br>Female: %.1f%%", employ$year, employ$pct_female),
     hoverinfo = "text") %>%
   layout(
-    title = list(text = "<b>Employment Rate of Iranian Immigrants<br>(ages 20\u201366), 2001\u20132025</b>",
+    title = list(text = "<b>Employment Rate of Iranian Immigrants<br>(Ages 20\u201366), 2001\u20132025</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", dtick = 2),
     yaxis = list(title = "", ticksuffix = "%", range = c(40, 75)),
@@ -162,7 +162,7 @@ p_county <- plot_ly() %>%
     geojson = no_geojson,
     locations = county$join_name, z = county$count,
     featureidkey = "properties.name",
-    text = sprintf("<b>%s</b><br>%s Iranian-origin (%.1f%%)",
+    text = sprintf("<b>%s</b><br>%s Iranian-origin<br>%.1f%% of total",
       county$county_name,
       format(county$count, big.mark = ","), county$pct),
     hoverinfo = "text",

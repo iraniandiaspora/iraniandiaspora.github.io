@@ -107,7 +107,7 @@ if (has_geojson) {
   prov$province_name <- factor(prov$province_name, levels = rev(prov$province_name))
   p_nl_bar <- plot_ly(prov, y = ~province_name, x = ~count, type = "bar",
     orientation = "h", marker = list(color = "#2774AE"),
-    text = sprintf("<b>%s</b><br>%s (%.1f%%)", prov$province_name,
+    text = sprintf("<b>%s</b><br>%s Iranian-origin<br>%.1f%% of total", prov$province_name,
       format(prov$count, big.mark = ","), prov$count / prov_total * 100),
     hoverinfo = "text", textposition = "none") %>%
     layout(
@@ -160,7 +160,7 @@ p_hist <- plot_ly(euro_nl, x = ~year, y = ~iran_born, type = "scatter",
   ) %>% config(displayModeBar = FALSE)
 
 EURO_LINK <- "<a href='https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/' target='_blank' style='color:#2774AE;'>Eurostat</a>"
-HIST_SOURCE <- paste0("Source: ", EURO_LINK, ", Iran-born population stock, 1999\u20132025")
+HIST_SOURCE <- paste0("Source: ", EURO_LINK, " \u2014 Iran-born population stock, 1999\u20132025; 1990 and 1995 from UN DESA")
 
 # --- Arrival year chart (from residence duration) ----------------------------
 arrival <- read.csv(file.path(DATA_DIR, "nl_arrival_year.csv"),
@@ -181,22 +181,20 @@ p_arrival <- plot_ly() %>%
   add_bars(data = arrival_agg, x = ~x_num, y = ~count,
     marker = list(color = "#2774AE",
       line = list(color = "#1a4e72", width = 0.3)),
-    text = sprintf("<b>%s</b><br>%s Iran-born residents<br>Cumulative: %.0f%%",
+    text = sprintf("<b>%s</b><br>%s arrivals<br>Cumulative: %.1f%%",
       arrival_agg$label, format(arrival_agg$count, big.mark = ","),
       arrival_agg$cum_pct),
-    hoverinfo = "text", textposition = "none", showlegend = FALSE, name = "Residents") %>%
+    hoverinfo = "text", textposition = "none", showlegend = FALSE, name = "Arrivals") %>%
   add_trace(data = arrival_agg, x = ~x_num,
     y = ~cum_pct / 100 * max_bar,
     type = "scatter", mode = "lines",
     yaxis = "y2",
     line = list(color = "lightblue", width = 2),
-    text = sprintf("<b>By %s:</b> %.0f%% cumulative",
-      arrival_agg$label, arrival_agg$cum_pct),
-    hoverinfo = "text", showlegend = FALSE, name = "Cumulative",
+    hoverinfo = "skip", showlegend = FALSE, name = "Cumulative",
     inherit = FALSE) %>%
   layout(
     title = list(
-      text = "<b>Iran-Born Residents in the Netherlands<br>by Implied Year of Arrival</b>",
+      text = "<b>Iran-Born Residents in the Netherlands<br>by Year of Arrival</b>",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickangle = -45, tickfont = list(size = 9),
       tickvals = arrival_agg$x_num[seq(1, nrow(arrival_agg), by = 5)],
@@ -221,7 +219,7 @@ gen_boxes <- paste0(
   make_gen_box(nl_gen1, paste0(round(nl_gen1 / nl_total * 100), "% of total"),
     "First generation", "Born in Iran", "#1a4e72"),
   make_gen_box(nl_gen2, paste0(round(nl_gen2 / nl_total * 100), "% of total"),
-    "Second generation", "Born in NL, parent(s) born in Iran", "#5a9bd5"),
+    "Second generation", "Born in the Netherlands, parent(s) born in Iran", "#5a9bd5"),
   '</div>')
 
 # --- Assemble nl-population page (Germany layout) ----------------------------
@@ -260,7 +258,7 @@ pop_body <- paste0(
   '<div class="chart-card">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'nl-tab-hist\',this,\'pop-tabs\')">Population Over Time</button>',
-  '<button class="tab-btn" onclick="switchTab(\'nl-tab-arrival\',this,\'pop-tabs\')">Implied Arrival Year</button>',
+  '<button class="tab-btn" onclick="switchTab(\'nl-tab-arrival\',this,\'pop-tabs\')">Year of Arrival</button>',
   '</div>',
   '<div id="nl-tab-hist" class="tab-panel active" data-group="pop-tabs">',
   plotly_div("nl-hist", plotly_to_json(p_hist), "430px", source = HIST_SOURCE),

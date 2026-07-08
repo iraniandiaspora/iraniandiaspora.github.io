@@ -56,7 +56,7 @@ body { font-family:"Montserrat",system-ui,sans-serif; color:#222; background:#f6
 ARMSTAT_LINK <- "<a href='https://armstat.am/en/?nid=82&id=2623' target='_blank' style='color:#2774AE;'>Armstat</a>"
 UN_LINK <- "<a href='https://www.un.org/development/desa/pd/content/international-migrant-stock' target='_blank' style='color:#2774AE;'>UN DESA</a>"
 
-TREND_SOURCE <- paste0("Source: ", UN_LINK, " International Migrant Stock 2024 and ", ARMSTAT_LINK, " Population Censuses 2011 and 2022.")
+TREND_SOURCE <- paste0("Source: ", UN_LINK, " — International Migrant Stock 2024; ", ARMSTAT_LINK, " — Population Censuses 2011 and 2022")
 
 # --- Load data ---------------------------------------------------------------
 cat("Loading Armenia extracts...\n")

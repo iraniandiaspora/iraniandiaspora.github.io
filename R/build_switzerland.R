@@ -112,7 +112,7 @@ p_arrivals <- plot_ly() %>%
     type = "scatter", mode = "lines",
     yaxis = "y2",
     line = list(color = "lightblue", width = 2),
-    text = sprintf("<b>By end of %d:</b> %.0f%% of 2024 Iran-born stock already present",
+    text = sprintf("<b>By end of %d:</b> %.0f%% of the 2024 population already present",
       stock_line$year, stock_line$cum_pct),
     hoverinfo = "text", showlegend = FALSE, name = "Share of current stock",
     inherit = FALSE) %>%
@@ -142,7 +142,7 @@ p_canton_map <- plot_ly() %>%
     geojson = ch_geojson,
     locations = canton$canton_name, z = canton$iran_born,
     featureidkey = "properties.name",
-    text = sprintf("<b>%s</b><br>%s Iran-born (%.1f%%)",
+    text = sprintf("<b>%s</b><br>%s Iran-born<br>%.1f%% of total",
       canton$canton_name,
       format(canton$iran_born, big.mark = ","), canton$pct),
     hoverinfo = "text",
@@ -157,30 +157,6 @@ p_canton_map <- plot_ly() %>%
     margin = list(t = 10, b = 10, l = 0, r = 0),
     paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
-
-# --- Canton horizontal bar chart (descending) --------------------------------
-canton_sorted <- canton[order(canton$iran_born), ]
-canton_sorted$canton_name <- factor(canton_sorted$canton_name,
-  levels = canton_sorted$canton_name)
-
-p_canton_bar <- plot_ly(canton_sorted, y = ~canton_name, x = ~iran_born,
-    type = "bar", orientation = "h",
-    marker = list(color = "#2774AE"),
-    text = sprintf("<b>%s</b><br>%s Iran-born (%.1f%%)",
-      canton_sorted$canton_name,
-      format(canton_sorted$iran_born, big.mark = ","),
-      round(canton_sorted$iran_born / ch_total * 100, 1)),
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Iran-Born Population<br>by Canton, 2024</b>",
-      font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 9),
-                 ticks = "outside", ticklen = 8,
-                 tickcolor = "rgba(0,0,0,0)"),
-    margin = list(l = 170, r = 20, t = 40, b = 30),
-    plot_bgcolor = "white", paper_bgcolor = "white"
-  ) %>% config(displayModeBar = FALSE)
 
 # --- Citizenship summary text ------------------------------------------------
 swiss_pct <- round(ch_swiss / ch_total * 100)
