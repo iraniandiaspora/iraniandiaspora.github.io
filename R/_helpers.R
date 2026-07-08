@@ -303,3 +303,74 @@ make_html_legend_hover <- function(colors, labels = names(colors), break_after =
   sprintf('<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:6px 14px; font-size:12px; color:#444; margin:6px 0 2px; line-height:2;">%s</div>',
     paste(items, collapse = ""))
 }
+
+# --- page_template (standard cluster) ----------------------------------------
+# Shared page shell for the standard single-column-friendly country pages
+# (8-builder cluster: AT/DK/IL/NL/NO/SE/CH/TR). Emits the base CSS grid,
+# optional tab CSS, and the body. Free vars resolved from the builder's
+# global env at call time: tab_switch_script (builder-local, e.g. Turkey's
+# guarded variant) plus shared MAPBOX_ATTRIB_HIDE_CSS / iframe_resize_script.
+# Builders with divergent shells (US/CA/DE/AU/UK/EU/FR/IT/AM/FI) keep a local
+# page_template that shadows this one; unifying those is Phase B.
+page_template <- function(title, body_html, has_tabs = FALSE) {
+  tab_css <- if (has_tabs) '
+.tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
+.tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
+  font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
+.tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:hover:not(.active) { background:#e0e0e0; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }' else ''
+
+  paste0('<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>', title, '</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
+.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.page-content .chart-card { margin-bottom:0; }
+.pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
+.pc1 { grid-area:2/1; } .pc2 { grid-area:2/2; }', tab_css, '
+@media (max-width:900px) {
+  body { padding:10px 15px; }
+  .chart-row, .text-row { grid-template-columns:1fr !important; }
+  .page-content { grid-template-columns:1fr; }
+  .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
+  .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
+  .headline { padding:20px 15px; }
+  .section-title { font-size:14px; }
+  .tab-bar { flex-wrap:wrap; gap:4px; }
+  .tab-btn { font-size:12px; padding:5px 10px; }
+}
+@media (max-width:480px) {
+  body { padding:8px 10px; }
+  .chart-card { padding:10px; }
+  .text-card { font-size:13px; padding:14px; }
+}
+', MAPBOX_ATTRIB_HIDE_CSS, '
+</style>
+</head>
+<body>
+', body_html, '
+', if (has_tabs) tab_switch_script else '', '
+', iframe_resize_script, '
+</body>
+</html>')
+}
