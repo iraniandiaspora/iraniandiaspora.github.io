@@ -483,12 +483,12 @@ e2 <- list(gen_2_wide = read_csv(file.path(DATA_DIR, "gen_2_wide.csv"), show_col
 
 {
   bap_share <- function(df, age, gender) {
-    # NB: raw gen_*_wide.csv labels the category "Bachelors degree"; the
-    # "BA degree" rename only happens inside make_butterfly_educ(). Match the
-    # raw label here or this silently counts graduate degrees only.
-    sub <- df %>% filter(age_group == age)
-    tot <- sum(sub[[gender]])
-    sum(sub[[gender]][sub$educ_factor %in% c("Bachelors degree","Graduate degree")]) / tot * 100
+    # "Bachelor's or higher" share within one age group. share_of() fails loud
+    # if these labels ever stop matching the raw CSV — the bug this card shipped
+    # (it matched the chart's post-rename "BA degree" and silently counted only
+    # graduate degrees). The raw gen_*_wide.csv column says "Bachelors degree".
+    share_of(df %>% filter(age_group == age), "educ_factor",
+             c("Bachelors degree", "Graduate degree"), gender)
   }
   g1_young_f <- round(bap_share(e1$gen_1_wide, "25-34", "Female"))
   g1_young_m <- round(bap_share(e1$gen_1_wide, "25-34", "Male"))
