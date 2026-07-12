@@ -675,6 +675,73 @@ window.addEventListener('hashchange', navigateToHash);
 </script>
 
 <script>
+// ---- Persian (fa) edition toggle — ALPHA, hidden unless URL has ?fa=1 ----
+// Inert for the public. With ?fa=1 a toggle appears; it re-points iframes to the
+// .fa.html twin for pages that have one (others stay English), sets dir=rtl, and
+// swaps the top-nav labels + title to Persian. localStorage remembers the choice.
+(function(){
+  var FA_ENABLED = /(?:^|[?&])fa=1(?:&|$)/.test(location.search);
+  if (!FA_ENABLED) return;
+  var FA_PAGES = ['global','nl-population','nl-workinc','am-population'];
+  var NAV_FA = {'global':'جهان','united-states':'آمریکا','europe':'اروپا','canada':'کانادا',
+    'turkey':'ترکیه','israel':'اسرائیل','australia':'استرالیا','armenia':'ارمنستان',
+    'bibliography':'کتاب‌شناسی','about':'درباره'};
+  var SITE_FA = 'داشبورد دیاسپورای ایرانی';
+  var currentLang = localStorage.getItem('idd_lang') || 'fa';
+
+  var st = document.createElement('style');
+  st.textContent =
+    '@font-face{font-family:"Vazirmatn";font-weight:400;font-display:swap;src:url("pages/lib/fonts/Vazirmatn-Regular.woff2") format("woff2");}'+
+    '@font-face{font-family:"Vazirmatn";font-weight:700;font-display:swap;src:url("pages/lib/fonts/Vazirmatn-Bold.woff2") format("woff2");}'+
+    'body.fa-mode{font-family:"Vazirmatn","Montserrat",sans-serif;}'+
+    'body.fa-mode .navbar,body.fa-mode .submenu-wrapper{direction:rtl;}'+
+    '.lang-toggle{margin-inline-start:12px;padding:4px 12px;border:1px solid #bbb;border-radius:6px;'+
+    'background:#fff;cursor:pointer;font:inherit;font-size:13px;line-height:1.4;white-space:nowrap;}';
+  document.head.appendChild(st);
+
+  function base(s){ s=s.split('?')[0]; s=s.replace(/^.*\//,''); return s.replace(/\.fa\.html$/,'').replace(/\.html$/,''); }
+  function langSrc(s){ var b=base(s); var fa=(currentLang==='fa'&&FA_PAGES.indexOf(b)>=0); return 'pages/'+b+(fa?'.fa':'')+'.html'; }
+
+  // Re-point lazy-iframe activation to the active language (SITE_VERSION is global)
+  activateIframe = function(container){
+    if(!container) return;
+    var f=container.querySelector('iframe');
+    if(f && !f.src && f.dataset.src){ f.src=langSrc(f.dataset.src)+'?v='+SITE_VERSION; }
+  };
+
+  var toggle=document.createElement('button');
+  toggle.className='lang-toggle';
+  toggle.addEventListener('click',function(){ setLang(currentLang==='fa'?'en':'fa'); });
+  var hdr=document.querySelector('.header'); if(hdr) hdr.appendChild(toggle);
+
+  function updateChrome(){
+    var fa=currentLang==='fa';
+    document.documentElement.setAttribute('dir',fa?'rtl':'ltr');
+    document.documentElement.setAttribute('lang',currentLang);
+    document.body.classList.toggle('fa-mode',fa);
+    toggle.textContent=fa?'EN':'فارسی';
+    var title=document.querySelector('.header-title');
+    if(title){ if(!title.dataset.en) title.dataset.en=title.textContent; title.textContent=fa?SITE_FA:title.dataset.en; }
+    document.querySelectorAll('.navbar .tab-button').forEach(function(b){
+      var m=(b.getAttribute('onclick')||'').match(/showTab\('([^']+)'/); if(!m) return;
+      if(!b.dataset.en) b.dataset.en=b.innerHTML;
+      if(fa && NAV_FA[m[1]]) b.textContent=NAV_FA[m[1]]; else b.innerHTML=b.dataset.en;
+    });
+  }
+  function reloadLoaded(){
+    document.querySelectorAll('iframe').forEach(function(f){
+      var s=f.getAttribute('src'); if(s){ f.src=langSrc(s)+'?v='+SITE_VERSION; }
+    });
+  }
+  function setLang(l){ currentLang=l; try{localStorage.setItem('idd_lang',l);}catch(e){} updateChrome(); reloadLoaded(); }
+
+  // Apply now, at parse time — before DOMContentLoaded→navigateToHash activates iframes,
+  // so the first load is already in the right language.
+  updateChrome(); reloadLoaded();
+})();
+</script>
+
+<script>
   // Strip query string (e.g. Google's ?_gl=... link-decoration params) so
   // inbound links don't spawn a new dashboard "page" row per unique token.
   window.goatcounter = {

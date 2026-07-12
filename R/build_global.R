@@ -1,6 +1,6 @@
 # Build Global overview page — stacked area chart + world choropleth
 # Input: data/global/stocks_countries.csv
-# Output: docs/pages/global.html
+# Output: docs/pages/global.html + docs/pages/global.fa.html
 #
 # Run from the iraniandiaspora.github.io/ directory:
 #   Rscript R/build_global.R
@@ -12,6 +12,14 @@
 #   country (UN has no France row; Eurostat values from 2000-2018, with
 #   2020/2024 carried forward from 2018). The headline total is computed
 #   dynamically from the CSV sum, not from the UN's published total.
+#
+# Bilingual (en + fa), following the R/build_nl.R pattern: all user-facing
+# strings come from R/i18n/strings_global.R via tr(); numbers go through
+# fa_num()/fmtv() so the English edition stays BYTE-IDENTICAL while the
+# Persian edition renders RTL with Persian digits and the Vazirmatn face.
+# This builder assembles a bespoke inline shell (not page_template()), so the
+# fa edition is produced by running the finished English shell through
+# fa_shell() — the shell already carries the exact anchors fa_shell() expects.
 
 library(plotly)
 library(dplyr)
@@ -21,6 +29,43 @@ library(jsonlite)
 # Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
 # iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
 source("R/_helpers.R")
+# Persian-edition helpers: LANG, is_fa(), fa_digits(), fa_num(), bdi(), tr(),
+# pj(), fa_shell().
+source("R/_helpers_i18n.R")
+# Global string table (defines the global STR consumed by tr(), plus the
+# GLOBAL_GROUP_KEYS / COUNTRY_FA display-name lookups).
+source("R/i18n/strings_global.R")
+
+# --- i18n formatting helpers (same shapes as build_nl.R) ----------------------
+# fmtv(): vector-safe big-integer formatter. In en it is LITERALLY
+#         format(x, big.mark = ",") — so it reproduces format()'s common-width
+#         PADDING (leading spaces) that the committed hover text relies on;
+#         fa_num()/formatC() do NOT pad and would break byte-identity. In fa it
+#         Persian-digits that same padded string (separators -> U+066C).
+fmtv <- function(x) {
+  s <- format(x, big.mark = ",")
+  if (!is_fa()) return(s)
+  gsub(",", "٬", fa_digits(s), fixed = TRUE)
+}
+
+# htxt(): Persian-digit any stray Western digits in an assembled display string
+#         (hover text, chart titles, axis ticktext). Identity in en.
+htxt <- function(s) if (is_fa()) fa_digits(s) else s
+
+# grp_label(): display name for a streamgraph group. en = the group key itself
+# (byte-identical); fa = Persian name. The trace `name` and the legend
+# `data-lg` attribute keep the ENGLISH key in BOTH editions so the
+# highlight/lock JS (which matches trace.name against data-lg) keeps working;
+# the trace name is never displayed (hoverinfo = "text", showlegend = FALSE).
+grp_label <- function(g) tr(GLOBAL_GROUP_KEYS[[g]])
+
+# dest_label(): choropleth country display name (vectorized). en = passthrough;
+# fa = COUNTRY_FA lookup with English fallback (never NA in hover text).
+dest_label <- function(d) {
+  if (!is_fa()) return(d)
+  out <- unname(COUNTRY_FA[d])
+  ifelse(is.na(out), d, out)
+}
 
 DATA_DIR <- "data/global"
 
@@ -32,7 +77,6 @@ stocks$destination <- trimws(gsub("[*]", "", stocks$destination))
 
 # Headline total computed from the CSV (UN + Eurostat supplement)
 total_2024 <- sum(stocks$X2024, na.rm = TRUE)
-total_label <- sprintf("%.2f million", total_2024 / 1e6)
 
 # Group into 12 categories matching original dashboard
 stocks <- stocks %>% mutate(group = case_when(
@@ -42,7 +86,7 @@ stocks <- stocks %>% mutate(group = case_when(
   destination == "United Kingdom" ~ "United Kingdom",
   destination == "Sweden" ~ "Sweden",
   destination == "Netherlands" ~ "Netherlands",
-  destination %in% c("Turkey", "T\u00fcrkiye", "Türkiye") ~ "T\u00fcrkiye",
+  destination %in% c("Turkey", "Türkiye", "Türkiye") ~ "Türkiye",
   destination == "Israel" ~ "Israel",
   destination == "Iraq" ~ "Iraq",
   destination == "Australia" ~ "Australia",
@@ -69,7 +113,7 @@ long <- grouped %>%
 # Match original legend order exactly
 legend_order <- c("United States of America", "Canada", "Germany",
   "United Kingdom", "Sweden", "Netherlands", "Other (Europe)",
-  "T\u00fcrkiye", "Israel", "Iraq", "Australia", "Other (Non-Europe)")
+  "Türkiye", "Israel", "Iraq", "Australia", "Other (Non-Europe)")
 long$group <- factor(long$group, levels = legend_order)
 
 # Color palette matching original (blues/teals for Western, purples for MENA)
@@ -81,14 +125,14 @@ colors <- c(
   "Sweden" = "#2ca089",
   "Netherlands" = "#5ec4b6",
   "Other (Europe)" = "#b2e0d9",
-  "T\u00fcrkiye" = "#3b2066",
+  "Türkiye" = "#3b2066",
   "Israel" = "#5e3a8a",
   "Iraq" = "#8b6daf",
   "Australia" = "#1a7c8a",
   "Other (Non-Europe)" = "#b0b0b0"
 )
 
-# --- Build centered streamgraph (manual plotly) ---
+# --- Streamgraph data prep (language-independent) ---
 wide <- grouped
 wide_mat <- as.matrix(wide[, years])
 rownames(wide_mat) <- wide$group
@@ -104,8 +148,6 @@ wide_interp <- wide_mat
 top_groups <- rev(legend_order[1:7])
 bot_groups <- legend_order[8:12]
 
-p_stock <- plot_ly()
-
 n_yr <- length(yr_nums)
 
 # Top groups: stack upward from y=0
@@ -114,72 +156,13 @@ for (i in seq_along(top_groups)) {
   top_cumul[i + 1, ] <- top_cumul[i, ] + wide_interp[top_groups[i], ]
 }
 
-for (i in seq_along(top_groups)) {
-  g <- top_groups[i]
-  vals <- as.numeric(wide_interp[g, ])
-  y0 <- as.numeric(top_cumul[i, ])
-  y1 <- as.numeric(top_cumul[i + 1, ])
-  if (i == 1) {
-    p_stock <- p_stock %>%
-      add_trace(x = yr_nums, y = y0, type = "scatter", mode = "lines",
-        showlegend = FALSE, hoverinfo = "skip",
-        line = list(width = 0, color = "transparent", shape = "spline"))
-  }
-  p_stock <- p_stock %>%
-    add_trace(x = yr_nums, y = y1, type = "scatter", mode = "lines+markers",
-      fill = "tonexty", fillcolor = colors[g], name = g,
-      line = list(width = 0.5, color = colors[g], shape = "spline"),
-      marker = list(size = 8, color = "rgba(0,0,0,0)"),
-      text = sprintf("<b>%s</b> %d<br>%s Iran-born migrants",
-        g, yr_nums, format(vals, big.mark = ",")),
-      hoverinfo = "text")
-}
-
 # Bottom groups: stack downward from y=0
 bot_cumul <- matrix(0, nrow = length(bot_groups) + 1, ncol = n_yr)
 for (i in seq_along(bot_groups)) {
   bot_cumul[i + 1, ] <- bot_cumul[i, ] - wide_interp[bot_groups[i], ]
 }
 
-for (i in seq_along(bot_groups)) {
-  g <- bot_groups[i]
-  vals <- as.numeric(wide_interp[g, ])
-  y0 <- as.numeric(bot_cumul[i, ])
-  y1 <- as.numeric(bot_cumul[i + 1, ])
-  if (i == 1) {
-    p_stock <- p_stock %>%
-      add_trace(x = yr_nums, y = y0, type = "scatter", mode = "lines",
-        showlegend = FALSE, hoverinfo = "skip",
-        line = list(width = 0, color = "transparent", shape = "spline"))
-  }
-  p_stock <- p_stock %>%
-    add_trace(x = yr_nums, y = y1, type = "scatter", mode = "lines+markers",
-      fill = "tonexty", fillcolor = colors[g], name = g,
-      line = list(width = 0.5, color = colors[g], shape = "spline"),
-      marker = list(size = 8, color = "rgba(0,0,0,0)"),
-      text = sprintf("<b>%s</b> %d<br>%s Iran-born migrants",
-        g, yr_nums, format(vals, big.mark = ",")),
-      hoverinfo = "text")
-}
-
-p_stock <- p_stock %>% layout(
-  title = list(text = "<b>Iran-Born Migrant Population,<br>Total by Country</b>",
-    font = list(size = 16, family = "Montserrat", color = "#333"), x = 0.5, xanchor = "center"),
-  xaxis = list(title = "", dtick = 5, tickvals = yr_nums_orig,
-    ticktext = as.character(yr_nums_orig), tickfont = list(size = 12),
-    showgrid = TRUE, gridcolor = "#e8e8e8"),
-  yaxis = list(title = "", showticklabels = FALSE, zeroline = FALSE, showgrid = FALSE),
-  showlegend = FALSE,
-  margin = list(t = 55, b = 60, l = 20, r = 20),
-  plot_bgcolor = "white", paper_bgcolor = "white",
-  font = list(family = "Montserrat, sans-serif"),
-  hoverlabel = list(bgcolor = "white", bordercolor = "#ccc",
-    font = list(family = "Montserrat, sans-serif", size = 13, color = "#333")),
-  hovermode = "closest",
-  annotations = list()
-) %>% config(displayModeBar = FALSE)
-
-# --- World choropleth ---
+# --- World choropleth data prep (language-independent) ---
 stocks_2024 <- stocks %>%
   group_by(destination) %>%
   summarize(pop_2024 = sum(X2024, na.rm = TRUE), .groups = "drop") %>%
@@ -189,7 +172,7 @@ stocks_2024 <- stocks %>%
 iso_map <- c(
   "United States of America" = "USA", "Canada" = "CAN", "Germany" = "DEU",
   "United Kingdom" = "GBR", "Sweden" = "SWE", "Netherlands" = "NLD",
-  "T\u00fcrkiye" = "TUR", "Israel" = "ISR", "Iraq" = "IRQ", "Australia" = "AUS",
+  "Türkiye" = "TUR", "Israel" = "ISR", "Iraq" = "IRQ", "Australia" = "AUS",
   "France" = "FRA", "Austria" = "AUT", "Italy" = "ITA", "Norway" = "NOR",
   "Denmark" = "DNK", "Spain" = "ESP", "Belgium" = "BEL", "Switzerland" = "CHE",
   "Finland" = "FIN", "Greece" = "GRC", "Japan" = "JPN", "India" = "IND",
@@ -264,32 +247,116 @@ stocks_2024 <- bind_rows(stocks_2024, iran_row)
 bin_colors <- list(c(0, "#e8e8e8"), c(0.2, "#c6dbef"), c(0.4, "#6baed6"),
   c(0.6, "#2171b5"), c(0.8, "#08306b"), c(1, "#f4c430"))
 
-p_world <- plot_ly(type = "choropleth",
-  locations = stocks_2024$iso3, z = stocks_2024$bin,
-  text = ifelse(stocks_2024$destination == "Iran",
-    "<b>Iran</b><br>Estimated population: 93 million (2026)<br>Source: UN World Population Prospects 2024",
-    sprintf("<b>%s</b><br>%s Iran-born migrants",
-      stocks_2024$destination, format(stocks_2024$pop_2024, big.mark = ","))),
-  hoverinfo = "text",
-  colorscale = bin_colors, zmin = 0, zmax = 5, showscale = FALSE,
-  marker = list(line = list(color = "white", width = 0.5))
-) %>% layout(
-  title = list(text = ""),
-  geo = list(showframe = FALSE, showcoastlines = TRUE, coastlinecolor = "#ccc",
-    projection = list(type = "natural earth"), bgcolor = "white",
-    landcolor = "#f0f0f0", showland = TRUE),
-  margin = list(t = 10, b = 10, l = 0, r = 0),
-  paper_bgcolor = "white",
-  hoverlabel = list(align = "left")
-) %>% config(displayModeBar = FALSE)
+# =============================================================================
+# Bilingual build loop: en (byte-identical to committed) then fa (RTL Persian).
+# LANG is the loop variable; at top-level Rscript scope it lives in the global
+# env, which is where the i18n helpers read it.
+# =============================================================================
+for (LANG in c("en", "fa")) {
 
-# --- Assemble page (side-by-side layout) ---
-global_page <- paste0('<!DOCTYPE html>
+  cat(sprintf("=== Building global [%s] ===\n", LANG))
+
+  total_label <- sprintf(tr("gl_total_label"), fa_num(total_2024 / 1e6, 2))
+
+  # Source-line link anchors are per-language: the fa anchors carry the Persian
+  # agency gloss with the Latin acronym isolated in <bdi> (glossary rule); the
+  # en anchors reproduce the committed text exactly.
+  un_link <- sprintf('<a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">%s</a>',
+    tr("gl_un_link_text"))
+  euro_link <- sprintf('<a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">%s</a>',
+    tr("gl_euro_link_text"))
+  src_area <- sprintf(tr("gl_src_area"), un_link, euro_link)
+  src_map  <- sprintf(tr("gl_src_map"),  un_link, euro_link)
+
+  # --- Build centered streamgraph (manual plotly) ---
+  p_stock <- plot_ly()
+
+  for (i in seq_along(top_groups)) {
+    g <- top_groups[i]
+    vals <- as.numeric(wide_interp[g, ])
+    y0 <- as.numeric(top_cumul[i, ])
+    y1 <- as.numeric(top_cumul[i + 1, ])
+    if (i == 1) {
+      p_stock <- p_stock %>%
+        add_trace(x = yr_nums, y = y0, type = "scatter", mode = "lines",
+          showlegend = FALSE, hoverinfo = "skip",
+          line = list(width = 0, color = "transparent", shape = "spline"))
+    }
+    p_stock <- p_stock %>%
+      add_trace(x = yr_nums, y = y1, type = "scatter", mode = "lines+markers",
+        fill = "tonexty", fillcolor = colors[g], name = g,
+        line = list(width = 0.5, color = colors[g], shape = "spline"),
+        marker = list(size = 8, color = "rgba(0,0,0,0)"),
+        text = sprintf(tr("gl_stream_hover"),
+          grp_label(g), fa_num(yr_nums, 0, big = FALSE), fmtv(vals)),
+        hoverinfo = "text")
+  }
+
+  for (i in seq_along(bot_groups)) {
+    g <- bot_groups[i]
+    vals <- as.numeric(wide_interp[g, ])
+    y0 <- as.numeric(bot_cumul[i, ])
+    y1 <- as.numeric(bot_cumul[i + 1, ])
+    if (i == 1) {
+      p_stock <- p_stock %>%
+        add_trace(x = yr_nums, y = y0, type = "scatter", mode = "lines",
+          showlegend = FALSE, hoverinfo = "skip",
+          line = list(width = 0, color = "transparent", shape = "spline"))
+    }
+    p_stock <- p_stock %>%
+      add_trace(x = yr_nums, y = y1, type = "scatter", mode = "lines+markers",
+        fill = "tonexty", fillcolor = colors[g], name = g,
+        line = list(width = 0.5, color = colors[g], shape = "spline"),
+        marker = list(size = 8, color = "rgba(0,0,0,0)"),
+        text = sprintf(tr("gl_stream_hover"),
+          grp_label(g), fa_num(yr_nums, 0, big = FALSE), fmtv(vals)),
+        hoverinfo = "text")
+  }
+
+  p_stock <- p_stock %>% layout(
+    title = list(text = tr("gl_stream_title"),
+      font = list(size = 16, family = "Montserrat", color = "#333"), x = 0.5, xanchor = "center"),
+    xaxis = list(title = "", dtick = 5, tickvals = yr_nums_orig,
+      ticktext = htxt(as.character(yr_nums_orig)), tickfont = list(size = 12),
+      showgrid = TRUE, gridcolor = "#e8e8e8"),
+    yaxis = list(title = "", showticklabels = FALSE, zeroline = FALSE, showgrid = FALSE),
+    showlegend = FALSE,
+    margin = list(t = 55, b = 60, l = 20, r = 20),
+    plot_bgcolor = "white", paper_bgcolor = "white",
+    font = list(family = "Montserrat, sans-serif"),
+    hoverlabel = list(bgcolor = "white", bordercolor = "#ccc",
+      font = list(family = "Montserrat, sans-serif", size = 13, color = "#333")),
+    hovermode = "closest",
+    annotations = list()
+  ) %>% config(displayModeBar = FALSE)
+
+  # --- World choropleth ---
+  p_world <- plot_ly(type = "choropleth",
+    locations = stocks_2024$iso3, z = stocks_2024$bin,
+    text = ifelse(stocks_2024$destination == "Iran",
+      tr("gl_map_hover_iran"),
+      htxt(sprintf(tr("gl_map_hover"),
+        dest_label(stocks_2024$destination), fmtv(stocks_2024$pop_2024)))),
+    hoverinfo = "text",
+    colorscale = bin_colors, zmin = 0, zmax = 5, showscale = FALSE,
+    marker = list(line = list(color = "white", width = 0.5))
+  ) %>% layout(
+    title = list(text = ""),
+    geo = list(showframe = FALSE, showcoastlines = TRUE, coastlinecolor = "#ccc",
+      projection = list(type = "natural earth"), bgcolor = "white",
+      landcolor = "#f0f0f0", showland = TRUE),
+    margin = list(t = 10, b = 10, l = 0, r = 0),
+    paper_bgcolor = "white",
+    hoverlabel = list(align = "left")
+  ) %>% config(displayModeBar = FALSE)
+
+  # --- Assemble page (side-by-side layout) ---
+  global_page <- paste0('<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Global Overview</title>
+<title>', tr("gl_page_title"), '</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="lib/plotly-3.4.0.min.js"></script>
 <style>
@@ -323,31 +390,31 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 <div class="global-grid">
 <div class="text-card global-text1" style="text-align:center;">
   <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">', total_label, '</div>
-  <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iran-born people live outside Iran as of 2024 &mdash; nearly three times the 1990 total.</div>
+  <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">', tr("gl_card1_primary"), '</div>
 </div>
 <div class="text-card global-text2" style="text-align:center;">
-  <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">How the United Nations counts Iranians abroad</div>
+  <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">', tr("gl_card2_heading"), '</div>
   <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-    <li>Each country&rsquo;s total includes only people born in Iran</li>
-    <li>Drawn from each country&rsquo;s census or population register, so definitions and reference years vary</li>
-    <li>Second-generation Iranians (children born abroad to Iran-born parents) are not counted</li>
-    <li>Some countries (notably the Persian Gulf states) do not publish country-of-birth statistics, so their Iranian populations are not reflected here</li>
+    <li>', tr("gl_card2_bullet1"), '</li>
+    <li>', tr("gl_card2_bullet2"), '</li>
+    <li>', tr("gl_card2_bullet3"), '</li>
+    <li>', tr("gl_card2_bullet4"), '</li>
   </ul>
-  <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Other pages on this site count Iranians more broadly &mdash; by ancestry, or by a parent&rsquo;s birthplace.</div>
+  <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">', tr("gl_card2_note"), '</div>
 </div>
 <div class="chart-card global-area" style="overflow:visible;">
   <div class="chart-with-legend" style="display:flex; align-items:stretch;">
     <div style="flex:1; min-width:0;">',
-      plotly_div("stock-area", plotly_to_json(p_stock, inject_hoveron = TRUE), "500px"),
+      plotly_div("stock-area", pj(p_stock, inject_hoveron = TRUE), "500px"),
     '</div>
     <div class="chart-legend-sidebar" style="width:200px; flex-shrink:0; padding:40px 10px 0 5px; font-size:13px; line-height:2.2;">',
       paste(sapply(legend_order, function(g) {
-        html_g <- gsub("&", "&amp;", g)
+        html_g <- gsub("&", "&amp;", grp_label(g))
         sprintf("<div data-lg=\"%s\" style=\"display:flex; align-items:center; gap:8px; cursor:pointer; transition:opacity 0.2s;\" onmouseenter=\"var el=document.getElementById('stock-area');if(el&&el.__hlOn&&!el.__locked)el.__hlOn(this.getAttribute('data-lg'));\" onmouseleave=\"var el=document.getElementById('stock-area');if(el&&el.__hlOff&&!el.__locked)el.__hlOff();\" onclick=\"var el=document.getElementById('stock-area');if(el&&el.__toggle)el.__toggle(this.getAttribute('data-lg'));\"><div style=\"width:14px; height:14px; border-radius:50%%; background:%s; flex-shrink:0;\"></div> %s</div>", g, colors[g], html_g)
       }), collapse = "\n"),
     '</div>
   </div>
-  <p style="font-size:10px; color:#6b6b6b; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a>. Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.</p>
+  <p style="font-size:10px; color:#6b6b6b; text-align:right; margin:4px 4px 0 0;">', src_area, '</p>
   <script>(function(){
     var el=document.getElementById("stock-area");
     if(!el)return;
@@ -392,17 +459,17 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   })();</script>
 </div>
 <div class="chart-card global-map">',
-  '<div style="text-align:center; font-size:16px; font-weight:600; margin:4px 0 12px;">Iranian Migrant Stock Worldwide (2024)</div>',
+  '<div style="text-align:center; font-size:16px; font-weight:600; margin:4px 0 12px;">', tr("gl_map_section_title"), '</div>',
   '<div style="display:flex; justify-content:center; flex-wrap:wrap; gap:12px; font-size:13px; color:#444; margin:0 0 12px; line-height:1;">',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#f4c430;border-radius:2px;"></span> Iran</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#c6dbef;border-radius:2px;"></span> 1 \u2013 1,000</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#6baed6;border-radius:2px;"></span> 1,000 \u2013 10,000</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#2171b5;border-radius:2px;"></span> 10,000 \u2013 100,000</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#08306b;border-radius:2px;"></span> 100,000 \u2013 450,000</span>',
-  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#e8e8e8;border:1px solid #ccc;border-radius:2px;"></span> No data</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#f4c430;border-radius:2px;"></span> ', tr("gl_leg_iran"), '</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#c6dbef;border-radius:2px;"></span> ', tr("gl_leg_bin1"), '</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#6baed6;border-radius:2px;"></span> ', tr("gl_leg_bin2"), '</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#2171b5;border-radius:2px;"></span> ', tr("gl_leg_bin3"), '</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#08306b;border-radius:2px;"></span> ', tr("gl_leg_bin4"), '</span>',
+  '<span style="display:inline-flex;align-items:center;gap:4px;"><span style="display:inline-block;width:16px;height:16px;background:#e8e8e8;border:1px solid #ccc;border-radius:2px;"></span> ', tr("gl_leg_nodata"), '</span>',
   '</div>',
-  plotly_div("world-map", plotly_to_json(p_world), "460px"),
-  '<p style="font-size:10px; color:#6b6b6b; text-align:right; margin:4px 4px 0 0;">Source: <a href="https://www.un.org/development/desa/pd/content/international-migrant-stock" target="_blank" style="color:#2774AE;">UN International Migrant Stock (2024)</a>, supplemented by <a href="https://ec.europa.eu/eurostat" target="_blank" style="color:#2774AE;">Eurostat</a><br>Based on foreign-born population data from national censuses and population registers.</p>
+  plotly_div("world-map", pj(p_world), "460px"),
+  '<p style="font-size:10px; color:#6b6b6b; text-align:right; margin:4px 4px 0 0;">', src_map, '</p>
 </div>
 </div>
 
@@ -410,5 +477,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 </body>
 </html>')
 
-writeLines(global_page, "docs/pages/global.html")
-cat("  Done\n")
+  # fa edition: transform the finished English shell (RTL, Vazirmatn, Persian
+  # locale/digit scripts). fa path only — English bytes never change.
+  if (is_fa()) global_page <- fa_shell(global_page)
+
+  fname <- if (is_fa()) "docs/pages/global.fa.html" else "docs/pages/global.html"
+  writeLines(global_page, fname)
+  cat("  Done\n")
+}
