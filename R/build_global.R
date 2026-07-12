@@ -409,8 +409,8 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
     <li>', tr("gl_card2_bullet2"), '</li>
     <li>', tr("gl_card2_bullet3"), '</li>
     <li>', tr("gl_card2_bullet4"), '</li>
+    <li style="margin-top:8px; font-weight:700; color:#333;">', tr("gl_card2_note"), '</li>
   </ul>
-  <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">', tr("gl_card2_note"), '</div>
 </div>
 <div class="chart-card global-area" style="overflow:visible;">
   <div class="chart-with-legend" style="display:flex; align-items:stretch;">
