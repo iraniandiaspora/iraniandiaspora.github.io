@@ -672,6 +672,13 @@ postgrad_pct   <- round(postgrad_count / edu_total * 100)
 
 # Ordinal blue gradient: darkest for highest qualification
 edu_blues <- colorRampPalette(c("#08306b", "#c6dbef"))(nrow(edu_chart))
+# Labels-above-bar (hbar_over_labels) so long qualification names don't crush
+# the bars on mobile; % of workers at each bar end. Align ends/text to levels.
+edu_ord <- match(levels(edu_chart$label), as.character(edu_chart$label))
+ov_edu <- hbar_over_labels(levels(edu_chart$label),
+  ends = edu_chart$count[edu_ord],
+  end_text = pct_lab(edu_chart$pct[edu_ord]))
+edu_xmax <- max(edu_chart$count) * 1.15
 p_edu <- plot_ly(edu_chart, y = ~label, x = ~count, type = "bar",
     orientation = "h", marker = list(color = edu_blues),
     text = sprintf("<b>%s</b><br>%s (%.1f%%)",
@@ -682,11 +689,10 @@ p_edu <- plot_ly(edu_chart, y = ~label, x = ~count, type = "bar",
     title = list(
       text = "<b>Highest Educational Attainment<br>of Iran-Born Australians</b>",
       font = list(size = 15, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 11),
-                 ticks = "outside", ticklen = 8,
-                 tickcolor = "rgba(0,0,0,0)"),
-    margin = list(l = 210, r = 20, t = 55, b = 30),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, edu_xmax)),
+    yaxis = ov_edu$yaxis,
+    annotations = ov_edu$annotations, bargap = 0.5,
+    margin = list(l = ov_edu$margin_l, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -852,6 +858,11 @@ occ_chart$label <- factor(occ_chart$label, levels = rev(occ_chart$label))
 
 # Shared Okabe-Ito categorical palette (8 ANZSCO occupation groups)
 occ_colors <- cat_colors(nrow(occ_chart))
+occ_ord <- match(levels(occ_chart$label), as.character(occ_chart$label))
+ov_occ <- hbar_over_labels(levels(occ_chart$label),
+  ends = occ_chart$count[occ_ord],
+  end_text = pct_lab(occ_chart$pct[occ_ord]))
+occ_xmax <- max(occ_chart$count) * 1.15
 p_occ <- plot_ly(occ_chart, y = ~label, x = ~count, type = "bar",
     orientation = "h", marker = list(color = occ_colors),
     text = sprintf("<b>%s</b><br>%s (%.1f%%)",
@@ -862,11 +873,10 @@ p_occ <- plot_ly(occ_chart, y = ~label, x = ~count, type = "bar",
     title = list(
       text = "<b>Occupation of Iran-Born Workers<br>in Australia</b>",
       font = list(size = 15, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 11),
-                 ticks = "outside", ticklen = 8,
-                 tickcolor = "rgba(0,0,0,0)"),
-    margin = list(l = 230, r = 20, t = 55, b = 30),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, occ_xmax)),
+    yaxis = ov_occ$yaxis,
+    annotations = ov_occ$annotations, bargap = 0.5,
+    margin = list(l = ov_occ$margin_l, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -899,6 +909,11 @@ ind_chart$label <- factor(ind_chart$label, levels = rev(ind_chart$label))
 # categorical color at ~8). Color is decorative — the y-axis labels identify
 # every bar. ind_chart is in descending-count order, so the top 8 get color.
 ind_colors <- c(OKABE_ITO, rep(CAT_OTHER, max(0, nrow(ind_chart) - 8)))[seq_len(nrow(ind_chart))]
+ind_ord <- match(levels(ind_chart$label), as.character(ind_chart$label))
+ov_ind <- hbar_over_labels(levels(ind_chart$label),
+  ends = ind_chart$count[ind_ord],
+  end_text = pct_lab(ind_chart$pct[ind_ord]))
+ind_xmax <- max(ind_chart$count) * 1.15
 p_ind <- plot_ly(ind_chart, y = ~label, x = ~count, type = "bar",
     orientation = "h", marker = list(color = ind_colors),
     text = sprintf("<b>%s</b><br>%s (%.1f%%)",
@@ -909,11 +924,10 @@ p_ind <- plot_ly(ind_chart, y = ~label, x = ~count, type = "bar",
     title = list(
       text = "<b>Industry of Employment<br>of Iran-Born Workers in Australia</b>",
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 10),
-                 ticks = "outside", ticklen = 8,
-                 tickcolor = "rgba(0,0,0,0)"),
-    margin = list(l = 195, r = 20, t = 55, b = 30),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, ind_xmax)),
+    yaxis = ov_ind$yaxis,
+    annotations = ov_ind$annotations, bargap = 0.5,
+    margin = list(l = ov_ind$margin_l, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 

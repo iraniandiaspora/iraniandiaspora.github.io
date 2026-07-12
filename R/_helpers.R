@@ -57,14 +57,22 @@ cat_colors <- function(n) {
 #   $yaxis       : y-axis config with tick labels turned OFF
 #   $xreversed   : TRUE on RTL (pass to xaxis autorange/range)
 #
-#   cats    : category labels IN PLOT ORDER (bottom-to-top = the factor levels)
-#   values  : optional numeric vector (same order) -> "N%" label at each bar end
-#   suffix  : value-label suffix (default "%")
-#   wrap_at : soft-wrap category labels longer than this many characters
+#   cats     : category labels IN PLOT ORDER (bottom-to-top = the factor levels)
+#   ends     : optional numeric vector (same order) = each bar's END position in
+#              x-DATA units (i.e. the plotted x value), used to PLACE the value
+#              label. On a count-scaled axis pass the counts, not the percents.
+#   end_text : optional character vector (same order) = the TEXT shown at each
+#              bar end (e.g. "21%"). Defaults to `ends` comma-formatted. Pass ""
+#              for a bar that should carry no value label (e.g. suppressed).
+#   wrap_at  : soft-wrap category labels longer than this many characters
 # Use ONLY for long-label CATEGORY bars (occupations, industries). Short-label
 # ranked GEOGRAPHIC bars (states, provinces, counties) keep conventional
 # left-axis tick labels — do not convert those.
-hbar_over_labels <- function(cats, values = NULL, suffix = "%",
+# pct_lab(): bar-end "N%" label, BLANKED when it would round to 0% — a sub-1%
+# sliver shows no number rather than a misleading "0%". Vectorized.
+pct_lab <- function(p) ifelse(is.na(p) | round(p) < 1, "", paste0(round(p), "%"))
+
+hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
                              wrap_at = 28, font_size = 11) {
   fa   <- exists("is_fa") && is_fa()
   cats <- as.character(cats)
@@ -87,13 +95,17 @@ hbar_over_labels <- function(cats, values = NULL, suffix = "%",
     font = list(size = font_size, family = "Montserrat, sans-serif", color = "#333")))
 
   val_anns <- list()
-  if (!is.null(values)) {
-    val_anns <- lapply(seq_along(cats), function(i) list(
-      x = values[i], xref = "x", xanchor = if (fa) "right" else "left",
-      xshift = if (fa) -5 else 5, y = cats[i], yref = "y", yanchor = "middle",
-      text = paste0(formatC(values[i], format = "f", digits = 0), suffix),
-      showarrow = FALSE,
-      font = list(size = 11, family = "Montserrat, sans-serif", color = "#555")))
+  if (!is.null(ends)) {
+    if (is.null(end_text))
+      end_text <- formatC(ends, format = "f", digits = 0, big.mark = ",")
+    for (i in seq_along(cats)) {
+      if (!nzchar(end_text[i])) next          # blank -> no value label (suppressed)
+      val_anns[[length(val_anns) + 1L]] <- list(
+        x = ends[i], xref = "x", xanchor = if (fa) "right" else "left",
+        xshift = if (fa) -5 else 5, y = cats[i], yref = "y", yanchor = "middle",
+        text = end_text[i], showarrow = FALSE,
+        font = list(size = 11, family = "Montserrat, sans-serif", color = "#555"))
+    }
   }
 
   list(annotations = c(lab_anns, val_anns), margin_l = 8,
