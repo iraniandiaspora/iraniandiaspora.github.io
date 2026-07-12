@@ -216,6 +216,11 @@ total_employed <- industry$total_employed[1]
 # are the largest — those get color, the smaller head is grey.
 n_ind <- nrow(industry)
 dk_ind_colors <- c(rep(CAT_OTHER, max(0, n_ind - 8)), rev(OKABE_ITO)[seq_len(min(8, n_ind))])
+dk_ord <- match(levels(industry$sector_en), as.character(industry$sector_en))
+ov_dk <- hbar_over_labels(levels(industry$sector_en),
+  ends = industry$count[dk_ord],
+  end_text = pct_lab(industry$pct[dk_ord]))
+dk_xmax <- max(industry$count) * 1.15
 p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
     orientation = "h", marker = list(color = dk_ind_colors),
     text = sprintf("<b>%s</b><br>%s employees (%.1f%%)",
@@ -226,11 +231,10 @@ p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
   layout(
     title = list(text = "<b>Iranian-Origin Full-Time Employees<br>by Industry in Denmark</b>",
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 10),
-                 ticks = "outside", ticklen = 8,
-                 tickcolor = "rgba(0,0,0,0)"),
-    margin = list(l = 150, r = 20, t = 40, b = 30),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, dk_xmax)),
+    yaxis = ov_dk$yaxis,
+    annotations = ov_dk$annotations, bargap = 0.5,
+    margin = list(l = ov_dk$margin_l, r = 20, t = 40, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 

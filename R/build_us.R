@@ -663,7 +663,7 @@ p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation =
     marker = list(color = br$col),
     text = ~sprintf("<b>%s</b><br>%d%% self-employed", origin, rate_pct),
     hoverinfo = "text", textposition = "none") %>%
-  layout(title = list(text = "<b>Self-Employment by Country of Birth</b>",
+  layout(title = list(text = "<b>Self-Employment by<br>Country of Birth</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
     yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
@@ -690,13 +690,14 @@ bi_cols <- rev(OKABE_ITO[seq_len(nrow(bi))])
 # Labels-above-bar (see hbar_over_labels in _helpers.R): category names ride
 # above each full-width bar with a % at the bar end, so long labels no longer
 # crush the bars on mobile. Values in factor-level order (bi is arranged asc).
-ov_bi <- hbar_over_labels(bi$industry, values = bi$share_pct)
+ov_bi <- hbar_over_labels(bi$industry, ends = bi$share_pct,
+                          end_text = pct_lab(bi$share_pct))
 bi_xmax <- max(bi$share_pct) * 1.15
 p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation = "h",
     marker = list(color = bi_cols),
     text = ~sprintf("<b>%s</b><br>%.0f%% of Iranian-owned businesses", industry, share_pct),
     hoverinfo = "text", textposition = "none") %>%
-  layout(title = list(text = "<b>Industries of Iranian-Owned Businesses</b>",
+  layout(title = list(text = "<b>Industries of<br>Iranian-Owned Businesses</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_bi$xreversed) c(bi_xmax, 0) else c(0, bi_xmax)),
@@ -720,13 +721,14 @@ oc$group <- dplyr::recode(oc$group,
 oc$group <- factor(oc$group, levels = oc$group)
 oc_cols <- rev(OKABE_ITO[seq_len(nrow(oc))])
 # Labels-above-bar with a % at each bar end (see hbar_over_labels).
-ov_oc <- hbar_over_labels(oc$group, values = oc$share_pct)
+ov_oc <- hbar_over_labels(oc$group, ends = oc$share_pct,
+                          end_text = pct_lab(oc$share_pct))
 oc_xmax <- max(oc$share_pct) * 1.15
 p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h",
     marker = list(color = oc_cols),
     text = ~sprintf("<b>%s</b><br>%.0f%% of employed Iranian-Americans", group, share_pct),
     hoverinfo = "text", textposition = "none") %>%
-  layout(title = list(text = "<b>Occupations of Employed Iranian-Americans</b>",
+  layout(title = list(text = "<b>Occupations of Employed<br>Iranian-Americans</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_oc$xreversed) c(oc_xmax, 0) else c(0, oc_xmax)),

@@ -663,6 +663,14 @@ visible_idx <- which(!ind$is_suppressed)
 ind$fill_color <- rep("#c8c8c8", nrow(ind))
 ind$fill_color[visible_idx] <- cat_colors(length(visible_idx))
 
+# Labels-above-bar; suppressed sectors keep their grey placeholder bar but carry
+# NO % label (end_text ""), so only the "Suppressed (<5,000)" hover shows.
+de_ind_ord <- match(levels(ind$label), as.character(ind$label))
+de_ind_ends <- ind$display_value[de_ind_ord]
+de_ind_text <- ifelse(ind$is_suppressed[de_ind_ord], "",
+                      pct_lab(ind$pct[de_ind_ord]))
+ov_de_ind <- hbar_over_labels(levels(ind$label), ends = de_ind_ends, end_text = de_ind_text)
+de_ind_xmax <- max(ind$display_value) * 1.15
 p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
     orientation = "h",
     marker = list(color = ~fill_color),
@@ -671,12 +679,10 @@ p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
   layout(
     title = list(text = "<b>Iranian-Origin Employment<br>by Industry in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 11),
-      automargin = TRUE,
-      ticks = "outside", ticklen = 8,
-      tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 55, b = 40, l = 210),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, de_ind_xmax)),
+    yaxis = ov_de_ind$yaxis,
+    annotations = ov_de_ind$annotations, bargap = 0.5,
+    margin = list(t = 55, b = 40, l = ov_de_ind$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)

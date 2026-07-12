@@ -387,6 +387,11 @@ qual_total <- sum(qual$count)
 # Blue gradient from light (low) to dark (high); grey for "Other"
 qual_colors <- c("#b0b0b0", "#d4e6f1", "#c6dbef", "#8bbdde", "#5a9bd5", "#1a4e72")
 
+qual_ord <- match(levels(qual$category), as.character(qual$category))
+ov_qual <- hbar_over_labels(levels(qual$category),
+  ends = qual$count[qual_ord],
+  end_text = pct_lab(qual$count[qual_ord] / qual_total * 100))
+qual_xmax <- max(qual$count) * 1.15
 p_qual <- plot_ly(qual, y = ~category, x = ~count, type = "bar",
   orientation = "h", marker = list(color = qual_colors),
   text = sprintf("<b>%s</b><br>%s (%.1f%%)",
@@ -397,9 +402,10 @@ p_qual <- plot_ly(qual, y = ~category, x = ~count, type = "bar",
   layout(
     title = list(text = "<b>Highest Qualification of Iran-Born<br>Residents in England and Wales</b>",
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickformat = ","),
-    yaxis = list(title = "", tickfont = list(size = 10)),
-    margin = list(l = 200, r = 20, t = 55, b = 30),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, qual_xmax)),
+    yaxis = ov_qual$yaxis,
+    annotations = ov_qual$annotations, bargap = 0.5,
+    margin = list(l = ov_qual$margin_l, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
