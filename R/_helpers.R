@@ -38,6 +38,69 @@ cat_colors <- function(n) {
   c(OKABE_ITO[1:7], CAT_OTHER)
 }
 
+# --- hbar_over_labels() -------------------------------------------------------
+# Long-category horizontal-bar labels that DON'T eat a fixed left pixel margin.
+# The category name rides in the whitespace ABOVE each bar (anchored to the
+# plot-area edge), so the bar itself spans the FULL container width at any
+# viewport — this is the fix for the mobile "bars crushed into a right-hand
+# sliver" problem (a hard-coded l=190/210 margin fighting a fixed-width iframe),
+# and it needs ZERO responsive JS (positions are paper/category coords, so it is
+# identical at 320px and 1280px and survives tab-switch re-renders).
+#
+# Optional value labels sit just past each bar's end. Direction-aware: on the
+# Persian (RTL) edition (is_fa() TRUE, from _helpers_i18n.R) labels anchor RIGHT
+# and $xreversed signals the caller to reverse the x-axis (bars grow leftward).
+#
+# Returns a list to splice into plot_ly() %>% layout():
+#   $annotations : category labels (+ value labels when `values` supplied)
+#   $margin_l    : left margin to use (8; replaces the old l=190/210)
+#   $yaxis       : y-axis config with tick labels turned OFF
+#   $xreversed   : TRUE on RTL (pass to xaxis autorange/range)
+#
+#   cats    : category labels IN PLOT ORDER (bottom-to-top = the factor levels)
+#   values  : optional numeric vector (same order) -> "N%" label at each bar end
+#   suffix  : value-label suffix (default "%")
+#   wrap_at : soft-wrap category labels longer than this many characters
+# Use ONLY for long-label CATEGORY bars (occupations, industries). Short-label
+# ranked GEOGRAPHIC bars (states, provinces, counties) keep conventional
+# left-axis tick labels — do not convert those.
+hbar_over_labels <- function(cats, values = NULL, suffix = "%",
+                             wrap_at = 28, font_size = 11) {
+  fa   <- exists("is_fa") && is_fa()
+  cats <- as.character(cats)
+
+  soft_wrap <- function(s) {
+    if (nchar(s) <= wrap_at) return(s)
+    words <- strsplit(s, " ")[[1]]; line <- ""; out <- character(0)
+    for (w in words) {
+      if (nzchar(line) && nchar(paste(line, w)) > wrap_at) { out <- c(out, line); line <- w }
+      else line <- if (nzchar(line)) paste(line, w) else w
+    }
+    paste(c(out, line), collapse = "<br>")
+  }
+  wrapped <- vapply(cats, soft_wrap, character(1))
+
+  lab_anns <- lapply(seq_along(cats), function(i) list(
+    x = if (fa) 1 else 0, xref = "paper", xanchor = if (fa) "right" else "left",
+    y = cats[i], yref = "y", yanchor = "bottom", yshift = 7,
+    text = wrapped[i], showarrow = FALSE, align = if (fa) "right" else "left",
+    font = list(size = font_size, family = "Montserrat, sans-serif", color = "#333")))
+
+  val_anns <- list()
+  if (!is.null(values)) {
+    val_anns <- lapply(seq_along(cats), function(i) list(
+      x = values[i], xref = "x", xanchor = if (fa) "right" else "left",
+      xshift = if (fa) -5 else 5, y = cats[i], yref = "y", yanchor = "middle",
+      text = paste0(formatC(values[i], format = "f", digits = 0), suffix),
+      showarrow = FALSE,
+      font = list(size = 11, family = "Montserrat, sans-serif", color = "#555")))
+  }
+
+  list(annotations = c(lab_anns, val_anns), margin_l = 8,
+       yaxis = list(title = "", showticklabels = FALSE, ticks = "", fixedrange = TRUE),
+       xreversed = fa)
+}
+
 # --- share_of -----------------------------------------------------------------
 # Weighted percentage of the rows of `df` whose `col` value is in `levels`, out
 # of the total `weight`. `weight` is a COLUMN NAME (string). Returns an unrounded

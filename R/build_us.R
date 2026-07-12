@@ -79,7 +79,7 @@ function switchTab(tabId, btn, groupId) {
 
 page_template <- function(title, body_html, has_tabs = FALSE) {
   tab_css <- if (has_tabs) '
-.tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
+.tab-bar { display:flex; justify-content:center; flex-wrap:wrap; gap:4px; margin:12px 0 0; }
 .tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
   font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
 .tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
@@ -129,6 +129,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   body { padding:8px 10px; }
   .text-card { font-size:13px; padding:14px; }
   .chart-card { padding:10px; }
+  .tab-btn { font-size:12px; padding:5px 10px; }
 }
 ', MAPBOX_ATTRIB_HIDE_CSS, '
 </style>
@@ -672,20 +673,36 @@ p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation =
 
 bi <- read_csv(file.path(DATA_DIR, "us_business_industry.csv"), show_col_types = FALSE) %>%
   arrange(share_pct)
+# Shorten the long ACS sector names for display (full definitions live in the
+# source line). "Arts, food & hospitality" matches the wording of the text card.
+bi$industry <- dplyr::recode(bi$industry,
+  "Arts, entertainment & food service"      = "Arts, food & hospitality",
+  "Education, health & social services"     = "Education & health",
+  "Finance, real estate & professional"     = "Finance & real estate",
+  "Professional & scientific services"      = "Professional & scientific",
+  "Transportation, utilities & information" = "Transport & utilities",
+  "Wholesale & retail trade"                = "Wholesale & retail")
 bi$industry <- factor(bi$industry, levels = bi$industry)
 # 8 stable sectors, Okabe-Ito categorical (no recycling). Precompute the color
 # vector (plotly lazy-evals inline calls) and rev() so the largest bar gets the
 # first, strongest hue.
 bi_cols <- rev(OKABE_ITO[seq_len(nrow(bi))])
+# Labels-above-bar (see hbar_over_labels in _helpers.R): category names ride
+# above each full-width bar with a % at the bar end, so long labels no longer
+# crush the bars on mobile. Values in factor-level order (bi is arranged asc).
+ov_bi <- hbar_over_labels(bi$industry, values = bi$share_pct)
+bi_xmax <- max(bi$share_pct) * 1.15
 p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation = "h",
     marker = list(color = bi_cols),
     text = ~sprintf("<b>%s</b><br>%.0f%% of Iranian-owned businesses", industry, share_pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(title = list(text = "<b>Industries of Iranian-Owned Businesses</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
-    yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 50, b = 40, l = 190, r = 20),
+    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE, fixedrange = TRUE,
+      range = if (ov_bi$xreversed) c(bi_xmax, 0) else c(0, bi_xmax)),
+    yaxis = ov_bi$yaxis,
+    annotations = ov_bi$annotations, bargap = 0.5,
+    margin = list(t = 55, b = 40, l = ov_bi$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
@@ -695,17 +712,27 @@ p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation
 # (precompute the color vector — plotly lazy-evals inline calls).
 oc <- read_csv(file.path(DATA_DIR, "us_occupation.csv"), show_col_types = FALSE) %>%
   arrange(share_pct)
+# Shorten the long occupation-group names for display.
+oc$group <- dplyr::recode(oc$group,
+  "Management, business & finance" = "Management & finance",
+  "Education, law, social & arts"  = "Education, law & arts",
+  "Production, trades & transport" = "Trades & transport")
 oc$group <- factor(oc$group, levels = oc$group)
 oc_cols <- rev(OKABE_ITO[seq_len(nrow(oc))])
+# Labels-above-bar with a % at each bar end (see hbar_over_labels).
+ov_oc <- hbar_over_labels(oc$group, values = oc$share_pct)
+oc_xmax <- max(oc$share_pct) * 1.15
 p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h",
     marker = list(color = oc_cols),
     text = ~sprintf("<b>%s</b><br>%.0f%% of employed Iranian-Americans", group, share_pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(title = list(text = "<b>Occupations of Employed Iranian-Americans</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
-    yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 50, b = 40, l = 210, r = 20),
+    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE, fixedrange = TRUE,
+      range = if (ov_oc$xreversed) c(oc_xmax, 0) else c(0, oc_xmax)),
+    yaxis = ov_oc$yaxis,
+    annotations = ov_oc$annotations, bargap = 0.5,
+    margin = list(t = 55, b = 40, l = ov_oc$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
@@ -754,7 +781,7 @@ writeLines(page_template("Work", paste0(
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'bo-occ\',this,\'bo-tabs\')">Occupations</button>',
   '<button class="tab-btn" onclick="switchTab(\'bo-rate\',this,\'bo-tabs\')">Self-Employment</button>',
-  '<button class="tab-btn" onclick="switchTab(\'bo-ind\',this,\'bo-tabs\')">Business Sectors</button>',
+  '<button class="tab-btn" onclick="switchTab(\'bo-ind\',this,\'bo-tabs\')">Sectors</button>',
   '</div>',
   '<div id="bo-occ" class="tab-panel active" data-group="bo-tabs">',
   plotly_div("us-occ", plotly_to_json(p_occ), "430px", source = SRC_OCC),
