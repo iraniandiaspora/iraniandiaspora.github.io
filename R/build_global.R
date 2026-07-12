@@ -415,7 +415,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 <div class="chart-card global-area" style="overflow:visible;">
   <div class="chart-with-legend" style="display:flex; align-items:stretch;">
     <div style="flex:1; min-width:0;">',
-      plotly_div("stock-area", pj(p_stock, inject_hoveron = TRUE), "500px"),
+      plotly_div("stock-area", pj(p_stock, inject_hoveron = !is_fa()), "500px"),
     '</div>
     <div class="chart-legend-sidebar" style="width:200px; flex-shrink:0; padding:40px 10px 0 5px; font-size:13px; line-height:2.2;">',
       paste(sapply(legend_order, function(g) {

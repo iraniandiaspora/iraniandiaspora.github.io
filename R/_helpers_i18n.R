@@ -139,6 +139,10 @@ pj <- function(p, inject_hoveron = FALSE) {
   if (is_fa()) {
     j$layout <- gsub("Montserrat, sans-serif",
                      "Vazirmatn, Montserrat, sans-serif", j$layout, fixed = TRUE)
+    # Right-align multi-line hover tooltips. Plotly's default hoverlabel.align is
+    # "auto" and it forces its hover box to LTR, so Persian tooltips render
+    # left-aligned / inconsistently. align="right" fixes every fa chart at once.
+    j$layout <- sub('"hoverlabel":{', '"hoverlabel":{"align":"right",', j$layout, fixed = TRUE)
   }
   j
 }
