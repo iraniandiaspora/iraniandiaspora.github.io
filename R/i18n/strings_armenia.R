@@ -61,11 +61,11 @@ STR <- list(
     en = "<b>Iran-Born Population in Armenia,<br>1990–2024</b>",
     fa = "<b>جمعیت متولدان ایران در ارمنستان،<br>1990–2024</b>"),
   am_hist_hover_un = list(
-    en = "<b>%s</b><br>%s Iran-born (UN estimate)",
-    fa = "<b>%s</b><br>%s نفر متولد ایران (برآورد سازمان ملل)"),
+    en = "<b>%s</b><br><b>%s</b> Iran-born (UN estimate)",
+    fa = "<b>%s</b><br><b>%s</b> نفر متولد ایران (برآورد سازمان ملل)"),
   am_hist_hover_armstat = list(
-    en = "<b>%s</b><br>%s Iran-born (Armstat census)",
-    fa = "<b>%s</b><br>%s نفر متولد ایران (سرشماری ارمنستان)"),
+    en = "<b>%s</b><br><b>%s</b> Iran-born (Armstat census)",
+    fa = "<b>%s</b><br><b>%s</b> نفر متولد ایران (سرشماری ارمنستان)"),
   am_leg_un = list(
     en = "UN Migrant Stock",
     fa = "برآورد مهاجران سازمان ملل"),
