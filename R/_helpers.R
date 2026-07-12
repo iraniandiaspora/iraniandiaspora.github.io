@@ -65,6 +65,16 @@ cat_colors <- function(n) {
 #              bar end (e.g. "21%"). Defaults to `ends` comma-formatted. Pass ""
 #              for a bar that should carry no value label (e.g. suppressed).
 #   wrap_at  : soft-wrap category labels longer than this many characters
+#   bargap   : plotly bargap to use — RETURNED as $bargap so the layout uses the
+#              SAME value the label positions were computed from (they must match
+#              or labels drift off the bars).
+#   row_px / min_height : the returned $height grows with row count so each bar
+#              gets a full row (bar + a gap above it for its label). Use $height
+#              for the plotly_div() so many-row charts don't cram labels onto bars.
+# Category labels are anchored to each bar's TOP EDGE (in category-axis units,
+# derived from bargap), NOT the bar centre — so they sit in the gap above the bar
+# at any bar thickness. Anchoring to the centre (the earlier bug) made labels
+# overlap thick bars.
 # Use ONLY for long-label CATEGORY bars (occupations, industries). Short-label
 # ranked GEOGRAPHIC bars (states, provinces, counties) keep conventional
 # left-axis tick labels — do not convert those.
@@ -73,9 +83,11 @@ cat_colors <- function(n) {
 pct_lab <- function(p) ifelse(is.na(p) | round(p) < 1, "", paste0(round(p), "%"))
 
 hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
-                             wrap_at = 28, font_size = 11) {
+                             wrap_at = 34, font_size = 11, bargap = 0.42,
+                             row_px = 42, min_height = 360) {
   fa   <- exists("is_fa") && is_fa()
   cats <- as.character(cats)
+  n    <- length(cats)
 
   soft_wrap <- function(s) {
     if (nchar(s) <= wrap_at) return(s)
@@ -88,9 +100,13 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
   }
   wrapped <- vapply(cats, soft_wrap, character(1))
 
-  lab_anns <- lapply(seq_along(cats), function(i) list(
+  # Bar i (1-based, factor level order) sits at category-axis position i-1; its
+  # top edge is half a bar-width above that. Put the label there so it clears the
+  # bar regardless of thickness.
+  half_bar <- (1 - bargap) / 2
+  lab_anns <- lapply(seq_len(n), function(i) list(
     x = if (fa) 1 else 0, xref = "paper", xanchor = if (fa) "right" else "left",
-    y = cats[i], yref = "y", yanchor = "bottom", yshift = 7,
+    y = (i - 1) + half_bar, yref = "y", yanchor = "bottom", yshift = 2,
     text = wrapped[i], showarrow = FALSE, align = if (fa) "right" else "left",
     font = list(size = font_size, family = "Montserrat, sans-serif", color = "#333")))
 
@@ -98,11 +114,11 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
   if (!is.null(ends)) {
     if (is.null(end_text))
       end_text <- formatC(ends, format = "f", digits = 0, big.mark = ",")
-    for (i in seq_along(cats)) {
-      if (!nzchar(end_text[i])) next          # blank -> no value label (suppressed)
+    for (i in seq_len(n)) {
+      if (is.na(end_text[i]) || !nzchar(end_text[i])) next   # blank -> no value label
       val_anns[[length(val_anns) + 1L]] <- list(
         x = ends[i], xref = "x", xanchor = if (fa) "right" else "left",
-        xshift = if (fa) -5 else 5, y = cats[i], yref = "y", yanchor = "middle",
+        xshift = if (fa) -5 else 5, y = i - 1, yref = "y", yanchor = "middle",
         text = end_text[i], showarrow = FALSE,
         font = list(size = 11, family = "Montserrat, sans-serif", color = "#555"))
     }
@@ -110,7 +126,8 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
 
   list(annotations = c(lab_anns, val_anns), margin_l = 8,
        yaxis = list(title = "", showticklabels = FALSE, ticks = "", fixedrange = TRUE),
-       xreversed = fa)
+       xreversed = fa, bargap = bargap,
+       height = paste0(max(min_height, round(95 + n * row_px)), "px"))
 }
 
 # --- share_of -----------------------------------------------------------------
