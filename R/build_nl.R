@@ -60,7 +60,7 @@ lnk <- function(x) if (is_fa()) bdi(x) else x
 fmtv <- function(x) {
   s <- format(x, big.mark = ",")
   if (!is_fa()) return(s)
-  gsub(",", "٬", fa_digits(s), fixed = TRUE)
+  fa_digits(s)
 }
 
 # htxt(): Persian-digit any stray Western digits in an assembled display string
@@ -172,7 +172,7 @@ for (LANG in c("en", "fa")) {
   # Axis affixes.
   pct_suffix  <- tr("nl_axis_pct_suffix")
   euro_prefix <- if (is_fa()) "" else "€"   # tr() fails loud on empty fa
-  k_suffix    <- tr("nl_axis_k_suffix")
+  k_suffix    <- if (is_fa()) "" else "k"
   y2_ticktext <- htxt(c(tr("nl_axis_pct_0"), tr("nl_axis_pct_25"),
                         tr("nl_axis_pct_50"), tr("nl_axis_pct_75"),
                         tr("nl_axis_pct_100")))

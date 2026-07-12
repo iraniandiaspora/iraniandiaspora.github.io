@@ -9,7 +9,7 @@
 #     so the English editions stay byte-identical.
 #   * Every %d / %.1f from the original is rewritten as %s; the builder passes
 #     fa_num()/fmtv() so the number is language-formatted and the percent SIGN
-#     lives in the template (%% in en, ٪ in fa).
+#     lives in the template (%% in en,  درصد in fa).
 #   * HTML tags / entities (<strong>, <br>, &mdash;, &ndash;) mirror the en
 #     structure; only the human text is swapped in fa.
 # ============================================================================
@@ -50,7 +50,7 @@ STR <- list(
     fa = "جمعیت ایرانی‌تبار به تفکیک نسل"),
   nl_gen_pct_of_total = list(
     en = "%s%% of total",
-    fa = "%s٪ از کل"),
+    fa = "%s درصد از کل"),
   nl_gen1_label = list(
     en = "First generation",
     fa = "نسل اول"),
@@ -87,10 +87,10 @@ STR <- list(
     fa = "<b>ساکنان متولد ایران در هلند<br>به تفکیک سال ورود</b>"),
   nl_arrival_hover_bar = list(
     en = "<b>%s</b><br>%s arrivals<br>Cumulative: %s%%",
-    fa = "<b>%s</b><br>%s نفر واردشده<br>تجمعی: %s٪"),
+    fa = "<b>%s</b><br>%s نفر واردشده<br>تجمعی: %s درصد"),
   nl_arrival_hover_cum = list(
     en = "<b>%s</b><br>%s%% of today's Iran-born population had arrived",
-    fa = "<b>%s</b><br>%s٪ از جمعیت کنونی متولدان ایران تا این سال وارد شده بودند"),
+    fa = "<b>%s</b><br>%s درصد از جمعیت کنونی متولدان ایران تا این سال وارد شده بودند"),
   nl_arrival_pre1965_label = list(
     en = "≤1965",
     fa = "تا 1965"),
@@ -101,7 +101,7 @@ STR <- list(
   nl_axis_pct_100 = list(en = "100%", fa = "100٪"),
   nl_prov_hover = list(
     en = "<b>%s</b><br>%s Iranian-origin<br>%s%% of total",
-    fa = "<b>%s</b><br>%s نفر ایرانی‌تبار<br>%s٪ از کل"),
+    fa = "<b>%s</b><br>%s نفر ایرانی‌تبار<br>%s درصد از کل"),
 
   # --- source lines ---------------------------------------------------------
   nl_src_cbs_pop2025 = list(
@@ -129,25 +129,25 @@ STR <- list(
     fa = "هلند: کار و درآمد"),
   nl_card_bignum = list(
     en = "%s%%",
-    fa = "%s٪"),
+    fa = "%s درصد"),
   nl_card1_primary = list(
     en = "of Iranian-origin residents aged 15&ndash;74 in the Netherlands are in the labour force (%s).",
     fa = "از ساکنان ایرانی‌تبار 15 تا 74 ساله هلند در نیروی کار مشارکت دارند (%s)."),
   nl_card1_bullet_perm = list(
     en = "%s%% of those employed hold permanent contracts",
-    fa = "%s٪ از شاغلان قرارداد دائم دارند"),
+    fa = "%s درصد از شاغلان قرارداد دائم دارند"),
   nl_card1_bullet_flex = list(
     en = "%s%% hold flexible contracts",
-    fa = "%s٪ قرارداد موقت دارند"),
+    fa = "%s درصد قرارداد موقت دارند"),
   nl_card1_bullet_self = list(
     en = "%s%% are self-employed",
-    fa = "%s٪ خوداشتغال هستند"),
+    fa = "%s درصد خوداشتغال هستند"),
   nl_card2_primary = list(
     en = "of the Dutch national average household disposable income, for Iranian-origin households (%s).",
     fa = "از میانگین ملی درآمد قابل تصرف خانوار در هلند، برای خانوارهای ایرانی‌تبار (%s)."),
   nl_card2_secondary = list(
     en = "The share of Iranian-origin households below the low-income threshold has fallen from %s%% in %s to %s%% in %s.",
-    fa = "سهم خانوارهای ایرانی‌تبارِ زیر آستانه کم‌درآمدی از %s٪ در سال %s به %s٪ در سال %s کاهش یافته است."),
+    fa = "سهم خانوارهای ایرانی‌تبارِ زیر آستانه کم‌درآمدی از %s درصد در سال %s به %s درصد در سال %s کاهش یافته است."),
 
   # --- workinc: charts ------------------------------------------------------
   nl_part_title = list(
@@ -155,19 +155,19 @@ STR <- list(
     fa = "<b>مشارکت در نیروی کار<br>در هلند</b>"),
   nl_part_hover = list(
     en = "<b>%s</b><br>Participation: %s%%<br>%s employed / %s total (15–74)",
-    fa = "<b>%s</b><br>مشارکت: %s٪<br>%s شاغل از مجموع %s نفر (15–74 ساله)"),
+    fa = "<b>%s</b><br>مشارکت: %s درصد<br>%s شاغل از مجموع %s نفر (15–74 ساله)"),
   nl_emp_title = list(
     en = "<b>Employment Type in the Netherlands</b>",
     fa = "<b>نوع اشتغال در هلند</b>"),
   nl_emp_hover_perm = list(
     en = "<b>%s</b><br>Permanent: %s%%",
-    fa = "<b>%s</b><br>قرارداد دائم: %s٪"),
+    fa = "<b>%s</b><br>قرارداد دائم: %s درصد"),
   nl_emp_hover_flex = list(
     en = "<b>%s</b><br>Flexible: %s%%",
-    fa = "<b>%s</b><br>قرارداد موقت: %s٪"),
+    fa = "<b>%s</b><br>قرارداد موقت: %s درصد"),
   nl_emp_hover_self = list(
     en = "<b>%s</b><br>Self-employed: %s%%",
-    fa = "<b>%s</b><br>خوداشتغال: %s٪"),
+    fa = "<b>%s</b><br>خوداشتغال: %s درصد"),
   nl_leg_permanent = list(
     en = "Permanent",
     fa = "قرارداد دائم"),
@@ -185,7 +185,7 @@ STR <- list(
     fa = "<b>%s</b><br>میانگین هلند: %s یورو"),
   nl_inc_hover_iran = list(
     en = "<b>%s</b><br>Iranian-origin: €%s<br>%s%% of NL average",
-    fa = "<b>%s</b><br>ایرانی‌تبار: %s یورو<br>معادل %s٪ میانگین هلند"),
+    fa = "<b>%s</b><br>ایرانی‌تبار: %s یورو<br>معادل %s درصد میانگین هلند"),
   nl_leg_iranian_origin = list(
     en = "Iranian-origin",
     fa = "ایرانی‌تبار"),
@@ -197,10 +197,10 @@ STR <- list(
     fa = "<b>خانوارهای کم‌درآمد<br>در هلند</b>"),
   nl_lowinc_hover_nl = list(
     en = "<b>%s</b><br>NL average: %s%%",
-    fa = "<b>%s</b><br>میانگین هلند: %s٪"),
+    fa = "<b>%s</b><br>میانگین هلند: %s درصد"),
   nl_lowinc_hover_iran = list(
     en = "<b>%s</b><br>Iranian-origin: %s%%",
-    fa = "<b>%s</b><br>ایرانی‌تبار: %s٪"),
+    fa = "<b>%s</b><br>ایرانی‌تبار: %s درصد"),
 
   # --- workinc: tabs --------------------------------------------------------
   nl_tab_participation = list(
@@ -221,5 +221,5 @@ STR <- list(
   # builder reads it inline rather than via tr() (tr() fails loud on empty).
   nl_axis_pct_suffix  = list(en = "%",       fa = "٪"),
   nl_axis_euro_prefix = list(en = "€",  fa = ""),
-  nl_axis_k_suffix    = list(en = "k",       fa = " هزار یورو")
+  nl_axis_k_suffix    = list(en = "k",       fa = "")
 )

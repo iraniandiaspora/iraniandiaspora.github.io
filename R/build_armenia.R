@@ -78,7 +78,7 @@ lnk <- function(x) if (is_fa()) bdi(x) else x
 fmtv <- function(x) {
   s <- format(x, big.mark = ",")
   if (!is_fa()) return(s)
-  gsub(",", "٬", fa_digits(s), fixed = TRUE)
+  fa_digits(s)   # keep ASCII "," thousands (Iranian economic-press convention)
 }
 
 # htxt(): Persian-digit any stray Western digits in an assembled display string
