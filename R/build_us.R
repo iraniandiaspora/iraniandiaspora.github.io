@@ -502,12 +502,16 @@ writeLines(page_template("Education", paste0(
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American women ages 25&ndash;34 hold a bachelor&rsquo;s degree or higher &mdash; now ahead of men (%d%%).</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Among older first-generation (ages 75&ndash;84): %d%% of men hold a BA+ vs only %d%% of women.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Among older first-generation (ages 75&ndash;84), %d%% of men hold a bachelor&rsquo;s degree or higher, vs only %d%% of women</li>
+    </ul>
   </div>', g1_young_f, g1_young_m, g1_old_m, g1_old_f),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American women ages 35&ndash;44 hold a bachelor&rsquo;s degree or higher &mdash; vs %d%% of men.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Both generations now show women outpacing men in higher education.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Both generations now show women outpacing men in higher education</li>
+    </ul>
   </div>', g2_mid_f, g2_mid_m),
   '<div class="chart-card pc1">',
   '<div class="section-title">Educational Attainment of Iranian-Americans: First Generation</div>',
