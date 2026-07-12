@@ -352,8 +352,7 @@ writeLines(page_template("US: Immigration History", paste0(
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">Iranians granted U.S. permanent residence between 1970 and 2024.</div>
-    <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45; margin-top:16px;">About these figures</div>
-    <ul style="margin:8px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>Counts green cards granted, not the current Iran-born population</li>
       <li>Includes people who later died, returned, or moved elsewhere</li>
       <li>Many recipients first entered on temporary visas (student, work) before receiving permanent residence in a subsequent year</li>
@@ -370,7 +369,7 @@ writeLines(page_template("US: Immigration History", paste0(
     </ul>
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>Family has been the largest category throughout</li>
-      <li>The 1989\u201391 surge includes IRCA legalization \u2014 a one-time program from a 1986 law that granted permanent residence to many previously undocumented immigrants</li>
+      <li>The 1989\u201391 surge includes a one-time program from a 1986 law (IRCA) that granted permanent residence to many previously undocumented immigrants</li>
     </ul>
   </div>',
   '<div class="chart-card pc1">', plotly_div("lpr-total", plotly_to_json(p_lpr_total), "450px", source = SRC_LPR), '</div>',
