@@ -81,7 +81,7 @@ STR <- list(
     fa = "<b>جمعیت متولدان ایران در هلند،<br>1990–2025</b>"),
   nl_hist_hover = list(
     en = "<b>%s</b><br>%s Iran-born",
-    fa = "<b>%s</b><br><b>%s</b> نفر متولد ایران"),
+    fa = "<b>%s</b><br>%s نفر متولد ایران"),
   nl_arrival_title = list(
     en = "<b>Iran-Born Residents in the Netherlands<br>by Year of Arrival</b>",
     fa = "<b>ساکنان متولد ایران در هلند<br>به تفکیک سال ورود</b>"),
