@@ -1,0 +1,152 @@
+key,en,fa,context,note,status
+site_name,Iranian Diaspora Dashboard,داشبورد دیاسپورای ایرانی,site title / header,alt: داشبورد ایرانیان جهان; brand term,OWNER-DECISION
+diaspora,diaspora,دیاسپورا,site-wide identity term,confirmed 2026-07-11 (transliteration; standard online),OWNER-CONFIRMED
+iranian_origin,Iranian-origin,ایرانی‌تبار,headline titles for register countries,pending scholarly-usage + prevalence research 2026-07-11; alpha uses ایرانی‌تبار,OWNER-DECISION
+iranian_ancestry,Iranian ancestry,اصالت ایرانی,census ancestry criterion (US/AU/CA),confirmed 2026-07-11; used broadly for ancestry in fa,OWNER-CONFIRMED
+iran_born,Iran-born,متولد ایران,headline titles; chart labels,alt: زاده ایران (more literary),draft
+first_generation,First generation,نسل اول,generation box label,,draft
+second_generation,Second generation,نسل دوم,generation box label,,draft
+third_generation,Third generation,نسل سوم,third-gen disclaimer text,,draft
+iranian_american,Iranian-American,ایرانی‌آمریکایی,US demonym in titles,pattern: ایرانی‌کانادایی، ایرانی‌استرالیایی,draft
+estimated_population,Estimated population,برآورد جمعیت,headline card title prefix,برآورد before the noun reads naturally,draft
+estimated_origin_population_title,Estimated Iranian-Origin Population in {Country},برآورد جمعیت ایرانی‌تبار در {کشور},headline card title pattern,,draft
+estimated_iranborn_population_title,Estimated Iran-Born Population in {Country},برآورد جمعیت متولدان ایران در {کشور},headline card title pattern,,draft
+foreign_born,Foreign-born,متولد خارج از کشور,identification text,,draft
+native_born,Native-born,متولد داخل کشور,identification text,relative to host country,draft
+place_of_birth,Place of birth,محل تولد,identification-box bullet,,draft
+country_of_birth,Country of birth,کشور محل تولد,identification-box bullet,,draft
+compound_definition,Compound definition,تعریف ترکیبی,US/AU methodology text,,draft
+how_we_count,How We Count,روش شمارش,waterfall tab title (US/AU),,draft
+who_is_counted,A person is counted if they meet at least one of:,هر فرد در صورتی شمرده می‌شود که دست‌کم یکی از این معیارها را داشته باشد:,identification-box heading,,draft
+not_counted,not counted,شمرده نمی‌شود,third-gen disclaimer,,draft
+year_of_arrival,Year of Arrival,سال ورود,tab label + chart titles,site-wide standard framing,draft
+immigration,Immigration,مهاجرت,nav/tab label,,draft
+annual_arrivals,Annual Arrivals,ورود سالانه,tab label (DE/US flow charts),alt: ورودی‌های سالانه,draft
+length_of_residence,Length of Residence,مدت اقامت,DE tab label,same rendering for residence duration,draft
+cumulative_share,cumulative share,سهم تجمعی,hover text,,draft
+cumulative_pct,cumulative %,درصد تجمعی,right-axis label,,draft
+cumulative_hover,% of today's Iran-born population had arrived,تا این سال …٪ از جمعیت امروز متولدان ایران وارد شده بودند,cumulative-line tooltip,stock composition; never «درصد کل ورودها»,draft
+naturalization,naturalization,کسب تابعیت,DE/TR page text,alt: تحصیل تابعیت (too legal),draft
+citizenship,Citizenship,تابعیت,chart title / category,alt: شهروندی; تابعیت for legal status,draft
+citizen,citizen,شهروند,citizenship chart category,,draft
+non_citizen,Not a citizen,غیرشهروند,citizenship chart category,alt: بدون تابعیت کشور میزبان,draft
+permanent_residence,Permanent residence,اقامت دائم,US admissions text,,draft
+green_card,green card,گرین‌کارت,US admissions text,everyday loanword,draft
+admissions,Admissions (permanent residence granted),اعطای اقامت دائم,us-admissions page title context,frame as green cards granted; not پذیرش alone,draft
+asylum,asylum,پناهندگی,category label,پناهجویی = seeking asylum; keep distinct,draft
+refugee,Refugee,پناهنده,admissions category,,draft
+migrant_stock,migrant stock,جمعیت مهاجران,UN data references,avoid calque «انباشت مهاجران»,draft
+un_migrant_stock,UN Migrant Stock,برآورد جمعیت مهاجران سازمان ملل,source lines (Global/NL/AM),,draft
+immigration_category,immigration category,نوع مهاجرت,US admissions legend,,draft
+family_sponsored,Family-sponsored,مهاجرت خانوادگی,admissions category,,draft
+employment_based,Employment-based,مهاجرت کاری,admissions category,alt: مهاجرت شغلی,draft
+diversity_visa,Diversity,ویزای تنوع (لاتاری),admissions category,لاتاری is the everyday name,draft
+main_reason_for_coming,Main Reason for Coming,دلیل اصلی مهاجرت,DE tab label,,draft
+age_at_arrival,Age at arrival,سن هنگام ورود,DE charts,,draft
+labour_force,labour force,نیروی کار,work-page text,,draft
+employed,Employed,شاغل,chart category,,draft
+unemployed,Unemployed,بیکار,chart category,,draft
+self_employed,Self-employed,خویش‌فرما,work charts,alt: خوداشتغال; خویش‌فرما common in Iran,draft
+employment,employment,اشتغال,chart titles,,draft
+employment_rate,Employment Rate,نرخ اشتغال,tab label (NO),,draft
+labour_force_participation,Labour force participation,نرخ مشارکت در نیروی کار,NL chart,alt: نرخ مشارکت اقتصادی,draft
+labour_force_status,Labour force status,وضعیت اشتغال,tab label (DE),,draft
+occupation,Occupation,شغل,tab label (US/AU),chart heading may use مشاغل,draft
+industry,Industry,بخش اقتصادی,tab label,صنعت excludes services; avoid,draft
+household,household,خانوار,income methodology text,,draft
+household_income,Household income,درآمد خانوار,US/CA income charts,,draft
+personal_income,Personal income,درآمد شخصی,AU/CA income charts,keep distinct from درآمد خانوار,draft
+disposable_income,Disposable Income,درآمد قابل تصرف,NL tab label,standard Persian econ term,draft
+income_decile,income decile,دهک درآمدی,US/CA/AU charts,دهک is standard Iranian usage,draft
+low_income,Low Income,کم‌درآمد,NL tab,share phrasing: سهم کم‌درآمدها,draft
+median_income,median income,درآمد میانه,text cards,میانه not میانگین (mean),draft
+public_sector,Public sector,بخش دولتی,US work chart,,draft
+private_sector,Private sector,بخش خصوصی,US work chart,,draft
+nonprofit,Non-profit,بخش غیرانتفاعی,US work chart,,draft
+permanent_contract,Permanent contract,قرارداد دائم,NL employment-type chart,,draft
+flexible_contract,Flexible contract,قرارداد موقت,NL employment-type chart,avoid calque «منعطف»,draft
+education,Education,تحصیلات,nav/tab label,,draft
+qualification,Qualification,مدرک تحصیلی,UK/DE charts,,draft
+bachelors_or_higher,Bachelor's degree or higher,لیسانس یا بالاتر,education text cards,alt: کارشناسی یا بالاتر (formal),draft
+graduate_degree,Graduate degree,تحصیلات تکمیلی,education charts,gloss: فوق‌لیسانس یا دکترا,draft
+no_formal_qualification,No formal qualification,بدون مدرک رسمی,DE/UK charts,,draft
+field_of_study,Field of study,رشته تحصیلی,CA education chart,,draft
+persian_language,Persian (Farsi),فارسی,language chart category,never «پرشین»,draft
+persian_at_home,Persian spoken at home,صحبت به فارسی در خانه,language charts / DE headline,,draft
+language_at_home,Language spoken at home,زبان رایج در خانه,chart title,avoid calque «زبان صحبت‌شده»,draft
+mother_tongue,Mother tongue,زبان مادری,CA language chart,,draft
+english_only,English only,فقط انگلیسی,language chart category,,draft
+other_language,Other language,زبان‌های دیگر,language chart category,,draft
+population,Population,جمعیت,nav/tab + charts,,draft
+age,Age,سن,chart axis,,draft
+age_group,Age group,گروه سنی,chart axis,,draft
+sex,Sex,جنسیت,chart splits,alt: جنس (stricter demographic term),draft
+male,Male,مرد,chart category,,draft
+female,Female,زن,chart category,,draft
+median_age,Median age,میانه سنی,text cards,,draft
+region,Region,منطقه,UK/US geography,,draft
+province,Province,استان,CA geography,,draft
+state,State,ایالت,US/AU/DE geography,DE Bundesland also ایالت,draft
+county,County,کانتی,US county maps,شهرستان is Iran-specific; media use کانتی,draft
+geographic_distribution,Geographic Distribution,پراکندگی جغرافیایی,map section heading,,draft
+geo_distribution_in_country,Geographic Distribution in {Country},پراکندگی جغرافیایی در {کشور},map heading pattern,,draft
+by_prefix,by ...,به تفکیک,cross-tab pattern,,draft
+by_generation,by generation,به تفکیک نسل,chart subtitle / box title,,draft
+by_sex,by sex,به تفکیک جنسیت,chart subtitle / box title,,draft
+by_state_province,by state/province,به تفکیک ایالت/استان,chart subtitle,,draft
+religion,Religion,دین,AU/UK charts,alt: مذهب (denominational; avoid),draft
+no_religion,No religion,بدون دین,religion chart category,,draft
+marriage,Marriage,ازدواج,US tab,page includes partnerships: ازدواج و زندگی مشترک,draft
+source_label,Source:,منبع:,chart source prefix,,draft
+based_on,Based on,بر اساس,headline source line,,draft
+population_over_time,Population Over Time,جمعیت در گذر زمان,tab label,alt: روند جمعیت,draft
+suppressed,"Suppressed (&lt;5,000)",منتشرنشده (کمتر از ۵٬۰۰۰ نفر),hover for suppressed cells (DE),disclosure rule; not «محرمانه»,draft
+not_available,not available,در دسترس نیست,missing-data label,,draft
+not_stated,Not stated,اظهارنشده,census non-response category,,draft
+other,Other,سایر,catch-all category,,draft
+total,Total,مجموع,chart legend / rows,alt: کل,draft
+methodology,Methodology,روش‌شناسی,methodology page title,alt: روش کار (lighter),draft
+bibliography,Bibliography,کتاب‌شناسی,nav tab,alt: فهرست منابع; torn,draft
+about,About,درباره,nav tab,alt: درباره این سایت,draft
+whats_changed,What's changed,تازه‌های سایت,about-page changelog heading,,draft
+per_year_average,per-year average,میانگین سالانه,normalized-bin footnote,,draft
+nav_global,Global,جهان,nav tab,alt: نمای جهانی,draft
+nav_united_states,United States,آمریکا,nav tab,alt: ایالات متحده (formal); torn,draft
+nav_europe,Europe,اروپا,nav tab,,draft
+nav_canada,Canada,کانادا,nav tab,,draft
+nav_turkiye,Türkiye,ترکیه,nav tab,,draft
+nav_israel,Israel,اسرائیل,nav tab,,draft
+nav_australia,Australia,استرالیا,nav tab,,draft
+nav_armenia,Armenia,ارمنستان,nav tab,,draft
+iran,Iran,ایران,site-wide,,draft
+netherlands,Netherlands,هلند,pilot country page,,draft
+germany,Germany,آلمان,Europe submenu,,draft
+united_kingdom,United Kingdom,بریتانیا,Europe submenu,انگلستان is imprecise (England only),draft
+sweden,Sweden,سوئد,Europe submenu,,draft
+denmark,Denmark,دانمارک,Europe submenu,,draft
+norway,Norway,نروژ,Europe submenu,,draft
+austria,Austria,اتریش,Europe submenu,,draft
+italy,Italy,ایتالیا,Europe submenu,,draft
+france,France,فرانسه,Europe submenu,,draft
+switzerland,Switzerland,سوئیس,Europe submenu,,draft
+finland,Finland,فنلاند,Europe submenu,,draft
+world,World,جهان,global page text,,draft
+census,census,سرشماری,source lines,,draft
+population_register,population register,سامانه ثبت جمعیت,Nordic/NL source descriptions,alt: ثبت احوال (Iran-specific; avoid),draft
+survey,survey,پیمایش,Mikrozensus descriptions,نظرسنجی reads as opinion poll; avoid,draft
+agency_cbs_nl,CBS (Statistics Netherlands),اداره مرکزی آمار هلند (CBS),NL source lines,acronym stays Latin; always gloss,draft
+agency_armstat,Statistics Armenia (ArmStat),کمیته آمار ارمنستان (ArmStat),AM source lines,,draft
+agency_un,United Nations,سازمان ملل متحد,global page,,draft
+agency_un_desa,UN DESA,اداره امور اقتصادی و اجتماعی سازمان ملل (UN DESA),global source lines,,draft
+agency_census_bureau,U.S. Census Bureau,اداره سرشماری آمریکا,US source lines,,draft
+agency_statcan,Statistics Canada,اداره آمار کانادا,CA source lines,,draft
+agency_destatis,Destatis,اداره فدرال آمار آلمان (Destatis),DE source lines,,draft
+agency_bamf,BAMF,اداره فدرال مهاجرت و پناهندگان آلمان (BAMF),DE source lines,,draft
+agency_ons,ONS,اداره ملی آمار بریتانیا (ONS),UK source lines,,draft
+agency_abs,ABS,اداره آمار استرالیا (ABS),AU source lines,,draft
+agency_scb,SCB,اداره آمار سوئد (SCB),SE source lines,,draft
+agency_dst,Statistics Denmark,اداره آمار دانمارک (DST),DK source lines,,draft
+agency_ssb,Statistics Norway,اداره آمار نروژ (SSB),NO source lines,,draft
+agency_eurostat,Eurostat,اداره آمار اتحادیه اروپا (Eurostat),Europe source lines,keep Latin; gloss in Persian,draft
+agency_insee,INSEE,اداره ملی آمار فرانسه (INSEE),FR source lines,,draft
+agency_cbs_israel,CBS (Israel),اداره مرکزی آمار اسرائیل,IL source lines,CBS collides with Netherlands; always gloss country,draft
