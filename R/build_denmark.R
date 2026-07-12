@@ -233,7 +233,7 @@ p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, dk_xmax)),
     yaxis = ov_dk$yaxis,
-    annotations = ov_dk$annotations, bargap = 0.5,
+    annotations = ov_dk$annotations, bargap = ov_dk$bargap,
     margin = list(l = ov_dk$margin_l, r = 20, t = 40, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
@@ -257,7 +257,7 @@ workinc_body <- paste0(
     top3$sector_en[2], top3$pct[2],
     top3$sector_en[3], top3$pct[3]),
   '<div class="chart-card">',
-  plotly_div("dk-industry", plotly_to_json(p_industry), "520px", source = DST_EMP_SOURCE),
+  plotly_div("dk-industry", plotly_to_json(p_industry), ov_dk$height, source = DST_EMP_SOURCE),
   '</div>',
   '</div>'
 )

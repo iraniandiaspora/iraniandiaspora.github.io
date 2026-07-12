@@ -702,7 +702,7 @@ p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_bi$xreversed) c(bi_xmax, 0) else c(0, bi_xmax)),
     yaxis = ov_bi$yaxis,
-    annotations = ov_bi$annotations, bargap = 0.5,
+    annotations = ov_bi$annotations, bargap = ov_bi$bargap,
     margin = list(t = 55, b = 40, l = ov_bi$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
@@ -733,7 +733,7 @@ p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h"
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_oc$xreversed) c(oc_xmax, 0) else c(0, oc_xmax)),
     yaxis = ov_oc$yaxis,
-    annotations = ov_oc$annotations, bargap = 0.5,
+    annotations = ov_oc$annotations, bargap = ov_oc$bargap,
     margin = list(t = 55, b = 40, l = ov_oc$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
@@ -786,13 +786,13 @@ writeLines(page_template("Work", paste0(
   '<button class="tab-btn" onclick="switchTab(\'bo-ind\',this,\'bo-tabs\')">Sectors</button>',
   '</div>',
   '<div id="bo-occ" class="tab-panel active" data-group="bo-tabs">',
-  plotly_div("us-occ", plotly_to_json(p_occ), "430px", source = SRC_OCC),
+  plotly_div("us-occ", plotly_to_json(p_occ), "500px", source = SRC_OCC),
   '</div>',
   '<div id="bo-rate" class="tab-panel" data-group="bo-tabs">',
-  plotly_div("biz-rate", plotly_to_json(p_bizrate), "430px", source = SRC_BIZ),
+  plotly_div("biz-rate", plotly_to_json(p_bizrate), "500px", source = SRC_BIZ),
   '</div>',
   '<div id="bo-ind" class="tab-panel" data-group="bo-tabs">',
-  plotly_div("biz-ind", plotly_to_json(p_bizind), "400px", source = SRC_BIZ),
+  plotly_div("biz-ind", plotly_to_json(p_bizind), "500px", source = SRC_BIZ),
   '</div>',
   '</div>',
   '</div>'

@@ -404,7 +404,7 @@ p_qual <- plot_ly(qual, y = ~category, x = ~count, type = "bar",
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, qual_xmax)),
     yaxis = ov_qual$yaxis,
-    annotations = ov_qual$annotations, bargap = 0.5,
+    annotations = ov_qual$annotations, bargap = ov_qual$bargap,
     margin = list(l = ov_qual$margin_l, r = 20, t = 55, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
@@ -445,7 +445,7 @@ workedu_body <- paste0(
   plotly_div("uk-econ", plotly_to_json(p_econ), "380px", source = ONS_CUSTOM),
   '</div>',
   '<div class="chart-card pc2">',
-  plotly_div("uk-qual", plotly_to_json(p_qual), "380px", source = ONS_CUSTOM),
+  plotly_div("uk-qual", plotly_to_json(p_qual), ov_qual$height, source = ONS_CUSTOM),
   '</div>',
   '</div>'
 )
