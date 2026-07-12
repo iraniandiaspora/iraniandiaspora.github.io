@@ -37,15 +37,17 @@ fa_digits <- function(s) {
 fa_num <- function(x, dec = 0, big = TRUE) {
   s <- formatC(x, format = "f", digits = dec, big.mark = if (big) "," else "")
   if (!is_fa()) return(s)
-  s <- fa_digits(s)
-  s <- gsub(",", "٬", s, fixed = TRUE)   # thousands -> ٬
-  s <- gsub(".", "٫", s, fixed = TRUE)   # decimal   -> ٫
-  s
+  # Persian digits only; keep ASCII "." decimal and "," thousands. The Iranian
+  # economic press (Donya-e-Eqtesad, Eghtesad News, BBC Persian) prints a plain
+  # dot and comma, NOT the prescriptive momayyez ٫ / Arabic ٬ — surveyed
+  # 2026-07-11 (zero occurrences of ٫/٬ across ~1.6M chars of raw press HTML).
+  fa_digits(s)
 }
 
-# fa_pct(): value already on a 0-100 scale. en "43%" ; fa "۴۳٪".
+# fa_pct(): value already on a 0-100 scale. en "43%"; fa "۴۳ درصد" — the economic
+# press uses the WORD «درصد» after the number, not the ٪ sign.
 fa_pct <- function(x, dec = 0) {
-  paste0(fa_num(x, dec), if (is_fa()) "٪" else "%")
+  paste0(fa_num(x, dec), if (is_fa()) " درصد" else "%")
 }
 
 # bdi(): isolate an embedded opposite-direction run (Latin agency name, URL,
@@ -76,9 +78,9 @@ tr <- function(key) {
 FA_LOCALE_JS <- paste0(
   '<script>(function(){if(!window.Plotly)return;',
   'Plotly.register({moduleType:"locale",name:"fa",dictionary:{},format:{',
-  'decimal:"٫",thousands:"٬",grouping:[3],percent:"٪",',
+  'decimal:".",thousands:",",grouping:[3],percent:"٪",',
   'numerals:["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"]}});',
-  'Plotly.setPlotConfig({locale:"fa",separators:"٫٬"});})();</script>')
+  'Plotly.setPlotConfig({locale:"fa",separators:".,"});})();</script>')
 
 # --- Persian font (self-hosted Vazirmatn) -------------------------------------
 # Relative "lib/fonts/..." resolves the same from docs/pages/*.fa.html as the
@@ -96,18 +98,19 @@ FA_FONT_HEAD <- paste0(
 # <p> carries an inline text-align:right).
 FA_RTL_OVERRIDES <- paste0(
   '<style>',
-  '[dir="rtl"] .chart-card p[style*="text-align:right"]{text-align:left !important;}',
   '[dir="rtl"] body{text-align:right;}',
   '[dir="rtl"] .headline div[style*="text-align:left"]{text-align:right !important;}',
-  '[dir="rtl"] .headline ul[style*="padding-left"]{padding-left:0 !important;padding-right:20px !important;}',
-  '[dir="rtl"] .text-card ul[style*="padding-left"]{padding-left:0 !important;padding-right:18px !important;}',
+  '[dir="rtl"] .headline ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:20px !important;}',
+  '[dir="rtl"] .text-card ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:18px !important;}',
+  '[dir="rtl"] .headline ul li,[dir="rtl"] .text-card ul li{text-align:right !important;}',
   '</style>')
 
 # --- FA_NUM_SCRIPT: universal Persian-digit pass ------------------------------
 # The Plotly `fa` locale does NOT reliably Persian-ize auto axis ticks / colorbar
 # in 3.4.0, and prose years baked as literals (source lines) also stay Latin.
-# This runtime pass converts Latin digits in every VISIBLE text node to Persian
-# (۰-۹), and swaps , -> ٬ and . -> ٫ inside chart text specifically. It walks
+# This runtime pass converts Western digits in every VISIBLE text node to Persian
+# (۰-۹). It keeps ASCII "." / "," separators (matches Iranian economic-press
+# usage, surveyed 2026-07-11). It walks
 # text nodes only and SKIPS <script>/<style>, so it can never corrupt the Plotly
 # data JSON or CSS. Re-runs after every plotly_afterplot so interaction (zoom,
 # tab switch, hover re-render) stays Persian. Injected before </body> on fa pages.
@@ -121,11 +124,8 @@ FA_NUM_SCRIPT <- paste0(
   'var t=p.nodeName;if(t==="SCRIPT"||t==="STYLE")return NodeFilter.FILTER_REJECT;',
   'return /[0-9]/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;}});',
   'var a=[],n;while(n=w.nextNode())a.push(n);',
-  'a.forEach(function(x){x.nodeValue=fd(x.nodeValue).split(",").join("٬");});}',
-  'function sepPass(){document.querySelectorAll(".js-plotly-plot text").forEach(function(el){',
-  'if(el.textContent.indexOf(".")<0)return;',
-  'el.textContent=el.textContent.split(".").join("٫");});}',
-  'function run(){digitsPass();sepPass();}',
+  'a.forEach(function(x){x.nodeValue=fd(x.nodeValue);});}',
+  'function run(){digitsPass();}',
   'function hook(){document.querySelectorAll(".js-plotly-plot").forEach(function(p){',
   'if(p.on&&!p._faHooked){p._faHooked=true;p.on("plotly_afterplot",function(){setTimeout(run,0);});}});}',
   'window.addEventListener("load",function(){run();hook();setTimeout(function(){run();hook();},1500);});',

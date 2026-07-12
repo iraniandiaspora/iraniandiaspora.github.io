@@ -13,7 +13,7 @@
 #     truth) so the English edition stays byte-identical.
 #   * Every %d / %.2f from the original is rewritten as %s; the builder passes
 #     fa_num()/fmtv() so the number is language-formatted and the percent SIGN
-#     lives in the template (%% in en, ٪ in fa).
+#     lives in the template (%% in en,  درصد in fa).
 #   * HTML tags / entities (<b>, <br>, &mdash;, &ndash;, &rsquo;) mirror the en
 #     structure; only the human text is swapped in fa.
 #   * fa hover templates bake Persian digits directly (hover labels are created
@@ -120,16 +120,16 @@ STR <- list(
     fa = "ایران"),
   gl_leg_bin1 = list(
     en = "1 – 1,000",
-    fa = "۱ تا ۱٬۰۰۰"),
+    fa = "۱ تا ۱,۰۰۰"),
   gl_leg_bin2 = list(
     en = "1,000 – 10,000",
-    fa = "۱٬۰۰۰ تا ۱۰٬۰۰۰"),
+    fa = "۱,۰۰۰ تا ۱۰,۰۰۰"),
   gl_leg_bin3 = list(
     en = "10,000 – 100,000",
-    fa = "۱۰٬۰۰۰ تا ۱۰۰٬۰۰۰"),
+    fa = "۱۰,۰۰۰ تا ۱۰۰,۰۰۰"),
   gl_leg_bin4 = list(
     en = "100,000 – 450,000",
-    fa = "۱۰۰٬۰۰۰ تا ۴۵۰٬۰۰۰"),
+    fa = "۱۰۰,۰۰۰ تا ۴۵۰,۰۰۰"),
   gl_leg_nodata = list(
     en = "No data",
     fa = "بدون داده"),

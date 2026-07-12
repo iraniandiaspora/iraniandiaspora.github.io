@@ -45,7 +45,7 @@ source("R/i18n/strings_global.R")
 fmtv <- function(x) {
   s <- format(x, big.mark = ",")
   if (!is_fa()) return(s)
-  gsub(",", "٬", fa_digits(s), fixed = TRUE)
+  fa_digits(s)   # keep ASCII "," thousands (Iranian economic-press convention)
 }
 
 # htxt(): Persian-digit any stray Western digits in an assembled display string
@@ -258,6 +258,16 @@ for (LANG in c("en", "fa")) {
 
   total_label <- sprintf(tr("gl_total_label"), fa_num(total_2024 / 1e6, 2))
 
+  # Streamgraph fill-hover fix. Each filled trace keeps its ENGLISH `name` (the
+  # legend/highlight JS matches trace.name against data-lg). With hoveron="fills"
+  # and a per-point `text` ARRAY, Plotly falls back to that English name for the
+  # fill label — so the fa fill hover showed "United States of America" instead
+  # of the Persian country name already sitting in `text`. A `hovertemplate`
+  # overrides the name-box and renders the per-point Persian `text` (with
+  # <extra></extra> suppressing the trace-name secondary box). fa-only (NULL in
+  # en, which plotly_build drops), so the English page stays byte-identical.
+  stream_hovertmpl <- if (is_fa()) "%{text}<extra></extra>" else NULL
+
   # Source-line link anchors are per-language: the fa anchors carry the Persian
   # agency gloss with the Latin acronym isolated in <bdi> (glossary rule); the
   # en anchors reproduce the committed text exactly.
@@ -289,7 +299,7 @@ for (LANG in c("en", "fa")) {
         marker = list(size = 8, color = "rgba(0,0,0,0)"),
         text = sprintf(tr("gl_stream_hover"),
           grp_label(g), fa_num(yr_nums, 0, big = FALSE), fmtv(vals)),
-        hoverinfo = "text")
+        hoverinfo = "text", hovertemplate = stream_hovertmpl)
   }
 
   for (i in seq_along(bot_groups)) {
@@ -310,7 +320,7 @@ for (LANG in c("en", "fa")) {
         marker = list(size = 8, color = "rgba(0,0,0,0)"),
         text = sprintf(tr("gl_stream_hover"),
           grp_label(g), fa_num(yr_nums, 0, big = FALSE), fmtv(vals)),
-        hoverinfo = "text")
+        hoverinfo = "text", hovertemplate = stream_hovertmpl)
   }
 
   p_stock <- p_stock %>% layout(

@@ -9,7 +9,7 @@
 #     truth) so the English edition stays byte-identical.
 #   * Every %d / format() slot from the original is rewritten as %s; the
 #     builder passes fa_num()/fmtv() so the number is language-formatted and
-#     the percent SIGN would live in the template (%% en, ٪ fa) if used.
+#     the percent SIGN would live in the template (%% en,  درصد fa) if used.
 #   * HTML tags / entities (<strong>, <br>, &mdash;) mirror the en structure;
 #     only the human text is swapped in fa. Latin digits in fa prose are
 #     converted at runtime by FA_NUM_SCRIPT.
