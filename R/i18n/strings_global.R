@@ -142,8 +142,8 @@ STR <- list(
     en = "Eurostat",
     fa = "اداره آمار اتحادیه اروپا (<bdi>Eurostat</bdi>)"),
   gl_src_area = list(
-    en = "Source: %s, supplemented by %s. Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.",
-    fa = "منبع: %s، با داده‌های تکمیلی از %s. داده‌ها در بازه‌های پنج‌ساله (۱۹۹۰&ndash;۲۰۲۰) و سال ۲۰۲۴ گزارش شده‌اند.<br>بر پایه داده‌های جمعیت متولد خارج از کشور از سرشماری‌ها و سامانه‌های ثبت جمعیت ملی."),
+    en = "Source: %s, supplemented by %s.<br>Data reported at 5-year intervals (1990&ndash;2020) and 2024.<br>Based on foreign-born population data from national censuses and population registers.",
+    fa = "منبع: %s، با داده‌های تکمیلی از %s.<br>داده‌ها در بازه‌های پنج‌ساله (۱۹۹۰&ndash;۲۰۲۰) و سال ۲۰۲۴ گزارش شده‌اند.<br>بر پایه داده‌های جمعیت متولد خارج از کشور از سرشماری‌ها و سامانه‌های ثبت جمعیت ملی."),
   gl_src_map = list(
     en = "Source: %s, supplemented by %s<br>Based on foreign-born population data from national censuses and population registers.",
     fa = "منبع: %s، با داده‌های تکمیلی از %s<br>بر پایه داده‌های جمعیت متولد خارج از کشور از سرشماری‌ها و سامانه‌های ثبت جمعیت ملی.")

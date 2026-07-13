@@ -174,7 +174,7 @@ pop_body <- paste0(
   BFS_LINK, ', ', data_yr, '</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Switzerland uses population registers. A person is counted as Iran-born based on:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Country of birth</strong> &mdash; recorded in the population register</li>',
   '</ul>',
   sprintf('<p style="margin-top:10px; font-size:12px; color:#555; line-height:1.5;">Of the %s Iran-born residents, %s (%d%%) hold Swiss citizenship, %s hold Iranian citizenship, and %s hold other nationalities.</p>',

@@ -264,7 +264,7 @@ pop_body <- paste0(
   '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html" style="color:#2774AE;" target="_blank">2025 Mikrozensus</a>, an annual 1% household survey by Destatis, the German Federal Statistical Office</div>',
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of two survey questions:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;In which country were you born?&rdquo; (Iran)</span></li>',
   '<li><strong>Parental origin</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;In which country was your mother / father born?&rdquo; (Iran, for at least one parent)</span></li>',
   '</ul>',
@@ -276,11 +276,11 @@ pop_body <- paste0(
   # Bottom row: bar chart + choropleth map
   '<div class="chart-row">',
   '<div class="chart-card">', plotly_div("de-bund-bar", plotly_to_json(p_bund_bar), "450px",
-    source = paste0(MZ_SOURCE, "<br>Six states with fewer than 5,000 Iranian-origin residents are suppressed by Destatis (shown in grey).")), '</div>',
+    source = paste0(MZ_SOURCE, "<br>Six states with fewer than 5,000 Iranian-origin residents are suppressed by Destatis (shown in gray).")), '</div>',
   '<div class="chart-card">',
   '<div class="section-title">Geographic Distribution in Germany</div>',
   plotly_div("de-bund-map", plotly_to_json(p_de_map), "450px",
-    source = paste0(MZ_SOURCE, "<br>Grey states: suppressed (<5,000). Published state counts sum to ~308,000 of the 334,000 national total.")),
+    source = paste0(MZ_SOURCE, "<br>Gray states: suppressed (<5,000). Published state counts sum to ~308,000 of the 334,000 national total.")),
   '</div>',
   '</div>'
 )
@@ -597,7 +597,7 @@ inactive    <- emp_status$value[emp_status$category == "Nichterwerbspersonen"]
 emp_total   <- employed + unemployed + inactive
 
 emp_bar_df <- data.frame(
-  status = c("Employed", "Unemployed", "Not in labour force"),
+  status = c("Employed", "Unemployed", "Not in labor force"),
   count  = c(employed, unemployed, inactive),
   stringsAsFactors = FALSE
 )
@@ -612,7 +612,7 @@ p_emp_status <- plot_ly(emp_bar_df, x = ~status, y = ~count, type = "bar",
       status, format(count, big.mark = ","), pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(
-    title = list(text = "<b>Labour Force Status in Germany</b>",
+    title = list(text = "<b>Labor Force Status in Germany</b>",
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ","),
@@ -781,7 +781,7 @@ workinc_body <- paste0(
   sprintf('    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>%d%% of all Iranian-origin residents aged 15+ are employed</li>
       <li>%d%% are unemployed</li>
-      <li>%d%% are not in the labour force (students, retirees, carers)</li>
+      <li>%d%% are not in the labor force (students, retirees, caregivers)</li>
     </ul>
   </div>',
     emp_pct, unemp_pct, nilf_pct),
@@ -796,7 +796,7 @@ workinc_body <- paste0(
   # LEFT: work with 2 tabs (labour force status + industry)
   '<div class="chart-card pc1">',
   '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'de-wk-status\',this,\'de-wk-tabs\')">Labour Force Status</button>',
+  '<button class="tab-btn active" onclick="switchTab(\'de-wk-status\',this,\'de-wk-tabs\')">Labor Force Status</button>',
   '<button class="tab-btn" onclick="switchTab(\'de-wk-industry\',this,\'de-wk-tabs\')">Employment by Industry</button>',
   '</div>',
   '<div id="de-wk-status" class="tab-panel active" data-group="de-wk-tabs">',
@@ -805,13 +805,13 @@ workinc_body <- paste0(
   '</div>',
   '<div id="de-wk-industry" class="tab-panel" data-group="de-wk-tabs">',
   plotly_div("de-industry", plotly_to_json(p_industry), ov_de_ind$height,
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Iranian-origin residents employed across five broad sectors. Agriculture and Public administration are suppressed by Destatis (shown in grey). Percentages are computed against the full published employed total (~175,000), so visible bars do not sum to 100%.")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Iranian-origin residents employed across five broad sectors. Agriculture and Public administration are suppressed by Destatis (shown in gray). Percentages are computed against the full published employed total (~175,000), so visible bars do not sum to 100%.")),
   '</div>',
   '</div>',
   # RIGHT: income chart
   '<div class="chart-card pc2">',
   plotly_div("de-income", plotly_to_json(p_income), "510px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Net monthly personal income of employed Iranian-origin residents, all generations combined. The under-\u20ac500 bracket is suppressed by Destatis (<5,000), shown in grey.")),
+    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Net monthly personal income of employed Iranian-origin residents, all generations combined. The under-\u20ac500 bracket is suppressed by Destatis (<5,000), shown in gray.")),
   '</div>',
   '</div>'
 )
@@ -925,8 +925,11 @@ langedu_body <- paste0(
      only_de_pct, mainly_de_pct, other_lang_pct, kurdish_pct),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold the Abitur, the secondary-school qualification that grants university entry.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">About %d%% (~%s) hold an academic degree.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold the Abitur.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>The Abitur is the secondary-school qualification that grants university entry</li>
+      <li>About %d%% (~%s) hold an academic degree</li>
+    </ul>
   </div>', abitur_pct, academic_pct, format(academic_k * 1000, big.mark = ",")),
   # LEFT: language chart (standalone, no persian sidebar)
   '<div class="chart-card pc1" style="display:flex; flex-direction:column; justify-content:center;">',

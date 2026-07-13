@@ -261,7 +261,7 @@ pop_body <- paste0(
   ', ', SCOT_LINK, ', and ', NISRA_LINK, '</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">The UK uses a decennial census. A person is counted as Iran-born based on:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;What is your country of birth?&rdquo;</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted.</p>',

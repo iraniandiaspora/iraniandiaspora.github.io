@@ -235,7 +235,7 @@ pop_body <- paste0(
   SCB_LINK, ', ', data_yr, '</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Sweden uses population registers. A person is classified as Iranian-origin if they meet at least one of:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Born in Iran</strong> <span style="color:#6b6b6b;">&mdash; first generation</span></li>',
   '<li><strong>Born in Sweden</strong> with a mother or father born in Iran <span style="color:#6b6b6b;">&mdash; second generation</span></li>',
   '</ul>',

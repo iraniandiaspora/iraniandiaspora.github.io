@@ -415,7 +415,7 @@ pop_body <- paste0(
   'Australian Bureau of Statistics</a>, Census of Population and Housing, 2021</div>',
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of four criteria:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; born in Iran</span></li>',
   '<li><strong>Ancestry</strong> <span style="color:#6b6b6b;">&mdash; reports Iranian ancestry</span></li>',
   '<li><strong>Language at home</strong> <span style="color:#6b6b6b;">&mdash; speaks Persian (excluding Dari)</span></li>',
@@ -834,7 +834,7 @@ total_employed <- employed_ft + employed_pt + employed_away
 unemp_ft <- lf$count[lf$status == "Unemployed, looking for full-time work"]
 unemp_pt <- lf$count[lf$status == "Unemployed, looking for part-time work"]
 total_unemployed <- unemp_ft + unemp_pt
-nilf <- lf$count[lf$status == "Not in the labour force"]
+nilf <- lf$count[lf$status == "Not in the labor force"]
 pop_15plus <- total_birthplace - lf$count[lf$status == "Not applicable"]
 labour_force <- total_employed + total_unemployed
 participation_rate <- round(labour_force / pop_15plus * 100, 1)
@@ -1013,7 +1013,7 @@ lf_chart <- lf %>%
   filter(!status %in% c("Not stated", "Not applicable"))
 
 lf_chart$label <- c("Full-time", "Part-time", "Away from work",
-  "Unemp. (FT)", "Unemp. (PT)", "Not in\nlabour force")
+  "Unemp. (FT)", "Unemp. (PT)", "Not in\nlabor force")
 lf_chart$label <- factor(lf_chart$label, levels = lf_chart$label)
 lf_chart$color <- c("#1a4e72", "#2774AE", "#5a9bd5", "#e07b54", "#d4a943", "#b0b0b0")
 lf_chart$pct <- round(lf_chart$count / pop_15plus * 100, 1)
@@ -1026,7 +1026,7 @@ p_lf <- plot_ly(lf_chart, x = ~label, y = ~count, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(
-      text = "<b>Labour Force Status<br>of Iran-Born Australians</b>",
+      text = "<b>Labor Force Status<br>of Iran-Born Australians</b>",
       font = list(size = 15, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10)),
     yaxis = list(title = "", tickformat = ","),
@@ -1072,7 +1072,7 @@ workinc_body <- paste0(
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iran-born Australians work as professionals &mdash; the largest occupation group.</div>
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
       <li>%d%% work in %s &mdash; the largest industry</li>
-      <li>Overall labour-force participation is %.0f%%</li>
+      <li>Overall labor-force participation is %.0f%%</li>
     </ul>
   </div>', prof_pct, top_ind_pct, top_ind, participation_rate),
   sprintf('<div class="text-card pt2" style="text-align:center;">
@@ -1092,12 +1092,12 @@ workinc_body <- paste0(
   # not comparable to the US/Canada household-income decile charts; the wording
   # above makes that explicit. See .claude/rules/australia-pipeline.md.
 
-  # Chart cell 1: tabbed (Occupation | Industry | Labour Force Status)
+  # Chart cell 1: tabbed (Occupation | Industry | Labor Force Status)
   '<div class="chart-card pc1">',
   '<div class="tab-bar">',
   '<button class="tab-btn active" onclick="switchTab(\'au-tab-occ\',this,\'work-tabs\')">Occupation</button>',
   '<button class="tab-btn" onclick="switchTab(\'au-tab-ind\',this,\'work-tabs\')">Industry</button>',
-  '<button class="tab-btn" onclick="switchTab(\'au-tab-lf\',this,\'work-tabs\')">Labour Force</button>',
+  '<button class="tab-btn" onclick="switchTab(\'au-tab-lf\',this,\'work-tabs\')">Labor Force</button>',
   '</div>',
   '<div id="au-tab-occ" class="tab-panel active" data-group="work-tabs">',
   plotly_div("au-occ", plotly_to_json(p_occ), ov_occ$height, source = ABS_SOURCE),

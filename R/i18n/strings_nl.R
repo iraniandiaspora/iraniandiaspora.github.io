@@ -131,7 +131,7 @@ STR <- list(
     en = "%s%%",
     fa = "%s درصد"),
   nl_card1_primary = list(
-    en = "of Iranian-origin residents aged 15&ndash;74 in the Netherlands are in the labour force (%s).",
+    en = "of Iranian-origin residents aged 15&ndash;74 in the Netherlands are in the labor force (%s).",
     fa = "از ساکنان ایرانی‌تبار 15 تا 74 ساله هلند در نیروی کار مشارکت دارند (%s)."),
   nl_card1_bullet_perm = list(
     en = "%s%% of those employed hold permanent contracts",
@@ -151,7 +151,7 @@ STR <- list(
 
   # --- workinc: charts ------------------------------------------------------
   nl_part_title = list(
-    en = "<b>Labour Force Participation<br>in the Netherlands</b>",
+    en = "<b>Labor Force Participation<br>in the Netherlands</b>",
     fa = "<b>مشارکت در نیروی کار<br>در هلند</b>"),
   nl_part_hover = list(
     en = "<b>%s</b><br>Participation: %s%%<br>%s employed / %s total (15–74)",

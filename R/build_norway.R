@@ -204,7 +204,7 @@ pop_body <- paste0(
   SSB_LINK, ', ', data_yr, '</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Norway uses population registers. A person is classified as Iranian-origin if they are:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Immigrant</strong>: born in Iran with two foreign-born parents</li>',
   '<li><strong>Norwegian-born to immigrant parents</strong>: born in Norway with two Iran-born parents</li>',
   '</ul>',

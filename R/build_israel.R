@@ -205,7 +205,7 @@ pop_body <- paste0(
   CBS_LINK, ', 2024</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Israel defines &ldquo;country of origin&rdquo; using a paternal-line, two-generation rule:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Born abroad</strong>: own country of birth is Iran</li>',
   '<li><strong>Born in Israel</strong>: father&rsquo;s country of birth is Iran</li>',
   '</ul>',
