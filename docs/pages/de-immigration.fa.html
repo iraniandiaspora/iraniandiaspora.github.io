@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آلمان: مهاجرت و تابعیت</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-basic-3.4.0.min.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Vazirmatn","Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-row-4 { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
+.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
+.source a { color:#2774AE; }
+.footnote { font-size:12px; color:#6b6b6b; text-align:center; margin:8px 0; font-style:italic; }
+.page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.page-content .chart-card { margin-bottom:0; }
+.pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
+.pc1 { grid-area:2/1; } .pc2 { grid-area:2/2; }
+.tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
+.tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
+  font-family:"Vazirmatn","Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
+.tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:hover:not(.active) { background:#e0e0e0; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+@media (max-width:900px) {
+  body { padding:10px 15px; display:flex; flex-direction:column; }
+  .text-row, .chart-row { grid-template-columns:1fr !important; }
+  .text-row-4 { grid-template-columns:1fr 1fr; }
+  .text-row, .text-row-4 { order:1; }
+  .page-content { grid-template-columns:1fr; }
+  .pt1,.pt2,.pc1,.pc2 { grid-area:auto; }
+  .pc1 { order:1; } .pt1 { order:2; } .pc2 { order:3; } .pt2 { order:4; }
+  .headline { padding:20px 15px; }
+  .section-title { font-size:14px; }
+  .tab-bar { flex-wrap:wrap; gap:4px; }
+  .tab-btn { font-size:12px; padding:5px 10px; }
+  .measure-num { font-size:28px !important; }
+}
+@media (max-width:600px) {
+  .text-row-4 { grid-template-columns:1fr !important; }
+}
+@media (max-width:480px) {
+  body { padding:8px 10px; }
+  .text-card { font-size:13px; padding:14px; }
+  .chart-card { padding:10px; }
+  .measure-num { font-size:24px !important; }
+}
+.mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo { display:none !important; }
+</style>
+
+<style>@font-face{font-family:"Vazirmatn";font-style:normal;font-weight:400;font-display:swap;src:url("lib/fonts/Vazirmatn-Regular.woff2") format("woff2");}@font-face{font-family:"Vazirmatn";font-style:normal;font-weight:700;font-display:swap;src:url("lib/fonts/Vazirmatn-Bold.woff2") format("woff2");}</style>
+<script>(function(){if(!window.Plotly)return;Plotly.register({moduleType:"locale",name:"fa",dictionary:{},format:{decimal:".",thousands:",",grouping:[3],percent:"٪",numerals:["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"]}});Plotly.setPlotConfig({locale:"fa",separators:".,"});})();</script>
+<style>[dir="rtl"] body{text-align:right;}[dir="rtl"] .headline div[style*="text-align:left"]{text-align:right !important;}[dir="rtl"] .headline ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:20px !important;}[dir="rtl"] .text-card ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:18px !important;}[dir="rtl"] .headline ul li,[dir="rtl"] .text-card ul li{text-align:right !important;}</style>
+</head>
+<body>
+<div class="page-content"><div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">۵۱ درصد</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">از ساکنان ایرانی‌تبار در آلمان تابعیت آلمان را دارند &mdash; حدود ۱۷۱,۰۰۰ نفر.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>حدود ۱۶۳,۰۰۰ نفر تابعیت ایران را دارند</li>
+      <li>در سال ۲۰۲۴، ۷,۸۴۰ مورد کسب تابعیت آلمان توسط ایرانیان ثبت شد</li>
+    </ul>
+  </div><div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">۵۴ درصد</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">از ساکنان ایرانیِ نسل اول یک دهه یا بیشتر در آلمان زندگی کرده‌اند.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>حدود ۲۳ درصد سی سال یا بیشتر در آلمان زندگی کرده‌اند</li>
+    </ul>
+  </div><div class="chart-card pc1"><div id="de-cit" style="width:100%;height:480px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":60,"l":60,"t":60,"r":10},"title":{"text":"<b>تابعیت ساکنان ایرانی‌تبار<br>در آلمان<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","tickfont":{"size":12},"type":"category","categoryorder":"array","categoryarray":["اتباع ایران","شهروندان آلمان"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":","},"plot_bgcolor":"white","paper_bgcolor":"white","showlegend":false,"hovermode":"closest","font":{"family":"Vazirmatn, Montserrat, sans-serif"},"hoverlabel":{"align":"right","bgcolor":"white","bordercolor":"#ccc","font":{"family":"Vazirmatn, Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("de-cit",[{"x":["شهروندان آلمان","اتباع ایران"],"y":[171000,163000],"marker":{"color":["#2774AE","#e07b54"],"line":{"color":"rgba(31,119,180,1)"}},"text":["<b>شهروندان آلمان<\/b><br>۱۷۱,۰۰۰ (۵۱.۲ درصد)","<b>اتباع ایران<\/b><br>۱۶۳,۰۰۰ (۴۸.۸ درصد)"],"hoverinfo":["text","text"],"textposition":["none","none"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">منبع: <bdi><a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220257005.html' target='_blank' style='color:#2774AE;'>Destatis</a></bdi> — Mikrozensus 2025 Erstergebnisse<br>پیمایش خانوار آلمان. ساکنان دارای پیشینه مهاجرت (نسل اول یا دوم)، ایران، را می‌شمارد.</p></div><div class="chart-card pc2"><div class="tab-bar"><button class="tab-btn active" onclick="switchTab('de-immig-annual',this,'de-immig-tabs')">ورود سالانه</button><button class="tab-btn" onclick="switchTab('de-immig-motive',this,'de-immig-tabs')">دلیل اصلی مهاجرت</button><button class="tab-btn" onclick="switchTab('de-immig-duration',this,'de-immig-tabs')">مدت اقامت</button></div><div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs"><div id="de-annual" style="width:100%;height:430px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":40,"l":55,"t":55,"r":20},"title":{"text":"<b>ورود سالانه ایرانیان به آلمان،<br>۱۹۹۱–۲۰۲۴<\/b>","font":{"size":15,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","tickfont":{"size":10},"dtick":4},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":",","tickfont":{"size":10}},"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","showlegend":false,"font":{"family":"Vazirmatn, Montserrat, sans-serif"},"hoverlabel":{"align":"right","bgcolor":"white","bordercolor":"#ccc","font":{"family":"Vazirmatn, Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("de-annual",[{"x":[1991,1992,1993,1994,1995,1996,1997,1998,1999,2000,2001,2002,2003,2004,2005,2006,2007,2008,2009,2010,2011,2012,2013,2014,2015,2016,2017,2018,2019,2020,2021,2022,2023,2024],"y":[8143,5842,5942,6585,6846,7815,6300,5547,5968,7629,6684,6089,4899,4138,3379,3085,2890,3374,4092,5791,7213,8224,8016,7199,19414,21056,10246,14520,11880,6604,10653,19288,21102,18862],"type":"bar","marker":{"color":"#2774AE","line":{"color":"#1a4e72","width":0.3}},"text":["<b>۱۹۹۱<\/b><br> ۸,۱۴۳ ورودِ ایرانی","<b>۱۹۹۲<\/b><br> ۵,۸۴۲ ورودِ ایرانی","<b>۱۹۹۳<\/b><br> ۵,۹۴۲ ورودِ ایرانی","<b>۱۹۹۴<\/b><br> ۶,۵۸۵ ورودِ ایرانی","<b>۱۹۹۵<\/b><br> ۶,۸۴۶ ورودِ ایرانی","<b>۱۹۹۶<\/b><br> ۷,۸۱۵ ورودِ ایرانی","<b>۱۹۹۷<\/b><br> ۶,۳۰۰ ورودِ ایرانی","<b>۱۹۹۸<\/b><br> ۵,۵۴۷ ورودِ ایرانی","<b>۱۹۹۹<\/b><br> ۵,۹۶۸ ورودِ ایرانی","<b>۲۰۰۰<\/b><br> ۷,۶۲۹ ورودِ ایرانی","<b>۲۰۰۱<\/b><br> ۶,۶۸۴ ورودِ ایرانی","<b>۲۰۰۲<\/b><br> ۶,۰۸۹ ورودِ ایرانی","<b>۲۰۰۳<\/b><br> ۴,۸۹۹ ورودِ ایرانی","<b>۲۰۰۴<\/b><br> ۴,۱۳۸ ورودِ ایرانی","<b>۲۰۰۵<\/b><br> ۳,۳۷۹ ورودِ ایرانی","<b>۲۰۰۶<\/b><br> ۳,۰۸۵ ورودِ ایرانی","<b>۲۰۰۷<\/b><br> ۲,۸۹۰ ورودِ ایرانی","<b>۲۰۰۸<\/b><br> ۳,۳۷۴ ورودِ ایرانی","<b>۲۰۰۹<\/b><br> ۴,۰۹۲ ورودِ ایرانی","<b>۲۰۱۰<\/b><br> ۵,۷۹۱ ورودِ ایرانی","<b>۲۰۱۱<\/b><br> ۷,۲۱۳ ورودِ ایرانی","<b>۲۰۱۲<\/b><br> ۸,۲۲۴ ورودِ ایرانی","<b>۲۰۱۳<\/b><br> ۸,۰۱۶ ورودِ ایرانی","<b>۲۰۱۴<\/b><br> ۷,۱۹۹ ورودِ ایرانی","<b>۲۰۱۵<\/b><br>۱۹,۴۱۴ ورودِ ایرانی","<b>۲۰۱۶<\/b><br>۲۱,۰۵۶ ورودِ ایرانی","<b>۲۰۱۷<\/b><br>۱۰,۲۴۶ ورودِ ایرانی","<b>۲۰۱۸<\/b><br>۱۴,۵۲۰ ورودِ ایرانی","<b>۲۰۱۹<\/b><br>۱۱,۸۸۰ ورودِ ایرانی","<b>۲۰۲۰<\/b><br> ۶,۶۰۴ ورودِ ایرانی","<b>۲۰۲۱<\/b><br>۱۰,۶۵۳ ورودِ ایرانی","<b>۲۰۲۲<\/b><br>۱۹,۲۸۸ ورودِ ایرانی","<b>۲۰۲۳<\/b><br>۲۱,۱۰۲ ورودِ ایرانی","<b>۲۰۲۴<\/b><br>۱۸,۸۶۲ ورودِ ایرانی"],"hoverinfo":["text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text","text"],"textposition":["none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none","none"],"showlegend":false,"name":"Annual arrivals","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">منبع: BAMF Migrationsberichte (ویرایش‌های 2005، 2015، 2020، 2023، 2024). ورودی‌های سالانه ایرانیان (Zuz&#252;ge، ورود به آلمان) بر پایه آمار رسمی جریان مهاجرت. داده‌های پیش از 1991 تنها برای آلمان غربی موجود است و اینجا لحاظ نشده است.</p></div><div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs"><div id="de-motive" style="width:100%;height:440px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":110,"l":60,"t":65,"r":10},"title":{"text":"<b>دلیل اصلی مهاجرت متولدان ایران<br>به آلمان<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","tickangle":-45,"tickfont":{"size":11},"type":"category","categoryorder":"array","categoryarray":["فرار و پناهندگی","تحصیل و آموزش","پیوستن به خانواده","کار","سایر","تشکیل خانواده"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":","},"plot_bgcolor":"white","paper_bgcolor":"white","showlegend":false,"hovermode":"closest","font":{"family":"Vazirmatn, Montserrat, sans-serif"},"hoverlabel":{"align":"right","bgcolor":"white","bordercolor":"#ccc","font":{"family":"Vazirmatn, Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("de-motive",[{"x":["فرار و پناهندگی","تحصیل و آموزش","پیوستن به خانواده","کار","سایر","تشکیل خانواده"],"y":[117000,44000,43000,25000,21000,14000],"marker":{"color":["#0072B2","#E69F00","#009E73","#CC79A7","#b0b0b0","#56B4E9"],"line":{"color":"rgba(31,119,180,1)"}},"text":["<b>فرار و پناهندگی<\/b><br>۱۱۷,۰۰۰ (۴۳.۸ درصد)","<b>تحصیل و آموزش<\/b><br> ۴۴,۰۰۰ (۱۶.۵ درصد)","<b>پیوستن به خانواده<\/b><br> ۴۳,۰۰۰ (۱۶.۱ درصد)","<b>کار<\/b><br> ۲۵,۰۰۰ (۹.۴ درصد)","<b>سایر<\/b><br> ۲۱,۰۰۰ (۷.۹ درصد)","<b>تشکیل خانواده<\/b><br> ۱۴,۰۰۰ (۵.۲ درصد)"],"hoverinfo":["text","text","text","text","text","text"],"textposition":["none","none","none","none","none","none"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">منبع: <bdi><a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220257005.html' target='_blank' style='color:#2774AE;'>Destatis</a></bdi> — Mikrozensus 2025. تنها نسل اول (متولد ایران).</p></div><div id="de-immig-duration" class="tab-panel" data-group="de-immig-tabs"><div id="de-duration" style="width:100%;height:430px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":90,"l":60,"t":65,"r":10},"title":{"text":"<b>ساکنان متولد ایران<br>به تفکیک مدت اقامت در آلمان<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"سال‌های اقامت در آلمان","tickfont":{"size":11},"type":"category","categoryorder":"array","categoryarray":["40+","30–40","25–30","20–25","15–20","10–15","5–10","< 5"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":","},"plot_bgcolor":"white","paper_bgcolor":"white","showlegend":false,"annotations":[{"text":"میله‌ها از قدیمی‌ترین ورودها (چپ) تا جدیدترین (راست) چیده شده‌اند.","x":0.5,"y":-0.26,"xref":"paper","yref":"paper","showarrow":false,"font":{"size":9,"color":"#6b6b6b"},"xanchor":"center"}],"hovermode":"closest","font":{"family":"Vazirmatn, Montserrat, sans-serif"},"hoverlabel":{"align":"right","bgcolor":"white","bordercolor":"#ccc","font":{"family":"Vazirmatn, Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("de-duration",[{"x":["< 5","5–10","10–15","15–20","20–25","25–30","30–40","40+"],"y":[63000,60000,54000,8000,9000,12000,36000,26000],"marker":{"color":"#2774AE","line":{"color":"rgba(31,119,180,1)"}},"text":["<b>< ۵ سال<\/b><br>۶۳,۰۰۰ (۲۳.۶ درصد)","<b>۵–۱۰ سال<\/b><br>۶۰,۰۰۰ (۲۲.۵ درصد)","<b>۱۰–۱۵ سال<\/b><br>۵۴,۰۰۰ (۲۰.۲ درصد)","<b>۱۵–۲۰ سال<\/b><br> ۸,۰۰۰ (۳.۰ درصد)","<b>۲۰–۲۵ سال<\/b><br> ۹,۰۰۰ (۳.۴ درصد)","<b>۲۵–۳۰ سال<\/b><br>۱۲,۰۰۰ (۴.۵ درصد)","<b>۳۰–۴۰ سال<\/b><br>۳۶,۰۰۰ (۱۳.۵ درصد)","<b>۴۰+ سال<\/b><br>۲۶,۰۰۰ (۹.۷ درصد)"],"hoverinfo":["text","text","text","text","text","text","text","text"],"textposition":["none","none","none","none","none","none","none","none"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">منبع: <bdi><a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220257005.html' target='_blank' style='color:#2774AE;'>Destatis</a></bdi> — Mikrozensus 2025. تنها ساکنان متولد ایران.</p></div></div></div>
+
+<script>
+function switchTab(tabId, btn, groupId) {
+  var panels = document.querySelectorAll(".tab-panel[data-group='" + groupId + "']");
+  panels.forEach(function(p) { p.classList.remove("active"); });
+  document.getElementById(tabId).classList.add("active");
+  var btns = btn.parentElement.querySelectorAll(".tab-btn");
+  btns.forEach(function(b) { b.classList.remove("active"); });
+  btn.classList.add("active");
+  var active = document.getElementById(tabId);
+  active.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) {
+      Plotly.Plots.resize(p);
+      if (p.__hlOn) {
+        p.removeAllListeners("plotly_hover");
+        p.removeAllListeners("plotly_unhover");
+        p.on("plotly_hover", function(d) { p.__hlOn(d.points[0].data.legendgroup); });
+        p.on("plotly_unhover", p.__hlOff);
+      }
+    }
+  });
+  reportHeight();
+}
+</script>
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+<script>(function(){var D={"0":"۰","1":"۱","2":"۲","3":"۳","4":"۴","5":"۵","6":"۶","7":"۷","8":"۸","9":"۹"};function fd(s){return s.replace(/[0-9]/g,function(d){return D[d];});}function digitsPass(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var p=n.parentNode;if(!p)return NodeFilter.FILTER_REJECT;var t=p.nodeName;if(t==="SCRIPT"||t==="STYLE")return NodeFilter.FILTER_REJECT;return /[0-9]/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;}});var a=[],n;while(n=w.nextNode())a.push(n);a.forEach(function(x){x.nodeValue=fd(x.nodeValue);});}function run(){digitsPass();}function hook(){document.querySelectorAll(".js-plotly-plot").forEach(function(p){if(p.on&&!p._faHooked){p._faHooked=true;p.on("plotly_afterplot",function(){setTimeout(run,0);});}});}window.addEventListener("load",function(){run();hook();setTimeout(function(){run();hook();},1500);});})();</script>
+</body>
+</html>
