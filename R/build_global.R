@@ -386,6 +386,9 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .global-text1 { order:2; }
   .global-map   { order:3; }
   .global-text2 { order:4; }
+  /* The natural-earth map only fills ~190px tall on a phone-width container, so
+     the fixed 460px box left big whitespace. Track the map aspect ratio here. */
+  #world-map { height:auto !important; aspect-ratio:1.85 / 1; }
 }
 @media (max-width:480px) {
   body { padding:8px 10px; }
