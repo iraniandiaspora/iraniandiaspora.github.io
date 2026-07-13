@@ -69,7 +69,7 @@ STR <- list(
   # --- population: section title -------------------------------------------
   dk_geo_section_title = list(
     en = "Geographic Distribution in Denmark",
-    fa = "توزیع جغرافیایی در دانمارک"),
+    fa = "پراکندگی جغرافیایی در دانمارک"),
 
   # --- population: charts ---------------------------------------------------
   dk_hist_title = list(

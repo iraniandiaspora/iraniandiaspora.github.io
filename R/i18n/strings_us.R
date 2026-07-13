@@ -74,7 +74,7 @@ US_WORKCLASS_FA <- c(
   "Private sector employee" = "کارمند بخش خصوصی",
   "Public sector employee"  = "کارمند بخش دولتی",
   "Non-profit employee"     = "کارمند بخش غیرانتفاعی",
-  "Self-employed"           = "خویش‌فرما",
+  "Self-employed"           = "خوداشتغال",
   "No work in last 5 years" = "بدون کار در 5 سال گذشته"
 )
 
@@ -183,7 +183,7 @@ STR <- list(
     fa = "منبع: INS Annual Reports (1970–1977)؛ INS Statistical Yearbooks (1978–2004)؛ DHS Yearbook of Immigration Statistics (2005–2024)"),
   us_src_biz = list(
     en = "Source: %s — ACS 2020–2024 5-Year PUMS<br>Self-employed (class of worker), Iran-born residents aged 20+.",
-    fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>خویش‌فرما (طبقه شغلی)، ساکنان متولد ایران 20 سال به بالا."),
+    fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>خوداشتغال (طبقه شغلی)، ساکنان متولد ایران 20 سال به بالا."),
   us_src_occ = list(
     en = "Source: %s — ACS 2020–2024 5-Year PUMS<br>Employed Iranian-American residents (first and second generation) aged 16+.",
     fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>ساکنان شاغل ایرانی‌آمریکایی (نسل اول و دوم) 16 سال به بالا."),
@@ -350,10 +350,10 @@ STR <- list(
   # --- self-employment / occupation / sector charts --------------------------
   us_bizrate_title = list(
     en = "<b>Self-Employment by<br>Country of Birth</b>",
-    fa = "<b>خویش‌فرمایی به تفکیک<br>کشور محل تولد</b>"),
+    fa = "<b>خوداشتغالی به تفکیک<br>کشور محل تولد</b>"),
   us_bizrate_hover = list(
     en = "<b>%s</b><br>%s%% self-employed",
-    fa = "<b>%s</b><br>%s درصد خویش‌فرما"),
+    fa = "<b>%s</b><br>%s درصد خوداشتغال"),
   us_bizind_title = list(
     en = "<b>Industries of<br>Iranian-Owned Businesses</b>",
     fa = "<b>بخش‌های کسب‌وکارهای<br>ایرانی‌مالک</b>"),
@@ -371,7 +371,7 @@ STR <- list(
   us_tab_1gen = list(en = "First Generation", fa = "نسل اول"),
   us_tab_2gen = list(en = "Second Generation", fa = "نسل دوم"),
   us_tab_occ = list(en = "Occupations", fa = "مشاغل"),
-  us_tab_selfemp = list(en = "Self-Employment", fa = "خویش‌فرمایی"),
+  us_tab_selfemp = list(en = "Self-Employment", fa = "خوداشتغالی"),
   us_tab_sectors = list(en = "Sectors", fa = "بخش‌ها"),
 
   # --- text cards ------------------------------------------------------------
@@ -383,13 +383,13 @@ STR <- list(
     fa = "زنان بیش از مردان در بخش دولتی (%s درصد در برابر %s درصد) یا بخش غیرانتفاعی (%s درصد در برابر %s درصد) کار می‌کنند"),
   us_work_c1_b2 = list(
     en = "Self-employment is more common among men (%s%% vs %s%%) and in the first generation than the second (%s%% vs %s%%)",
-    fa = "خویش‌فرمایی در میان مردان (%s درصد در برابر %s درصد) و در نسل اول بیش از نسل دوم (%s درصد در برابر %s درصد) رایج است"),
+    fa = "خوداشتغالی در میان مردان (%s درصد در برابر %s درصد) و در نسل اول بیش از نسل دوم (%s درصد در برابر %s درصد) رایج است"),
   us_work_c2_primary = list(
     en = "of employed Iranian-Americans work in professional or managerial occupations.",
     fa = "از ایرانی‌آمریکایی‌های شاغل در مشاغل حرفه‌ای یا مدیریتی کار می‌کنند."),
   us_work_c2_b1 = list(
     en = "Iranian immigrants are self-employed at %s%%, above the %s%% for all U.S. immigrants",
-    fa = "مهاجران ایرانی با نرخ %s درصد خویش‌فرما هستند، بالاتر از %s درصد برای همه مهاجران آمریکا"),
+    fa = "مهاجران ایرانی با نرخ %s درصد خوداشتغال هستند، بالاتر از %s درصد برای همه مهاجران آمریکا"),
   us_work_c2_b2 = list(
     en = "Arts, food and hospitality is their most common business sector (%s%%)",
     fa = "هنر، غذا و پذیرایی رایج‌ترین بخش کسب‌وکار آنهاست (%s درصد)"),

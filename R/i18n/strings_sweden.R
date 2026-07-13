@@ -74,7 +74,7 @@ STR <- list(
     fa = "سال ورود"),
   se_geo_section_title = list(
     en = "Geographic Distribution in Sweden",
-    fa = "توزیع جغرافیایی در سوئد"),
+    fa = "پراکندگی جغرافیایی در سوئد"),
 
   # --- charts -----------------------------------------------------------------
   se_hist_title = list(
