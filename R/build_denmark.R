@@ -234,7 +234,7 @@ p_industry <- plot_ly(industry, y = ~sector_en, x = ~count, type = "bar",
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, dk_xmax)),
     yaxis = ov_dk$yaxis,
     annotations = ov_dk$annotations, bargap = ov_dk$bargap,
-    margin = list(l = ov_dk$margin_l, r = 20, t = 40, b = 30),
+    margin = list(l = ov_dk$margin_l, r = 20, t = ov_dk$margin_t, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 

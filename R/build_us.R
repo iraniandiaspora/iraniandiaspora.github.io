@@ -667,7 +667,7 @@ p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation =
       font = list(size = 16, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
     yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 50, b = 40, l = 120, r = 20),
+    margin = list(t = 90, b = 40, l = 120, r = 20),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
@@ -703,7 +703,7 @@ p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation
       range = if (ov_bi$xreversed) c(bi_xmax, 0) else c(0, bi_xmax)),
     yaxis = ov_bi$yaxis,
     annotations = ov_bi$annotations, bargap = ov_bi$bargap,
-    margin = list(t = 55, b = 40, l = ov_bi$margin_l, r = 12),
+    margin = list(t = ov_bi$margin_t, b = 40, l = ov_bi$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
@@ -734,7 +734,7 @@ p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h"
       range = if (ov_oc$xreversed) c(oc_xmax, 0) else c(0, oc_xmax)),
     yaxis = ov_oc$yaxis,
     annotations = ov_oc$annotations, bargap = ov_oc$bargap,
-    margin = list(t = 55, b = 40, l = ov_oc$margin_l, r = 12),
+    margin = list(t = ov_oc$margin_t, b = 40, l = ov_oc$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 

@@ -84,7 +84,7 @@ pct_lab <- function(p) ifelse(is.na(p) | round(p) < 1, "", paste0(round(p), "%")
 
 hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
                              wrap_at = 34, font_size = 11, bargap = 0.42,
-                             row_px = 42, min_height = 360) {
+                             row_px = 42, min_height = 360, margin_t = 88) {
   fa   <- exists("is_fa") && is_fa()
   cats <- as.character(cats)
   n    <- length(cats)
@@ -124,10 +124,13 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
     }
   }
 
-  list(annotations = c(lab_anns, val_anns), margin_l = 8,
+  # A generous top margin drops the first bar below the title with breathing
+  # room, so a label-above chart doesn't start "higher" than a neighbour whose
+  # own title/subtitle pushes its plot down. $height accounts for it.
+  list(annotations = c(lab_anns, val_anns), margin_l = 8, margin_t = margin_t,
        yaxis = list(title = "", showticklabels = FALSE, ticks = "", fixedrange = TRUE),
        xreversed = fa, bargap = bargap,
-       height = paste0(max(min_height, round(95 + n * row_px)), "px"))
+       height = paste0(max(min_height, round(margin_t + 42 + n * row_px)), "px"))
 }
 
 # --- share_of -----------------------------------------------------------------

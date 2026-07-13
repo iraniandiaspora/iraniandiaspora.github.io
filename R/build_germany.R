@@ -682,7 +682,7 @@ p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, de_ind_xmax)),
     yaxis = ov_de_ind$yaxis,
     annotations = ov_de_ind$annotations, bargap = ov_de_ind$bargap,
-    margin = list(t = 55, b = 40, l = ov_de_ind$margin_l, r = 12),
+    margin = list(t = ov_de_ind$margin_t, b = 40, l = ov_de_ind$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white",
     showlegend = FALSE) %>%
   config(displayModeBar = FALSE)
