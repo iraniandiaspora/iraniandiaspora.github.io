@@ -1,10 +1,23 @@
-# Build all Germany pages from Mikrozensus 2025 Iran extracts + BAMF/IW figures.
+# Build all Germany pages from Mikrozensus 2025 Iran extracts + BAMF figures.
 # Run from deployment repo root:
 #   Rscript R/build_germany.R
 #
 # Input:  data/germany/*.csv (see R/germany_export/extract_mikrozensus.R)
 #         data/germany/bundeslaender.geojson
-# Output: docs/pages/de-*.html
+# Output: docs/pages/de-population.html   + de-population.fa.html
+#         docs/pages/de-immigration.html  + de-immigration.fa.html
+#         docs/pages/de-langedu.html      + de-langedu.fa.html
+#         docs/pages/de-workinc.html      + de-workinc.fa.html
+#
+# Bilingual (en + fa) following the build_nl.R / build_denmark.R pattern.
+# Germany keeps its LOCAL page_template() (has_tabs / extra_head) and its LOCAL
+# tab_switch_script (which re-attaches the language-chart highlight handlers on
+# tab switch). All user-facing strings come from R/i18n/strings_germany.R via
+# tr(); numbers go through fa_num()/fmtv() so the four English editions stay
+# BYTE-IDENTICAL while the Persian editions render RTL with Persian digits and
+# the Vazirmatn face. The en path calls the local page_template() unchanged; the
+# fa path runs that same shell through fa_shell() (its font token already matches
+# the canonical anchor, so no realignment is needed).
 
 library(plotly)
 library(dplyr)
@@ -13,8 +26,16 @@ library(jsonlite)
 DATA_DIR <- "data/germany"
 
 # Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
-# iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
+# iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS, hbar_over_labels(), pct_lab(),
+# cat_colors(), make_html_legend_hover(), OKABE_ITO, CAT_OTHER.
 source("R/_helpers.R")
+# Persian-edition helpers: LANG, is_fa(), fa_digits(), fa_num(), bdi(), tr(),
+# pj(), fa_shell().
+source("R/_helpers_i18n.R")
+# Germany string table (defines the global STR consumed by tr(), plus the
+# fa-only category display vectors DE_MOTIVE_FA / DE_SCHOOL_FA / ...).
+source("R/i18n/strings_germany.R")
+
 tab_switch_script <- '
 <script>
 function switchTab(tabId, btn, groupId) {
@@ -115,14 +136,42 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 </html>')
 }
 
-# --- Source citation strings ---
+# render(): en delegates to the local page_template() (byte-identical English);
+# fa is that same shell run through fa_shell() (the font token already matches
+# the canonical anchor, so no realignment is required).
+render <- function(title, body_html, has_tabs = FALSE) {
+  html <- page_template(title, body_html, has_tabs)
+  if (is_fa()) html <- fa_shell(html)
+  html
+}
+
+# --- i18n formatting helpers (build_nl.R pattern) -----------------------------
+# lnk():  in fa, isolate a Latin agency link/URL in <bdi> so bidi ordering is
+#         correct; in en, pass through unchanged (keeps English byte-identical).
+lnk <- function(x) if (is_fa()) bdi(x) else x
+
+# fmtv(): vector-safe big-integer formatter. In en it is LITERALLY
+#         format(x, big.mark = ",") — reproducing format()'s common-width PADDING
+#         (leading spaces) that the committed hover text relies on. In fa it
+#         Persian-digits that padded string (ASCII "," thousands kept, per press).
+fmtv <- function(x) {
+  s <- format(x, big.mark = ",")
+  if (!is_fa()) return(s)
+  fa_digits(s)
+}
+
+# htxt(): Persian-digit any stray Western digits in an assembled display string
+#         (hover text, chart titles, card prose). Idempotent on already-Persian
+#         digits. NEVER apply to HTML that carries CSS — only to plain human text.
+htxt <- function(s) if (is_fa()) fa_digits(s) else s
+
+# --- Latin source links / anchors (language-independent) ----------------------
 MZ_LINK <- "<a href='https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/Downloads-Migration/statistischer-bericht-migrationshintergrund-erst-2010220257005.html' target='_blank' style='color:#2774AE;'>Destatis</a>"
-MZ_SOURCE <- paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025 Erstergebnisse<br>",
-  "German household survey. Counts residents with migration background (first or second generation), Iran.")
+MZ_HEADLINE_LINK <- '<a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html" style="color:#2774AE;" target="_blank">2025 Mikrozensus</a>'
 
 blues <- c("#1a4e72", "#2774AE", "#5a9bd5", "#8bbdde", "#d4e6f1")
 
-# --- Load all extracts ---
+# --- Load all extracts (ONCE — language-independent) --------------------------
 cat("Loading Mikrozensus extracts from ", DATA_DIR, "...\n", sep = "")
 hl <- read.csv(file.path(DATA_DIR, "de_headline.csv"))
 bund <- read.csv(file.path(DATA_DIR, "de_bundesland.csv"))
@@ -142,49 +191,34 @@ hl_sg    <- hl$value_thousands[hl$category == "second_gen"] * 1000
 hl_deu   <- hl$value_thousands[hl$category == "german_citizens"] * 1000
 hl_for   <- hl$value_thousands[hl$category == "foreign_citizens"] * 1000
 
+# Generation breakdown box (Germany LOCAL variant — 38px number, min-height 170).
+# Takes a PRE-FORMATTED value string so the fa edition can pass Persian digits;
+# en passes fmtv() = format(val, big.mark=","), keeping the output byte-identical.
+make_mig_box <- function(val_str, pct, label, sublabel, color) {
+  sprintf('<div style="background:%s; border-radius:6px; padding:28px 18px; text-align:center; color:white; flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center; min-height:170px;">
+    <div class="measure-num" style="font-size:38px; font-weight:700; line-height:1.1;">%s</div>
+    <div class="measure-label" style="font-size:14px; margin-top:6px; font-weight:600;">%s</div>
+    <div style="font-size:12px; opacity:0.9; margin-top:3px;">%s</div>
+    <div style="font-size:11px; opacity:0.85; margin-top:4px;">%s</div>
+  </div>',
+    color, val_str, label, pct, sublabel)
+}
 
-# =====================================================
-# DE POPULATION (headline + matrix + bar + Bundesland map)
-# =====================================================
-cat("Building de-population...\n")
+# =============================================================================
+# LANGUAGE-INDEPENDENT DATA PREP (numeric / factor / colour; computed ONCE)
+# =============================================================================
 
-# Bundesland bar (all_gens), sorted descending.
-# Suppressed states (Destatis rule: <5K) are kept in the chart with a grey
-# fill and "Suppressed (<5K)" hover instead of being silently coerced to 0.
-# The 10 visible states sum to ~308K vs the 334K headline; the ~26K gap
-# lives in 6 suppressed Bundesländer and is labeled as such below the chart.
+# --- DE-POPULATION: Bundesland bar + choropleth ------------------------------
 bund_all <- bund %>% filter(gen == "all_gens") %>%
   mutate(is_suppressed = is.na(value_k),
          value = ifelse(is_suppressed, 0, value_k * 1000)) %>%
   arrange(desc(value), is_suppressed)
-# Visible states first (by size), then suppressed ones grouped at the end.
 bar_df <- bund_all %>% select(land, value, is_suppressed)
 bar_df$pct <- round(bar_df$value / hl_total * 100, 1)
-bar_df$hover <- ifelse(bar_df$is_suppressed,
-  sprintf("<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000", bar_df$land),
-  sprintf("<b>%s</b><br>%s (%.1f%%)", bar_df$land, format(bar_df$value, big.mark = ","), bar_df$pct))
 bar_df$fill_color <- ifelse(bar_df$is_suppressed, "#c8c8c8", "#2774AE")
 bar_df$display_value <- ifelse(bar_df$is_suppressed, 2500, bar_df$value)
 bar_df$land <- factor(bar_df$land, levels = bar_df$land)
 
-p_bund_bar <- plot_ly(bar_df, x = ~land, y = ~display_value, type = "bar",
-    marker = list(color = ~fill_color),
-    text = ~hover,
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Iranian-Origin Population<br>by German State</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -30, tickfont = list(size = 10)),
-    yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 60, b = 100),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
-
-# Bundesland choropleth (load GeoJSON server-side, pass inline).
-# Suppressed states are rendered in neutral grey (z=NA dropped by plotly and
-# filled via the default trace color) with a "Suppressed" hover rather than
-# shading at 0 on the blue ramp.
 bund_map_data <- bund %>% filter(gen == "all_gens") %>%
   mutate(is_suppressed = is.na(value_k),
          value = ifelse(is_suppressed, NA_real_, value_k * 1000))
@@ -194,125 +228,24 @@ bund_map_suppressed <- bund_map_data %>% filter(is_suppressed)
 de_geojson <- jsonlite::fromJSON(file.path(DATA_DIR, "bundeslaender.geojson"),
   simplifyVector = FALSE)
 
-p_de_map <- plot_ly() %>%
-  # Suppressed polygons: neutral grey with "Suppressed" hover
-  add_trace(type = "choroplethmapbox",
-    geojson = de_geojson,
-    locations = bund_map_suppressed$land,
-    z = rep(1, nrow(bund_map_suppressed)),
-    featureidkey = "properties.name",
-    text = sprintf("<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000",
-      bund_map_suppressed$land),
-    hoverinfo = "text",
-    colorscale = list(c(0, "#d0d0d0"), c(1, "#d0d0d0")),
-    zmin = 0, zmax = 1,
-    showscale = FALSE,
-    marker = list(line = list(color = "white", width = 1), opacity = 0.7)
-  ) %>%
-  add_trace(type = "choroplethmapbox",
-    geojson = de_geojson,
-    locations = bund_map_visible$land,
-    z = bund_map_visible$value,
-    featureidkey = "properties.name",
-    text = sprintf("<b>%s</b><br>%s Iranian-origin residents<br>%.1f%% of Germany total",
-      bund_map_visible$land, format(bund_map_visible$value, big.mark = ","),
-      bund_map_visible$value / hl_total * 100),
-    hoverinfo = "text",
-    colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"), c(0.1, "#6baed6"),
-      c(0.4, "#2171b5"), c(1, "#08306b")),
-    showscale = TRUE,
-    colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
-    marker = list(line = list(color = "white", width = 1), opacity = 0.9)
-  ) %>% layout(
-    mapbox = list(
-      style = "carto-positron",
-      center = list(lon = 10.5, lat = 51.2),
-      zoom = 4.3
-    ),
-    margin = list(t = 10, b = 10, l = 0, r = 0),
-    paper_bgcolor = "white"
-  ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
-
-# Generation breakdown (two colored boxes)
-make_mig_box <- function(val, pct, label, sublabel, color) {
-  sprintf('<div style="background:%s; border-radius:6px; padding:28px 18px; text-align:center; color:white; flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center; min-height:170px;">
-    <div class="measure-num" style="font-size:38px; font-weight:700; line-height:1.1;">%s</div>
-    <div class="measure-label" style="font-size:14px; margin-top:6px; font-weight:600;">%s</div>
-    <div style="font-size:12px; opacity:0.9; margin-top:3px;">%s</div>
-    <div style="font-size:11px; opacity:0.85; margin-top:4px;">%s</div>
-  </div>',
-    color, format(val, big.mark = ","), label, pct, sublabel)
-}
-
-mig_grid <- paste0(
-  '<div style="display:flex; flex-direction:column; gap:12px; width:100%;">',
-  '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">Iranian-Origin Population by Generation</div>',
-  '<div style="display:flex; gap:12px;">',
-  make_mig_box(hl_fg, paste0(round(hl_fg/hl_total*100), "% of total"), "First generation", "Born in Iran", "#1a4e72"),
-  make_mig_box(hl_sg, paste0(round(hl_sg/hl_total*100), "% of total"), "Second generation", "Born in Germany with at least one Iran-born parent", "#5a9bd5"),
-  '</div>',
-  sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0;">%s</p>', MZ_SOURCE),
-  '</div>'
-)
-
-pop_body <- paste0(
-  # Top row: headline block + migration grid
-  '<div class="chart-row">',
-  '<div class="headline">',
-  '<div class="label">Estimated Iranian-Origin Population in Germany</div>',
-  '<div class="number">', format(hl_total, big.mark = ","), '</div>',
-  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Methoden/mikrozensus.html" style="color:#2774AE;" target="_blank">2025 Mikrozensus</a>, an annual 1% household survey by Destatis, the German Federal Statistical Office</div>',
-  '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
-  '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of two survey questions:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
-  '<li><strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;In which country were you born?&rdquo; (Iran)</span></li>',
-  '<li><strong>Parental origin</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;In which country was your mother / father born?&rdquo; (Iran, for at least one parent)</span></li>',
-  '</ul>',
-  '</div>',
-  '</div>',
-  '<div class="chart-card" style="display:flex; align-items:center;">', mig_grid, '</div>',
-  '</div>',
-
-  # Bottom row: bar chart + choropleth map
-  '<div class="chart-row">',
-  '<div class="chart-card">', plotly_div("de-bund-bar", plotly_to_json(p_bund_bar), "450px",
-    source = paste0(MZ_SOURCE, "<br>Six states with fewer than 5,000 Iranian-origin residents are suppressed by Destatis (shown in gray).")), '</div>',
-  '<div class="chart-card">',
-  '<div class="section-title">Geographic Distribution in Germany</div>',
-  plotly_div("de-bund-map", plotly_to_json(p_de_map), "450px",
-    source = paste0(MZ_SOURCE, "<br>Gray states: suppressed (<5,000). Published state counts sum to ~308,000 of the 334,000 national total.")),
-  '</div>',
-  '</div>'
-)
-
-writeLines(page_template("Germany: Population", pop_body), "docs/pages/de-population.html")
-cat("  Done\n")
-
-
-# =====================================================
-# DE IMMIGRATION & CITIZENSHIP (page-content layout)
-# =====================================================
-cat("Building de-immigration...\n")
-
+# --- DE-IMMIGRATION: motive / duration / citizenship -------------------------
 motive_clean <- motive %>%
   mutate(short = case_when(
     motive == "Flucht, Asyl, internationaler Schutz" ~ "Flight / asylum",
-    motive == "Familienzusammenf\u00fchrung" ~ "Family reunification",
-    motive == "Familiengr\u00fcndung" ~ "Family formation",
+    motive == "Familienzusammenführung" ~ "Family reunification",
+    motive == "Familiengründung" ~ "Family formation",
     motive == "Studium, Ausbildung, Weiterbildung" ~ "Study / training",
-    motive == "Arbeit/Besch\u00e4ftigung zusammen" ~ "Work",
-    motive == "sonstige Gr\u00fcnde" ~ "Other",
-    motive == "Hauptmotiv f\u00fcr die Zuwanderung Insgesamt" ~ "TOTAL",
+    motive == "Arbeit/Beschäftigung zusammen" ~ "Work",
+    motive == "sonstige Gründe" ~ "Other",
+    motive == "Hauptmotiv für die Zuwanderung Insgesamt" ~ "TOTAL",
     TRUE ~ NA_character_
   )) %>%
   filter(!is.na(short), short != "TOTAL") %>%
   mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000)
-
 motive_total <- hl_fg
 motive_clean$pct <- round(motive_clean$value / motive_total * 100, 1)
 motive_clean <- motive_clean %>% arrange(desc(value))
 motive_clean$short <- factor(motive_clean$short, levels = motive_clean$short)
-
 # Shared Okabe-Ito categorical palette (named map so a category keeps its color
 # regardless of sort order); the "Other" catch-all stays grey (CAT_OTHER).
 motive_colors <- c(
@@ -324,31 +257,14 @@ motive_colors <- c(
   "Other"                = "#b0b0b0"
 )
 
-p_motive <- plot_ly(motive_clean, x = ~short, y = ~value, type = "bar",
-    marker = list(color = motive_colors[as.character(motive_clean$short)]),
-    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)", short, format(value, big.mark = ","), pct),
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Main Reason Iran-Born Immigrants<br>Came to Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -45, tickfont = list(size = 11)),
-    yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 65, b = 110),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
-
-# Residence duration — Iran-born residents, Mikrozensus 2025 Table 12211-08
-# Two cohorts are visible: a recent wave (under 10 years) and an established
-# 1980s/90s cohort (25+ years).
 dur_labels <- c(
   "under_5"  = "< 5",
-  "5_to_10"  = "5\u201310",
-  "10_to_15" = "10\u201315",
-  "15_to_20" = "15\u201320",
-  "20_to_25" = "20\u201325",
-  "25_to_30" = "25\u201330",
-  "30_to_40" = "30\u201340",
+  "5_to_10"  = "5–10",
+  "10_to_15" = "10–15",
+  "15_to_20" = "15–20",
+  "20_to_25" = "20–25",
+  "25_to_30" = "25–30",
+  "30_to_40" = "30–40",
   "40_plus"  = "40+"
 )
 dur_df <- duration %>%
@@ -356,84 +272,11 @@ dur_df <- duration %>%
     value = ifelse(is.na(value_k), 0, value_k) * 1000,
     label = dur_labels[bucket]
   )
-# Order DESCENDING (40+ -> <5) so the earliest-arrived cohort sits on the LEFT
-# and the most recent on the RIGHT, matching the temporal direction of every
-# year-of-arrival chart on the site. (A duration histogram's natural 0-on-left
-# order would put recent arrivals left, reversing cohort direction vs the rest
-# of the site.)
+# Order DESCENDING (40+ -> <5) so the earliest-arrived cohort sits on the LEFT.
 dur_df$label <- factor(dur_df$label, levels = rev(unname(dur_labels)))
 dur_df$pct <- round(dur_df$value / hl_fg * 100, 1)
-# Monochromatic blue — consistent with other countries' duration charts.
-p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
-    marker = list(color = "#2774AE"),
-    text = ~sprintf("<b>%s years</b><br>%s (%.1f%%)",
-      label, format(value, big.mark = ","), pct),
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Iran-Born Residents by<br>Length of Residence in Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "Years Lived in Germany", tickfont = list(size = 11)),
-    yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 65, b = 90),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE,
-    annotations = list(
-      list(text = "Bars run from earliest arrivals (left) to most recent (right).",
-        x = 0.5, y = -0.26, xref = "paper", yref = "paper", showarrow = FALSE,
-        font = list(size = 9, color = "#6b6b6b"), xanchor = "center"))) %>%
-  config(displayModeBar = FALSE)
 
-# Annual arrivals chart — Iranian Zuzüge 1991-2024 from BAMF/Destatis
-# Migrationsberichte. This is a flow series (annual arrivals in that year),
-# not a stock-based cohort view. No cumulative line here — unlike the US
-# (FY1978+) or Canada, the data starts at 1991 when Germany already had
-# ~108K Iran-born residents, so a cumulative % starting at 0 is misleading.
-p_annual <- plot_ly() %>%
-  add_bars(
-    data = annual_arrivals,
-    x = ~year, y = ~iran_arrivals,
-    marker = list(color = "#2774AE", line = list(color = "#1a4e72", width = 0.3)),
-    text = ~sprintf("<b>%d</b><br>%s Iranian arrivals",
-      year, format(iran_arrivals, big.mark = ",")),
-    hoverinfo = "text", textposition = "none",
-    showlegend = FALSE,
-    name = "Annual arrivals"
-  ) %>%
-  layout(
-    title = list(text = "<b>Annual Iranian Arrivals to Germany,<br>1991\u20132024</b>",
-      font = list(size = 15, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 10), dtick = 4),
-    yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
-    margin = list(t = 55, b = 40, l = 55, r = 20),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    hovermode = "closest"
-  ) %>%
-  config(displayModeBar = FALSE)
-
-p_citizen <- plot_ly(data.frame(
-    status = c("German citizens", "Iranian nationals"),
-    count  = c(hl_deu, hl_for),
-    pct    = round(c(hl_deu, hl_for) / hl_total * 100, 1)
-  ),
-  x = ~status, y = ~count, type = "bar",
-  # Citizenship is a 2-category status chart: site blue + coral (the documented
-  # citizenship palette). The motive chart uses the shared Okabe-Ito categorical
-  # palette; the duration chart is monochromatic blue.
-  marker = list(color = c("#2774AE", "#e07b54")),
-  text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
-    status, format(count, big.mark = ","), pct),
-  hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Citizenship of Iranian-Origin<br>Residents in Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 12)),
-    yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 60, b = 60),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
-
-# Dynamic shares for the factoid cards
+# Dynamic shares for the immigration factoid cards
 de_cit_pct <- round(hl_deu / hl_total * 100)
 dur_10plus_k <- sum(duration$value_k[duration$bucket %in% c(
   "10_to_15","15_to_20","20_to_25","25_to_30","30_to_40","40_plus")], na.rm = TRUE)
@@ -443,66 +286,11 @@ fg_k <- hl_fg / 1000
 dur_10plus_pct <- round(dur_10plus_k / fg_k * 100)
 dur_30plus_pct <- round(dur_30plus_k / fg_k * 100)
 
-immig_body <- paste0(
-  '<div class="page-content">',
-  sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold German citizenship &mdash; about %s people.</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>About %s hold Iranian citizenship</li>
-      <li>7,840 Iranian naturalizations were recorded in 2024</li>
-    </ul>
-  </div>', de_cit_pct, format(hl_deu, big.mark = ","), format(hl_for, big.mark = ",")),
-  sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian residents have lived in Germany for a decade or more.</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>Roughly %d%% have lived in Germany for 30 or more years</li>
-    </ul>
-  </div>', dur_10plus_pct, dur_30plus_pct),
-
-  # Left: citizenship chart
-  '<div class="chart-card pc1">',
-  plotly_div("de-cit", plotly_to_json(p_citizen), "480px",
-    source = MZ_SOURCE),
-  '</div>',
-
-  # Right: tabbed annual arrivals + motive + duration
-  '<div class="chart-card pc2">',
-  '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'de-immig-annual\',this,\'de-immig-tabs\')">Annual Arrivals</button>',
-  '<button class="tab-btn" onclick="switchTab(\'de-immig-motive\',this,\'de-immig-tabs\')">Main Reason for Coming</button>',
-  '<button class="tab-btn" onclick="switchTab(\'de-immig-duration\',this,\'de-immig-tabs\')">Length of Residence</button>',
-  '</div>',
-  '<div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs">',
-  plotly_div("de-annual", plotly_to_json(p_annual), "430px",
-    source = "Source: BAMF Migrationsberichte (2005, 2015, 2020, 2023, 2024 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here."),
-  '</div>',
-  '<div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs">',
-  plotly_div("de-motive", plotly_to_json(p_motive), "440px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. First generation only (born in Iran).")),
-  '</div>',
-  '<div id="de-immig-duration" class="tab-panel" data-group="de-immig-tabs">',
-  plotly_div("de-duration", plotly_to_json(p_duration), "430px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Iran-born residents only.")),
-  '</div>',
-  '</div>',
-  '</div>'
-)
-
-writeLines(page_template("Germany: Immigration & Citizenship", immig_body, has_tabs = TRUE), "docs/pages/de-immigration.html")
-cat("  Done\n")
-
-
-# =====================================================
-# DE EDUCATION (page-content layout)
-# =====================================================
-cat("Building de-education...\n")
-
+# --- DE-EDUCATION: school + vocational/academic ------------------------------
 school_cats <- c(
   "Ohne Schulabschluss" = "No school<br>certificate",
   "Darunter: Hauptschule" = "Basic<br>secondary",
-  "Realschule o. \u00e4." = "Intermediate<br>secondary",
+  "Realschule o. ä." = "Intermediate<br>secondary",
   "Fachhochschulreife" = "Applied-university<br>entrance",
   "Abitur" = "University<br>entrance"
 )
@@ -510,14 +298,9 @@ school_clean <- school %>%
   mutate(cat = school_cats[school_level]) %>%
   filter(!is.na(cat)) %>%
   mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000)
-
-# Denominator = full Iranian-origin population (matches the text cards)
 school_all <- school_clean %>% filter(gen == "all_gens") %>%
   mutate(pct = round(value / hl_total * 100, 1))
 school_all$cat <- factor(school_all$cat, levels = unname(school_cats))
-
-# Ordinal blue gradient (per dashboard-content-rules.md §7) — lightest at
-# lowest qualification, darkest at highest.
 school_colors <- c(
   "No school<br>certificate" = "#c6dbef",
   "Basic<br>secondary" = "#8bbdde",
@@ -525,21 +308,6 @@ school_colors <- c(
   "Applied-university<br>entrance" = "#2774AE",
   "University<br>entrance" = "#1a4e72"
 )
-
-p_school <- plot_ly(school_all, x = ~cat, y = ~pct, type = "bar",
-    marker = list(color = school_colors[as.character(school_all$cat)]),
-    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
-      cat, format(value, big.mark = ","), pct),
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Highest School Qualification in Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = 0, tickfont = list(size = 10)),
-    yaxis = list(title = "", ticksuffix = "%", range = c(0, 60)),
-    margin = list(t = 60, b = 70),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
 
 prof_clean <- prof %>%
   mutate(cat = case_when(
@@ -550,54 +318,24 @@ prof_clean <- prof %>%
   )) %>%
   filter(!is.na(cat)) %>%
   mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000)
-
 prof_all <- prof_clean %>% filter(gen == "all_gens") %>%
   mutate(pct = round(value / hl_total * 100, 1))
 prof_cat_order <- c("No vocational qualification", "Vocational (non-academic)", "Academic degree")
 prof_all$cat <- factor(prof_all$cat, levels = prof_cat_order)
 prof_all <- prof_all %>% arrange(cat)
-
-# Ordinal blue gradient (per dashboard-content-rules.md §7) — three stops
-# from no qualification (lightest) to academic degree (darkest).
 prof_colors <- c(
   "No vocational qualification" = "#c6dbef",
   "Vocational (non-academic)" = "#5a9bd5",
   "Academic degree" = "#1a4e72"
 )
 
-p_prof <- plot_ly(prof_all, x = ~cat, y = ~pct, type = "bar",
-    marker = list(color = prof_colors[as.character(prof_all$cat)]),
-    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
-      cat, format(value, big.mark = ","), pct),
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Highest Vocational or Academic<br>Qualification in Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 11)),
-    yaxis = list(title = "", ticksuffix = "%", range = c(0, 40)),
-    margin = list(t = 60, b = 70),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
-
-# (de-education charts p_school and p_prof are built above; the education
-# writeLines now happens inside the combined Language & Education page below,
-# which is assembled after the language chart is built.)
-cat("  (de-education charts prepared, will be combined with language)\n")
-
-
-# =====================================================
-# DE WORK (page-content layout)
-# =====================================================
-cat("Building de-work...\n")
-
+# --- DE-WORK: labour-force status + industry ---------------------------------
 emp_status <- emp %>% filter(section == "status", gen == "all_gens") %>%
   mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000)
-employed    <- emp_status$value[emp_status$category == "Erwerbst\u00e4tige"]
+employed    <- emp_status$value[emp_status$category == "Erwerbstätige"]
 unemployed  <- emp_status$value[emp_status$category == "Erwerbslose"]
 inactive    <- emp_status$value[emp_status$category == "Nichterwerbspersonen"]
 emp_total   <- employed + unemployed + inactive
-
 emp_bar_df <- data.frame(
   status = c("Employed", "Unemployed", "Not in labor force"),
   count  = c(employed, unemployed, inactive),
@@ -606,30 +344,9 @@ emp_bar_df <- data.frame(
 emp_bar_df$pct <- round(emp_bar_df$count / emp_total * 100, 1)
 emp_bar_df$status <- factor(emp_bar_df$status, levels = emp_bar_df$status)
 
-p_emp_status <- plot_ly(emp_bar_df, x = ~status, y = ~count, type = "bar",
-    # Warm-earth palette for the Work side of the page; the income chart
-    # on the right uses a blue gradient so the two sides stay distinct.
-    marker = list(color = c("#c4793a", "#b05050", "#b0b0b0")),
-    text = ~sprintf("<b>%s</b><br>%s (%.1f%%)",
-      status, format(count, big.mark = ","), pct),
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Labor Force Status in Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 11)),
-    yaxis = list(title = "", tickformat = ","),
-    margin = list(t = 55, b = 70),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
-
 # True employed total ("Erwerbstätige") — the denominator for industry %.
-# Previously percentages were normalized to the sum of visible industry
-# bars (~164K), which understated suppressed sectors. Now % is computed
-# against the full published employed total (~170K), and suppressed
-# sectors are shown as grey bars labeled "Suppressed (<5K)".
 hl_employed <- emp$value_k[emp$section == "status" &
-                           emp$category == "Erwerbst\u00e4tige" &
+                           emp$category == "Erwerbstätige" &
                            emp$gen == "all_gens"] * 1000
 
 ind <- emp %>% filter(section == "industry", gen == "all_gens") %>%
@@ -639,129 +356,63 @@ ind <- emp %>% filter(section == "industry", gen == "all_gens") %>%
            category == "Land- und Forstwirtschaft, Fischerei" ~ "Agriculture & fishing",
            category == "Produzierendes Gewerbe, Baugewerbe" ~ "Industry & construction",
            category == "Handel, Gastgewerbe und Verkehr" ~ "Trade, hospitality & transport",
-           category == "\u00d6ffentliche Verwaltung" ~ "Public administration",
+           category == "Öffentliche Verwaltung" ~ "Public administration",
            category == "Sonstige Dienstleistungen" ~ "Other services",
            TRUE ~ category
          )) %>%
   arrange(desc(value), is_suppressed)
-# Percentages always use the true employed total; visible bars don't sum to
-# 100% because two sectors are Destatis-suppressed.
 ind$pct <- round(ind$value / hl_employed * 100, 1)
 ind$display_value <- ifelse(ind$is_suppressed, 3000, ind$value)
-ind$hover <- ifelse(ind$is_suppressed,
-  sprintf("<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000", ind$label),
-  sprintf("<b>%s</b><br>%s (%.1f%% of all employed)", ind$label,
-          format(ind$value, big.mark = ","), ind$pct))
-# Horizontal bars: suppressed rows at the bottom, then non-suppressed
-# sorted ascending so the longest bar appears at the top.
+# Horizontal bars: suppressed rows at the bottom, then non-suppressed ascending.
 ind <- ind %>% arrange(desc(is_suppressed), value)
 ind$label <- factor(ind$label, levels = ind$label)
-# Shared Okabe-Ito categorical palette for the visible sectors. Suppressed
-# sectors stay grey (#c8c8c8 = "<5,000, not published" — a separate signal from
-# the palette). Colors are applied by suppression mask, not row index: after the
-# arrange() above, suppressed rows are at the front, so positional assignment
-# would otherwise put colors on the wrong bars.
+# Okabe-Ito palette for the visible sectors; suppressed stay grey (a separate
+# signal). Colors applied by suppression mask, not row index.
 visible_idx <- which(!ind$is_suppressed)
 ind$fill_color <- rep("#c8c8c8", nrow(ind))
 ind$fill_color[visible_idx] <- cat_colors(length(visible_idx))
+# Label-above-bar geometry (language-independent parts): plot order, bar ends,
+# and the base % end-text (blank for suppressed) — the fa edition re-styles the
+# end-text (Persian digits + ٪) inside the loop.
+de_ind_levels_en <- levels(ind$label)
+de_ind_ord   <- match(de_ind_levels_en, as.character(ind$label))
+de_ind_ends  <- ind$display_value[de_ind_ord]
+de_ind_base_text <- ifelse(ind$is_suppressed[de_ind_ord], "", pct_lab(ind$pct[de_ind_ord]))
+de_ind_xmax  <- max(ind$display_value) * 1.15
 
-# Labels-above-bar; suppressed sectors keep their grey placeholder bar but carry
-# NO % label (end_text ""), so only the "Suppressed (<5,000)" hover shows.
-de_ind_ord <- match(levels(ind$label), as.character(ind$label))
-de_ind_ends <- ind$display_value[de_ind_ord]
-de_ind_text <- ifelse(ind$is_suppressed[de_ind_ord], "",
-                      pct_lab(ind$pct[de_ind_ord]))
-ov_de_ind <- hbar_over_labels(levels(ind$label), ends = de_ind_ends, end_text = de_ind_text)
-de_ind_xmax <- max(ind$display_value) * 1.15
-p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
-    orientation = "h",
-    marker = list(color = ~fill_color),
-    text = ~hover,
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Iranian-Origin Employment<br>by Industry in Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, de_ind_xmax)),
-    yaxis = ov_de_ind$yaxis,
-    annotations = ov_de_ind$annotations, bargap = ov_de_ind$bargap,
-    margin = list(t = ov_de_ind$margin_t, b = 40, l = ov_de_ind$margin_l, r = 12),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
-
-# (work_body and the separate de-work page are no longer built here; the work
-# charts are now combined with income into the de-workinc page below.)
-cat("  (de-work charts prepared, will be combined with income)\n")
-
-
-# =====================================================
-# DE INCOME (page-content layout)
-# =====================================================
-cat("Building de-income...\n")
-
+# --- DE-INCOME: monthly net income brackets ----------------------------------
 inc <- emp %>% filter(section == "income", gen == "all_gens") %>%
   mutate(is_suppressed = is.na(value_k),
          value = ifelse(is_suppressed, 0, value_k) * 1000,
          bracket = case_when(
-           grepl("unter 500", category) ~ "Under \u20ac500",
-           category == "500 - 1 000" ~ "\u20ac500\u2013\u20ac1,000",
-           category == "1 000 - 1 500" ~ "\u20ac1,000\u2013\u20ac1,500",
-           category == "1 500 - 2 000" ~ "\u20ac1,500\u2013\u20ac2,000",
-           category == "2 000 - 2 500" ~ "\u20ac2,000\u2013\u20ac2,500",
-           category == "2 500 - 3 000" ~ "\u20ac2,500\u2013\u20ac3,000",
-           category == "3 000 - 3 500" ~ "\u20ac3,000\u2013\u20ac3,500",
-           category == "3 500 und mehr" ~ "\u20ac3,500+",
+           grepl("unter 500", category) ~ "Under €500",
+           category == "500 - 1 000" ~ "€500–€1,000",
+           category == "1 000 - 1 500" ~ "€1,000–€1,500",
+           category == "1 500 - 2 000" ~ "€1,500–€2,000",
+           category == "2 000 - 2 500" ~ "€2,000–€2,500",
+           category == "2 500 - 3 000" ~ "€2,500–€3,000",
+           category == "3 000 - 3 500" ~ "€3,000–€3,500",
+           category == "3 500 und mehr" ~ "€3,500+",
            category == "Kein Einkommen" ~ "No income",
            TRUE ~ category
          )) %>%
   filter(bracket != "No income")
-
 inc_denom <- sum(inc$value, na.rm = TRUE)
 inc$pct <- round(inc$value / inc_denom * 100, 1)
-inc_order <- c("Under \u20ac500", "\u20ac500\u2013\u20ac1,000", "\u20ac1,000\u2013\u20ac1,500",
-               "\u20ac1,500\u2013\u20ac2,000", "\u20ac2,000\u2013\u20ac2,500",
-               "\u20ac2,500\u2013\u20ac3,000", "\u20ac3,000\u2013\u20ac3,500", "\u20ac3,500+")
+inc_order <- c("Under €500", "€500–€1,000", "€1,000–€1,500",
+               "€1,500–€2,000", "€2,000–€2,500",
+               "€2,500–€3,000", "€3,000–€3,500", "€3,500+")
 inc$bracket <- factor(inc$bracket, levels = inc_order)
 inc <- inc %>% arrange(bracket)
-
 inc_colors <- c("#d4e6f1", "#bcdcec", "#a3d2e6", "#8bbdde", "#5a9bd5", "#2774AE", "#1a4e72", "#0d2f4a")
-# Suppressed brackets (Destatis <5,000) get a small grey stub + "suppressed"
-# hover so the axis slot reads as suppressed rather than a blank/broken bar.
-# Same convention as the state and industry charts above. In 2025 the
-# "Under €500" bracket is suppressed (was 7K in 2024).
 inc$bar_color <- inc_colors[as.integer(inc$bracket)]
 inc$bar_color[inc$is_suppressed] <- "#c8c8c8"
 inc$display_pct <- ifelse(inc$is_suppressed, 1.2, inc$pct)
-inc$hover <- ifelse(inc$is_suppressed,
-  sprintf("<b>%s per month</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000", inc$bracket),
-  sprintf("<b>%s per month</b><br>%s workers (%.1f%%)", inc$bracket,
-          format(inc$value, big.mark = ","), inc$pct))
+middle_share <- sum(inc$pct[inc$bracket %in% c("€1,000–€1,500", "€1,500–€2,000", "€2,000–€2,500")])
+top_share    <- sum(inc$pct[inc$bracket %in% c("€3,000–€3,500", "€3,500+")])
+low_share    <- sum(inc$pct[inc$bracket %in% c("Under €500", "€500–€1,000")])
 
-p_income <- plot_ly(inc, x = ~bracket, y = ~display_pct, type = "bar",
-    marker = list(color = inc$bar_color),
-    text = ~hover,
-    hoverinfo = "text", textposition = "none") %>%
-  layout(
-    title = list(text = "<b>Monthly Net Income of<br>Iranian-Origin Workers in Germany</b>",
-      font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", tickangle = -25, tickfont = list(size = 10)),
-    yaxis = list(title = "", ticksuffix = "%", range = c(0, 25)),
-    margin = list(t = 65, b = 110),
-    plot_bgcolor = "white", paper_bgcolor = "white",
-    showlegend = FALSE) %>%
-  config(displayModeBar = FALSE)
-
-# Headline share: middle brackets (1,000-2,500)
-middle_share <- sum(inc$pct[inc$bracket %in% c("\u20ac1,000\u2013\u20ac1,500", "\u20ac1,500\u2013\u20ac2,000", "\u20ac2,000\u2013\u20ac2,500")])
-top_share    <- sum(inc$pct[inc$bracket %in% c("\u20ac3,000\u2013\u20ac3,500", "\u20ac3,500+")])
-low_share    <- sum(inc$pct[inc$bracket %in% c("Under \u20ac500", "\u20ac500\u2013\u20ac1,000")])
-
-# =====================================================
-# DE WORK & INCOME (combined page)
-# =====================================================
-cat("Building de-workinc...\n")
-
-# Dynamic shares for work factoid card
+# --- DE-WORK & INCOME: factoid-card shares -----------------------------------
 emp_all <- emp %>% filter(gen == "all_gens")
 employed_k   <- emp_all$value_k[grepl("^Erwerbstätige$", emp_all$category)][1]
 unemployed_k <- emp_all$value_k[grepl("Erwerbslose|^Arbeitslose", emp_all$category)][1]
@@ -774,59 +425,7 @@ emp_pct      <- round(employed_k / total_15plus_k * 100)
 unemp_pct    <- round(unemployed_k / total_15plus_k * 100)
 nilf_pct     <- round(nilf_k / total_15plus_k * 100)
 
-workinc_body <- paste0(
-  '<div class="page-content">',
-  sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-origin residents work in the broad services sector (trade, hospitality, transport, and other services).</div>',
-    services_pct),
-  sprintf('    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>%d%% of all Iranian-origin residents aged 15+ are employed</li>
-      <li>%d%% are unemployed</li>
-      <li>%d%% are not in the labor force (students, retirees, caregivers)</li>
-    </ul>
-  </div>',
-    emp_pct, unemp_pct, nilf_pct),
-  sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%.0f%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of employed Iranian-origin residents earn between %s1,000 and %s2,500 net per month.</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>About %.0f%% earn %s3,000 or more per month</li>
-      <li>About %.0f%% earn under %s1,000</li>
-    </ul>
-  </div>', middle_share, "\u20ac", "\u20ac", top_share, "\u20ac", low_share, "\u20ac"),
-  # LEFT: work with 2 tabs (labour force status + industry)
-  '<div class="chart-card pc1">',
-  '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'de-wk-status\',this,\'de-wk-tabs\')">Labor Force Status</button>',
-  '<button class="tab-btn" onclick="switchTab(\'de-wk-industry\',this,\'de-wk-tabs\')">Employment by Industry</button>',
-  '</div>',
-  '<div id="de-wk-status" class="tab-panel active" data-group="de-wk-tabs">',
-  plotly_div("de-empstatus", plotly_to_json(p_emp_status), "460px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025")),
-  '</div>',
-  '<div id="de-wk-industry" class="tab-panel" data-group="de-wk-tabs">',
-  plotly_div("de-industry", plotly_to_json(p_industry), ov_de_ind$height,
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Iranian-origin residents employed across five broad sectors. Agriculture and Public administration are suppressed by Destatis (shown in gray). Percentages are computed against the full published employed total (~175,000), so visible bars do not sum to 100%.")),
-  '</div>',
-  '</div>',
-  # RIGHT: income chart
-  '<div class="chart-card pc2">',
-  plotly_div("de-income", plotly_to_json(p_income), "510px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025. Net monthly personal income of employed Iranian-origin residents, all generations combined. The under-\u20ac500 bracket is suppressed by Destatis (<5,000), shown in gray.")),
-  '</div>',
-  '</div>'
-)
-
-writeLines(page_template("Germany: Work & Income", workinc_body, has_tabs = TRUE), "docs/pages/de-workinc.html")
-cat("  Done\n")
-
-
-# =====================================================
-# DE LANGUAGE (page-content layout)
-# =====================================================
-cat("Building de-language...\n")
-
+# --- DE-LANGUAGE rollup ------------------------------------------------------
 lang_rollup <- function(g) {
   sub <- lang %>% filter(gen == g) %>%
     mutate(value = ifelse(is.na(value_k), 0, value_k) * 1000)
@@ -844,7 +443,6 @@ lang_rollup <- function(g) {
     stringsAsFactors = FALSE
   ) %>% mutate(pct = round(value / total * 100, 1))
 }
-
 lang_all <- bind_rows(lang_rollup("all_gens"), lang_rollup("first_gen"))
 lang_all$gen_label <- factor(ifelse(lang_all$gen == "all_gens",
   "All Iranian-origin", "First generation only"),
@@ -858,39 +456,7 @@ lang_colors <- c(
   "Mostly other non-German" = "#b0b0b0"
 )
 
-p_lang <- plot_ly()
-for (cat_name in lang_cat_order) {
-  sub <- lang_all %>% filter(category == cat_name)
-  p_lang <- p_lang %>% add_bars(
-    data = sub, y = ~gen_label, x = ~pct, name = cat_name,
-    marker = list(color = lang_colors[cat_name]), textposition = "none",
-    hovertext = sprintf("<b>%s</b><br>%s<br>%s residents (%.1f%%)",
-      cat_name, sub$gen_label, format(sub$value, big.mark = ","), sub$pct),
-    hoverinfo = "text",
-    legendgroup = cat_name, showlegend = FALSE, orientation = "h")
-}
-p_lang <- p_lang %>% layout(
-  barmode = "stack",
-  title = list(text = "<b>Main Language Spoken at Home in Germany</b>",
-    font = list(size = 16, family = "Montserrat")),
-  xaxis = list(title = "", ticksuffix = "%", range = c(0, 105)),
-  yaxis = list(title = "",
-    # Put "First generation only" on top, "All Iranian-origin" underneath.
-    # categoryarray is bottom-to-top for horizontal bars.
-    categoryorder = "array", categoryarray = levels(lang_all$gen_label),
-    ticklabelstandoff = 6),
-  margin = list(t = 55, b = 40, l = 140), showlegend = FALSE,
-  plot_bgcolor = "white", paper_bgcolor = "white") %>%
-  config(displayModeBar = FALSE)
-
-lang_leg <- make_html_legend_hover(lang_colors, break_after = 2)
-
-# =====================================================
-# DE LANGUAGE & EDUCATION (combined page)
-# =====================================================
-cat("Building de-langedu...\n")
-
-# Dynamic shares for the factoid cards
+# --- DE-LANGUAGE & EDUCATION factoid-card shares -----------------------------
 lang_total <- lang$value_k[lang$language == "Zu Hause vorwiegend gesprochene Sprache Insgesamt" & lang$gen == "all_gens"]
 persian_k <- lang$value_k[lang$language == "Persisch" & lang$gen == "all_gens"]
 only_de_k <- lang$value_k[lang$language == "nur Deutsch" & lang$gen == "all_gens"]
@@ -900,64 +466,586 @@ kurdish_k <- lang$value_k[lang$language == "Kurdisch" & lang$gen == "all_gens"]
 persian_pct <- round(persian_k / lang_total * 100)
 only_de_pct <- round(only_de_k / lang_total * 100)
 mainly_de_pct <- round(mainly_de_k / lang_total * 100)
-# Non-Persian non-German share: total minus Persian minus all-German speakers.
-# Mikrozensus suppresses cells below 5,000 — the named portion (Kurdish,
-# English, Other Asian) is each ~3% with low-reliability flag; the rest
-# (Arabic, Turkish, Albanian, etc.) is suppressed under the 5K threshold.
 other_lang_pct <- round((nonde_k - persian_k) / lang_total * 100)
 kurdish_pct <- round(kurdish_k / lang_total * 100)
-
 abitur_k <- school$value_k[school$school_level == "Abitur" & school$gen == "all_gens"]
 abitur_pct <- round(abitur_k / hl_total * 1000 * 100)
 academic_k <- prof$value_k[prof$prof_level == "akademischer Abschluss" & prof$gen == "all_gens"]
 academic_pct <- round(academic_k / hl_total * 1000 * 100)
 
-langedu_body <- paste0(
-  '<div class="page-content">',
-  sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents speak Persian as the main language at home &mdash; about %s people.</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>%d%% speak only German at home</li>
-      <li>%d%% speak mainly German with some other languages</li>
-      <li>%d%% speak another non-German, non-Persian language at home</li>
-      <li>Including Kurdish, English, and Other Asian, each about %d%%</li>
-    </ul>
-  </div>', persian_pct, format(persian_k * 1000, big.mark = ","),
-     only_de_pct, mainly_de_pct, other_lang_pct, kurdish_pct),
-  sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of Iranian-origin residents in Germany hold the Abitur.</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
-      <li>The Abitur is the secondary-school qualification that grants university entry</li>
-      <li>About %d%% (~%s) hold an academic degree</li>
-    </ul>
-  </div>', abitur_pct, academic_pct, format(academic_k * 1000, big.mark = ",")),
-  # LEFT: language chart (standalone, no persian sidebar)
-  '<div class="chart-card pc1" style="display:flex; flex-direction:column; justify-content:center;">',
-  plotly_div("de-lang", plotly_to_json(p_lang), "320px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025"),
-    legend_html = lang_leg, highlight_hover = TRUE),
-  '</div>',
-  # RIGHT: education with 2 tabs (school qualification + vocational/academic)
-  '<div class="chart-card pc2">',
-  '<div class="tab-bar">',
-  '<button class="tab-btn active" onclick="switchTab(\'de-ed-school\',this,\'de-ed-tabs\')">Highest School Qualification</button>',
-  '<button class="tab-btn" onclick="switchTab(\'de-ed-prof\',this,\'de-ed-tabs\')">Vocational / Academic Qualification</button>',
-  '</div>',
-  '<div id="de-ed-school" class="tab-panel active" data-group="de-ed-tabs">',
-  plotly_div("de-school", plotly_to_json(p_school), "450px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025")),
-  '</div>',
-  '<div id="de-ed-prof" class="tab-panel" data-group="de-ed-tabs">',
-  plotly_div("de-prof", plotly_to_json(p_prof), "450px",
-    source = paste0("Source: ", MZ_LINK, " \u2014 Mikrozensus 2025")),
-  '</div>',
-  '</div>',
-  '</div>'
-)
+dir.create("docs/pages", showWarnings = FALSE, recursive = TRUE)
 
-writeLines(page_template("Germany: Language & Education", langedu_body, has_tabs = TRUE), "docs/pages/de-langedu.html")
-cat("  Done\n")
+# =============================================================================
+# Bilingual build loop: en (byte-identical to committed) then fa (RTL Persian).
+# =============================================================================
+for (LANG in c("en", "fa")) {
 
-cat("\nAll Germany pages built.\n")
+  cat(sprintf("=== Building Germany [%s] ===\n", LANG))
+
+  # --- Per-language source citations + axis affix ----------------------------
+  MZ_SOURCE    <- sprintf(tr("de_src_mz"), lnk(MZ_LINK))
+  MZ_SIMPLE    <- sprintf(tr("de_src_mz_simple"), lnk(MZ_LINK))
+  src_annual   <- tr("de_src_annual")
+  src_motive   <- sprintf(tr("de_src_motive"), lnk(MZ_LINK))
+  src_duration <- sprintf(tr("de_src_duration"), lnk(MZ_LINK))
+  src_industry <- sprintf(tr("de_src_industry"), lnk(MZ_LINK))
+  src_income   <- sprintf(tr("de_src_income"), lnk(MZ_LINK))
+  pct_suffix   <- if (is_fa()) "٪" else "%"
+
+  # ===========================================================================
+  # DE-POPULATION
+  # ===========================================================================
+  cat("Building de-population...\n")
+
+  bar_df$hover <- ifelse(bar_df$is_suppressed,
+    htxt(sprintf(tr("de_hover_suppressed"), as.character(bar_df$land))),
+    htxt(sprintf(tr("de_hover_cat_pct"), as.character(bar_df$land),
+      fmtv(bar_df$value), fa_num(bar_df$pct, 1))))
+
+  p_bund_bar <- plot_ly(bar_df, x = ~land, y = ~display_value, type = "bar",
+      marker = list(color = ~fill_color),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_pop_bar_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", tickangle = -30, tickfont = list(size = 10)),
+      yaxis = list(title = "", tickformat = ","),
+      margin = list(t = 60, b = 100),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+  supp_hover_map <- htxt(sprintf(tr("de_hover_suppressed"), bund_map_suppressed$land))
+  vis_hover_map  <- htxt(sprintf(tr("de_hover_map"), bund_map_visible$land,
+    fmtv(bund_map_visible$value), fa_num(bund_map_visible$value / hl_total * 100, 1)))
+
+  p_de_map <- plot_ly() %>%
+    add_trace(type = "choroplethmapbox",
+      geojson = de_geojson,
+      locations = bund_map_suppressed$land,
+      z = rep(1, nrow(bund_map_suppressed)),
+      featureidkey = "properties.name",
+      text = supp_hover_map,
+      hoverinfo = "text",
+      colorscale = list(c(0, "#d0d0d0"), c(1, "#d0d0d0")),
+      zmin = 0, zmax = 1,
+      showscale = FALSE,
+      marker = list(line = list(color = "white", width = 1), opacity = 0.7)
+    ) %>%
+    add_trace(type = "choroplethmapbox",
+      geojson = de_geojson,
+      locations = bund_map_visible$land,
+      z = bund_map_visible$value,
+      featureidkey = "properties.name",
+      text = vis_hover_map,
+      hoverinfo = "text",
+      colorscale = list(c(0, "#e8e8e8"), c(0.001, "#c6dbef"), c(0.1, "#6baed6"),
+        c(0.4, "#2171b5"), c(1, "#08306b")),
+      showscale = TRUE,
+      colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
+      marker = list(line = list(color = "white", width = 1), opacity = 0.9)
+    ) %>% layout(
+      mapbox = list(
+        style = "carto-positron",
+        center = list(lon = 10.5, lat = 51.2),
+        zoom = 4.3
+      ),
+      margin = list(t = 10, b = 10, l = 0, r = 0),
+      paper_bgcolor = "white"
+    ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
+
+  mig_grid <- paste0(
+    '<div style="display:flex; flex-direction:column; gap:12px; width:100%;">',
+    '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">', tr("de_gen_box_title"), '</div>',
+    '<div style="display:flex; gap:12px;">',
+    make_mig_box(fmtv(hl_fg),
+      sprintf(tr("de_gen_pct_of_total"), fa_num(round(hl_fg / hl_total * 100), 0)),
+      tr("de_gen1_label"), tr("de_gen1_sub"), "#1a4e72"),
+    make_mig_box(fmtv(hl_sg),
+      sprintf(tr("de_gen_pct_of_total"), fa_num(round(hl_sg / hl_total * 100), 0)),
+      tr("de_gen2_label"), tr("de_gen2_sub"), "#5a9bd5"),
+    '</div>',
+    sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0;">%s</p>', MZ_SOURCE),
+    '</div>'
+  )
+
+  pop_body <- paste0(
+    # Top row: headline block + migration grid
+    '<div class="chart-row">',
+    '<div class="headline">',
+    '<div class="label">', tr("de_pop_headline_label"), '</div>',
+    '<div class="number">', fmtv(hl_total), '</div>',
+    '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
+    sprintf(tr("de_pop_headline_caption"), lnk(MZ_HEADLINE_LINK)), '</div>',
+    '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<p style="margin-bottom:8px;">', tr("de_pop_idbox_intro"), '</p>',
+    '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
+    '<li>', tr("de_pop_idbox_bullet1"), '</li>',
+    '<li>', tr("de_pop_idbox_bullet2"), '</li>',
+    '</ul>',
+    '</div>',
+    '</div>',
+    '<div class="chart-card" style="display:flex; align-items:center;">', mig_grid, '</div>',
+    '</div>',
+
+    # Bottom row: bar chart + choropleth map
+    '<div class="chart-row">',
+    '<div class="chart-card">', plotly_div("de-bund-bar", pj(p_bund_bar), "450px",
+      source = paste0(MZ_SOURCE, "<br>", tr("de_src_bundbar_note"))), '</div>',
+    '<div class="chart-card">',
+    '<div class="section-title">', tr("de_pop_map_section"), '</div>',
+    plotly_div("de-bund-map", pj(p_de_map), "450px",
+      source = paste0(MZ_SOURCE, "<br>", tr("de_src_map_note"))),
+    '</div>',
+    '</div>'
+  )
+
+  fname_pop <- if (is_fa()) "docs/pages/de-population.fa.html" else "docs/pages/de-population.html"
+  writeLines(render(tr("de_pop_title"), pop_body), fname_pop)
+  cat("  Done\n")
+
+
+  # ===========================================================================
+  # DE-IMMIGRATION & CITIZENSHIP
+  # ===========================================================================
+  cat("Building de-immigration...\n")
+
+  # --- Motive chart ----------------------------------------------------------
+  motive_disp_levels <- if (is_fa()) unname(DE_MOTIVE_FA[levels(motive_clean$short)]) else levels(motive_clean$short)
+  motive_clean$short_disp <- factor(
+    if (is_fa()) unname(DE_MOTIVE_FA[as.character(motive_clean$short)]) else as.character(motive_clean$short),
+    levels = motive_disp_levels)
+  motive_clean$hover <- htxt(sprintf(tr("de_hover_cat_pct"),
+    as.character(motive_clean$short_disp), fmtv(motive_clean$value), fa_num(motive_clean$pct, 1)))
+  p_motive <- plot_ly(motive_clean, x = ~short_disp, y = ~value, type = "bar",
+      marker = list(color = motive_colors[as.character(motive_clean$short)]),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_motive_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", tickangle = -45, tickfont = list(size = 11)),
+      yaxis = list(title = "", tickformat = ","),
+      margin = list(t = 65, b = 110),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+  # --- Residence duration chart ----------------------------------------------
+  dur_df$hover <- htxt(sprintf(tr("de_hover_duration"),
+    as.character(dur_df$label), fmtv(dur_df$value), fa_num(dur_df$pct, 1)))
+  p_duration <- plot_ly(dur_df, x = ~label, y = ~value, type = "bar",
+      marker = list(color = "#2774AE"),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_duration_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = tr("de_duration_xaxis"), tickfont = list(size = 11)),
+      yaxis = list(title = "", tickformat = ","),
+      margin = list(t = 65, b = 90),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE,
+      annotations = list(
+        list(text = htxt(tr("de_duration_annot")),
+          x = 0.5, y = -0.26, xref = "paper", yref = "paper", showarrow = FALSE,
+          font = list(size = 9, color = "#6b6b6b"), xanchor = "center"))) %>%
+    config(displayModeBar = FALSE)
+
+  # --- Annual arrivals chart -------------------------------------------------
+  annual_arrivals$hover <- htxt(sprintf(tr("de_hover_annual"),
+    fa_num(annual_arrivals$year, 0, big = FALSE), fmtv(annual_arrivals$iran_arrivals)))
+  p_annual <- plot_ly() %>%
+    add_bars(
+      data = annual_arrivals,
+      x = ~year, y = ~iran_arrivals,
+      marker = list(color = "#2774AE", line = list(color = "#1a4e72", width = 0.3)),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none",
+      showlegend = FALSE,
+      name = "Annual arrivals"
+    ) %>%
+    layout(
+      title = list(text = htxt(tr("de_annual_title")),
+        font = list(size = 15, family = "Montserrat")),
+      xaxis = list(title = "", tickfont = list(size = 10), dtick = 4),
+      yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
+      margin = list(t = 55, b = 40, l = 55, r = 20),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      hovermode = "closest"
+    ) %>%
+    config(displayModeBar = FALSE)
+
+  # --- Citizenship chart -----------------------------------------------------
+  cit_df <- data.frame(
+    status_en = c("German citizens", "Iranian nationals"),
+    count     = c(hl_deu, hl_for),
+    pct       = round(c(hl_deu, hl_for) / hl_total * 100, 1),
+    stringsAsFactors = FALSE)
+  cit_df$status <- if (is_fa()) unname(DE_CITIZEN_FA[cit_df$status_en]) else cit_df$status_en
+  cit_df$hover <- htxt(sprintf(tr("de_hover_cat_pct"),
+    cit_df$status, fmtv(cit_df$count), fa_num(cit_df$pct, 1)))
+  p_citizen <- plot_ly(cit_df, x = ~status, y = ~count, type = "bar",
+      marker = list(color = c("#2774AE", "#e07b54")),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_citizen_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", tickfont = list(size = 12)),
+      yaxis = list(title = "", tickformat = ","),
+      margin = list(t = 60, b = 60),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+  # --- Text-card pieces ------------------------------------------------------
+  im1_big  <- sprintf(tr("de_bignum"), fa_num(de_cit_pct, 0))
+  im1_prim <- htxt(sprintf(tr("de_immig_c1_primary"), fmtv(hl_deu)))
+  im1_b1   <- htxt(sprintf(tr("de_immig_c1_b1"), fmtv(hl_for)))
+  im1_b2   <- htxt(tr("de_immig_c1_b2"))
+  im2_big  <- sprintf(tr("de_bignum"), fa_num(dur_10plus_pct, 0))
+  im2_prim <- htxt(tr("de_immig_c2_primary"))
+  im2_b1   <- htxt(sprintf(tr("de_immig_c2_b1"), fa_num(dur_30plus_pct, 0)))
+
+  immig_body <- paste0(
+    '<div class="page-content">',
+    sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%s</li>
+      <li>%s</li>
+    </ul>
+  </div>', im1_big, im1_prim, im1_b1, im1_b2),
+    sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%s</li>
+    </ul>
+  </div>', im2_big, im2_prim, im2_b1),
+
+    # Left: citizenship chart
+    '<div class="chart-card pc1">',
+    plotly_div("de-cit", pj(p_citizen), "480px",
+      source = MZ_SOURCE),
+    '</div>',
+
+    # Right: tabbed annual arrivals + motive + duration
+    '<div class="chart-card pc2">',
+    '<div class="tab-bar">',
+    '<button class="tab-btn active" onclick="switchTab(\'de-immig-annual\',this,\'de-immig-tabs\')">', tr("de_tab_annual"), '</button>',
+    '<button class="tab-btn" onclick="switchTab(\'de-immig-motive\',this,\'de-immig-tabs\')">', tr("de_tab_motive"), '</button>',
+    '<button class="tab-btn" onclick="switchTab(\'de-immig-duration\',this,\'de-immig-tabs\')">', tr("de_tab_duration"), '</button>',
+    '</div>',
+    '<div id="de-immig-annual" class="tab-panel active" data-group="de-immig-tabs">',
+    plotly_div("de-annual", pj(p_annual), "430px",
+      source = src_annual),
+    '</div>',
+    '<div id="de-immig-motive" class="tab-panel" data-group="de-immig-tabs">',
+    plotly_div("de-motive", pj(p_motive), "440px",
+      source = src_motive),
+    '</div>',
+    '<div id="de-immig-duration" class="tab-panel" data-group="de-immig-tabs">',
+    plotly_div("de-duration", pj(p_duration), "430px",
+      source = src_duration),
+    '</div>',
+    '</div>',
+    '</div>'
+  )
+
+  fname_immig <- if (is_fa()) "docs/pages/de-immigration.fa.html" else "docs/pages/de-immigration.html"
+  writeLines(render(tr("de_immig_title"), immig_body, has_tabs = TRUE), fname_immig)
+  cat("  Done\n")
+
+
+  # ===========================================================================
+  # DE-EDUCATION charts (built here, rendered on the de-langedu page)
+  # ===========================================================================
+  school_disp_levels <- if (is_fa()) unname(DE_SCHOOL_FA[levels(school_all$cat)]) else levels(school_all$cat)
+  school_all$cat_disp <- factor(
+    if (is_fa()) unname(DE_SCHOOL_FA[as.character(school_all$cat)]) else as.character(school_all$cat),
+    levels = school_disp_levels)
+  school_all$hover <- htxt(sprintf(tr("de_hover_cat_pct"),
+    as.character(school_all$cat_disp), fmtv(school_all$value), fa_num(school_all$pct, 1)))
+  p_school <- plot_ly(school_all, x = ~cat_disp, y = ~pct, type = "bar",
+      marker = list(color = school_colors[as.character(school_all$cat)]),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_school_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", tickangle = 0, tickfont = list(size = 10)),
+      yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 60)),
+      margin = list(t = 60, b = 70),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+  prof_disp_levels <- if (is_fa()) unname(DE_PROF_FA[levels(prof_all$cat)]) else levels(prof_all$cat)
+  prof_all$cat_disp <- factor(
+    if (is_fa()) unname(DE_PROF_FA[as.character(prof_all$cat)]) else as.character(prof_all$cat),
+    levels = prof_disp_levels)
+  prof_all$hover <- htxt(sprintf(tr("de_hover_cat_pct"),
+    as.character(prof_all$cat_disp), fmtv(prof_all$value), fa_num(prof_all$pct, 1)))
+  p_prof <- plot_ly(prof_all, x = ~cat_disp, y = ~pct, type = "bar",
+      marker = list(color = prof_colors[as.character(prof_all$cat)]),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_prof_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", tickfont = list(size = 11)),
+      yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 40)),
+      margin = list(t = 60, b = 70),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+
+  # ===========================================================================
+  # DE-WORK charts (built here, rendered on the de-workinc page)
+  # ===========================================================================
+  emp_disp_levels <- if (is_fa()) unname(DE_STATUS_FA[levels(emp_bar_df$status)]) else levels(emp_bar_df$status)
+  emp_bar_df$status_disp <- factor(
+    if (is_fa()) unname(DE_STATUS_FA[as.character(emp_bar_df$status)]) else as.character(emp_bar_df$status),
+    levels = emp_disp_levels)
+  emp_bar_df$hover <- htxt(sprintf(tr("de_hover_cat_pct"),
+    as.character(emp_bar_df$status_disp), fmtv(emp_bar_df$count), fa_num(emp_bar_df$pct, 1)))
+  p_emp_status <- plot_ly(emp_bar_df, x = ~status_disp, y = ~count, type = "bar",
+      marker = list(color = c("#c4793a", "#b05050", "#b0b0b0")),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_empstatus_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", tickfont = list(size = 11)),
+      yaxis = list(title = "", tickformat = ","),
+      margin = list(t = 55, b = 70),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+  # Industry: label-above bars (RTL-mirrored on fa via hbar_over_labels()).
+  de_ind_text <- de_ind_base_text
+  if (is_fa()) de_ind_text <- ifelse(de_ind_text == "", "",
+    gsub("%", "٪", fa_digits(de_ind_text)))   # N% -> ۲۴٪ (axis-style suffix)
+  ind_cats_disp <- if (is_fa()) unname(DE_INDUSTRY_FA[de_ind_levels_en]) else de_ind_levels_en
+  ov_de_ind <- hbar_over_labels(ind_cats_disp, ends = de_ind_ends, end_text = de_ind_text)
+  de_ind_xrange <- if (isTRUE(ov_de_ind$xreversed)) c(de_ind_xmax, 0) else c(0, de_ind_xmax)
+  row_ind_disp <- if (is_fa()) unname(DE_INDUSTRY_FA[as.character(ind$label)]) else as.character(ind$label)
+  ind$hover <- ifelse(ind$is_suppressed,
+    htxt(sprintf(tr("de_hover_suppressed"), row_ind_disp)),
+    htxt(sprintf(tr("de_hover_industry"), row_ind_disp, fmtv(ind$value), fa_num(ind$pct, 1))))
+  p_industry <- plot_ly(ind, y = ~label, x = ~display_value, type = "bar",
+      orientation = "h",
+      marker = list(color = ~fill_color),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_industry_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = de_ind_xrange),
+      yaxis = ov_de_ind$yaxis,
+      annotations = ov_de_ind$annotations, bargap = ov_de_ind$bargap,
+      margin = list(t = ov_de_ind$margin_t, b = 40, l = ov_de_ind$margin_l, r = 12),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+
+  # ===========================================================================
+  # DE-INCOME chart (built here, rendered on the de-workinc page)
+  # ===========================================================================
+  inc_disp_levels <- if (is_fa()) unname(DE_INCBRACKET_FA[inc_order]) else inc_order
+  inc$bracket_disp <- factor(
+    if (is_fa()) unname(DE_INCBRACKET_FA[as.character(inc$bracket)]) else as.character(inc$bracket),
+    levels = inc_disp_levels)
+  inc$hover <- ifelse(inc$is_suppressed,
+    htxt(sprintf(tr("de_hover_income_suppressed"), as.character(inc$bracket_disp))),
+    htxt(sprintf(tr("de_hover_income"), as.character(inc$bracket_disp),
+      fmtv(inc$value), fa_num(inc$pct, 1))))
+  p_income <- plot_ly(inc, x = ~bracket_disp, y = ~display_pct, type = "bar",
+      marker = list(color = inc$bar_color),
+      text = ~hover,
+      hoverinfo = "text", textposition = "none") %>%
+    layout(
+      title = list(text = htxt(tr("de_income_title")),
+        font = list(size = 16, family = "Montserrat")),
+      xaxis = list(title = "", tickangle = -25, tickfont = list(size = 10)),
+      yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 25)),
+      margin = list(t = 65, b = 110),
+      plot_bgcolor = "white", paper_bgcolor = "white",
+      showlegend = FALSE) %>%
+    config(displayModeBar = FALSE)
+
+
+  # ===========================================================================
+  # DE-WORK & INCOME (combined page)
+  # ===========================================================================
+  cat("Building de-workinc...\n")
+
+  wi1_big  <- sprintf(tr("de_bignum"), fa_num(services_pct, 0))
+  wi1_prim <- htxt(tr("de_wi_c1_primary"))
+  wi1_b1   <- htxt(sprintf(tr("de_wi_c1_b1"), fa_num(emp_pct, 0)))
+  wi1_b2   <- htxt(sprintf(tr("de_wi_c1_b2"), fa_num(unemp_pct, 0)))
+  wi1_b3   <- htxt(sprintf(tr("de_wi_c1_b3"), fa_num(nilf_pct, 0)))
+  wi2_big  <- sprintf(tr("de_bignum"), fa_num(middle_share, 0))
+  wi2_prim <- htxt(tr("de_wi_c2_primary"))
+  wi2_b1   <- htxt(sprintf(tr("de_wi_c2_b1"), fa_num(top_share, 0)))
+  wi2_b2   <- htxt(sprintf(tr("de_wi_c2_b2"), fa_num(low_share, 0)))
+
+  workinc_body <- paste0(
+    '<div class="page-content">',
+    sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>',
+      wi1_big, wi1_prim),
+    sprintf('    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%s</li>
+      <li>%s</li>
+      <li>%s</li>
+    </ul>
+  </div>',
+      wi1_b1, wi1_b2, wi1_b3),
+    sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%s</li>
+      <li>%s</li>
+    </ul>
+  </div>', wi2_big, wi2_prim, wi2_b1, wi2_b2),
+    # LEFT: work with 2 tabs (labour force status + industry)
+    '<div class="chart-card pc1">',
+    '<div class="tab-bar">',
+    '<button class="tab-btn active" onclick="switchTab(\'de-wk-status\',this,\'de-wk-tabs\')">', tr("de_tab_status"), '</button>',
+    '<button class="tab-btn" onclick="switchTab(\'de-wk-industry\',this,\'de-wk-tabs\')">', tr("de_tab_industry"), '</button>',
+    '</div>',
+    '<div id="de-wk-status" class="tab-panel active" data-group="de-wk-tabs">',
+    plotly_div("de-empstatus", pj(p_emp_status), "460px",
+      source = MZ_SIMPLE),
+    '</div>',
+    '<div id="de-wk-industry" class="tab-panel" data-group="de-wk-tabs">',
+    plotly_div("de-industry", pj(p_industry), ov_de_ind$height,
+      source = src_industry),
+    '</div>',
+    '</div>',
+    # RIGHT: income chart
+    '<div class="chart-card pc2">',
+    plotly_div("de-income", pj(p_income), "510px",
+      source = src_income),
+    '</div>',
+    '</div>'
+  )
+
+  fname_workinc <- if (is_fa()) "docs/pages/de-workinc.fa.html" else "docs/pages/de-workinc.html"
+  writeLines(render(tr("de_workinc_title"), workinc_body, has_tabs = TRUE), fname_workinc)
+  cat("  Done\n")
+
+
+  # ===========================================================================
+  # DE-LANGUAGE chart (built here, rendered on the de-langedu page)
+  # ===========================================================================
+  cat_disp <- function(c) if (is_fa()) unname(DE_LANGCAT_FA[c]) else c
+  lang_all$gen_disp <- factor(
+    if (is_fa()) unname(DE_GENLABEL_FA[as.character(lang_all$gen_label)]) else as.character(lang_all$gen_label),
+    levels = if (is_fa()) unname(DE_GENLABEL_FA[levels(lang_all$gen_label)]) else levels(lang_all$gen_label))
+
+  p_lang <- plot_ly()
+  for (cat_name in lang_cat_order) {
+    disp <- cat_disp(cat_name)
+    sub <- lang_all %>% filter(category == cat_name)
+    p_lang <- p_lang %>% add_bars(
+      data = sub, y = ~gen_disp, x = ~pct, name = disp,
+      marker = list(color = lang_colors[cat_name]), textposition = "none",
+      hovertext = htxt(sprintf(tr("de_hover_lang"),
+        disp, as.character(sub$gen_disp), fmtv(sub$value), fa_num(sub$pct, 1))),
+      hoverinfo = "text",
+      legendgroup = disp, showlegend = FALSE, orientation = "h")
+  }
+  p_lang <- p_lang %>% layout(
+    barmode = "stack",
+    title = list(text = htxt(tr("de_lang_title")),
+      font = list(size = 16, family = "Montserrat")),
+    xaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 105)),
+    yaxis = list(title = "",
+      categoryorder = "array", categoryarray = levels(lang_all$gen_disp),
+      ticklabelstandoff = 6),
+    margin = list(t = 55, b = 40, l = 140), showlegend = FALSE,
+    plot_bgcolor = "white", paper_bgcolor = "white") %>%
+    config(displayModeBar = FALSE)
+
+  lang_colors_disp <- setNames(unname(lang_colors[lang_cat_order]),
+                               vapply(lang_cat_order, cat_disp, character(1)))
+  lang_leg <- make_html_legend_hover(lang_colors_disp, break_after = 2)
+
+
+  # ===========================================================================
+  # DE-LANGUAGE & EDUCATION (combined page)
+  # ===========================================================================
+  cat("Building de-langedu...\n")
+
+  le1_big  <- sprintf(tr("de_bignum"), fa_num(persian_pct, 0))
+  le1_prim <- htxt(sprintf(tr("de_le_c1_primary"), fmtv(persian_k * 1000)))
+  le1_b1   <- htxt(sprintf(tr("de_le_c1_b1"), fa_num(only_de_pct, 0)))
+  le1_b2   <- htxt(sprintf(tr("de_le_c1_b2"), fa_num(mainly_de_pct, 0)))
+  le1_b3   <- htxt(sprintf(tr("de_le_c1_b3"), fa_num(other_lang_pct, 0)))
+  le1_b4   <- htxt(sprintf(tr("de_le_c1_b4"), fa_num(kurdish_pct, 0)))
+  le2_big  <- sprintf(tr("de_bignum"), fa_num(abitur_pct, 0))
+  le2_prim <- htxt(tr("de_le_c2_primary"))
+  le2_b1   <- htxt(tr("de_le_c2_b1"))
+  le2_b2   <- htxt(sprintf(tr("de_le_c2_b2"), fa_num(academic_pct, 0), fmtv(academic_k * 1000)))
+
+  langedu_body <- paste0(
+    '<div class="page-content">',
+    sprintf('<div class="text-card pt1" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%s</li>
+      <li>%s</li>
+      <li>%s</li>
+      <li>%s</li>
+    </ul>
+  </div>', le1_big, le1_prim, le1_b1, le1_b2, le1_b3, le1_b4),
+    sprintf('<div class="text-card pt2" style="text-align:center;">
+    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>%s</li>
+      <li>%s</li>
+    </ul>
+  </div>', le2_big, le2_prim, le2_b1, le2_b2),
+    # LEFT: language chart (standalone, no persian sidebar)
+    '<div class="chart-card pc1" style="display:flex; flex-direction:column; justify-content:center;">',
+    plotly_div("de-lang", pj(p_lang), "320px",
+      source = MZ_SIMPLE,
+      legend_html = lang_leg, highlight_hover = TRUE),
+    '</div>',
+    # RIGHT: education with 2 tabs (school qualification + vocational/academic)
+    '<div class="chart-card pc2">',
+    '<div class="tab-bar">',
+    '<button class="tab-btn active" onclick="switchTab(\'de-ed-school\',this,\'de-ed-tabs\')">', tr("de_tab_school"), '</button>',
+    '<button class="tab-btn" onclick="switchTab(\'de-ed-prof\',this,\'de-ed-tabs\')">', tr("de_tab_prof"), '</button>',
+    '</div>',
+    '<div id="de-ed-school" class="tab-panel active" data-group="de-ed-tabs">',
+    plotly_div("de-school", pj(p_school), "450px",
+      source = MZ_SIMPLE),
+    '</div>',
+    '<div id="de-ed-prof" class="tab-panel" data-group="de-ed-tabs">',
+    plotly_div("de-prof", pj(p_prof), "450px",
+      source = MZ_SIMPLE),
+    '</div>',
+    '</div>',
+    '</div>'
+  )
+
+  fname_langedu <- if (is_fa()) "docs/pages/de-langedu.fa.html" else "docs/pages/de-langedu.html"
+  writeLines(render(tr("de_langedu_title"), langedu_body, has_tabs = TRUE), fname_langedu)
+  cat("  Done\n")
+}
+
+cat("\nAll Germany pages built (en + fa).\n")
