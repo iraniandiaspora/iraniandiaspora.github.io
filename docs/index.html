@@ -422,7 +422,7 @@
 // Cache-buster bumped with each release so the browser fetches the new
 // iframe pages instead of showing a stale cached copy. Bump on any
 // release that changes any docs/pages/*.html.
-var SITE_VERSION = 'v6.1';
+var SITE_VERSION = 'v6.2';
 function activateIframe(container) {
   if (!container) return;
   var iframe = container.querySelector('iframe');
@@ -687,6 +687,16 @@ window.addEventListener('hashchange', navigateToHash);
     'turkey':'ترکیه','israel':'اسرائیل','australia':'استرالیا','armenia':'ارمنستان',
     'bibliography':'کتاب‌شناسی','about':'درباره'};
   var SITE_FA = 'داشبورد دیاسپورای ایرانی';
+  // Europe submenu country-tab labels
+  var COUNTRY_FA = {'All Europe':'همه اروپا','Germany':'آلمان','Sweden':'سوئد',
+    'United Kingdom':'بریتانیا','Netherlands':'هلند','Austria':'اتریش','Italy':'ایتالیا',
+    'Denmark':'دانمارک','Norway':'نروژ','France':'فرانسه','Switzerland':'سوئیس','Finland':'فنلاند'};
+  // Sub-tab labels (keyed by English with a real & )
+  var SUBTAB_FA = {'Population':'جمعیت','Immigration':'مهاجرت','Immigration & Citizenship':'مهاجرت و شهروندی',
+    'Immigration History':'تاریخچه مهاجرت','Marriage':'ازدواج','Language':'زبان','Education':'آموزش',
+    'Work':'کار','Income':'درآمد','Language & Religion':'زبان و دین','Education & Religion':'آموزش و دین',
+    'Language & Education':'زبان و آموزش','Work & Income':'کار و درآمد','Work & Education':'کار و آموزش',
+    'Work & Industry':'کار و صنعت','Iran-Born Across Europe':'متولدان ایران در اروپا'};
   var currentLang = localStorage.getItem('idd_lang') || 'fa';
 
   var st = document.createElement('style');
@@ -737,6 +747,16 @@ window.addEventListener('hashchange', navigateToHash);
       var m=(b.getAttribute('onclick')||'').match(/showTab\('([^']+)'/); if(!m) return;
       if(!b.dataset.en) b.dataset.en=b.innerHTML;
       if(fa && NAV_FA[m[1]]) b.textContent=NAV_FA[m[1]]; else b.innerHTML=b.dataset.en;
+    });
+    document.querySelectorAll('#europe-submenu .country-tab').forEach(function(b){
+      if(!b.dataset.en) b.dataset.en=b.innerHTML;
+      var k=b.dataset.en.replace(/&amp;/g,'&').trim();
+      if(fa && COUNTRY_FA[k]) b.textContent=COUNTRY_FA[k]; else b.innerHTML=b.dataset.en;
+    });
+    document.querySelectorAll('.sub-tab').forEach(function(b){
+      if(!b.dataset.en) b.dataset.en=b.innerHTML;
+      var k=b.dataset.en.replace(/&amp;/g,'&').trim();
+      if(fa && SUBTAB_FA[k]) b.textContent=SUBTAB_FA[k]; else b.innerHTML=b.dataset.en;
     });
   }
   function reloadLoaded(){
