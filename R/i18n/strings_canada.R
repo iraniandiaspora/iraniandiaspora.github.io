@@ -107,7 +107,7 @@ CA_FOS_FA <- c(
 CA_EMPCAT_FA <- c(
   "Private sector"          = "بخش خصوصی",
   "Public sector"           = "بخش دولتی",
-  "Self-employed"           = "خویش‌فرما",
+  "Self-employed"           = "خوداشتغال",
   "No work in last 5 years" = "بدون کار در 5 سال گذشته"
 )
 

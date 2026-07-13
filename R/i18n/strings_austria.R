@@ -64,7 +64,7 @@ STR <- list(
   # --- map section -------------------------------------------------------------
   at_geo_section_title = list(
     en = "Geographic Distribution in Austria",
-    fa = "توزیع جغرافیایی در اتریش"),
+    fa = "پراکندگی جغرافیایی در اتریش"),
 
   # --- trend chart -------------------------------------------------------------
   at_hist_title = list(

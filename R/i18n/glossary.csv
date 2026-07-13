@@ -46,7 +46,7 @@ age_at_arrival,Age at arrival,سن هنگام ورود,DE charts,,draft
 labour_force,labor force,نیروی کار,work-page text,,draft
 employed,Employed,شاغل,chart category,,draft
 unemployed,Unemployed,بیکار,chart category,,draft
-self_employed,Self-employed,خویش‌فرما,work charts,alt: خوداشتغال; خویش‌فرما common in Iran,draft
+self_employed,Self-employed,خوداشتغال,work charts,alt: خوداشتغال; خوداشتغال common in Iran,draft
 employment,employment,اشتغال,chart titles,,draft
 employment_rate,Employment Rate,نرخ اشتغال,tab label (NO),,draft
 labour_force_participation,Labor force participation,نرخ مشارکت در نیروی کار,NL chart,alt: نرخ مشارکت اقتصادی,draft
