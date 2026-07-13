@@ -456,7 +456,9 @@ immig_body <- paste0(
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian residents have lived in Germany for a decade or more.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Roughly %d%% have lived in Germany for 30 or more years.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Roughly %d%% have lived in Germany for 30 or more years</li>
+    </ul>
   </div>', dur_10plus_pct, dur_30plus_pct),
 
   # Left: citizenship chart
