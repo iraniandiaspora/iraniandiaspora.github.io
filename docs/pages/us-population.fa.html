@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex,nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آمریکا: جمعیت</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<script src="lib/plotly-3.4.0.min.js"></script>
+<link rel="stylesheet" href="lib/maplibre-gl-4.7.1.css">
+<script src="lib/maplibre-gl-4.7.1.js"></script>
+<script src="lib/pmtiles-3.2.1.js"></script>
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:"Vazirmatn","Montserrat",sans-serif; background:#fafafa; color:#333; padding:15px 40px; max-width:100%; overflow-x:hidden; }
+.text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
+.text-card { background:white; border-radius:8px; padding:20px; text-align:center;
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
+.chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
+.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
+.source a { color:#2774AE; }
+@media (max-width:900px) {
+  body { padding:10px 15px; display:flex; flex-direction:column; }
+  .text-row, .chart-row { grid-template-columns:1fr !important; }
+  .text-row-4 { grid-template-columns:1fr 1fr; }
+  .text-row, .text-row-4 { order:1; }
+  .headline .number { font-size:28px; }
+  .headline { padding:20px 15px; }
+  .section-title { font-size:14px; }
+  .tab-bar { flex-wrap:wrap; gap:4px; }
+  .tab-btn { font-size:12px; padding:5px 10px; }
+  .map-legend { font-size:10px; padding:6px 8px; }
+}
+@media (max-width:600px) {
+  .text-row-4 { grid-template-columns:1fr !important; }
+}
+@media (max-width:480px) {
+  body { padding:8px 10px; }
+  .text-card { font-size:13px; padding:14px; }
+  .headline .number { font-size:24px; }
+  .chart-card { padding:10px; }
+  .map-legend { position:relative; top:auto; right:auto; margin-top:8px; box-shadow:none; border:1px solid #e0e0e0; }
+}
+.headline { background:white; border-radius:8px; padding:30px; text-align:center;
+  border:1px solid #e0e0e0; margin-bottom:20px; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+a { transition: color 0.15s; }
+a:hover { color: #1a4e72 !important; text-decoration: underline; }
+.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
+.tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
+  font-family:"Vazirmatn","Montserrat",sans-serif; font-size:13px; }
+.tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-panel { display:none; }
+.tab-panel.active { display:block; }
+.map-container { position:relative; width:100%; }
+.map-container .maplibregl-map { border-radius:4px; }
+.map-popup { font-family:"Vazirmatn","Montserrat",sans-serif; font-size:13px; }
+.map-popup b { color:#1a4e72; }
+.map-legend { position:absolute; top:10px; right:10px; background:rgba(255,255,255,0.9); padding:8px 12px;
+  border-radius:6px; font-size:12px; box-shadow:0 1px 4px rgba(0,0,0,0.15); z-index:1; line-height:1.8; }
+.map-legend .leg-item { display:flex; align-items:center; gap:6px; }
+.map-legend .leg-swatch { width:16px; height:16px; border-radius:2px; flex-shrink:0; }
+.mapboxgl-ctrl-attrib, .mapboxgl-ctrl-logo { display:none !important; }
+</style>
+<style>@font-face{font-family:"Vazirmatn";font-style:normal;font-weight:400;font-display:swap;src:url("lib/fonts/Vazirmatn-Regular.woff2") format("woff2");}@font-face{font-family:"Vazirmatn";font-style:normal;font-weight:700;font-display:swap;src:url("lib/fonts/Vazirmatn-Bold.woff2") format("woff2");}</style>
+<script>(function(){if(!window.Plotly)return;Plotly.register({moduleType:"locale",name:"fa",dictionary:{},format:{decimal:".",thousands:",",grouping:[3],percent:"٪",numerals:["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"]}});Plotly.setPlotConfig({locale:"fa",separators:".,"});})();</script>
+<style>[dir="rtl"] body{text-align:right;}[dir="rtl"] .headline div[style*="text-align:left"]{text-align:right !important;}[dir="rtl"] .headline ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:20px !important;}[dir="rtl"] .text-card ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:18px !important;}[dir="rtl"] .headline ul li,[dir="rtl"] .text-card ul li{text-align:right !important;}</style>
+</head>
+<body>
+
+<!-- Top row: headline + waterfall -->
+<div class="chart-row">
+<div class="headline">
+  <div class="label">برآورد جمعیت ایرانی‌آمریکایی</div>
+  <div class="number">794,915</div>
+  <div class="label" style="margin-top:6px; font-size:13px; color:#555;">بر پایه <a href="https://www2.census.gov/programs-surveys/acs/methodology/questionnaires/2024/quest24.pdf" style="color:#2774AE;" target="_blank">پیمایش جامعه آمریکا 2024</a>، پیمایشی سراسری از سوی اداره سرشماری آمریکا</div>
+  <div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">
+    <p style="margin-bottom:8px;">هر فرد در صورت داشتن <em>دست‌کم یکی</em> از این چهار پاسخ در پرسش‌های سرشماری شمرده می‌شود:</p>
+    <ul style="padding-left:20px; margin:0; line-height:1.5;">
+      <li><strong>محل تولد</strong> <span style="color:#6b6b6b;">&mdash; «این فرد کجا متولد شده است؟»</span></li>
+      <li><strong>اصالت</strong> <span style="color:#6b6b6b;">&mdash; «اصالت یا خاستگاه قومی این فرد چیست؟»</span></li>
+      <li><strong>نژاد</strong> <span style="color:#6b6b6b;">&mdash; «ایرانی» که ذیل گزینه «سفید» نوشته شده است</span></li>
+      <li><strong>پیشینه والدین</strong> <span style="color:#6b6b6b;">&mdash; با والدی زندگی می‌کند که هر یک از موارد بالا را دارد</span></li>
+    </ul>
+  </div>
+</div>
+<div class="chart-card"><div id="waterfall" style="width:100%;height:320px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":6,"l":80,"t":50,"r":20},"title":{"text":"<b>ایرانی‌آمریکایی‌ها: روش شمارش<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","showticklabels":false,"showgrid":false,"zeroline":false,"fixedrange":true,"range":[0.5,8.5]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":",","fixedrange":true},"showlegend":false,"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","font":{"family":"Vazirmatn, Montserrat, sans-serif"},"hoverlabel":{"align":"right","bgcolor":"white","bordercolor":"#ccc","font":{"family":"Vazirmatn, Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("waterfall",[{"x":[1,2,3,4,5,6,7,8],"y":[231649,70565,33282,84732,94398,128739,46085,105465],"type":"bar","base":[0,231649,302214,335496,420228,514626,643365,689450],"marker":{"color":["#1a4e72","#2774AE","#5a9bd5","#4a8c6f","#c4793a","#d4a943","#7b5ea7","#e07b54"],"line":{"color":"rgba(31,119,180,1)"}},"text":["<b>متولد ایران + اصالت + خوداظهاری نژادی<\/b><br>✓ متولد ایران<br>✓ اصالت ایرانی<br>✓ خوداظهاری نژادی ایرانی<br>✗ والد ایرانی<br><br>۲۳۱,۶۴۹ نفر · ۲۹.۱ درصد از کل<br>مجموع تجمعی: ۲۳۱,۶۴۹","<b>متولد ایران + اصالت<\/b><br>✓ متولد ایران<br>✓ اصالت ایرانی<br>✗ خوداظهاری نژادی ایرانی<br>✗ والد ایرانی<br><br> ۷۰,۵۶۵ نفر · ۸.۹ درصد از کل<br>مجموع تجمعی: ۳۰۲,۲۱۴","<b>متولد ایران + خوداظهاری نژادی<\/b><br>✓ متولد ایران<br>✗ اصالت ایرانی<br>✓ خوداظهاری نژادی ایرانی<br>✗ والد ایرانی<br><br> ۳۳,۲۸۲ نفر · ۴.۲ درصد از کل<br>مجموع تجمعی: ۳۳۵,۴۹۶","<b>اصالت + خوداظهاری نژادی<\/b><br>✗ متولد ایران<br>✓ اصالت ایرانی<br>✓ خوداظهاری نژادی ایرانی<br>✗ والد ایرانی<br><br> ۸۴,۷۳۲ نفر · ۱۰.۷ درصد از کل<br>مجموع تجمعی: ۴۲۰,۲۲۸","<b>فقط متولد ایران<\/b><br>✓ متولد ایران<br>✗ اصالت ایرانی<br>✗ خوداظهاری نژادی ایرانی<br>✗ والد ایرانی<br><br> ۹۴,۳۹۸ نفر · ۱۱.۹ درصد از کل<br>مجموع تجمعی: ۵۱۴,۶۲۶","<b>فقط اصالت<\/b><br>✗ متولد ایران<br>✓ اصالت ایرانی<br>✗ خوداظهاری نژادی ایرانی<br>✗ والد ایرانی<br><br>۱۲۸,۷۳۹ نفر · ۱۶.۲ درصد از کل<br>مجموع تجمعی: ۶۴۳,۳۶۵","<b>فقط خوداظهاری نژادی<\/b><br>✗ متولد ایران<br>✗ اصالت ایرانی<br>✓ خوداظهاری نژادی ایرانی<br>✗ والد ایرانی<br><br> ۴۶,۰۸۵ نفر · ۵.۸ درصد از کل<br>مجموع تجمعی: ۶۸۹,۴۵۰","<b>فرزند متولد آمریکا با والد ایرانی<\/b><br>✗ متولد ایران<br>✗ اصالت ایرانی<br>✗ خوداظهاری نژادی ایرانی<br>✓ والد ایرانی<br><br>۱۰۵,۴۶۵ نفر · ۱۳.۳ درصد از کل<br>مجموع تجمعی: ۷۹۴,۹۱۵"],"hoverinfo":["text","text","text","text","text","text","text","text"],"textposition":["none","none","none","none","none","none","none","none"],"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script><div style="padding-right:20px;"><table style="width:100%; table-layout:fixed; border-collapse:collapse;"><colgroup><col style="width:80px;"><col><col><col><col><col><col><col><col></colgroup><tbody><tr style=" background:#f1f3f5;"><td style="text-align:right; padding:6px 9px 6px 4px; font-size:11px; color:#333; line-height:1.2;">متولد<br>ایران</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td></tr><tr style=""><td style="text-align:right; padding:6px 9px 6px 4px; font-size:11px; color:#333; line-height:1.2;">اصالت<br>ایرانی</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td></tr><tr style=" background:#f1f3f5;"><td style="text-align:right; padding:6px 9px 6px 4px; font-size:11px; color:#333; line-height:1.2;">خوداظهاری<br>نژادی ایرانی</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td></tr><tr style=""><td style="text-align:right; padding:6px 9px 6px 4px; font-size:11px; color:#333; line-height:1.2;">والد<br>ایرانی</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#c4c4c4;">✗</td><td style="text-align:center; padding:6px 0; font-size:15px; color:#2f2f2f;">✓</td></tr></tbody></table></div><p style="font-size:11px; color:#666; text-align:right; margin:6px 0 0; padding-right:2px;">منبع: <bdi><a href='https://doi.org/10.18128/D010.V16.0' target='_blank' style='color:#2774AE;'>IPUMS USA</a></bdi> — ACS 2024 1-Year<br>برآوردهای وزنی که اداره سرشماری از پیمایشی سالانه در حدود 3.5 میلیون خانوار آمریکا تهیه می‌کند.</p>
+</div>
+</div>
+
+<!-- Bottom row: region bar + map -->
+<div class="chart-row">
+<div class="chart-card"><div id="region" style="width:100%;height:400px;touch-action:manipulation;"></div>
+<script>(function(){var c=Object.assign({"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false,"displayModeBar":false},{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l={"margin":{"b":40,"l":60,"t":60,"r":10},"title":{"text":"<b>ایرانی‌آمریکایی‌ها به تفکیک منطقه آمریکا<\/b>","font":{"size":16,"family":"Montserrat"}},"xaxis":{"domain":[0,1],"automargin":true,"title":"","type":"category","categoryorder":"array","categoryarray":["West","South","Northeast","Midwest"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"","tickformat":","},"plot_bgcolor":"white","paper_bgcolor":"white","hovermode":"closest","showlegend":false,"font":{"family":"Vazirmatn, Montserrat, sans-serif"},"hoverlabel":{"align":"right","bgcolor":"white","bordercolor":"#ccc","font":{"family":"Vazirmatn, Montserrat, sans-serif","size":13,"color":"#333"}}};Plotly.newPlot("region",[{"x":["West","South","Northeast","Midwest"],"y":[423865,191826,84902,54002],"marker":{"color":["#7b5ea7","#d4a943","#2ca089","#e07b54"],"line":{"color":"rgba(31,119,180,1)"}},"text":["<b>West<\/b><br>۴۲۳,۸۶۵ (۵۶ درصد)","<b>South<\/b><br>۱۹۱,۸۲۶ (۲۵ درصد)","<b>Northeast<\/b><br> ۸۴,۹۰۲ (۱۱ درصد)","<b>Midwest<\/b><br> ۵۴,۰۰۲ (۷ درصد)"],"hoverinfo":["text","text","text","text"],"textposition":["none","none","none","none"],"type":"bar","error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],l,c);})();</script>
+<p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0 0; padding-right:2px;">منبع: <bdi><a href='https://www.census.gov/programs-surveys/acs/microdata.html' target='_blank' style='color:#2774AE;'>U.S. Census Bureau</a></bdi> — ACS 2020–2024 5-Year PUMS<br>پنج پیمایش سالانه را برای برآوردهای مطمئن‌تر در سطح ایالت و کلان‌شهر ترکیب می‌کند.</p></div>
+<div class="chart-card" style="margin-bottom:0; padding-bottom:8px;">
+  <div class="section-title" style="margin-top:0;">پراکندگی جغرافیایی ایرانی‌آمریکایی‌ها</div>
+  <div class="tab-bar" style="margin-bottom:8px;">
+    <button class="tab-btn active" data-btn-group="geo" onclick="switchGeoTab('geo-state',this)">به تفکیک ایالت</button>
+    <button class="tab-btn" data-btn-group="geo" onclick="switchGeoTab('geo-county',this)">به تفکیک کانتی کالیفرنیا</button>
+    <button class="tab-btn" data-btn-group="geo" onclick="switchGeoTab('geo-la',this)">کلان‌شهر لس‌آنجلس</button>
+  </div>
+  <div id="geo-state" class="tab-panel active" data-group="geo">
+    <div class="map-container">
+      <div id="state-map" style="width:100%;height:380px;"></div>
+      <div class="map-legend">
+        <div class="leg-item"><div class="leg-swatch" style="background:#c6dbef;"></div> 0 &ndash; 20,000</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#6baed6;"></div> 20,000 &ndash; 100,000</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#08306b;"></div> 100,000 &ndash; 300,000</div>
+      </div>
+    </div>
+    <p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0;">منبع: <a href="https://www.census.gov/programs-surveys/acs/microdata.html" target="_blank" style="color:#2774AE;">اداره سرشماری آمریکا</a> &mdash; ACS 2020&ndash;2024 5-Year PUMS<br>برآوردهای وزنی جمعیت به تفکیک ایالت. شامل محل تولد، اصالت و پیشینه والدین.</p>
+  </div>
+  <div id="geo-county" class="tab-panel" data-group="geo">
+    <div class="map-container">
+      <div id="county-map" style="width:100%;height:380px;"></div>
+      <div class="map-legend">
+        <div class="leg-item"><div class="leg-swatch" style="background:#c6dbef;"></div> 0 &ndash; 5,000</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#6baed6;"></div> 5,000 &ndash; 50,000</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#08306b;"></div> 50,000 &ndash; 110,000</div>
+      </div>
+    </div>
+    <p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0;">منبع: ACS 2020&ndash;2024 5-Year<br>تنها کانتی‌های کالیفرنیا. شامل محل تولد، اصالت و پیشینه والدین، توزیع‌شده از حوزه‌های پیمایشیِ زیرِکانتی.</p>
+  </div>
+  <div id="geo-la" class="tab-panel" data-group="geo">
+    <div class="map-container">
+      <div id="la-map" style="width:100%;height:380px;"></div>
+      <div class="map-legend">
+        <div class="leg-item"><div class="leg-swatch" style="background:#e8e8e8;"></div> 0 &ndash; 500</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#c6dbef;"></div> 500 &ndash; 1,000</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#6baed6;"></div> 1,000 &ndash; 5,000</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#2171b5;"></div> 5,000 &ndash; 15,000</div>
+        <div class="leg-item"><div class="leg-swatch" style="background:#08306b;"></div> 15,000 &ndash; 30,000</div>
+      </div>
+    </div>
+    <p style="font-size:11px; color:#666; text-align:right; margin:4px 0 0;">منبع: ACS 2020&ndash;2024 5-Year PUMS (سطح PUMA)<br>کلان‌شهر لس‌آنجلس (CSA). شامل محل تولد، اصالت و پیشینه والدین.<br>حوزه‌های پیمایشی سرشماری، نه محله‌های دقیق.</p>
+  </div>
+</div><!-- end chart-card (map) -->
+</div><!-- end chart-row -->
+
+<script>
+// PMTiles protocol
+let protocol = new pmtiles.Protocol();
+maplibregl.addProtocol("pmtiles", protocol.tile);
+
+// Determine base URL for tiles (works for both local and GitHub Pages)
+const base = window.location.href.replace(/\/[^\/]*$/, "/");
+
+// --- State Map ---
+const stateMap = new maplibregl.Map({
+  container: "state-map",
+  style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+  center: [-98.5, 39.8],
+  zoom: window.innerWidth < 600 ? 2.1 : 2.8,
+  minZoom: 2,
+  maxZoom: 7,
+  attributionControl: false,
+  preserveDrawingBuffer: true
+});
+stateMap.addControl(new maplibregl.NavigationControl({showCompass:false}), "bottom-right");
+
+stateMap.on("load", function() {
+  stateMap.addSource("states-src", {
+    type: "vector",
+    url: "pmtiles://" + base + "tiles/us_states.pmtiles"
+  });
+  stateMap.addLayer({
+    id: "states-fill",
+    type: "fill",
+    source: "states-src",
+    "source-layer": "states",
+    paint: {
+      "fill-color": ["step", ["get", "population_est"],
+        "#e8e8e8", 1, "#c6dbef", 20000, "#6baed6", 100000, "#08306b"],
+      "fill-opacity": 0.85
+    }
+  });
+  stateMap.addLayer({
+    id: "states-line",
+    type: "line",
+    source: "states-src",
+    "source-layer": "states",
+    paint: { "line-color": "#fff", "line-width": 1 }
+  });
+
+  // Hover popup
+  const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: "map-popup" });
+  stateMap.on("mousemove", "states-fill", function(e) {
+    stateMap.getCanvas().style.cursor = "pointer";
+    const f = e.features[0];
+    const pop = Number(f.properties.population_est);
+    const pct = (pop / 754595 * 100).toFixed(1);
+    popup.setLngLat(e.lngLat)
+      .setHTML("<b>" + f.properties.state + "</b><br>" + pop.toLocaleString() + " ایرانی‌آمریکایی<br>" + pct + " درصد از کل آمریکا")
+      .addTo(stateMap);
+  });
+  stateMap.on("mouseleave", "states-fill", function() {
+    stateMap.getCanvas().style.cursor = "";
+    popup.remove();
+  });
+});
+
+// --- County Map ---
+let countyMapInited = false;
+let countyMap;
+
+function initCountyMap() {
+  if (countyMapInited) { countyMap.resize(); return; }
+  countyMapInited = true;
+  countyMap = new maplibregl.Map({
+    container: "county-map",
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+    center: [-119.5, 37.5],
+    zoom: 4.2,
+    minZoom: 4,
+    maxZoom: 10,
+    attributionControl: false,
+    preserveDrawingBuffer: true
+  });
+  countyMap.addControl(new maplibregl.NavigationControl({showCompass:false}), "bottom-right");
+
+  countyMap.on("load", function() {
+    countyMap.addSource("counties-src", {
+      type: "vector",
+      url: "pmtiles://" + base + "tiles/ca_counties.pmtiles"
+    });
+    countyMap.addLayer({
+      id: "counties-fill",
+      type: "fill",
+      source: "counties-src",
+      "source-layer": "counties",
+      paint: {
+        "fill-color": ["step", ["get", "pop_estimate"],
+          "#e8e8e8", 1, "#c6dbef", 5000, "#6baed6", 25000, "#2171b5", 100000, "#08306b"],
+        "fill-opacity": 0.85
+      }
+    });
+    countyMap.addLayer({
+      id: "counties-line",
+      type: "line",
+      source: "counties-src",
+      "source-layer": "counties",
+      paint: { "line-color": "#fff", "line-width": 1 }
+    });
+
+    const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: "map-popup" });
+    countyMap.on("mousemove", "counties-fill", function(e) {
+      countyMap.getCanvas().style.cursor = "pointer";
+      const f = e.features[0];
+      const pop = Number(f.properties.pop_estimate);
+      const pct = Number(f.properties.percent).toFixed(1);
+      popup.setLngLat(e.lngLat)
+        .setHTML("<b>" + f.properties.NAMELSAD + "</b><br>" +
+          pop.toLocaleString() + " ایرانی‌آمریکایی<br>" + pct + " درصد از کل کالیفرنیا")
+        .addTo(countyMap);
+    });
+    countyMap.on("mouseleave", "counties-fill", function() {
+      countyMap.getCanvas().style.cursor = "";
+      popup.remove();
+    });
+  });
+}
+
+// Tab switching with lazy map init
+// --- LA Neighborhood Map ---
+let laMapInited = false;
+let laMap;
+
+function initLaMap() {
+  if (laMapInited) { laMap.resize(); return; }
+  laMapInited = true;
+  laMap = new maplibregl.Map({
+    container: "la-map",
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
+    center: [-118.3, 34.05],
+    zoom: 7.5,
+    minZoom: 7,
+    maxZoom: 13,
+    attributionControl: false,
+    preserveDrawingBuffer: true
+  });
+  laMap.addControl(new maplibregl.NavigationControl({showCompass:false}), "bottom-right");
+
+  laMap.on("load", function() {
+    laMap.addSource("pumas-src", {
+      type: "vector",
+      url: "pmtiles://" + base + "tiles/la_pumas.pmtiles"
+    });
+    laMap.addLayer({
+      id: "pumas-fill",
+      type: "fill",
+      source: "pumas-src",
+      "source-layer": "pumas",
+      paint: {
+        "fill-color": ["step", ["get", "total"],
+          "#e8e8e8", 500, "#c6dbef", 1000, "#6baed6", 5000, "#2171b5", 15000, "#08306b"],
+        "fill-opacity": 0.85
+      }
+    });
+    laMap.addLayer({
+      id: "pumas-line",
+      type: "line",
+      source: "pumas-src",
+      "source-layer": "pumas",
+      paint: { "line-color": "#fff", "line-width": 0.5 }
+    });
+
+    const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false, className: "map-popup" });
+    laMap.on("mousemove", "pumas-fill", function(e) {
+      laMap.getCanvas().style.cursor = "pointer";
+      const f = e.features[0];
+      const pop = Number(f.properties.total);
+      const name = f.properties.name || "PUMA " + f.properties.puma_id;
+      const laPct = (pop / 353221 * 100).toFixed(1);
+      popup.setLngLat(e.lngLat)
+        .setHTML("<b>" + name + "</b><br>" +
+          pop.toLocaleString() + " ایرانی‌آمریکایی<br>" + laPct + " درصد از کل کالیفرنیا")
+        .addTo(laMap);
+    });
+    laMap.on("mouseleave", "pumas-fill", function() {
+      laMap.getCanvas().style.cursor = "";
+      popup.remove();
+    });
+  });
+}
+
+// Tab switching with lazy map init
+function switchGeoTab(tabId, btn) {
+  document.querySelectorAll("[data-group=\"geo\"]").forEach(function(e){e.classList.remove("active");});
+  document.querySelectorAll("[data-btn-group=\"geo\"]").forEach(function(e){e.classList.remove("active");});
+  document.getElementById(tabId).classList.add("active");
+  btn.classList.add("active");
+  if (tabId === "geo-county") setTimeout(initCountyMap, 50);
+  if (tabId === "geo-la") setTimeout(initLaMap, 50);
+  if (tabId === "geo-state") stateMap.resize();
+}
+</script>
+
+<script>
+function reportHeight() {
+  if (window.parent !== window) {
+    window.parent.postMessage({ type: "iframeHeight", height: document.body.scrollHeight + 20 }, "*");
+  }
+}
+function resizeAllPlots() {
+  document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+    if (window.Plotly) Plotly.Plots.resize(p);
+  });
+  reportHeight();
+}
+window.addEventListener("load", function(){ setTimeout(resizeAllPlots, 300); });
+window.addEventListener("resize", function(){ setTimeout(resizeAllPlots, 150); });
+if (window.ResizeObserver) {
+  var ro = new ResizeObserver(function(entries) {
+    entries.forEach(function(e) {
+      var plot = e.target.querySelector(".js-plotly-plot") || (e.target.classList.contains("js-plotly-plot") ? e.target : null);
+      if (plot && window.Plotly) Plotly.Plots.resize(plot);
+    });
+    reportHeight();
+  });
+  window.addEventListener("load", function() {
+    setTimeout(function() {
+      document.querySelectorAll(".js-plotly-plot").forEach(function(p) {
+        ro.observe(p.parentElement || p);
+      });
+    }, 500);
+  });
+}
+new MutationObserver(reportHeight).observe(document.body, { childList: true, subtree: true });
+</script>
+<script>(function(){var D={"0":"۰","1":"۱","2":"۲","3":"۳","4":"۴","5":"۵","6":"۶","7":"۷","8":"۸","9":"۹"};function fd(s){return s.replace(/[0-9]/g,function(d){return D[d];});}function digitsPass(){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,{acceptNode:function(n){var p=n.parentNode;if(!p)return NodeFilter.FILTER_REJECT;var t=p.nodeName;if(t==="SCRIPT"||t==="STYLE")return NodeFilter.FILTER_REJECT;return /[0-9]/.test(n.nodeValue)?NodeFilter.FILTER_ACCEPT:NodeFilter.FILTER_SKIP;}});var a=[],n;while(n=w.nextNode())a.push(n);a.forEach(function(x){x.nodeValue=fd(x.nodeValue);});}function run(){digitsPass();}function hook(){document.querySelectorAll(".js-plotly-plot").forEach(function(p){if(p.on&&!p._faHooked){p._faHooked=true;p.on("plotly_afterplot",function(){setTimeout(run,0);});}});}window.addEventListener("load",function(){run();hook();setTimeout(function(){run();hook();},1500);});})();</script>
+</body>
+</html>
