@@ -422,7 +422,7 @@
 // Cache-buster bumped with each release so the browser fetches the new
 // iframe pages instead of showing a stale cached copy. Bump on any
 // release that changes any docs/pages/*.html.
-var SITE_VERSION = 'v5.0';
+var SITE_VERSION = 'v5.1';
 function activateIframe(container) {
   if (!container) return;
   var iframe = container.querySelector('iframe');
@@ -682,7 +682,7 @@ window.addEventListener('hashchange', navigateToHash);
 (function(){
   var FA_ENABLED = /(?:^|[?&])fa=1(?:&|$)/.test(location.search);
   if (!FA_ENABLED) return;
-  var FA_PAGES = ['global','nl-population','nl-workinc','am-population','fi-population','no-population'];
+  var FA_PAGES = ['global','nl-population','nl-workinc','am-population','fi-population','no-population','dk-population','dk-workinc','fr-population','it-population','at-population'];
   var NAV_FA = {'global':'جهان','united-states':'آمریکا','europe':'اروپا','canada':'کانادا',
     'turkey':'ترکیه','israel':'اسرائیل','australia':'استرالیا','armenia':'ارمنستان',
     'bibliography':'کتاب‌شناسی','about':'درباره'};

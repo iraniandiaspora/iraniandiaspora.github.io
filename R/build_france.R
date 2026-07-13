@@ -3,7 +3,16 @@
 #   Rscript R/build_france.R
 #
 # Input:  data/france/fr_trend.csv, fr_headline.csv
-# Output: docs/pages/fr-population.html
+# Output: docs/pages/fr-population.html      + fr-population.fa.html
+#
+# Bilingual (en + fa), following the build_armenia.R pattern. All user-facing
+# strings come from R/i18n/strings_france.R via tr(); numbers go through
+# fa_num()/fmtv() so the English edition stays BYTE-IDENTICAL while the Persian
+# edition renders RTL with Persian digits and the Vazirmatn face. France keeps
+# its LOCAL page_template() (note the .wide-card class) for English; the fa
+# edition is that same shell run through fa_shell(). The local body font token
+# is already the canonical "Montserrat",sans-serif anchor fa_shell() expects, so
+# no font realignment is needed (fa path only never touches English bytes).
 #
 # Extract first via: Rscript R/fr_export/extract_insee.R
 
@@ -18,6 +27,12 @@ DATA_DIR <- "data/france"
 # Shared helpers: strip_internal_classes(), plotly_to_json(), plotly_div(),
 # iframe_resize_script, MAPBOX_ATTRIB_HIDE_CSS.
 source("R/_helpers.R")
+# Persian-edition helpers: LANG, is_fa(), fa_digits(), fa_num(), bdi(), tr(),
+# pj(), fa_shell().
+source("R/_helpers_i18n.R")
+# France string table (defines the global STR consumed by tr()).
+source("R/i18n/strings_france.R")
+
 page_template <- function(title, body_html) {
   paste0('<!DOCTYPE html>
 <html lang="en">
@@ -73,11 +88,30 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
 </html>')
 }
 
-# --- Source citation strings ---
-INSEE_LINK <- "<a href='https://www.insee.fr/fr/statistiques/6478089' target='_blank' style='color:#2774AE;'>INSEE</a>"
-INSEE_SOURCE <- paste0("Source: ", INSEE_LINK, " &mdash; Recensement de la population, Iran-born residents 1968\u20132019 (periodic censuses 1968\u20131999, annual from 2006)")
+# --- i18n formatting helpers (build_armenia.R pattern) ------------------------
+# lnk():  in fa, isolate a Latin agency link/URL in <bdi> so bidi ordering is
+#         correct; in en, pass through unchanged (keeps English byte-identical).
+lnk <- function(x) if (is_fa()) bdi(x) else x
 
-# --- Load data ---------------------------------------------------------------
+# fmtv(): vector-safe big-integer formatter. In en it is LITERALLY
+#         format(x, big.mark = ",") — so it reproduces format()'s common-width
+#         PADDING (leading spaces) that the committed hover text relies on. In
+#         fa it Persian-digits that same string (ASCII "," thousands kept).
+fmtv <- function(x) {
+  s <- format(x, big.mark = ",")
+  if (!is_fa()) return(s)
+  fa_digits(s)
+}
+
+# htxt(): Persian-digit any stray Western digits in an assembled display string
+#         (hover text, chart titles). Idempotent, so safe to wrap fa_num()
+#         output. NEVER apply to HTML that carries CSS — only plain human text.
+htxt <- function(s) if (is_fa()) fa_digits(s) else s
+
+# --- Latin source link (language-independent) --------------------------------
+INSEE_LINK <- "<a href='https://www.insee.fr/fr/statistiques/6478089' target='_blank' style='color:#2774AE;'>INSEE</a>"
+
+# --- Load data (ONCE — language-independent) ---------------------------------
 cat("Loading France extracts...\n")
 trend <- read.csv(file.path(DATA_DIR, "fr_trend.csv"), stringsAsFactors = FALSE)
 hl    <- read.csv(file.path(DATA_DIR, "fr_headline.csv"), stringsAsFactors = FALSE)
@@ -87,57 +121,68 @@ fr_total  <- hl$count[hl$category == "total"]
 data_yr   <- hl$year[hl$category == "total"]
 fr_min_yr <- min(trend$year)
 
-# =============================================================================
-# FR-POPULATION
-# =============================================================================
-cat("Building fr-population...\n")
-
-# --- Historical trend (INSEE, line + markers; gap at 2018) -------------------
-p_hist <- plot_ly(trend, x = ~year, y = ~iran_born, type = "scatter",
-    mode = "lines+markers",
-    line = list(color = "#1a4e72", width = 2.5),
-    marker = list(color = "#1a4e72", size = 6),
-    text = sprintf("<b>%d</b><br>%s Iran-born",
-      trend$year, format(trend$iran_born, big.mark = ",")),
-    hoverinfo = "text", showlegend = FALSE) %>%
-  layout(
-    title = list(
-      text = sprintf("<b>Iran-Born Population in France,<br>%d\u2013%d</b>",
-                     fr_min_yr, data_yr),
-      font = list(size = 15, family = "Montserrat")),
-    xaxis = list(title = "", dtick = 2),
-    yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
-    margin = list(t = 50, b = 30),
-    plot_bgcolor = "white", paper_bgcolor = "white"
-  ) %>% config(displayModeBar = FALSE)
-
-# --- Assemble fr-population page ---------------------------------------------
-pop_body <- paste0(
-  # Top row: headline with identification box (left) + trend chart (right)
-  '<div class="chart-row">',
-  '<div class="headline">',
-  '<div class="label">Estimated Iran-Born Population in France</div>',
-  '<div class="number">', format(fr_total, big.mark = ","), '</div>',
-  '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the Recensement de la population maintained by ',
-  INSEE_LINK, ', ', data_yr, '</div>',
-  '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
-  '<p style="margin-bottom:8px;">France uses a rolling annual census. A person is counted as Iran-born based on:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
-  '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; "Dans quel pays \u00eates-vous n\u00e9(e)?"</span></li>',
-  '</ul>',
-  '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">French law (Loi Informatique et Libert\u00e9s, Art. 8) prohibits collecting ethnicity or ancestry statistics, so French-born children of Iran-born parents are not separately identified. INSEE\u2019s detailed country-of-birth tables are also released with a multi-year delay, so ', data_yr, ' is the most recent Iran-specific figure currently published.</p>',
-  '</div>',
-  '</div>',
-  '<div class="chart-card">',
-  plotly_div("fr-hist", plotly_to_json(p_hist), "430px", source = INSEE_SOURCE),
-  '</div>',
-  '</div>'
-)
-
 dir.create("docs/pages", showWarnings = FALSE, recursive = TRUE)
-writeLines(page_template("France: Population", pop_body),
-           "docs/pages/fr-population.html")
-cat("  Done\n")
+
+# =============================================================================
+# Bilingual build loop: en (byte-identical to committed) then fa (RTL Persian).
+# =============================================================================
+for (LANG in c("en", "fa")) {
+
+  cat(sprintf("=== Building France [%s] ===\n", LANG))
+
+  # --- Source citation string (per language) ----------------------------------
+  INSEE_SOURCE <- sprintf(tr("fr_src_insee"), lnk(INSEE_LINK))
+
+  # --- Historical trend (INSEE, line + markers; gap at 2018) -----------------
+  p_hist <- plot_ly(trend, x = ~year, y = ~iran_born, type = "scatter",
+      mode = "lines+markers",
+      line = list(color = "#1a4e72", width = 2.5),
+      marker = list(color = "#1a4e72", size = 6),
+      text = htxt(sprintf(tr("fr_hist_hover"),
+        fa_num(trend$year, 0, big = FALSE), fmtv(trend$iran_born))),
+      hoverinfo = "text", showlegend = FALSE) %>%
+    layout(
+      title = list(
+        text = htxt(sprintf(tr("fr_hist_title"),
+          fa_num(fr_min_yr, 0, big = FALSE), fa_num(data_yr, 0, big = FALSE))),
+        font = list(size = 15, family = "Montserrat")),
+      xaxis = list(title = "", dtick = 2),
+      yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
+      margin = list(t = 50, b = 30),
+      plot_bgcolor = "white", paper_bgcolor = "white"
+    ) %>% config(displayModeBar = FALSE)
+
+  # --- Assemble fr-population page ---------------------------------------------
+  pop_body <- paste0(
+    # Top row: headline with identification box (left) + trend chart (right)
+    '<div class="chart-row">',
+    '<div class="headline">',
+    '<div class="label">', tr("fr_pop_headline_label"), '</div>',
+    '<div class="number">', fmtv(fr_total), '</div>',
+    '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
+    sprintf(tr("fr_pop_headline_caption"),
+      lnk(INSEE_LINK), fa_num(data_yr, 0, big = FALSE)), '</div>',
+    '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<p style="margin-bottom:8px;">', tr("fr_pop_idbox_intro"), '</p>',
+    '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
+    '<li>', tr("fr_pop_idbox_bullet1"), '</li>',
+    '</ul>',
+    sprintf('<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">%s</p>',
+      sprintf(tr("fr_pop_law_note"), fa_num(data_yr, 0, big = FALSE))),
+    '</div>',
+    '</div>',
+    '<div class="chart-card">',
+    plotly_div("fr-hist", pj(p_hist), "430px", source = INSEE_SOURCE),
+    '</div>',
+    '</div>'
+  )
+
+  html <- page_template(tr("fr_pop_title"), pop_body)
+  if (is_fa()) html <- fa_shell(html)
+  fname_pop <- if (is_fa()) "docs/pages/fr-population.fa.html" else "docs/pages/fr-population.html"
+  writeLines(html, fname_pop)
+  cat("  Done\n")
+}
 
 # --- Summary ------------------------------------------------------------------
 cat(sprintf("\nFrance: %s Iran-born (%d)\n",
