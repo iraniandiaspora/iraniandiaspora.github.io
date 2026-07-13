@@ -405,7 +405,7 @@ p_qual <- plot_ly(qual, y = ~category, x = ~count, type = "bar",
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, qual_xmax)),
     yaxis = ov_qual$yaxis,
     annotations = ov_qual$annotations, bargap = ov_qual$bargap,
-    margin = list(l = ov_qual$margin_l, r = 20, t = 55, b = 30),
+    margin = list(l = ov_qual$margin_l, r = 20, t = ov_qual$margin_t, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 

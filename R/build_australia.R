@@ -692,7 +692,7 @@ p_edu <- plot_ly(edu_chart, y = ~label, x = ~count, type = "bar",
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, edu_xmax)),
     yaxis = ov_edu$yaxis,
     annotations = ov_edu$annotations, bargap = ov_edu$bargap,
-    margin = list(l = ov_edu$margin_l, r = 20, t = 55, b = 30),
+    margin = list(l = ov_edu$margin_l, r = 20, t = ov_edu$margin_t, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -876,7 +876,7 @@ p_occ <- plot_ly(occ_chart, y = ~label, x = ~count, type = "bar",
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, occ_xmax)),
     yaxis = ov_occ$yaxis,
     annotations = ov_occ$annotations, bargap = ov_occ$bargap,
-    margin = list(l = ov_occ$margin_l, r = 20, t = 55, b = 30),
+    margin = list(l = ov_occ$margin_l, r = 20, t = ov_occ$margin_t, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
@@ -927,7 +927,7 @@ p_ind <- plot_ly(ind_chart, y = ~label, x = ~count, type = "bar",
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = c(0, ind_xmax)),
     yaxis = ov_ind$yaxis,
     annotations = ov_ind$annotations, bargap = ov_ind$bargap,
-    margin = list(l = ov_ind$margin_l, r = 20, t = 55, b = 30),
+    margin = list(l = ov_ind$margin_l, r = 20, t = ov_ind$margin_t, b = 30),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 
