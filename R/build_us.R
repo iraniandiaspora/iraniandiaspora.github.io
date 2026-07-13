@@ -659,15 +659,23 @@ br <- read_csv(file.path(DATA_DIR, "us_business_rate.csv"), show_col_types = FAL
   arrange(rate_pct)
 br$origin <- factor(br$origin, levels = br$origin)
 br$col <- ifelse(br$is_iran, "#1a4e72", ifelse(br$is_benchmark, "#c4793a", "#b0b0b0"))
+# Labels-above-bar to match the occupation/sectors tabs in the same card (short
+# country names, but congruence beats the marginal left-axis tidiness here).
+br_ord <- match(levels(br$origin), as.character(br$origin))
+ov_br <- hbar_over_labels(levels(br$origin),
+  ends = br$rate_pct[br_ord], end_text = pct_lab(br$rate_pct[br_ord]))
+br_xmax <- max(br$rate_pct) * 1.15
 p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation = "h",
     marker = list(color = br$col),
     text = ~sprintf("<b>%s</b><br>%d%% self-employed", origin, rate_pct),
     hoverinfo = "text", textposition = "none") %>%
   layout(title = list(text = "<b>Self-Employment by<br>Country of Birth</b>",
       font = list(size = 16, family = "Montserrat")),
-    xaxis = list(title = "", ticksuffix = "%", zeroline = FALSE),
-    yaxis = list(title = "", ticks = "outside", ticklen = 6, tickcolor = "rgba(0,0,0,0)"),
-    margin = list(t = 90, b = 40, l = 120, r = 20),
+    xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE,
+      fixedrange = TRUE, range = c(0, br_xmax)),
+    yaxis = ov_br$yaxis,
+    annotations = ov_br$annotations, bargap = ov_br$bargap,
+    margin = list(t = ov_br$margin_t, b = 40, l = ov_br$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
 
@@ -789,7 +797,7 @@ writeLines(page_template("Work", paste0(
   plotly_div("us-occ", plotly_to_json(p_occ), "500px", source = SRC_OCC),
   '</div>',
   '<div id="bo-rate" class="tab-panel" data-group="bo-tabs">',
-  plotly_div("biz-rate", plotly_to_json(p_bizrate), "500px", source = SRC_BIZ),
+  plotly_div("biz-rate", plotly_to_json(p_bizrate), ov_br$height, source = SRC_BIZ),
   '</div>',
   '<div id="bo-ind" class="tab-panel" data-group="bo-tabs">',
   plotly_div("biz-ind", plotly_to_json(p_bizind), "500px", source = SRC_BIZ),
