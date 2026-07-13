@@ -122,7 +122,7 @@ pop_body <- paste0(
   INSEE_LINK, ', ', data_yr, '</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">France uses a rolling annual census. A person is counted as Iran-born based on:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Country of birth</strong> <span style="color:#6b6b6b;">&mdash; "Dans quel pays \u00eates-vous n\u00e9(e)?"</span></li>',
   '</ul>',
   '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">French law (Loi Informatique et Libert\u00e9s, Art. 8) prohibits collecting ethnicity or ancestry statistics, so French-born children of Iran-born parents are not separately identified. INSEE\u2019s detailed country-of-birth tables are also released with a multi-year delay, so ', data_yr, ' is the most recent Iran-specific figure currently published.</p>',

@@ -422,7 +422,7 @@ body <- paste0(
   '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Summed across ', n_countries, ' European countries with published data</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they were born in Iran and currently live in one of:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>', EUROSTAT_LINK, '</strong> <span style="color:#6b6b6b;">&mdash; ', n_eurostat_box, ' European countries (country-of-birth tables)</span></li>',
   '<li><strong>', MIKRO_LINK, '</strong> <span style="color:#6b6b6b;">&mdash; Germany</span></li>',
   '<li><strong>', ONS_LINK, ', ', NRS_LINK, ', ', NISRA_LINK, '</strong> <span style="color:#6b6b6b;">&mdash; United Kingdom (combined)</span></li>',

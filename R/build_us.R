@@ -1061,13 +1061,19 @@ writeLines(page_template("Income", paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile &mdash; more than double the national baseline of 10%%.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Only %d%% fall in the lowest decile.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of first-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>More than double the national baseline of 10%%</li>
+      <li>Only %d%% fall in the lowest decile</li>
+    </ul>
   </div>', round(fg_d10), round(fg_d1)),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%d%%</div>
-    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile &mdash; even more concentrated at the top than the first generation.</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">Just %d%% fall in the lowest decile.</div>
+    <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">of second-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile.</div>
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+      <li>Even more concentrated at the top than the first generation</li>
+      <li>Just %d%% fall in the lowest decile</li>
+    </ul>
   </div>', round(sg_d10), round(sg_d1)),
   '<div class="chart-card pc1">', make_income_chart(inc, "1st gen", "First Generation", "inc1"), '</div>',
   '<div class="chart-card pc2">', make_income_chart(inc, "2nd gen", "Second Generation", "inc2"), '</div>',
@@ -1444,7 +1450,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   <div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www2.census.gov/programs-surveys/acs/methodology/questionnaires/2024/quest24.pdf" style="color:#2774AE;" target="_blank">2024 American Community Survey</a>, a nationwide survey by the U.S. Census Bureau</div>
   <div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">
     <p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of four survey questions:</p>
-    <ul style="padding-left:20px; margin:0; line-height:2;">
+    <ul style="padding-left:20px; margin:0; line-height:1.5;">
       <li><strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;Where was this person born?&rdquo;</span></li>
       <li><strong>Ancestry</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;What is this person&rsquo;s ancestry or ethnic origin?&rdquo;</span></li>
       <li><strong>Race</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;Iranian&rdquo; written in under &ldquo;White&rdquo;</span></li>

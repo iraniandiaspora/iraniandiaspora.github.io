@@ -182,7 +182,7 @@ pop_body <- paste0(
   STATFIN_LINK, ', ', data_yr, '</div>',
   '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">Finland uses a continuous population register. A person is classified as Iranian-origin if they meet at least one of:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Born in Iran</strong> <span style="color:#6b6b6b;">&mdash; recorded in the Digital and Population Data Services Agency (DVV) register</span></li>',
   '<li><strong>Born in Finland with at least one Iran-born parent</strong> <span style="color:#6b6b6b;">&mdash; from StatFin\'s &ldquo;background country&rdquo; classification</span></li>',
   '</ul>',

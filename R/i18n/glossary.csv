@@ -43,14 +43,14 @@ employment_based,Employment-based,مهاجرت کاری,admissions category,alt:
 diversity_visa,Diversity,ویزای تنوع (لاتاری),admissions category,لاتاری is the everyday name,draft
 main_reason_for_coming,Main Reason for Coming,دلیل اصلی مهاجرت,DE tab label,,draft
 age_at_arrival,Age at arrival,سن هنگام ورود,DE charts,,draft
-labour_force,labour force,نیروی کار,work-page text,,draft
+labour_force,labor force,نیروی کار,work-page text,,draft
 employed,Employed,شاغل,chart category,,draft
 unemployed,Unemployed,بیکار,chart category,,draft
 self_employed,Self-employed,خویش‌فرما,work charts,alt: خوداشتغال; خویش‌فرما common in Iran,draft
 employment,employment,اشتغال,chart titles,,draft
 employment_rate,Employment Rate,نرخ اشتغال,tab label (NO),,draft
-labour_force_participation,Labour force participation,نرخ مشارکت در نیروی کار,NL chart,alt: نرخ مشارکت اقتصادی,draft
-labour_force_status,Labour force status,وضعیت اشتغال,tab label (DE),,draft
+labour_force_participation,Labor force participation,نرخ مشارکت در نیروی کار,NL chart,alt: نرخ مشارکت اقتصادی,draft
+labour_force_status,Labor force status,وضعیت اشتغال,tab label (DE),,draft
 occupation,Occupation,شغل,tab label (US/AU),chart heading may use مشاغل,draft
 industry,Industry,بخش اقتصادی,tab label,صنعت excludes services; avoid,draft
 household,household,خانوار,income methodology text,,draft

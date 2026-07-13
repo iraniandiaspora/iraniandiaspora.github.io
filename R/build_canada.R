@@ -340,7 +340,7 @@ writeLines(page_template("Canada: Population", paste0(
   '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">Based on the <a href="https://www.statcan.gc.ca/census-recensement/2021/ref/questionnaire/index-eng.cfm" style="color:#2774AE;" target="_blank">2021 Canadian Census</a> Public Use Microdata File</div>',
   '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
   '<p style="margin-bottom:8px;">A person is counted if they meet <em>at least one</em> of three census questions:</p>',
-  '<ul style="padding-left:20px; margin:0; line-height:2;">',
+  '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
   '<li><strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;Where was this person born?&rdquo;</span></li>',
   '<li><strong>Ethnic origin</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;What are the ethnic or cultural origins of this person&rsquo;s ancestors?&rdquo;</span></li>',
   '<li><strong>Mother tongue or home language</strong> <span style="color:#6b6b6b;">&mdash; reports Persian as the language first learned in childhood, or as the language spoken most often at home today</span></li>',
