@@ -561,7 +561,7 @@ STR <- list(
 
   us_geo_section = list(
     en = "Geographic Distribution of Iranian-Americans",
-    fa = "پراکندگی جغرافیایی ایرانی‌آمریکایی‌ها"),
+    fa = "توزیع جغرافیایی ایرانی‌آمریکایی‌ها"),
   us_geo_tab_state = list(en = "By State", fa = "به تفکیک ایالت"),
   us_geo_tab_county = list(en = "By California County", fa = "به تفکیک کانتی کالیفرنیا"),
   us_geo_tab_la = list(en = "Greater Los Angeles", fa = "کلان‌شهر لس‌آنجلس"),

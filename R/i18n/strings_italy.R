@@ -63,7 +63,7 @@ STR <- list(
   # --- map section -------------------------------------------------------------
   it_geo_section_title = list(
     en = "Geographic Distribution in Italy",
-    fa = "پراکندگی جغرافیایی در ایتالیا"),
+    fa = "توزیع جغرافیایی در ایتالیا"),
   it_map_unavailable = list(
     en = "Map unavailable (GeoJSON missing)",
     fa = "نقشه در دسترس نیست (فایل GeoJSON یافت نشد)"),

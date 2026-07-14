@@ -115,7 +115,7 @@ STR <- list(
   # --- population: geographic distribution ------------------------------------
   uk_geo_section_title = list(
     en = "Geographic Distribution in the United Kingdom",
-    fa = "پراکندگی جغرافیایی در بریتانیا"),
+    fa = "توزیع جغرافیایی در بریتانیا"),
   # slots: region name (Latin), count, share of UK total%
   uk_map_hover = list(
     en = "<b>%s</b><br>%s Iran-born residents<br>%s%% of UK total",
