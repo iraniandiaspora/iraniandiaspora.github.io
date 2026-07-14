@@ -214,7 +214,7 @@ STR <- list(
   # --- maps ------------------------------------------------------------------
   ca_geo_section = list(
     en = "Geographic Distribution of Iranian-Canadians",
-    fa = "پراکندگی جغرافیایی ایرانی‌کانادایی‌ها"),
+    fa = "توزیع جغرافیایی ایرانی‌کانادایی‌ها"),
   ca_tab_by_province = list(
     en = "By Province",
     fa = "به تفکیک استان"),

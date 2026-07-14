@@ -88,8 +88,8 @@ region,Region,منطقه,UK/US geography,,draft
 province,Province,استان,CA geography,,draft
 state,State,ایالت,US/AU/DE geography,DE Bundesland also ایالت,draft
 county,County,کانتی,US county maps,شهرستان is Iran-specific; media use کانتی,draft
-geographic_distribution,Geographic Distribution,پراکندگی جغرافیایی,map section heading,,draft
-geo_distribution_in_country,Geographic Distribution in {Country},پراکندگی جغرافیایی در {کشور},map heading pattern,,draft
+geographic_distribution,Geographic Distribution,توزیع جغرافیایی,map section heading,,draft
+geo_distribution_in_country,Geographic Distribution in {Country},توزیع جغرافیایی در {کشور},map heading pattern,,draft
 by_prefix,by ...,به تفکیک,cross-tab pattern,,draft
 by_generation,by generation,به تفکیک نسل,chart subtitle / box title,,draft
 by_sex,by sex,به تفکیک جنسیت,chart subtitle / box title,,draft

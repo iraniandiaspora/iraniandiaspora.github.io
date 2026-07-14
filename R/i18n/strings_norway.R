@@ -69,7 +69,7 @@ STR <- list(
     fa = "نرخ اشتغال"),
   no_geo_section_title = list(
     en = "Geographic Distribution in Norway",
-    fa = "پراکندگی جغرافیایی در نروژ"),
+    fa = "توزیع جغرافیایی در نروژ"),
 
   # --- historical trend chart --------------------------------------------------
   no_hist_title = list(

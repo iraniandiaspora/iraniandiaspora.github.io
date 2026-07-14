@@ -167,7 +167,7 @@ STR <- list(
     fa = "<b>جمعیت ایرانی‌تبار<br>به تفکیک ایالت آلمان</b>"),
   de_pop_map_section = list(
     en = "Geographic Distribution in Germany",
-    fa = "پراکندگی جغرافیایی در آلمان"),
+    fa = "توزیع جغرافیایی در آلمان"),
   de_hover_suppressed = list(
     en = "<b>%s</b><br>Suppressed (<5,000)<br>Destatis does not publish counts below 5,000",
     fa = "<b>%s</b><br>منتشرنشده (کمتر از 5,000)<br>Destatis ارقام کمتر از 5,000 را منتشر نمی‌کند"),

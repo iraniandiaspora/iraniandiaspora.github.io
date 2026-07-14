@@ -77,7 +77,7 @@ STR <- list(
     fa = "<b>%s</b><br>%s نفر متولد ایران (%s درصد از نسل اول)"),
   fi_geo_section_title = list(
     en = "Geographic Distribution in Finland",
-    fa = "پراکندگی جغرافیایی در فنلاند"),
+    fa = "توزیع جغرافیایی در فنلاند"),
 
   # --- source lines -----------------------------------------------------------
   fi_src_box = list(

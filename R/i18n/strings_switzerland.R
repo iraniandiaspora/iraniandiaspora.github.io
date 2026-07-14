@@ -53,7 +53,7 @@ STR <- list(
   # --- map section -------------------------------------------------------------
   ch_geo_section_title = list(
     en = "Geographic Distribution in Switzerland",
-    fa = "پراکندگی جغرافیایی در سوئیس"),
+    fa = "توزیع جغرافیایی در سوئیس"),
 
   # --- population trend chart --------------------------------------------------
   ch_trend_title = list(

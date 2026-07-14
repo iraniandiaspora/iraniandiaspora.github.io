@@ -73,7 +73,7 @@ STR <- list(
     fa = "سال ورود"),
   nl_geo_section_title = list(
     en = "Geographic Distribution in the Netherlands",
-    fa = "پراکندگی جغرافیایی در هلند"),
+    fa = "توزیع جغرافیایی در هلند"),
 
   # --- population: charts ---------------------------------------------------
   nl_hist_title = list(

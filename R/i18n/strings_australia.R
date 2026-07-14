@@ -189,7 +189,7 @@ STR <- list(
     fa = "<b>%s</b><br>%s نفر متولد ایران<br>%s درصد از کل"),
   au_geo_section = list(
     en = "Geographic Distribution of Iran-Born Australians",
-    fa = "پراکندگی جغرافیایی متولدان ایران در استرالیا"),
+    fa = "توزیع جغرافیایی متولدان ایران در استرالیا"),
   au_tab_bystate = list(
     en = "By State",
     fa = "به تفکیک ایالت"),
