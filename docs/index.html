@@ -325,7 +325,7 @@
 
 <!-- About -->
 <div id="page-about" class="tab-content">
-  <div class="about-content" style="max-width:800px; margin:0 auto; text-align:left;">
+  <div class="about-content about-content-en" style="max-width:800px; margin:0 auto; text-align:left;">
     <p>
       The Iranian Diaspora Dashboard is part of the Iranian Diaspora project funded by
       the Ebrahimi Program on Iranian Diaspora in Global Perspective, housed at the
@@ -347,6 +347,15 @@
       details.changelog-entry[open] summary::before { content:"▾ "; color:#1a4e72; }
       details.changelog-entry summary:hover { color:#1a4e72; }
       details.changelog-entry ul { margin:8px 0 12px 18px; line-height:1.8; }
+      /* Bilingual About: English shows by default; Persian only under fa-mode (set only with ?fa=1) */
+      .about-content-fa { display:none; }
+      body.fa-mode .about-content-en { display:none; }
+      body.fa-mode .about-content-fa { display:block; }
+      .about-content-fa details.changelog-entry { padding-left:0; padding-right:16px; border-left:none; border-right:3px solid #d4dfeb; }
+      .about-content-fa details.changelog-entry[open] { border-right-color:#1a4e72; }
+      .about-content-fa details.changelog-entry summary::before { content:"\25C2 "; }
+      .about-content-fa details.changelog-entry[open] summary::before { content:"\25BE "; }
+      .about-content-fa details.changelog-entry ul { margin:8px 18px 12px 0; }
     </style>
 
     <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">What&rsquo;s changed</h3>
@@ -406,6 +415,77 @@
       </ul>
     </details>
   </div>
+
+  <div class="about-content about-content-fa" dir="rtl" style="max-width:800px; margin:0 auto; text-align:right;">
+    <p>
+      داشبورد دیاسپورای ایرانی بخشی از پروژهٔ دیاسپورای ایرانی است که با حمایت مالی
+      برنامهٔ ابراهیمی دربارهٔ دیاسپورای ایرانی در چشم‌انداز جهانی، مستقر در مرکز مطالعات
+      خاور نزدیک دانشگاه کالیفرنیا، لس‌آنجلس (CNES)، اجرا شده است. این داشبورد را
+      رکسان کوربی، کوان هریس و گیلاد وینیگ ساخته‌اند. برای هرگونه پرسش یا راهنمایی،
+      لطفاً با <a href="mailto:cnes@international.ucla.edu">cnes@international.ucla.edu</a> تماس بگیرید.
+    </p>
+
+    <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">شیوهٔ استناد</h3>
+    <p dir="ltr" style="text-align:left; margin-left:24px; text-indent:-24px; line-height:1.8;">Harris, Kevan, Roxanne Corbeil, and Gilad Wenig. 2024. <em>Iranian Diaspora Dashboard</em>. UCLA Center for Near Eastern Studies. <a href="https://iraniandiaspora.github.io" style="color:#2774AE;">https://iraniandiaspora.github.io</a></p>
+    <p style="font-size:12px; color:#888; margin-top:8px;">نمودارها و تحلیل‌های اصلی تحت مجوز <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" style="color:#2774AE;">CC BY 4.0</a> منتشر شده‌اند. داده‌های پایه تابع شرایط استفادهٔ اصلیِ منابع خود هستند: ادارهٔ سرشماری ایالات متحده، DHS، Statistics Canada، ABS، Destatis، BAMF، ONS، CBS هلند، SCB، DST، SSB، Statistik Austria، ISTAT، BFS، CBS اسرائیل، Eurostat و سازمان ملل متحد.</p>
+
+    <h3 style="margin-top:30px; margin-bottom:12px; color:#1a4e72;">تغییرات</h3>
+
+    <details class="changelog-entry" open>
+      <summary>ژوئیهٔ ۲۰۲۶</summary>
+      <ul>
+        <li>افزودن <strong>مشاغل و مالکیت کسب‌وکار در ایالات متحده</strong> از پیمایش جامعهٔ آمریکا</li>
+      </ul>
+    </details>
+
+    <details class="changelog-entry">
+      <summary>ژوئن ۲۰۲۶</summary>
+      <ul>
+        <li>به‌روزرسانی جمعیت <strong>هلند</strong> تا سال ۲۰۲۶</li>
+        <li>گسترش <strong>تاریخچهٔ مهاجرت</strong> ایالات متحده تا سال ۲۰۲۴</li>
+      </ul>
+    </details>
+
+    <details class="changelog-entry">
+      <summary>مهٔ ۲۰۲۶</summary>
+      <ul>
+        <li>افزودن داده‌های سال ۲۰۲۵ <strong>آلمان</strong> از سرشماری خرد آلمان</li>
+        <li>افزودن کشورهای بیشتر به نقشهٔ نمای کلی <strong>اروپا</strong>، از جمله بلغارستان، جمهوری چک، مجارستان، لوکزامبورگ و رومانی</li>
+        <li>افزودن <strong>ارمنستان</strong> با داده‌های جمعیتی سرشماری‌های ۲۰۱۱ و ۲۰۲۲ ارمنستان</li>
+        <li>افزودن <strong>زبان در ایالات متحده</strong>، شامل حفظ زبان فارسی در خانه بر پایهٔ نسل، از پیمایش جامعهٔ آمریکا</li>
+        <li>افزودن <strong>فنلاند</strong> با داده‌های جمعیتی و مکانی</li>
+        <li>افزودن داده‌های تاریخی جمعیت به <strong>فرانسه</strong> از سرشماری INSEE</li>
+        <li>افزودن تفکیک مجوز اقامت ایرانیان برای <strong>ترکیه</strong></li>
+      </ul>
+    </details>
+
+    <details class="changelog-entry">
+      <summary>آوریل ۲۰۲۶</summary>
+      <ul>
+        <li>افزودن <strong>اروپا</strong> با داده‌های دوازده کشور: آلمان، بریتانیا، هلند، سوئد، دانمارک، نروژ، اتریش، ایتالیا، فرانسه، سوئیس، بلژیک و فنلاند، همراه با یک نمای کلی مقایسه‌ای میان کشورها</li>
+        <li>افزودن <strong>ترکیه</strong> با داده‌های جمعیت و مهاجرت از ثبت مبتنی بر نشانی TÜİK</li>
+        <li>افزودن <strong>استرالیا</strong> با داده‌های جمعیت، مهاجرت، آموزش و اشتغال از سرشماری ۲۰۲۱ استرالیا</li>
+        <li>افزودن <strong>تاریخچهٔ مهاجرت</strong> ایالات متحده، شامل پذیرش اقامت دائم بر پایهٔ نوع، از ۱۹۷۰ تا ۲۰۲۳</li>
+        <li>به‌روزرسانی داده‌های ایالات متحده به <strong>پیمایش جامعهٔ آمریکا ۲۰۲۰–۲۰۲۴</strong>، با برآورد جمعیتی بازنگری‌شدهٔ <strong>۷۹۴,۹۱۵</strong></li>
+        <li>افزودن <strong>اسرائیل</strong> با داده‌های جمعیتی از سالنامهٔ آماری اسرائیل</li>
+        <li>طراحی مجدد سایت برای بهبود سرعت، تعامل و نمایش در موبایل</li>
+      </ul>
+    </details>
+
+    <details class="changelog-entry">
+      <summary>سپتامبر ۲۰۲۵</summary>
+      <ul>
+        <li>افزودن <strong>کانادا</strong> با داده‌های جمعیت، زبان، دین، آموزش، اشتغال و درآمد از سرشماری ۲۰۲۱ کانادا</li>
+      </ul>
+    </details>
+
+    <details class="changelog-entry">
+      <summary>آوریل ۲۰۲۴</summary>
+      <ul>
+        <li>راه‌اندازی داشبورد با داده‌های <strong>ایالات متحده</strong> و <strong>جهانی</strong></li>
+      </ul>
+    </details>
+  </div>
 </div>
 
 </main>
@@ -422,7 +502,7 @@
 // Cache-buster bumped with each release so the browser fetches the new
 // iframe pages instead of showing a stale cached copy. Bump on any
 // release that changes any docs/pages/*.html.
-var SITE_VERSION = 'v6.4';
+var SITE_VERSION = 'v6.5';
 function activateIframe(container) {
   if (!container) return;
   var iframe = container.querySelector('iframe');
