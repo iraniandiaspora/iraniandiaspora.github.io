@@ -135,7 +135,7 @@ FA_NUM_SCRIPT <- paste0(
 # plotly_to_json() hardcodes Montserrat on layout.font; on fa pages we want
 # Vazirmatn first so Persian glyphs in titles/hover render in the site face.
 pj <- function(p, inject_hoveron = FALSE) {
-  j <- plotly_to_json(p, inject_hoveron = inject_hoveron)
+  j <- plotly_to_json(p, inject_hoveron = inject_hoveron, title_rtl = is_fa())
   if (is_fa()) {
     j$layout <- gsub("Montserrat, sans-serif",
                      "Vazirmatn, Montserrat, sans-serif", j$layout, fixed = TRUE)
