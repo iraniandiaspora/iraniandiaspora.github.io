@@ -178,10 +178,20 @@ strip_internal_classes <- function(x) {
 # inject_hoveron: if TRUE, adds hoveron="fills+points" to every trace that has
 # a fill (used by the stacked-area chart on the Global page so hover fires
 # anywhere in the band, not just on the line).
-plotly_to_json <- function(p, inject_hoveron = FALSE) {
+plotly_to_json <- function(p, inject_hoveron = FALSE, title_rtl = FALSE) {
   b <- plotly_build(p)
   b$x$data <- strip_internal_classes(b$x$data)
   b$x$layout <- strip_internal_classes(b$x$layout)
+  # title_rtl: force each chart-title line to RTL base direction with a leading
+  # RLM (U+200F). Plotly renders titles as SVG <text>/<tspan>; a multi-line RTL
+  # title whose lines end in a bidi-neutral char (Arabic comma ،, a paren) gets
+  # its words/lines reordered by Safari's SVG bidi engine. An RLM at the start of
+  # each line pins the paragraph direction so word and line order stay correct.
+  # Off by default → English output is byte-identical.
+  if (title_rtl && !is.null(b$x$layout$title$text) && nzchar(b$x$layout$title$text)) {
+    tt <- b$x$layout$title$text
+    b$x$layout$title$text <- paste0("\u200f", gsub("<br>", "<br>\u200f", tt, fixed = TRUE))
+  }
   if (is.null(b$x$layout$font)) b$x$layout$font <- list()
   b$x$layout$font$family <- "Montserrat, sans-serif"
   b$x$layout$hoverlabel <- list(
