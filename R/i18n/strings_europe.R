@@ -45,8 +45,11 @@ STR <- list(
 
   # --- identification box ------------------------------------------------------
   eu_idbox_intro = list(
-    en = "A person is counted if they were born in Iran and currently live in one of:",
-    fa = "هر فرد در صورتی شمرده می‌شود که در ایران متولد شده باشد و اکنون در یکی از این کشورها زندگی کند:"),
+    en = "A person is counted if their country of birth is Iran, as recorded in each country\u2019s census or population register.",
+    fa = "هر فرد در صورتی شمرده می‌شود که کشور محل تولدش ایران باشد، بر پایهٔ سرشماری یا سامانهٔ ثبت جمعیت هر کشور."),
+  eu_idbox_sources = list(
+    en = "Most figures come from Eurostat; Germany, the United Kingdom, and Switzerland use their national statistics.",
+    fa = "بیشتر ارقام از Eurostat گرفته شده و برای آلمان، بریتانیا و سوئیس از آمار ملی آن کشورها استفاده شده است."),
   eu_idbox_b1_span = list(
     en = "&mdash; %s European countries (country-of-birth tables)",
     fa = "&mdash; %s کشور اروپایی (جدول‌های کشور محل تولد)"),
