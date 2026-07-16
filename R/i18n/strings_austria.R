@@ -39,7 +39,7 @@ STR <- list(
     fa = '<strong>کشور محل تولد</strong> <span style="color:#6b6b6b;">&mdash; ثبت‌شده در سامانه مرکزی ثبت ساکنان</span>'),
   at_pop_thirdgen_note = list(
     en = "Austrian-born children of Iran-born parents are not counted as Iran-born in population statistics. This count reflects first-generation residents only.",
-    fa = "فرزندانِ متولد اتریشِ والدینِ متولد ایران در آمار جمعیتی متولد ایران به شمار نمی‌آیند. این شمار تنها ساکنان نسل اول را دربرمی‌گیرد."),
+    fa = "فرزندان متولد اتریش والدین متولد ایران در آمار جمعیتی متولد ایران به شمار نمی‌آیند. این شمار تنها ساکنان نسل اول را دربرمی‌گیرد."),
 
   # --- sex breakdown boxes -----------------------------------------------------
   at_sex_box_title = list(

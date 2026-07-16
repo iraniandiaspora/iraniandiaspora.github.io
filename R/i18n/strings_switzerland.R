@@ -48,7 +48,7 @@ STR <- list(
     fa = "از میان %s ساکن متولد ایران، %s نفر (%s درصد) تابعیت سوئیس، %s نفر تابعیت ایران و %s نفر تابعیت‌های دیگر دارند."),
   ch_pop_thirdgen_note = list(
     en = "The register tracks country of birth but not parental birthplace. Swiss-born children of Iran-born parents are not counted.",
-    fa = "این سامانه کشور محل تولد را ثبت می‌کند اما محل تولد والدین را نه. فرزندان متولد سوئیسِ والدین متولد ایران شمرده نمی‌شوند."),
+    fa = "این سامانه کشور محل تولد را ثبت می‌کند اما محل تولد والدین را نه. فرزندان متولد سوئیس والدین متولد ایران شمرده نمی‌شوند."),
 
   # --- map section -------------------------------------------------------------
   ch_geo_section_title = list(

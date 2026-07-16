@@ -212,7 +212,7 @@ STR <- list(
     fa = "<b>ورود سالانه ایرانیان به آلمان،<br>1991–2024</b>"),
   de_hover_annual = list(
     en = "<b>%s</b><br>%s Iranian arrivals",
-    fa = "<b>%s</b><br>%s ورودِ ایرانی"),
+    fa = "<b>%s</b><br>%s ورود ایرانی"),
   de_citizen_title = list(
     en = "<b>Citizenship of Iranian-Origin<br>Residents in Germany</b>",
     fa = "<b>تابعیت ساکنان ایرانی‌تبار<br>در آلمان</b>"),
@@ -232,7 +232,7 @@ STR <- list(
     fa = "در سال 2024، 7,840 مورد کسب تابعیت آلمان توسط ایرانیان ثبت شد"),
   de_immig_c2_primary = list(
     en = "of first-generation Iranian residents have lived in Germany for a decade or more.",
-    fa = "از ساکنان ایرانیِ نسل اول یک دهه یا بیشتر در آلمان زندگی کرده‌اند."),
+    fa = "از ساکنان ایرانی نسل اول یک دهه یا بیشتر در آلمان زندگی کرده‌اند."),
   de_immig_c2_b1 = list(
     en = "Roughly %s%% have lived in Germany for 30 or more years",
     fa = "حدود %s درصد سی سال یا بیشتر در آلمان زندگی کرده‌اند"),
@@ -320,10 +320,10 @@ STR <- list(
   # --- source lines ----------------------------------------------------------
   de_src_industry = list(
     en = "Source: %s — Mikrozensus 2025. Iranian-origin residents employed across five broad sectors. Agriculture and Public administration are suppressed by Destatis (shown in gray). Percentages are computed against the full published employed total (~175,000), so visible bars do not sum to 100%%.",
-    fa = "منبع: %s — Mikrozensus 2025. ساکنان ایرانی‌تبارِ شاغل در پنج بخش گسترده اقتصادی. بخش‌های کشاورزی و اداره عمومی توسط Destatis منتشر نشده‌اند (به رنگ خاکستری). درصدها نسبت به کل شاغلان منتشرشده (حدود 175,000 نفر) محاسبه شده‌اند، بنابراین میله‌های نمایان جمعاً 100 درصد نمی‌شوند."),
+    fa = "منبع: %s — Mikrozensus 2025. ساکنان ایرانی‌تبار شاغل در پنج بخش گسترده اقتصادی. بخش‌های کشاورزی و اداره عمومی توسط Destatis منتشر نشده‌اند (به رنگ خاکستری). درصدها نسبت به کل شاغلان منتشرشده (حدود 175,000 نفر) محاسبه شده‌اند، بنابراین میله‌های نمایان جمعاً 100 درصد نمی‌شوند."),
   de_src_income = list(
     en = "Source: %s — Mikrozensus 2025. Net monthly personal income of employed Iranian-origin residents, all generations combined. The under-€500 bracket is suppressed by Destatis (<5,000), shown in gray.",
-    fa = "منبع: %s — Mikrozensus 2025. درآمد خالص شخصیِ ماهانه ساکنان شاغل ایرانی‌تبار، همه نسل‌ها با هم. طبقه زیر 500 یورو توسط Destatis منتشر نشده است (کمتر از 5,000)، به رنگ خاکستری."),
+    fa = "منبع: %s — Mikrozensus 2025. درآمد خالص شخصی ماهانه ساکنان شاغل ایرانی‌تبار، همه نسل‌ها با هم. طبقه زیر 500 یورو توسط Destatis منتشر نشده است (کمتر از 5,000)، به رنگ خاکستری."),
 
   # ===========================================================================
   # DE-LANGUAGE & EDUCATION

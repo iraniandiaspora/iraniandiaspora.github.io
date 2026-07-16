@@ -38,10 +38,10 @@ STR <- list(
     fa = '<strong>متولد ایران</strong> <span style="color:#6b6b6b;">&mdash; ثبت‌شده در سامانه اداره خدمات دیجیتال و داده‌های جمعیتی (DVV)</span>'),
   fi_pop_idbox_bullet2 = list(
     en = '<strong>Born in Finland with at least one Iran-born parent</strong> <span style="color:#6b6b6b;">&mdash; from StatFin\'s &ldquo;background country&rdquo; classification</span>',
-    fa = '<strong>متولد فنلاند با دست‌کم یکی از والدینِ متولد ایران</strong> <span style="color:#6b6b6b;">&mdash; بر پایه طبقه‌بندی «کشور خاستگاه» در StatFin</span>'),
+    fa = '<strong>متولد فنلاند با دست‌کم یکی از والدین متولد ایران</strong> <span style="color:#6b6b6b;">&mdash; بر پایه طبقه‌بندی «کشور خاستگاه» در StatFin</span>'),
   fi_pop_thirdgen_note = list(
     en = "Third-generation Finnish-born grandchildren of Iran-born grandparents are not counted as Iranian-origin in the StatFin classification.",
-    fa = "نوه‌های نسل‌سومِ متولد فنلاند که پدربزرگ یا مادربزرگشان متولد ایران بوده‌اند، در طبقه‌بندی StatFin ایرانی‌تبار به شمار نمی‌آیند."),
+    fa = "نوه‌های نسل‌سوم متولد فنلاند که پدربزرگ یا مادربزرگشان متولد ایران بوده‌اند، در طبقه‌بندی StatFin ایرانی‌تبار به شمار نمی‌آیند."),
 
   # --- generation boxes -------------------------------------------------------
   fi_gen_box_title = list(

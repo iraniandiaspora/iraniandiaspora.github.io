@@ -42,7 +42,7 @@ STR <- list(
     fa = '<strong>متولد هلند</strong> با پدر یا مادر متولد ایران <span style="color:#6b6b6b;">&mdash; نسل دوم</span>'),
   nl_pop_thirdgen_note = list(
     en = "Third-generation residents (Dutch-born with Dutch-born parents) are not counted as Iranian-origin in CBS statistics. The classification is derived from birth records, not self-reported ethnicity or language.",
-    fa = "ساکنان نسل سوم (متولد هلند با پدر و مادرِ متولد هلند) در آمار CBS ایرانی‌تبار به شمار نمی‌آیند. این طبقه‌بندی بر پایه اسناد تولد است، نه قومیت یا زبانِ خوداظهارشده."),
+    fa = "ساکنان نسل سوم (متولد هلند با پدر و مادر متولد هلند) در آمار CBS ایرانی‌تبار به شمار نمی‌آیند. این طبقه‌بندی بر پایه اسناد تولد است، نه قومیت یا زبان خوداظهارشده."),
 
   # --- population: generation boxes ----------------------------------------
   nl_gen_box_title = list(
@@ -147,7 +147,7 @@ STR <- list(
     fa = "از میانگین ملی درآمد قابل تصرف خانوار در هلند، برای خانوارهای ایرانی‌تبار (%s)."),
   nl_card2_secondary = list(
     en = "The share of Iranian-origin households below the low-income threshold has fallen from %s%% in %s to %s%% in %s.",
-    fa = "سهم خانوارهای ایرانی‌تبارِ زیر آستانه کم‌درآمدی از %s درصد در سال %s به %s درصد در سال %s کاهش یافته است."),
+    fa = "سهم خانوارهای ایرانی‌تبار زیر آستانه کم‌درآمدی از %s درصد در سال %s به %s درصد در سال %s کاهش یافته است."),
 
   # --- workinc: charts ------------------------------------------------------
   nl_part_title = list(

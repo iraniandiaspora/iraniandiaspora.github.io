@@ -38,13 +38,13 @@ STR <- list(
     fa = "دانمارک از ثبت جمعیت استفاده می‌کند. هر فرد در صورت داشتن یکی از این ویژگی‌ها ایرانی‌تبار طبقه‌بندی می‌شود:"),
   dk_pop_idbox_bullet1 = list(
     en = '<strong>Immigrant</strong>: born in Iran, neither parent a Danish citizen born in Denmark',
-    fa = '<strong>مهاجر</strong>: متولد ایران، که هیچ‌یک از والدینش شهروند دانمارکیِ متولد دانمارک نیست'),
+    fa = '<strong>مهاجر</strong>: متولد ایران، که هیچ‌یک از والدینش شهروند دانمارکی متولد دانمارک نیست'),
   dk_pop_idbox_bullet2 = list(
     en = '<strong>Descendant</strong>: born in Denmark, neither parent a Danish citizen born in Denmark',
-    fa = '<strong>فرزند مهاجر</strong>: متولد دانمارک، که هیچ‌یک از والدینش شهروند دانمارکیِ متولد دانمارک نیست'),
+    fa = '<strong>فرزند مهاجر</strong>: متولد دانمارک، که هیچ‌یک از والدینش شهروند دانمارکی متولد دانمارک نیست'),
   dk_pop_thirdgen_note = list(
     en = "The descendant category requires that neither parent is a Danish citizen born in Denmark. Third-generation (both parents Danish-born citizens) are not counted as Iranian-origin.",
-    fa = "طبقه‌بندی «فرزند مهاجر» مستلزم آن است که هیچ‌یک از والدین شهروند دانمارکیِ متولد دانمارک نباشد. نسل سوم (که هر دو والد شهروند دانمارکیِ متولد دانمارک‌اند) ایرانی‌تبار به شمار نمی‌آید."),
+    fa = "طبقه‌بندی «فرزند مهاجر» مستلزم آن است که هیچ‌یک از والدین شهروند دانمارکی متولد دانمارک نباشد. نسل سوم (که هر دو والد شهروند دانمارکی متولد دانمارک‌اند) ایرانی‌تبار به شمار نمی‌آید."),
 
   # --- population: generation boxes ----------------------------------------
   dk_gen_box_title = list(

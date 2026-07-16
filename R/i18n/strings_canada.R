@@ -467,7 +467,7 @@ STR <- list(
     fa = "از درآمدبگیران ایرانی‌کانادایی نسل اول در گروه سنی %s سالانه CA$100,000 یا بیشتر درآمد دارند &mdash; بالاترین سهم در میان همه گروه‌های سنی."),
   ca_inc_c2_note = list(
     en = "Reports each individual&rsquo;s own pre-tax earnings by age. Household income, by contrast, sums every earner in a household into one total before ranking it against the national distribution.",
-    fa = "درآمد پیش از مالیاتِ هر فرد را به تفکیک سن گزارش می‌کند. درآمد خانوار، در مقابل، درآمد همه درآمدبگیران یک خانوار را در یک مجموع گرد می‌آورد و سپس آن را در برابر توزیع ملی رتبه‌بندی می‌کند."),
+    fa = "درآمد پیش از مالیات هر فرد را به تفکیک سن گزارش می‌کند. درآمد خانوار، در مقابل، درآمد همه درآمدبگیران یک خانوار را در یک مجموع گرد می‌آورد و سپس آن را در برابر توزیع ملی رتبه‌بندی می‌کند."),
   ca_src_income = list(
     en = " — 2021 Canadian Census<br>Ages 25–54 (prime working years). Each decile holds 10% of all Canadian households, ranked by pre-tax household income.<br>Smaller estimates should be interpreted with caution.",
     fa = " — سرشماری 2021 کانادا<br>25–54 سال (سال‌های اصلی کار). هر دهک 10 درصد از کل خانوارهای کانادا را در بر می‌گیرد، رتبه‌بندی‌شده بر پایه درآمد خانوار پیش از مالیات.<br>برآوردهای کوچک‌تر را باید با احتیاط تفسیر کرد."),

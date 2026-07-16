@@ -54,7 +54,7 @@ STR <- list(
     fa = '<strong>کشور محل تولد</strong> <span style="color:#6b6b6b;">&mdash; «کشور محل تولد شما کجاست؟»</span>'),
   uk_pop_thirdgen_note = list(
     en = "The UK census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not counted.",
-    fa = "سرشماری بریتانیا درباره تبار یا خاستگاه والدین نمی‌پرسد، بنابراین فرزندان متولد بریتانیا با والدینِ متولد ایران شمرده نمی‌شوند."),
+    fa = "سرشماری بریتانیا درباره تبار یا خاستگاه والدین نمی‌پرسد، بنابراین فرزندان متولد بریتانیا با والدین متولد ایران شمرده نمی‌شوند."),
 
   # --- population: tabs -------------------------------------------------------
   uk_tab_age = list(
@@ -138,10 +138,10 @@ STR <- list(
     fa = "%s درصد"),
   uk_card1_primary = list(
     en = "of economically active Iran-born residents aged 16+ in England and Wales are employed.",
-    fa = "از ساکنان متولد ایرانِ فعال اقتصادی 16 سال به بالا در انگلستان و ولز شاغل‌اند."),
+    fa = "از ساکنان متولد ایران فعال اقتصادی 16 سال به بالا در انگلستان و ولز شاغل‌اند."),
   uk_card1_secondary = list(
     en = "Another %s%% of the Iran-born 16+ population are economically inactive (including %s%% students).",
-    fa = "%s درصد دیگر از جمعیت متولد ایرانِ 16 سال به بالا از نظر اقتصادی غیرفعال‌اند (از جمله %s درصد دانشجو)."),
+    fa = "%s درصد دیگر از جمعیت متولد ایران 16 سال به بالا از نظر اقتصادی غیرفعال‌اند (از جمله %s درصد دانشجو)."),
   uk_card2_primary = list(
     en = "of Iran-born residents aged 16+ in England and Wales hold a bachelor&rsquo;s degree or higher.",
     fa = "از ساکنان متولد ایران 16 سال به بالا در انگلستان و ولز لیسانس یا مدرک بالاتر دارند."),

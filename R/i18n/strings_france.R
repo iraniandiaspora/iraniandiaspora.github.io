@@ -43,7 +43,7 @@ STR <- list(
     fa = '<strong>کشور محل تولد</strong> <span style="color:#6b6b6b;">&mdash; «Dans quel pays êtes-vous né(e)?»</span>'),
   fr_pop_law_note = list(
     en = "French law (Loi Informatique et Libertés, Art. 8) prohibits collecting ethnicity or ancestry statistics, so French-born children of Iran-born parents are not separately identified. INSEE’s detailed country-of-birth tables are also released with a multi-year delay, so %s is the most recent Iran-specific figure currently published.",
-    fa = "قانون فرانسه (Loi Informatique et Libertés، ماده 8) گردآوری آمار قومیت یا تبار را ممنوع کرده است؛ از این‌رو فرزندانِ متولد فرانسهِ والدین متولد ایران به‌طور جداگانه شناسایی نمی‌شوند. جدول‌های تفصیلی کشور محل تولدِ INSEE نیز با چند سال تأخیر منتشر می‌شوند، بنابراین %s تازه‌ترین رقم مربوط به ایران است که تاکنون منتشر شده است."),
+    fa = "قانون فرانسه (Loi Informatique et Libertés، ماده 8) گردآوری آمار قومیت یا تبار را ممنوع کرده است؛ از این‌رو فرزندان متولد فرانسه والدین متولد ایران به‌طور جداگانه شناسایی نمی‌شوند. جدول‌های تفصیلی کشور محل تولد INSEE نیز با چند سال تأخیر منتشر می‌شوند، بنابراین %s تازه‌ترین رقم مربوط به ایران است که تاکنون منتشر شده است."),
 
   # --- trend chart -------------------------------------------------------------
   fr_hist_title = list(
