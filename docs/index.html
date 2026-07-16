@@ -844,19 +844,43 @@ window.addEventListener('hashchange', navigateToHash);
       var s=f.getAttribute('src'); if(s){ f.src=langSrc(s)+'?v='+SITE_VERSION; }
     });
   }
-  function setLang(l){ currentLang=l; try{localStorage.setItem('idd_lang',l);}catch(e){} updateChrome(); reloadLoaded(); }
+  // GoatCounter language split. The automatic pageview records the LANDING
+  // language via window.goatcounter.path() (below). countLang() records a switch
+  // to the other language once per visit too — English is the default, so
+  // landing-only would undercount Persian readers who toggle in-session. Deduped
+  // per language so repeated toggles/returns can't inflate; guarded because
+  // count.js loads async (the method only exists after the script arrives, i.e.
+  // well after any user click). Result: just two paths, /lang/en and /lang/fa.
+  var _langCounted = {};
+  function countLang(l){
+    var p='/lang/'+l;
+    if(_langCounted[p]) return;
+    _langCounted[p]=true;
+    if(window.goatcounter && typeof window.goatcounter.count==='function'){ window.goatcounter.count({path:p}); }
+  }
+  function setLang(l){ currentLang=l; try{localStorage.setItem('idd_lang',l);}catch(e){} updateChrome(); reloadLoaded(); countLang(l); }
 
   // Apply now, at parse time — before DOMContentLoaded→navigateToHash activates iframes,
   // so the first load is already in the right language.
   updateChrome(); reloadLoaded();
+  // Seed the landing language so the automatic pageview owns it and a later
+  // toggle back to it doesn't double-count.
+  _langCounted['/lang/'+currentLang]=true;
 })();
 </script>
 
 <script>
-  // Strip query string (e.g. Google's ?_gl=... link-decoration params) so
-  // inbound links don't spawn a new dashboard "page" row per unique token.
+  // Record the active language as the page path ("/lang/en" | "/lang/fa") so the
+  // GoatCounter dashboard shows the English-vs-Persian split. A fixed path also
+  // strips any inbound query string (Google ?_gl=... link-decoration junk), which
+  // is why this replaced the old location.pathname passthrough. This fires once
+  // automatically on load with the landing language; setLang()'s countLang()
+  // adds one count if the visitor switches to the other language in-session.
   window.goatcounter = {
-    path: function() { return location.pathname; }
+    path: function() {
+      try { return '/lang/' + (localStorage.getItem('idd_lang') || 'en'); }
+      catch(e) { return '/lang/en'; }
+    }
   };
 </script>
 <script data-goatcounter="https://iraniandiaspora.goatcounter.com/count"
