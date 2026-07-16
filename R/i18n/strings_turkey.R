@@ -48,7 +48,7 @@ STR <- list(
     fa = "<strong>کشور محل تولد</strong> <span style=\"color:#6b6b6b;\">&mdash; ثبت‌شده در سامانه ثبت مبتنی بر نشانی (ADNKS)</span>"),
   tr_pop_thirdgen_note = list(
     en = "Türkiye-born children of Iran-born parents are not counted as Iran-born in these statistics. The figure reflects first-generation residents only.",
-    fa = "فرزندان متولد ترکیهِ والدین متولد ایران در این آمار متولد ایران شمرده نمی‌شوند. این رقم تنها ساکنان نسل اول را نشان می‌دهد."),
+    fa = "فرزندان متولد ترکیه والدین متولد ایران در این آمار متولد ایران شمرده نمی‌شوند. این رقم تنها ساکنان نسل اول را نشان می‌دهد."),
   tr_pop_un_note = list(
     en = "The UN International Migrant Stock reports about 200,000 Iran-born residents of Türkiye in 2024, higher than the figure above because UN numbers add UNHCR-registered refugees and asylum seekers to the national register and are extrapolated from 2020.",
     fa = "برآورد جمعیت مهاجران سازمان ملل شمار ساکنان متولد ایران ترکیه را در سال 2024 حدود 200,000 نفر گزارش می‌کند که از رقم بالا بیشتر است، زیرا آمار سازمان ملل پناهندگان و پناهجویان ثبت‌شده نزد UNHCR را به سامانه ثبت ملی می‌افزاید و از سال 2020 برون‌یابی شده است."),

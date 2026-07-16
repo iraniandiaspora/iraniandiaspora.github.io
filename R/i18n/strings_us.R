@@ -171,13 +171,13 @@ STR <- list(
     fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>25 سال به بالا، سنی که بیشتر افراد تحصیل خود را تمام کرده‌اند."),
   us_src_work = list(
     en = "Source: %s — ACS 2020–2024 5-Year PUMS<br>Employment type reflects primary job held in the past year.",
-    fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>نوع اشتغال بازتاب شغل اصلیِ سال گذشته است."),
+    fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>نوع اشتغال بازتاب شغل اصلی سال گذشته است."),
   us_src_lang = list(
     en = "Source: %s — ACS 2020–2024 5-Year PUMS<br>Language spoken at home, ages 5+.",
     fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>زبان رایج در خانه، 5 سال به بالا."),
   us_src_income = list(
     en = "Source: %s — ACS 2020–2024 5-Year PUMS<br>Ages 25–54 (prime working years).<br>Each decile holds 10%% of all U.S. households, ranked by pre-tax household income.",
-    fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>25 تا 54 سال (سال‌های اصلی کار).<br>هر دهک شامل 10 درصد از همه خانوارهای آمریکاست که بر پایه درآمد خانوارِ پیش از مالیات رتبه‌بندی شده‌اند."),
+    fa = "منبع: %s — ACS 2020–2024 5-Year PUMS<br>25 تا 54 سال (سال‌های اصلی کار).<br>هر دهک شامل 10 درصد از همه خانوارهای آمریکاست که بر پایه درآمد خانوار پیش از مالیات رتبه‌بندی شده‌اند."),
   us_src_lpr = list(
     en = "Source: INS Annual Reports (1970–1977); INS Statistical Yearbooks (1978–2004); DHS Yearbook of Immigration Statistics (2005–2024)",
     fa = "منبع: INS Annual Reports (1970–1977)؛ INS Statistical Yearbooks (1978–2004)؛ DHS Yearbook of Immigration Statistics (2005–2024)"),
@@ -211,7 +211,7 @@ STR <- list(
     fa = "<b>%s</b><br>%s ورود<br>تجمعی: %s درصد"),
   us_immig_hover_line = list(
     en = "<b>%s</b><br>%s%% of today's Iran-born population had arrived",
-    fa = "<b>%s</b><br>%s درصد از جمعیت امروزِ متولدان ایران تا این سال وارد شده بودند"),
+    fa = "<b>%s</b><br>%s درصد از جمعیت امروز متولدان ایران تا این سال وارد شده بودند"),
   us_citizen_title = list(
     en = "<b>Iranian-Americans by<br>Citizenship Status</b>",
     fa = "<b>ایرانی‌آمریکایی‌ها به تفکیک<br>وضعیت تابعیت</b>"),
@@ -238,7 +238,7 @@ STR <- list(
     fa = "آمریکا: تاریخچه مهاجرت"),
   us_lpr_total_title = list(
     en = "<b>Iranians Granted<br>US Permanent Resident Status,<br>1970–2024</b>",
-    fa = "<b>ایرانیانِ دریافت‌کننده<br>اقامت دائم آمریکا،<br>1970–2024</b>"),
+    fa = "<b>ایرانیان دریافت‌کننده<br>اقامت دائم آمریکا،<br>1970–2024</b>"),
   us_lpr_total_hover = list(
     en = "<b>%s</b><br>Granted: %s",
     fa = "<b>%s</b><br>اعطاشده: %s"),
@@ -317,13 +317,13 @@ STR <- list(
   # --- text cards ------------------------------------------------------------
   us_educ_c1_primary = list(
     en = "of first-generation Iranian-American women ages 25&ndash;34 hold a bachelor&rsquo;s degree or higher &mdash; now ahead of men (%s%%).",
-    fa = "از زنان ایرانی‌آمریکاییِ نسل اول در سن 25&ndash;34 دارای مدرک لیسانس یا بالاتر هستند &mdash; اکنون جلوتر از مردان (%s درصد)."),
+    fa = "از زنان ایرانی‌آمریکایی نسل اول در سن 25&ndash;34 دارای مدرک لیسانس یا بالاتر هستند &mdash; اکنون جلوتر از مردان (%s درصد)."),
   us_educ_c1_b1 = list(
     en = "Among older first-generation (ages 75&ndash;84), %s%% of men hold a bachelor&rsquo;s degree or higher, vs only %s%% of women",
-    fa = "در میان نسل اولِ مسن‌تر (سن 75&ndash;84)، %s درصد مردان مدرک لیسانس یا بالاتر دارند، در برابر تنها %s درصد زنان"),
+    fa = "در میان نسل اول مسن‌تر (سن 75&ndash;84)، %s درصد مردان مدرک لیسانس یا بالاتر دارند، در برابر تنها %s درصد زنان"),
   us_educ_c2_primary = list(
     en = "of second-generation Iranian-American women ages 35&ndash;44 hold a bachelor&rsquo;s degree or higher &mdash; vs %s%% of men.",
-    fa = "از زنان ایرانی‌آمریکاییِ نسل دوم در سن 35&ndash;44 دارای مدرک لیسانس یا بالاتر هستند &mdash; در برابر %s درصد مردان."),
+    fa = "از زنان ایرانی‌آمریکایی نسل دوم در سن 35&ndash;44 دارای مدرک لیسانس یا بالاتر هستند &mdash; در برابر %s درصد مردان."),
   us_educ_c2_b1 = list(
     en = "Both generations now show women outpacing men in higher education",
     fa = "در هر دو نسل اکنون زنان در آموزش عالی از مردان پیشی گرفته‌اند"),
@@ -416,16 +416,16 @@ STR <- list(
   # --- text cards ------------------------------------------------------------
   us_marriage_c1_primary = list(
     en = "of first-generation Iranian-Americans in partnerships have an Iranian partner.",
-    fa = "از ایرانی‌آمریکایی‌های نسل اولِ دارای شریک زندگی، شریکی ایرانی دارند."),
+    fa = "از ایرانی‌آمریکایی‌های نسل اول دارای شریک زندگی، شریکی ایرانی دارند."),
   us_marriage_c2_primary = list(
     en = "of second-generation Iranian-Americans in partnerships have an Iranian partner.",
-    fa = "از ایرانی‌آمریکایی‌های نسل دومِ دارای شریک زندگی، شریکی ایرانی دارند."),
+    fa = "از ایرانی‌آمریکایی‌های نسل دوم دارای شریک زندگی، شریکی ایرانی دارند."),
   us_marriage_c2_b1 = list(
     en = "%s%% partner with White, non-Hispanic Americans",
-    fa = "%s درصد با آمریکایی‌های سفیدپوستِ غیرلاتین‌تبار پیوند می‌بندند"),
+    fa = "%s درصد با آمریکایی‌های سفیدپوست غیرلاتین‌تبار پیوند می‌بندند"),
   us_marriage_c2_b2 = list(
     en = "Similar to <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/\" target=\"_blank\" style=\"color:#2774AE; text-decoration:none; border-bottom:1px solid rgba(39,116,174,0.4);\">other second-generation Asian Americans</a>",
-    fa = "مشابه <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/\" target=\"_blank\" style=\"color:#2774AE; text-decoration:none; border-bottom:1px solid rgba(39,116,174,0.4);\">دیگر آمریکایی‌های آسیایی‌تبارِ نسل دوم</a>"),
+    fa = "مشابه <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/\" target=\"_blank\" style=\"color:#2774AE; text-decoration:none; border-bottom:1px solid rgba(39,116,174,0.4);\">دیگر آمریکایی‌های آسیایی‌تبار نسل دوم</a>"),
 
   # ===========================================================================
   # US-INCOME
@@ -451,16 +451,16 @@ STR <- list(
   # --- text cards ------------------------------------------------------------
   us_income_c1_primary = list(
     en = "of first-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile.",
-    fa = "از خانوارهای ایرانی‌آمریکاییِ نسل اول (سن 25&ndash;54) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
+    fa = "از خانوارهای ایرانی‌آمریکایی نسل اول (سن 25&ndash;54) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
   us_income_c1_b1 = list(
     en = "More than double the national baseline of 10%",
-    fa = "بیش از دو برابر خط پایه ملیِ 10 درصد"),
+    fa = "بیش از دو برابر خط پایه ملی 10 درصد"),
   us_income_c1_b2 = list(
     en = "Only %s%% fall in the lowest decile",
     fa = "تنها %s درصد در پایین‌ترین دهک قرار می‌گیرند"),
   us_income_c2_primary = list(
     en = "of second-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile.",
-    fa = "از خانوارهای ایرانی‌آمریکاییِ نسل دوم (سن 25&ndash;54) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
+    fa = "از خانوارهای ایرانی‌آمریکایی نسل دوم (سن 25&ndash;54) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
   us_income_c2_b1 = list(
     en = "Even more concentrated at the top than the first generation",
     fa = "حتی بیش از نسل اول در بالای توزیع متمرکز هستند"),
@@ -571,7 +571,7 @@ STR <- list(
     fa = "منبع: <a href=\"https://www.census.gov/programs-surveys/acs/microdata.html\" target=\"_blank\" style=\"color:#2774AE;\">اداره سرشماری آمریکا</a> &mdash; ACS 2020&ndash;2024 5-Year PUMS<br>برآوردهای وزنی جمعیت به تفکیک ایالت. شامل محل تولد، اصالت و پیشینه والدین."),
   us_geo_src_county = list(
     en = "Source: ACS 2020&ndash;2024 5-Year<br>California counties only. Includes birthplace, ancestry, and parental origin, allocated from sub-county survey areas.",
-    fa = "منبع: ACS 2020&ndash;2024 5-Year<br>تنها کانتی‌های کالیفرنیا. شامل محل تولد، اصالت و پیشینه والدین، توزیع‌شده از حوزه‌های پیمایشیِ زیرِکانتی."),
+    fa = "منبع: ACS 2020&ndash;2024 5-Year<br>تنها کانتی‌های کالیفرنیا. شامل محل تولد، اصالت و پیشینه والدین، توزیع‌شده از حوزه‌های پیمایشی زیرکانتی."),
   us_geo_src_la = list(
     en = "Source: ACS 2020&ndash;2024 5-Year PUMS (PUMA-level)<br>Greater Los Angeles CSA. Includes birthplace, ancestry, and parental origin.<br>Census survey areas, not exact neighborhoods.",
     fa = "منبع: ACS 2020&ndash;2024 5-Year PUMS (سطح PUMA)<br>کلان‌شهر لس‌آنجلس (CSA). شامل محل تولد، اصالت و پیشینه والدین.<br>حوزه‌های پیمایشی سرشماری، نه محله‌های دقیق."),

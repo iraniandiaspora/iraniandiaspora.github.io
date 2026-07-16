@@ -40,13 +40,13 @@ STR <- list(
     fa = "اسرائیل «کشور مبدأ» را با قاعده‌ای دونسلی و بر پایه خط پدری تعریف می‌کند:"),
   il_pop_idbox_bullet1 = list(
     en = "<strong>Born abroad</strong>: own country of birth is Iran",
-    fa = "<strong>متولد خارج از کشور</strong>: کشور محل تولد خودِ فرد ایران است"),
+    fa = "<strong>متولد خارج از کشور</strong>: کشور محل تولد خود فرد ایران است"),
   il_pop_idbox_bullet2 = list(
     en = "<strong>Born in Israel</strong>: father&rsquo;s country of birth is Iran",
     fa = "<strong>متولد اسرائیل</strong>: کشور محل تولد پدر ایران است"),
   il_pop_thirdgen_note = list(
     en = "Third-generation descendants (Israeli-born, father Israeli-born) and maternal-only lines are not counted.",
-    fa = "نوادگان نسل سوم (متولد اسرائیل با پدرِ متولد اسرائیل) و تبارهای صرفاً مادری شمرده نمی‌شوند."),
+    fa = "نوادگان نسل سوم (متولد اسرائیل با پدر متولد اسرائیل) و تبارهای صرفاً مادری شمرده نمی‌شوند."),
 
   # --- generation boxes -------------------------------------------------------
   il_gen_box_title = list(
@@ -66,7 +66,7 @@ STR <- list(
     fa = "متولد اسرائیل"),
   il_gen2_sub = list(
     en = "Born in Israel, father born in Iran",
-    fa = "متولد اسرائیل، با پدرِ متولد ایران"),
+    fa = "متولد اسرائیل، با پدر متولد ایران"),
 
   # --- age chart (grouped 1st vs 2nd gen) -------------------------------------
   il_age_title = list(

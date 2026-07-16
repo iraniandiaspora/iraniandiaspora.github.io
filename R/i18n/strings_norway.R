@@ -35,10 +35,10 @@ STR <- list(
     fa = "نروژ از سامانه ثبت جمعیت استفاده می‌کند. هر فرد در صورتی ایرانی‌تبار طبقه‌بندی می‌شود که یکی از این موارد باشد:"),
   no_pop_idbox_bullet1 = list(
     en = "<strong>Immigrant</strong>: born in Iran with two foreign-born parents",
-    fa = "<strong>مهاجر</strong>: متولد ایران با دو والدِ متولد خارج از کشور"),
+    fa = "<strong>مهاجر</strong>: متولد ایران با دو والد متولد خارج از کشور"),
   no_pop_idbox_bullet2 = list(
     en = "<strong>Norwegian-born to immigrant parents</strong>: born in Norway with two Iran-born parents",
-    fa = "<strong>متولد نروژ از والدین مهاجر</strong>: متولد نروژ با دو والدِ متولد ایران"),
+    fa = "<strong>متولد نروژ از والدین مهاجر</strong>: متولد نروژ با دو والد متولد ایران"),
   no_pop_thirdgen_note = list(
     en = "Children with one Norwegian-born parent are not counted as immigrants or Norwegian-born to immigrant parents in SSB statistics.",
     fa = "فرزندانی که یکی از والدینشان متولد نروژ باشد، در آمار SSB نه مهاجر و نه متولد نروژ از والدین مهاجر به شمار می‌آیند."),
