@@ -108,6 +108,14 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
   }
   wrapped <- vapply(cats, soft_wrap, character(1))
 
+  # fa: wrap each label line in an RTL isolate (RLI U+2067 … PDI U+2069) so a
+  # parenthetical — Persian "(…)" or a Latin run like "(A level)"/"(GCSE)" — keeps
+  # its position instead of flipping under WebKit's SVG bidi (iOS Safari/Chrome).
+  # Wrap the whole label (not per-<br>-line) so a parenthetical that soft-wraps
+  # across two lines isn't split into mismatched "(..." / "...)" fragments.
+  # Zero-width controls; no visual change on engines that already render correctly.
+  if (fa) wrapped <- paste0("\u2067", wrapped, "\u2069")
+
   # Bar i (1-based, factor level order) sits at category-axis position i-1; its
   # top edge is half a bar-width above that. Put the label there so it clears the
   # bar regardless of thickness.
