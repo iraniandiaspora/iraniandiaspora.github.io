@@ -182,15 +182,28 @@ plotly_to_json <- function(p, inject_hoveron = FALSE, title_rtl = FALSE) {
   b <- plotly_build(p)
   b$x$data <- strip_internal_classes(b$x$data)
   b$x$layout <- strip_internal_classes(b$x$layout)
-  # title_rtl: force each chart-title line to RTL base direction with a leading
-  # RLM (U+200F). Plotly renders titles as SVG <text>/<tspan>; a multi-line RTL
-  # title whose lines end in a bidi-neutral char (Arabic comma ،, a paren) gets
-  # its words/lines reordered by Safari's SVG bidi engine. An RLM at the start of
-  # each line pins the paragraph direction so word and line order stay correct.
+  # title_rtl: Plotly renders titles as SVG <text> with one <tspan> per <br>
+  # line. WebKit's SVG bidi engine (iOS Safari AND iOS Chrome) reorders the
+  # words/lines of a multi-line RTL title — even with a leading RLM (U+200F)
+  # per line, which was deployed first and verified NOT to fix it. SVG title
+  # text is unfixable there, so on fa we LIFT the title out of the SVG:
+  # capture it, blank layout.title, and return it as $html_title so that
+  # plotly_div() renders it as a real HTML <div dir="rtl"> above the chart —
+  # HTML text layout handles multi-line RTL correctly on every engine (the map
+  # section-title divs on the same pages prove it). The Plotly pseudo-HTML in
+  # the captured text (<b>, <br>, <span>) is real HTML in a div, so it carries
+  # over as-is. The vacated in-SVG title band is reclaimed by shrinking
+  # margin.t by a one-title allowance, clamped to a floor so charts with an
+  # intentionally large top margin (hbar_over_labels() label-above charts,
+  # margin_t = 88) keep their breathing room above the first bar.
   # Off by default → English output is byte-identical.
+  html_title <- NULL
   if (title_rtl && !is.null(b$x$layout$title$text) && nzchar(b$x$layout$title$text)) {
-    tt <- b$x$layout$title$text
-    b$x$layout$title$text <- paste0("\u200f", gsub("<br>", "<br>\u200f", tt, fixed = TRUE))
+    html_title <- b$x$layout$title$text
+    b$x$layout$title <- list(text = "")
+    if (is.numeric(b$x$layout$margin$t) && length(b$x$layout$margin$t) == 1) {
+      b$x$layout$margin$t <- max(b$x$layout$margin$t - 30, 25)
+    }
   }
   if (is.null(b$x$layout$font)) b$x$layout$font <- list()
   b$x$layout$font$family <- "Montserrat, sans-serif"
@@ -206,7 +219,8 @@ plotly_to_json <- function(p, inject_hoveron = FALSE, title_rtl = FALSE) {
   }
   list(data = toJSON(b$x$data, auto_unbox = TRUE),
        layout = toJSON(b$x$layout, auto_unbox = TRUE),
-       config = toJSON(b$x$config, auto_unbox = TRUE))
+       config = toJSON(b$x$config, auto_unbox = TRUE),
+       html_title = html_title)
 }
 
 # --- plotly_div ---------------------------------------------------------------
@@ -253,6 +267,16 @@ el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg=
   chart <- sprintf(
     '<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
+  # fa RTL titles: plotly_to_json(title_rtl=TRUE) lifts the chart title out of
+  # the Plotly SVG (WebKit scrambles multi-line RTL SVG text) and hands it over
+  # as json$html_title; render it as a real HTML div above the chart. The
+  # Plotly pseudo-HTML (<b>/<br>/<span>) is valid HTML here. NULL for every
+  # English build → English output stays byte-identical.
+  if (!is.null(json$html_title)) {
+    chart <- paste0(sprintf(
+      '<div dir="rtl" style="text-align:center; font-size:16px; color:#333; line-height:1.35; margin:0 0 6px;">%s</div>\n',
+      json$html_title), chart)
+  }
   if (!is.null(legend_html)) {
     chart <- paste0(chart, '\n', legend_html)
   }

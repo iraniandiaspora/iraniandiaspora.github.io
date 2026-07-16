@@ -134,6 +134,11 @@ FA_NUM_SCRIPT <- paste0(
 # --- pj(): plotly JSON with Vazirmatn on fa charts ----------------------------
 # plotly_to_json() hardcodes Montserrat on layout.font; on fa pages we want
 # Vazirmatn first so Persian glyphs in titles/hover render in the site face.
+# On fa, title_rtl=TRUE makes plotly_to_json() lift the chart title out of the
+# Plotly SVG (WebKit scrambles multi-line RTL SVG text) into j$html_title,
+# which passes through here untouched and is rendered by plotly_div() as an
+# HTML div above the chart. The layout gsubs below only touch JSON strings, so
+# they never see it.
 pj <- function(p, inject_hoveron = FALSE) {
   j <- plotly_to_json(p, inject_hoveron = inject_hoveron, title_rtl = is_fa())
   if (is_fa()) {
