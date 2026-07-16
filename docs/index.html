@@ -17,7 +17,7 @@
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:image" content="https://iraniandiaspora.github.io/og-image.png">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="styles.css?v=6.8">
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -502,7 +502,7 @@
 // Cache-buster bumped with each release so the browser fetches the new
 // iframe pages instead of showing a stale cached copy. Bump on any
 // release that changes any docs/pages/*.html.
-var SITE_VERSION = 'v6.7';
+var SITE_VERSION = 'v6.8';
 function activateIframe(container) {
   if (!container) return;
   var iframe = container.querySelector('iframe');
@@ -793,7 +793,8 @@ window.addEventListener('hashchange', navigateToHash);
     '.lang-toggle span.on{background:#fff;color:#1a4e72;font-weight:700;}'+
     '.lang-toggle span.on:hover{background:#fff;}'+
     '.header.has-toggle{padding-right:120px;}'+
-    '@media (max-width:768px){.lang-toggle{top:9px;right:10px;}.header.has-toggle{padding-right:12px;}}';
+    '@media (max-width:900px){.lang-toggle{top:9px;right:10px;}.header.has-toggle{padding-right:10px;}'+
+    'body.fa-mode .lang-toggle{left:10px;right:auto;}}';
   document.head.appendChild(st);
 
   function base(s){ s=s.split('?')[0]; s=s.replace(/^.*\//,''); return s.replace(/\.fa\.html$/,'').replace(/\.html$/,''); }
