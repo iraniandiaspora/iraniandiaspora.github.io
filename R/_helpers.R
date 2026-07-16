@@ -86,6 +86,14 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
                              wrap_at = 34, font_size = 11, bargap = 0.42,
                              row_px = 42, min_height = 360, margin_t = 88) {
   fa   <- exists("is_fa") && is_fa()
+  # fa: the chart title is lifted out of the Plotly SVG into an HTML div above
+  # the chart (plotly_to_json(title_rtl=TRUE) via pj()), so the tall in-plot
+  # title band that margin_t = 88 reserves would sit empty — a big gap between
+  # the HTML title and the first bar. Use the minimal breathing-room margin
+  # instead; 25 equals plotly_to_json()'s post-lift clamp floor, so the clamp
+  # passes it through unchanged and $height stays consistent with the rendered
+  # margin. English keeps margin_t = 88 and its in-plot title (byte-identical).
+  if (fa) margin_t <- 25
   cats <- as.character(cats)
   n    <- length(cats)
 
@@ -193,9 +201,10 @@ plotly_to_json <- function(p, inject_hoveron = FALSE, title_rtl = FALSE) {
   # section-title divs on the same pages prove it). The Plotly pseudo-HTML in
   # the captured text (<b>, <br>, <span>) is real HTML in a div, so it carries
   # over as-is. The vacated in-SVG title band is reclaimed by shrinking
-  # margin.t by a one-title allowance, clamped to a floor so charts with an
-  # intentionally large top margin (hbar_over_labels() label-above charts,
-  # margin_t = 88) keep their breathing room above the first bar.
+  # margin.t by a one-title allowance, clamped to a 25px floor of breathing
+  # room. hbar_over_labels() label-above charts pass margin_t = 25 on fa
+  # (their EN-only 88px title band would otherwise leave a gap), which the
+  # floor passes through unchanged.
   # Off by default → English output is byte-identical.
   html_title <- NULL
   if (title_rtl && !is.null(b$x$layout$title$text) && nzchar(b$x$layout$title$text)) {
@@ -272,10 +281,20 @@ el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg=
   # as json$html_title; render it as a real HTML div above the chart. The
   # Plotly pseudo-HTML (<b>/<br>/<span>) is valid HTML here. NULL for every
   # English build → English output stays byte-identical.
+  # - Year ranges ("1970–2024" / "۱۹۷۰–۲۰۲۴") bidi-flip inside an RTL div and
+  #   display later-year-first. Wrap each range in an LRI…PDI isolate
+  #   (U+2066/U+2069) so it always reads ascending, earlier year on the left.
+  #   Matches ASCII or Persian digits and en/em dash or hyphen; isolates ONLY
+  #   the matched range substring, never the whole title.
+  # - class="fa-chart-title": tight bottom margin here; FA_RTL_OVERRIDES
+  #   (_helpers_i18n.R) adds top breathing room when the title sits inside a
+  #   .tab-panel (directly under a tab-button bar).
   if (!is.null(json$html_title)) {
+    ht <- gsub("([0-9\u06F0-\u06F9]{4} ?[\u2013\u2014-] ?[0-9\u06F0-\u06F9]{2,4})",
+               "\u2066\\1\u2069", json$html_title, perl = TRUE)
     chart <- paste0(sprintf(
-      '<div dir="rtl" style="text-align:center; font-size:16px; color:#333; line-height:1.35; margin:0 0 6px;">%s</div>\n',
-      json$html_title), chart)
+      '<div class="fa-chart-title" dir="rtl" style="text-align:center; font-size:16px; color:#333; line-height:1.35; margin:0 0 2px;">%s</div>\n',
+      ht), chart)
   }
   if (!is.null(legend_html)) {
     chart <- paste0(chart, '\n', legend_html)
@@ -302,7 +321,17 @@ el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg=
 # padding-right = 20). Holds at any width, so it stays aligned on mobile.
 #
 # rows: list of list(label = "<html, may use <br>>", vals = <logical, length n_cols>)
+#
+# fa/RTL: a dir="rtl" document MIRRORS the table — the label column (first col)
+# renders on the RIGHT and the criterion columns run right-to-left. The
+# waterfall above must therefore be mirrored to match (reversed x-axis range,
+# y ticks side="right", l/r margins swapped — see build_us/ca/au), and this
+# helper mirrors its two physical paddings: wrapper padding moves to the LEFT
+# (padding-right is physical, it does not flip with dir) and the label cell
+# aligns toward the criterion columns on its left. EN emits the exact same
+# bytes as before (is_fa() FALSE or undefined).
 criteria_table <- function(rows, n_cols, label_px = 84, sym_px = 16) {
+  fa <- exists("is_fa") && is_fa()
   body <- vapply(seq_along(rows), function(i) {
     r <- rows[[i]]
     bg <- if (i %% 2 == 1) " background:#f1f3f5;" else ""
@@ -310,13 +339,16 @@ criteria_table <- function(rows, n_cols, label_px = 84, sym_px = 16) {
       '<td style="text-align:center; padding:6px 0; font-size:%dpx; color:%s;">%s</td>',
       sym_px, if (isTRUE(v)) "#2f2f2f" else "#c4c4c4", if (isTRUE(v)) "✓" else "✗"),
       character(1)), collapse = "")
-    sprintf(paste0('<tr style="%s"><td style="text-align:right; padding:6px 9px 6px 4px;',
+    sprintf(paste0('<tr style="%s"><td style="text-align:%s; padding:%s;',
       ' font-size:11px; color:#333; line-height:1.2;">%s</td>%s</tr>'),
-      bg, r$label, cells)
+      bg, if (fa) "left" else "right",
+      if (fa) "6px 4px 6px 9px" else "6px 9px 6px 4px",
+      r$label, cells)
   }, character(1))
-  sprintf(paste0('<div style="padding-right:20px;"><table style="width:100%%;',
+  sprintf(paste0('<div style="padding-%s:20px;"><table style="width:100%%;',
     ' table-layout:fixed; border-collapse:collapse;">',
     '<colgroup><col style="width:%dpx;">%s</colgroup><tbody>%s</tbody></table></div>'),
+    if (fa) "left" else "right",
     label_px, paste(rep("<col>", n_cols), collapse = ""), paste(body, collapse = ""))
 }
 

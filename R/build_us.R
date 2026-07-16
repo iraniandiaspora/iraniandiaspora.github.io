@@ -1349,11 +1349,18 @@ p_waterfall <- plot_ly() %>%
   layout(
     title = list(text = htxt(tr("us_waterfall_title")),
       font = list(size = 16, family = "Montserrat")),
+    # fa: the RTL document mirrors the criteria_table() below (label column on
+    # the RIGHT, criterion columns right-to-left), so mirror the bars to match:
+    # reversed x range, y ticks on the right, l/r margins swapped. Same plot-
+    # area geometry as EN, just flipped — columns align under the bars again.
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE,
-      zeroline = FALSE, fixedrange = TRUE, range = c(0.5, nrow(wf) + 0.5)),
-    yaxis = list(title = "", tickformat = ",", fixedrange = TRUE),
+      zeroline = FALSE, fixedrange = TRUE,
+      range = if (is_fa()) c(nrow(wf) + 0.5, 0.5) else c(0.5, nrow(wf) + 0.5)),
+    yaxis = c(list(title = "", tickformat = ",", fixedrange = TRUE),
+      if (is_fa()) list(side = "right")),
     showlegend = FALSE,
-    margin = list(t = 50, b = 6, l = US_LBL_PX, r = 20),
+    margin = list(t = 50, b = 6,
+      l = if (is_fa()) 20 else US_LBL_PX, r = if (is_fa()) US_LBL_PX else 20),
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
 

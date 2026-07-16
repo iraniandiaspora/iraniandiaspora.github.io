@@ -642,11 +642,16 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(text = htxt(tr("au_wf_title")),
         font = list(size = 16, family = "Montserrat")),
+      # fa: mirror the bars to match the RTL-mirrored criteria_table() below
+      # (reversed x range, y ticks right, l/r margins swapped) — see build_us.R.
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE,
-        zeroline = FALSE, fixedrange = TRUE, range = c(0.5, nrow(wf) + 0.5)),
-      yaxis = list(title = "", tickformat = ",", fixedrange = TRUE),
+        zeroline = FALSE, fixedrange = TRUE,
+        range = if (is_fa()) c(nrow(wf) + 0.5, 0.5) else c(0.5, nrow(wf) + 0.5)),
+      yaxis = c(list(title = "", tickformat = ",", fixedrange = TRUE),
+        if (is_fa()) list(side = "right")),
       showlegend = FALSE,
-      margin = list(t = 50, b = 6, l = AU_LBL_PX, r = 20),
+      margin = list(t = 50, b = 6,
+        l = if (is_fa()) 20 else AU_LBL_PX, r = if (is_fa()) AU_LBL_PX else 20),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
