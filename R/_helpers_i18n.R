@@ -103,6 +103,11 @@ FA_RTL_OVERRIDES <- paste0(
   '[dir="rtl"] .headline ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:20px !important;}',
   '[dir="rtl"] .text-card ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:18px !important;}',
   '[dir="rtl"] .headline ul li,[dir="rtl"] .text-card ul li{text-align:right !important;}',
+  # .fa-chart-title = the HTML chart title plotly_div() renders above each fa
+  # chart (inline default margin:0 0 2px). Inside a .tab-panel it sits directly
+  # under the tab-button bar, so give it top breathing room there; !important
+  # beats the inline margin shorthand (top only — bottom stays tight).
+  '[dir="rtl"] .tab-panel .fa-chart-title{margin-top:14px !important;}',
   '</style>')
 
 # --- FA_NUM_SCRIPT: universal Persian-digit pass ------------------------------
