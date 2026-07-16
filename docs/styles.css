@@ -185,7 +185,9 @@ html, body {
 
 /* Responsive — tablet */
 @media (max-width: 900px) {
-  .header { flex-direction: column; height: auto; padding: 8px 10px; gap: 4px; }
+  /* App-bar: title flush to the start edge (left in LTR, right in RTL).
+     flex-start on a column flex container is direction-aware. */
+  .header { flex-direction: column; align-items: flex-start; height: auto; padding: 8px 10px; gap: 4px; }
   .header-title { font-size: 18px; }
   .navbar {
     width: 100%;
