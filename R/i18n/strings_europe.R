@@ -69,7 +69,7 @@ STR <- list(
     fa = "اداره آمار اتحادیه اروپا (<bdi>Eurostat</bdi>)"),
   eu_link_mikro = list(
     en = "Destatis Mikrozensus 2025",
-    fa = "سرشماری خرد آلمان، 2025 (<bdi>Destatis</bdi>)"),
+    fa = "پیمایش خانوار Mikrozensus آلمان، 2025 (<bdi>Destatis</bdi>)"),
   eu_link_ons = list(
     en = "ONS Census 2021",
     fa = "سرشماری 2021 اداره ملی آمار بریتانیا (<bdi>ONS</bdi>)"),
@@ -95,7 +95,7 @@ STR <- list(
     fa = " کشورهایی با کمتر از 10,000 نفر متولد ایران روی نقشه نشان داده می‌شوند اما از این رتبه‌بندی کنار گذاشته شده‌اند."),
   eu_ts_src = list(
     en = "Source: %s for the seven solid lines (Sweden, Netherlands, Austria, Italy, Norway, Denmark, Finland). United Kingdom (dotted) is from ONS/NRS/NISRA census points 2001, 2011, and 2021/22. France (dashed) is from INSEE Recensement de la population — census snapshot 1999, then continuous 2006–2019. The INSEE “immigré” definition is narrower than Eurostat’s foreign-born. Switzerland (dashed) is from the BFS register, 2010–2024. Germany is omitted because Eurostat does not publish Iran-born counts for Germany; see the Germany pages.",
-    fa = "منبع: %s برای هفت خط توپُر (سوئد، هلند، اتریش، ایتالیا، نروژ، دانمارک، فنلاند). بریتانیا (خط‌چین نقطه‌ای) از نقاط سرشماری ONS/NRS/NISRA در سال‌های 2001، 2011 و 2021/22. فرانسه (خط‌چین) از Recensement de la population اداره آمار فرانسه — تصویر سرشماری 1999 و سپس پیوسته 2006–2019. تعریف “immigré” اداره آمار فرانسه (INSEE) تنگ‌تر از تعریف متولد خارج Eurostat است. سوئیس (خط‌چین) از سامانه ثبت BFS، 2010–2024. آلمان کنار گذاشته شده است زیرا Eurostat شمار متولدان ایران را برای آلمان منتشر نمی‌کند؛ صفحه‌های آلمان را ببینید."),
+    fa = "منبع: %s برای هفت خط توپُر (سوئد، هلند، اتریش، ایتالیا، نروژ، دانمارک، فنلاند). بریتانیا (خط‌چین نقطه‌ای) از نقاط سرشماری ONS/NRS/NISRA در سال‌های 2001، 2011 و 2021/22. فرانسه (خط‌چین) از Recensement de la population اداره آمار فرانسه — دادهٔ سرشماری 1999 و سپس پیوسته 2006–2019. تعریف “immigré” اداره آمار فرانسه (INSEE) محدودتر از تعریف «متولد خارج» Eurostat است. سوئیس (خط‌چین) از سامانه ثبت BFS، 2010–2024. آلمان کنار گذاشته شده است زیرا Eurostat شمار متولدان ایران را برای آلمان منتشر نمی‌کند؛ صفحه‌های آلمان را ببینید."),
 
   # --- map legend swatch labels -----------------------------------------------
   eu_leg_bin1 = list(

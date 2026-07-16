@@ -27,7 +27,7 @@ STR <- list(
     fa = "هلند: جمعیت"),
   nl_pop_headline_label = list(
     en = "Estimated Iranian-Origin Population in the Netherlands",
-    fa = "جمعیت تخمینی ایرانی‌تباران در هلند"),
+    fa = "برآورد جمعیت ایرانی‌تباران در هلند"),
   nl_pop_headline_caption = list(
     en = "Based on population registers maintained by %s, Statistics Netherlands, January 2026",
     fa = "بر پایه ثبت جمعیت %s، اداره آمار هلند، ژانویه 2026"),
@@ -144,7 +144,7 @@ STR <- list(
     fa = "%s درصد خوداشتغال هستند"),
   nl_card2_primary = list(
     en = "of the Dutch national average household disposable income, for Iranian-origin households (%s).",
-    fa = "از میانگین ملی درآمد قابل تصرف خانوار در هلند، برای خانوارهای ایرانی‌تبار (%s)."),
+    fa = "درآمد قابل تصرف خانوارهای ایرانی‌تبار نسبت به میانگین ملی هلند (%s)."),
   nl_card2_secondary = list(
     en = "The share of Iranian-origin households below the low-income threshold has fallen from %s%% in %s to %s%% in %s.",
     fa = "سهم خانوارهای ایرانی‌تبار زیر آستانه کم‌درآمدی از %s درصد در سال %s به %s درصد در سال %s کاهش یافته است."),

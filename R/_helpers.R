@@ -227,68 +227,6 @@ plotly_to_json <- function(p, inject_hoveron = FALSE, title_rtl = FALSE) {
   b$x$layout$hoverlabel <- list(
     bgcolor = "white", bordercolor = "#ccc",
     font = list(family = "Montserrat, sans-serif", size = 13, color = "#333"))
-  # fa hover bidi fix: Plotly renders hover tooltips as SVG <text> (one <tspan>
-  # per <br> line). With mixed Persian + digits + ✓/✗ + <b> content the SVG bidi
-  # algorithm reorders numbers/marks relative to the Persian words and can even
-  # fuse a number into the adjacent word across a line break. Same failure class
-  # as the chart titles/labels; same cure: wrap EACH <br>-separated line in an
-  # RTL isolate (RLI U+2067 … PDI U+2069) so every line's base direction is RTL
-  # and embedded LTR runs (numbers, Latin, ✓/✗) keep their place. Applied to
-  #   - hovertext (always hover-only), and
-  #   - text, but ONLY when it feeds the hover (hoverinfo contains "text",
-  #     or a hovertemplate interpolates %{text}) AND is not drawn on the
-  #     plot (scatter mode has no "text"; bar textposition is "none") —
-  #     on-plot labels are handled elsewhere (hbar_over_labels/annotations).
-  #   - hovertemplate lines with literal content; a line that is a bare
-  #     %{token} is left alone (its content arrives pre-wrapped via text),
-  #     and the trailing <extra>…</extra> block is never wrapped.
-  # Zero-width controls; gated on title_rtl (fa) → English byte-identical.
-  if (title_rtl) {
-    wrap_lines <- function(one) {
-      if (is.na(one) || !nzchar(one)) return(one)
-      parts <- strsplit(paste0(one, "\x01"), "<br>", fixed = TRUE)[[1]]
-      parts[length(parts)] <- sub("\x01$", "", parts[length(parts)])
-      keep <- nzchar(parts) & !grepl("^%\\{[^}]*\\}$", parts)
-      parts[keep] <- paste0("\u2067", parts[keep], "\u2069")
-      paste(parts, collapse = "<br>")
-    }
-    wrap_field <- function(v, template = FALSE) {
-      f <- function(one) {
-        one <- as.character(one)
-        if (template) {
-          extra <- regmatches(one, regexpr("<extra>.*</extra>$", one))
-          if (length(extra) == 1 && nzchar(extra)) {
-            return(paste0(wrap_lines(sub("<extra>.*</extra>$", "", one)), extra))
-          }
-        }
-        wrap_lines(one)
-      }
-      if (is.list(v)) lapply(v, f)
-      else vapply(as.character(v), f, character(1), USE.NAMES = FALSE)
-    }
-    for (i in seq_along(b$x$data)) {
-      tr <- b$x$data[[i]]
-      if (!is.null(tr$hovertext)) tr$hovertext <- wrap_field(tr$hovertext)
-      if (!is.null(tr$text)) {
-        hover_uses_text <-
-          if (!is.null(tr$hovertemplate)) {
-            any(grepl("%{text}", unlist(tr$hovertemplate), fixed = TRUE))
-          } else if (is.null(tr$hoverinfo)) {
-            TRUE  # plotly default hoverinfo "all" includes text
-          } else {
-            any(grepl("text", unlist(tr$hoverinfo), fixed = TRUE))
-          }
-        tp    <- unlist(tr$textposition)
-        drawn <- (!is.null(tr$mode) && grepl("text", tr$mode, fixed = TRUE)) ||
-                 (!is.null(tp) && any(tp != "none"))
-        if (hover_uses_text && !drawn) tr$text <- wrap_field(tr$text)
-      }
-      if (!is.null(tr$hovertemplate)) {
-        tr$hovertemplate <- wrap_field(tr$hovertemplate, template = TRUE)
-      }
-      b$x$data[[i]] <- tr
-    }
-  }
   if (inject_hoveron) {
     for (i in seq_along(b$x$data)) {
       if (!is.null(b$x$data[[i]]$fill)) {

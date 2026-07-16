@@ -114,7 +114,7 @@ STR <- list(
   # ===========================================================================
   de_src_mz = list(
     en = "Source: %s — Mikrozensus 2025 Erstergebnisse<br>German household survey. Counts residents with migration background (first or second generation), Iran.",
-    fa = "منبع: %s — Mikrozensus 2025 Erstergebnisse<br>پیمایش خانوار آلمان. ساکنان دارای پیشینه مهاجرت (نسل اول یا دوم)، ایران، را می‌شمارد."),
+    fa = "منبع: %s — Mikrozensus 2025 Erstergebnisse<br>پیمایش خانوار آلمان. ساکنان دارای پیشینه مهاجرت از ایران (نسل اول یا دوم) را می‌شمارد."),
   de_src_mz_simple = list(
     en = "Source: %s — Mikrozensus 2025",
     fa = "منبع: %s — Mikrozensus 2025"),
@@ -133,7 +133,7 @@ STR <- list(
     fa = "بر پایه %s، پیمایشی سالانه که حدود 1 درصد خانوارها را دربر می‌گیرد و توسط Destatis، اداره فدرال آمار آلمان، انجام می‌شود"),
   de_pop_idbox_intro = list(
     en = "A person is counted if they meet <em>at least one</em> of two survey questions:",
-    fa = "هر فرد در صورت داشتن <em>دست‌کم یکی</em> از این دو پاسخ در پرسش‌های سرشماری شمرده می‌شود:"),
+    fa = "هر فرد در صورتی شمرده می‌شود که <em>دست‌کم یکی</em> از این دو پرسش سرشماری در موردش صدق کند:"),
   de_pop_idbox_bullet1 = list(
     en = '<strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;In which country were you born?&rdquo; (Iran)</span>',
     fa = '<strong>محل تولد</strong> <span style="color:#6b6b6b;">&mdash; «شما در کدام کشور متولد شده‌اید؟» (ایران)</span>'),
@@ -251,7 +251,7 @@ STR <- list(
   # --- source lines ----------------------------------------------------------
   de_src_annual = list(
     en = "Source: BAMF Migrationsberichte (2005, 2015, 2020, 2023, 2024 editions). Annual Iranian Zuz&#252;ge (arrivals to Germany) as reported in the official migration flow statistics. Pre-1991 data exists only for West Germany and is not included here.",
-    fa = "منبع: BAMF Migrationsberichte (ویرایش‌های 2005، 2015، 2020، 2023، 2024). ورودی‌های سالانه ایرانیان (Zuz&#252;ge، ورود به آلمان) بر پایه آمار رسمی جریان مهاجرت. داده‌های پیش از 1991 تنها برای آلمان غربی موجود است و اینجا لحاظ نشده است."),
+    fa = "منبع: BAMF Migrationsberichte (ویرایش‌های 2005، 2015، 2020، 2023، 2024). ورود سالانه ایرانیان (Zuz&#252;ge، ورود به آلمان) بر پایه آمار رسمی جریان مهاجرت. داده‌های پیش از 1991 تنها برای آلمان غربی موجود است و اینجا لحاظ نشده است."),
   de_src_motive = list(
     en = "Source: %s — Mikrozensus 2025. First generation only (born in Iran).",
     fa = "منبع: %s — Mikrozensus 2025. تنها نسل اول (متولد ایران)."),
@@ -335,7 +335,7 @@ STR <- list(
   # --- charts ----------------------------------------------------------------
   de_lang_title = list(
     en = "<b>Main Language Spoken at Home in Germany</b>",
-    fa = "<b>زبان اصلی گفت‌وگو در خانه در آلمان</b>"),
+    fa = "<b>زبان اصلی خانه در آلمان</b>"),
   de_hover_lang = list(
     en = "<b>%s</b><br>%s<br>%s residents (%s%%)",
     fa = "<b>%s</b><br>%s<br>%s ساکن (%s درصد)"),

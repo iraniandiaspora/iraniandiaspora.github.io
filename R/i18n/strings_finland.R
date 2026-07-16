@@ -24,7 +24,7 @@ STR <- list(
     fa = "فنلاند: جمعیت"),
   fi_pop_headline_label = list(
     en = "Estimated Iranian-Origin Population in Finland",
-    fa = "جمعیت تخمینی ایرانی‌تباران در فنلاند"),
+    fa = "برآورد جمعیت ایرانی‌تباران در فنلاند"),
   fi_pop_headline_caption = list(
     en = "Based on population registers maintained by %s, %s",
     fa = "بر پایه سامانه ثبت جمعیت %s، %s"),

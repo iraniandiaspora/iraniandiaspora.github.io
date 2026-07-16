@@ -37,7 +37,7 @@ STR <- list(
     fa = "برآورد جمعیت متولدان ایران در ترکیه"),
   tr_pop_headline_caption = list(
     en = "Based on the address-based population register maintained by %s, %s",
-    fa = "بر پایه سامانه ثبت جمعیت مبتنی بر نشانی که توسط %s نگهداری می‌شود، %s"),
+    fa = "بر پایه سامانه ثبت جمعیت مبتنی بر نشانی %s، %s"),
 
   # --- identification box ------------------------------------------------------
   tr_pop_idbox_intro = list(
@@ -48,10 +48,10 @@ STR <- list(
     fa = "<strong>کشور محل تولد</strong> <span style=\"color:#6b6b6b;\">&mdash; ثبت‌شده در سامانه ثبت مبتنی بر نشانی (ADNKS)</span>"),
   tr_pop_thirdgen_note = list(
     en = "Türkiye-born children of Iran-born parents are not counted as Iran-born in these statistics. The figure reflects first-generation residents only.",
-    fa = "فرزندان متولد ترکیه والدین متولد ایران در این آمار متولد ایران شمرده نمی‌شوند. این رقم تنها ساکنان نسل اول را نشان می‌دهد."),
+    fa = "فرزندانی که در ترکیه از والدین متولد ایران به دنیا آمده‌اند در این آمار متولد ایران شمرده نمی‌شوند. این رقم تنها ساکنان نسل اول را نشان می‌دهد."),
   tr_pop_un_note = list(
     en = "The UN International Migrant Stock reports about 200,000 Iran-born residents of Türkiye in 2024, higher than the figure above because UN numbers add UNHCR-registered refugees and asylum seekers to the national register and are extrapolated from 2020.",
-    fa = "برآورد جمعیت مهاجران سازمان ملل شمار ساکنان متولد ایران ترکیه را در سال 2024 حدود 200,000 نفر گزارش می‌کند که از رقم بالا بیشتر است، زیرا آمار سازمان ملل پناهندگان و پناهجویان ثبت‌شده نزد UNHCR را به سامانه ثبت ملی می‌افزاید و از سال 2020 برون‌یابی شده است."),
+    fa = "برآورد جمعیت مهاجران سازمان ملل شمار متولدان ایران ساکن ترکیه را در سال 2024 حدود 200,000 نفر گزارش می‌کند که از رقم بالا بیشتر است، زیرا آمار سازمان ملل پناهندگان و پناهجویان ثبت‌شده نزد UNHCR را به سامانه ثبت ملی می‌افزاید و از سال 2020 برون‌یابی شده است."),
 
   # --- sex breakdown boxes -----------------------------------------------------
   tr_sex_box_title = list(
@@ -106,7 +106,7 @@ STR <- list(
   # --- residence-permit chart --------------------------------------------------
   tr_permits_title = list(
     en = "<b>Iranian Residence Permits in Türkiye,<br>by Type</b>",
-    fa = "<b>پروانه‌های اقامت ایرانیان در ترکیه،<br>به تفکیک نوع</b>"),
+    fa = "<b>اجازه‌های اقامت ایرانیان در ترکیه،<br>به تفکیک نوع</b>"),
   tr_permit_short = list(
     en = "Short-term",
     fa = "کوتاه‌مدت"),
@@ -121,7 +121,7 @@ STR <- list(
     fa = "سایر / بلندمدت"),
   tr_permits_hover = list(
     en = "<b>%s</b><br>%s permits (%s%% of total)",
-    fa = "<b>%s</b><br>%s پروانه (%s درصد از کل)"),
+    fa = "<b>%s</b><br>%s اجازه اقامت (%s درصد از کل)"),
 
   # --- immigration text cards --------------------------------------------------
   tr_imm_cit_sentence = list(
@@ -129,13 +129,13 @@ STR <- list(
     fa = "شهروندان ایرانی مقیم ترکیه %s برابر شدند: از %s نفر در سال 2014 به بالاترین رقم خود در سال %s (%s نفر) رسیدند."),
   tr_imm_permits_sentence = list(
     en = "Iranian residence permits in Türkiye in May 2026 — the fourth-largest foreign group after Turkmen, Azerbaijani, and Syrian nationals.",
-    fa = "پروانه‌های اقامت ایرانیان در ترکیه در مه 2026 — چهارمین گروه خارجی بزرگ پس از اتباع ترکمن، آذربایجانی و سوری."),
+    fa = "اجازه‌های اقامت ایرانیان در ترکیه در مه 2026 — چهارمین گروه خارجی بزرگ پس از اتباع ترکمن، آذربایجانی و سوری."),
   tr_imm_permits_bullet1 = list(
     en = "About %s%% are short-term permits",
-    fa = "حدود %s درصد پروانه‌های کوتاه‌مدت‌اند"),
+    fa = "حدود %s درصد اجازه‌های اقامت کوتاه‌مدت‌اند"),
   tr_imm_permits_bullet2 = list(
     en = "About %s%% are student permits",
-    fa = "حدود %s درصد پروانه‌های دانشجویی‌اند"),
+    fa = "حدود %s درصد اجازه‌های اقامت دانشجویی‌اند"),
   tr_imm_permits_bullet3 = list(
     en = "Iranian students are the second-largest foreign-student group in Türkiye",
     fa = "دانشجویان ایرانی دومین گروه بزرگ دانشجویان خارجی در ترکیه‌اند"),
@@ -143,10 +143,10 @@ STR <- list(
   # --- source lines ------------------------------------------------------------
   tr_src_headline = list(
     en = "Source: %s &mdash; Iran-born residents of Türkiye, 2025",
-    fa = "منبع: %s &mdash; ساکنان متولد ایران ترکیه، 2025"),
+    fa = "منبع: %s &mdash; متولدان ایران ساکن ترکیه، 2025"),
   tr_src_trend = list(
     en = "Source: %s and %s &mdash; Iran-born residents of Türkiye, 2015–2025",
-    fa = "منبع: %s و %s &mdash; ساکنان متولد ایران ترکیه، 2015–2025"),
+    fa = "منبع: %s و %s &mdash; متولدان ایران ساکن ترکیه، 2015–2025"),
   tr_src_age = list(
     en = "Source: %s &mdash; Iran-born by age and sex, 2025",
     fa = "منبع: %s &mdash; متولدان ایران به تفکیک سن و جنسیت، 2025"),
@@ -155,5 +155,5 @@ STR <- list(
     fa = "منبع: %s و %s &mdash; شهروندان ایرانی در ترکیه، 2014–2025"),
   tr_src_permits = list(
     en = "Source: %s &mdash; Residence permits by type and nationality, 7 May 2026",
-    fa = "منبع: %s &mdash; پروانه‌های اقامت به تفکیک نوع و تابعیت، 7 مه 2026")
+    fa = "منبع: %s &mdash; اجازه‌های اقامت به تفکیک نوع و تابعیت، 7 مه 2026")
 )

@@ -34,7 +34,7 @@ STR <- list(
     fa = "برآورد جمعیت متولدان ایران در سوئیس"),
   ch_pop_headline_caption = list(
     en = "Based on population registers maintained by %s, %s",
-    fa = "بر پایه سامانه ثبت جمعیت نگهداری‌شده توسط %s، %s"),
+    fa = "بر پایه سامانه ثبت جمعیت %s، %s"),
 
   # --- identification box ------------------------------------------------------
   ch_pop_idbox_intro = list(
@@ -48,7 +48,7 @@ STR <- list(
     fa = "از میان %s ساکن متولد ایران، %s نفر (%s درصد) تابعیت سوئیس، %s نفر تابعیت ایران و %s نفر تابعیت‌های دیگر دارند."),
   ch_pop_thirdgen_note = list(
     en = "The register tracks country of birth but not parental birthplace. Swiss-born children of Iran-born parents are not counted.",
-    fa = "این سامانه کشور محل تولد را ثبت می‌کند اما محل تولد والدین را نه. فرزندان متولد سوئیس والدین متولد ایران شمرده نمی‌شوند."),
+    fa = "این سامانه کشور محل تولد را ثبت می‌کند اما محل تولد والدین را ثبت نمی‌کند. فرزندان متولد سوئیس با والدین متولد ایران شمرده نمی‌شوند."),
 
   # --- map section -------------------------------------------------------------
   ch_geo_section_title = list(
@@ -69,13 +69,13 @@ STR <- list(
     fa = "<b>مهاجرت سالانه متولدان ایران<br>به سوئیس، 2011–2024</b>"),
   ch_arr_hover_bar = list(
     en = "<b>%s</b><br>%s arrivals",
-    fa = "<b>%s</b><br>%s ورودی"),
+    fa = "<b>%s</b><br>%s نفر واردشده"),
   ch_arr_name_bar = list(
     en = "Arrivals",
-    fa = "ورودی‌ها"),
+    fa = "واردشدگان"),
   ch_arr_hover_line = list(
     en = "<b>By end of %s:</b> %s%% of the 2024 population already present",
-    fa = "<b>تا پایان %s:</b> %s درصد از جمعیت سال 2024 پیش‌تر حاضر بوده‌اند"),
+    fa = "<b>تا پایان %s:</b> %s درصد از جمعیت سال 2024 در سوئیس ساکن شده بودند"),
   ch_arr_name_line = list(
     en = "Share of current stock",
     fa = "سهم از جمعیت کنونی"),

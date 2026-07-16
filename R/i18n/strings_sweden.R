@@ -26,10 +26,10 @@ STR <- list(
     fa = "سوئد: جمعیت"),
   se_pop_headline_label = list(
     en = "Estimated Iranian-Origin Population in Sweden",
-    fa = "جمعیت تخمینی ایرانی‌تباران در سوئد"),
+    fa = "برآورد جمعیت ایرانی‌تباران در سوئد"),
   se_pop_headline_caption = list(
     en = "Based on population registers maintained by %s, %s",
-    fa = "بر پایه ثبت جمعیت نگه‌داری‌شده توسط %s، %s"),
+    fa = "بر پایه ثبت جمعیت %s، %s"),
 
   # --- identification box -----------------------------------------------------
   se_pop_idbox_intro = list(
@@ -114,5 +114,5 @@ STR <- list(
     fa = "منبع: %s &mdash; جمعیت به تفکیک کشور محل تولد، 2024"),
   se_src_hist = list(
     en = "Source: %s &mdash; Iran-born population stock, 1999–2025; gaps filled from Statistics Sweden, 1990 and 1995 from UN DESA",
-    fa = "منبع: %s &mdash; جمعیت متولدان ایران، 1999–2025؛ خلأها از Statistics Sweden پر شده، داده‌های 1990 و 1995 از UN DESA")
+    fa = "منبع: %s &mdash; جمعیت متولدان ایران، 1999–2025؛ سال‌های بدون داده با آمار Statistics Sweden تکمیل شده، داده‌های 1990 و 1995 از UN DESA")
 )

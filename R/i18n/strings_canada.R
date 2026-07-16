@@ -76,7 +76,7 @@ CA_IMMTYPE_FA <- c(
 # Citizenship status — full label (ca-immigration citizenship hover).
 CA_CITSTATUS_FA <- c(
   "Canadian citizen by birth"          = "شهروند کانادا از بدو تولد",
-  "Canadian citizen by naturalization" = "شهروند کانادا از راه کسب تابعیت",
+  "Canadian citizen by naturalization" = "شهروند کانادا با تابعیت اکتسابی",
   "Not a Canadian citizen"             = "بدون تابعیت کانادا"
 )
 
@@ -169,7 +169,7 @@ STR <- list(
     fa = "بر پایه فایل ریزداده عمومی %s"),
   ca_pop_idbox_intro = list(
     en = "A person is counted if they meet <em>at least one</em> of three census questions:",
-    fa = "هر فرد در صورت داشتن <em>دست‌کم یکی</em> از این سه پاسخ در پرسش‌های سرشماری شمرده می‌شود:"),
+    fa = "هر فرد در صورتی شمرده می‌شود که <em>دست‌کم یکی</em> از این سه پرسش سرشماری در موردش صدق کند:"),
   ca_pop_idbox_bullet1 = list(
     en = '<strong>Place of birth</strong> <span style="color:#6b6b6b;">&mdash; &ldquo;Where was this person born?&rdquo;</span>',
     fa = '<strong>محل تولد</strong> <span style="color:#6b6b6b;">&mdash; «این فرد در کجا متولد شده است؟»</span>'),
@@ -271,10 +271,10 @@ STR <- list(
     fa = "از ایرانی‌کانادایی‌های نسل اول خود را مسلمان می‌دانند."),
   ca_lr_c3_note = list(
     en = "Another %s%% report no religion or a secular identity.",
-    fa = "%s درصد دیگر بی‌دینی یا هویت سکولار را اعلام می‌کنند."),
+    fa = "%s درصد دیگر خود را بی‌دین یا سکولار معرفی می‌کنند."),
   ca_lr_c4_sentence = list(
     en = "of second-generation Iranian-Canadians report no religion or a secular identity.",
-    fa = "از ایرانی‌کانادایی‌های نسل دوم بی‌دینی یا هویت سکولار را اعلام می‌کنند."),
+    fa = "از ایرانی‌کانادایی‌های نسل دوم خود را بی‌دین یا سکولار معرفی می‌کنند."),
   ca_lr_c4_note = list(
     en = "Muslim %s%%, Christian %s%%.",
     fa = "مسلمان %s درصد، مسیحی %s درصد."),
@@ -296,7 +296,7 @@ STR <- list(
     fa = "<b>%s</b><br>%s ورود<br>تجمعی: %s درصد"),
   ca_immig_hover_cum = list(
     en = "<b>%s</b><br>%s%% of today's Iran-born population had arrived",
-    fa = "<b>%s</b><br>تا این زمان %s درصد از جمعیت امروز متولدان ایران وارد شده بودند"),
+    fa = "<b>%s</b><br>تا این زمان %s درصد از جمعیت کنونی متولدان ایران وارد شده بودند"),
   ca_immig_period_before = list(
     en = "Before ",
     fa = "پیش از "),
@@ -328,7 +328,7 @@ STR <- list(
     fa = "تنها %s درصد در دهه 1980 وارد شده‌اند."),
   ca_immig_c2_sentence = list(
     en = "of Iranian-Canadians are naturalized Canadian citizens.",
-    fa = "از ایرانی‌کانادایی‌ها شهروند کانادا از راه کسب تابعیت هستند."),
+    fa = "از ایرانی‌کانادایی‌ها تابعیت کانادا را کسب کرده‌اند."),
   ca_immig_c2_b1 = list(
     en = "%s%% have not yet obtained citizenship",
     fa = "%s درصد هنوز تابعیت نگرفته‌اند"),
@@ -357,13 +357,13 @@ STR <- list(
     fa = "<b>%s</b><br>%s، %s<br>%s درصد"),
   ca_educ_section1 = list(
     en = "Educational Attainment of Iranian-Canadians: First Generation",
-    fa = "دستاورد تحصیلی ایرانی‌کانادایی‌ها: نسل اول"),
+    fa = "سطح تحصیلات ایرانی‌کانادایی‌ها: نسل اول"),
   ca_educ_section2 = list(
     en = "Fields of Study of Iranian-Canadians: First Generation",
     fa = "رشته‌های تحصیلی ایرانی‌کانادایی‌ها: نسل اول"),
   ca_educ_c1_sentence = list(
     en = "of first-generation Iranian-Canadian women aged 30&ndash;34 hold a graduate degree &mdash; slightly ahead of men (%s%%).",
-    fa = "از زنان ایرانی‌کانادایی نسل اول در گروه سنی 30&ndash;34 دارای تحصیلات تکمیلی هستند &mdash; اندکی جلوتر از مردان (%s درصد)."),
+    fa = "از زنان ایرانی‌کانادایی نسل اول در گروه سنی 30&ndash;34 دارای تحصیلات تکمیلی هستند &mdash; اندکی از مردان (%s درصد) پیشی گرفته‌اند."),
   ca_educ_c1_note = list(
     en = "Among those 55&ndash;64, men are more likely to hold graduate degrees (%s%% vs %s%%).",
     fa = "در گروه 55&ndash;64، احتمال داشتن تحصیلات تکمیلی در مردان بیشتر است (%s درصد در برابر %s درصد)."),
@@ -403,13 +403,13 @@ STR <- list(
     fa = "از مردان نسل اول در گروه سنی 35&ndash;44 در حوزه‌های تخصصی و فنی کار می‌کنند."),
   ca_work_c1_note = list(
     en = "Manufacturing &amp; Construction ties at %s%%.",
-    fa = "تولید و ساخت‌وساز با %s درصد برابری می‌کند."),
+    fa = "سهم تولید و ساخت‌وساز نیز %s درصد است."),
   ca_work_c2_sentence = list(
     en = "of first-generation women aged 35&ndash;44 work in Trade &amp; Services &mdash; the largest sector.",
     fa = "از زنان نسل اول در گروه سنی 35&ndash;44 در بازرگانی و خدمات کار می‌کنند &mdash; بزرگ‌ترین بخش."),
   ca_work_c2_note = list(
     en = "Professional &amp; Technical (%s%%) and Health &amp; Education (%s%%) are close behind.",
-    fa = "تخصصی و فنی (%s درصد) و بهداشت و آموزش (%s درصد) در رتبه‌های بعدی و نزدیک به آن قرار دارند."),
+    fa = "تخصصی و فنی (%s درصد) و بهداشت و آموزش (%s درصد) با فاصله‌ای اندک در رتبه‌های بعدی قرار دارند."),
   ca_work_c3_sentence = list(
     en = "of second-generation men work in Professional &amp; Technical fields.",
     fa = "از مردان نسل دوم در حوزه‌های تخصصی و فنی کار می‌کنند."),
@@ -449,7 +449,7 @@ STR <- list(
     fa = "دهک "),
   ca_inc_baseline_annot = list(
     en = "10% =<br>national<br>baseline",
-    fa = "10٪ =<br>معیار<br>ملی"),
+    fa = "10٪ =<br>سهم پایه<br>هر دهک"),
   ca_inc_age_title = list(
     en = "<b>Personal Income by Age:<br>First-Generation Iranian-Canadians</b>",
     fa = "<b>درآمد شخصی به تفکیک سن:<br>ایرانی‌کانادایی‌های نسل اول</b>"),
@@ -458,7 +458,7 @@ STR <- list(
     fa = "<b>%s</b><br>سن %s<br>%s درصد"),
   ca_inc_c1_sentence = list(
     en = "of first-generation Iranian-Canadian households fall in the lowest Canadian income decile &mdash; nearly double the 10% national baseline.",
-    fa = "از خانوارهای ایرانی‌کانادایی نسل اول در پایین‌ترین دهک درآمدی کانادا قرار دارند &mdash; نزدیک به دو برابر معیار ملی 10 درصد."),
+    fa = "از خانوارهای ایرانی‌کانادایی نسل اول در پایین‌ترین دهک درآمدی کانادا قرار دارند &mdash; نزدیک به دو برابر سهم پایه هر دهک (10 درصد)."),
   ca_inc_c1_note = list(
     en = "Only %s%% reach the top decile.",
     fa = "تنها %s درصد به بالاترین دهک می‌رسند."),
@@ -467,7 +467,7 @@ STR <- list(
     fa = "از درآمدبگیران ایرانی‌کانادایی نسل اول در گروه سنی %s سالانه CA$100,000 یا بیشتر درآمد دارند &mdash; بالاترین سهم در میان همه گروه‌های سنی."),
   ca_inc_c2_note = list(
     en = "Reports each individual&rsquo;s own pre-tax earnings by age. Household income, by contrast, sums every earner in a household into one total before ranking it against the national distribution.",
-    fa = "درآمد پیش از مالیات هر فرد را به تفکیک سن گزارش می‌کند. درآمد خانوار، در مقابل، درآمد همه درآمدبگیران یک خانوار را در یک مجموع گرد می‌آورد و سپس آن را در برابر توزیع ملی رتبه‌بندی می‌کند."),
+    fa = "درآمد پیش از مالیات هر فرد را به تفکیک سن گزارش می‌کند. در مقابل، درآمد خانوار درآمد همه اعضای شاغل خانوار را جمع می‌زند و سپس آن را با توزیع ملی مقایسه می‌کند."),
   ca_src_income = list(
     en = " — 2021 Canadian Census<br>Ages 25–54 (prime working years). Each decile holds 10% of all Canadian households, ranked by pre-tax household income.<br>Smaller estimates should be interpreted with caution.",
     fa = " — سرشماری 2021 کانادا<br>25–54 سال (سال‌های اصلی کار). هر دهک 10 درصد از کل خانوارهای کانادا را در بر می‌گیرد، رتبه‌بندی‌شده بر پایه درآمد خانوار پیش از مالیات.<br>برآوردهای کوچک‌تر را باید با احتیاط تفسیر کرد."),
