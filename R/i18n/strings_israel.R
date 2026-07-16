@@ -32,7 +32,7 @@ STR <- list(
     fa = "برآورد جمعیت ایرانی‌تبار در اسرائیل"),
   il_pop_headline_caption = list(
     en = "Based on population registers maintained by %s, 2024",
-    fa = "بر پایه سامانه ثبت جمعیت نگهداری‌شده توسط %s، 2024"),
+    fa = "بر پایه سامانه ثبت جمعیت %s، 2024"),
 
   # --- identification box -----------------------------------------------------
   il_pop_idbox_intro = list(
@@ -60,7 +60,7 @@ STR <- list(
     fa = "متولد ایران"),
   il_gen1_sub = list(
     en = "Born in Iran",
-    fa = "متولد در ایران"),
+    fa = "متولد ایران"),
   il_gen2_label = list(
     en = "Israeli-born",
     fa = "متولد اسرائیل"),
@@ -141,7 +141,7 @@ STR <- list(
     fa = "جمعیت در طول زمان"),
   il_tab_comp = list(
     en = "Comparative Context",
-    fa = "زمینه مقایسه‌ای"),
+    fa = "مقایسه با گروه‌های دیگر"),
 
   # --- source lines -----------------------------------------------------------
   il_src_cbs = list(

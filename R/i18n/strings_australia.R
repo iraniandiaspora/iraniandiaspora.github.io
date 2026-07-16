@@ -164,7 +164,7 @@ STR <- list(
   # --- three census measures --------------------------------------------------
   au_measures_title = list(
     en = "Three Census Measures",
-    fa = "سه سنجه سرشماری"),
+    fa = "سه معیار سرشماری"),
   au_box_ancestry = list(
     en = "Iranian<br>ancestry",
     fa = "اصالت<br>ایرانی"),
@@ -270,7 +270,7 @@ STR <- list(
     fa = "متولد استرالیا"),
   au_genbox_caption = list(
     en = "Of the %s Australians who report Iranian ancestry. About %s%% of the first generation were born outside Iran (largely diaspora re-migration via India, Afghanistan and the UK).",
-    fa = "از مجموع %s استرالیایی که اصالت ایرانی اعلام می‌کنند. حدود %s درصد از نسل اول خارج از ایران متولد شده‌اند (عمدتاً مهاجرت مجدد دیاسپورا از طریق هند، افغانستان و بریتانیا)."),
+    fa = "از مجموع %s استرالیایی که اصالت ایرانی اعلام می‌کنند. حدود %s درصد از نسل اول خارج از ایران متولد شده‌اند (بیشتر مهاجرت دوباره ایرانیان مهاجر از هند، افغانستان و بریتانیا)."),
 
   # ==========================================================================
   # IMMIGRATION
@@ -362,7 +362,7 @@ STR <- list(
     fa = "%s درصد تحصیلات تکمیلی دارند &mdash; حدود نیمی از دارندگان مدرک لیسانس و بالاتر."),
   au_ed_card2_primary = list(
     en = "of Iranian-ancestry Australians report no religious affiliation.",
-    fa = "از استرالیایی‌های با اصالت ایرانی هیچ وابستگی دینی اعلام نمی‌کنند."),
+    fa = "از استرالیایی‌های دارای اصالت ایرانی خود را پیرو هیچ دینی نمی‌دانند."),
   au_ed_islam = list(
     en = "Islam %s%%",
     fa = "اسلام %s درصد"),
@@ -378,13 +378,13 @@ STR <- list(
     fa = "استرالیا: کار و درآمد"),
   au_occ_title = list(
     en = "<b>Occupation of Iran-Born Workers<br>in Australia</b>",
-    fa = "<b>شغل کارگران متولد ایران<br>در استرالیا</b>"),
+    fa = "<b>شغل شاغلان متولد ایران<br>در استرالیا</b>"),
   au_occ_hover = list(
     en = "<b>%s</b><br>%s (%s%%)",
     fa = "<b>%s</b><br>%s نفر (%s درصد)"),
   au_ind_title = list(
     en = "<b>Industry of Employment<br>of Iran-Born Workers in Australia</b>",
-    fa = "<b>بخش اقتصادی اشتغال<br>کارگران متولد ایران در استرالیا</b>"),
+    fa = "<b>بخش اقتصادی اشتغال<br>شاغلان متولد ایران در استرالیا</b>"),
   au_ind_hover = list(
     en = "<b>%s</b><br>%s (%s%%)",
     fa = "<b>%s</b><br>%s نفر (%s درصد)"),
@@ -405,7 +405,7 @@ STR <- list(
     fa = "دهک درآمدی (کمترین تا بیشترین)"),
   au_dec_annotation = list(
     en = "10% =<br>national<br>baseline",
-    fa = "10٪ =<br>خط پایه<br>ملی"),
+    fa = "10٪ =<br>سهم پایه<br>هر دهک"),
   au_lf_title = list(
     en = "<b>Labor Force Status<br>of Iran-Born Australians</b>",
     fa = "<b>وضعیت نیروی کار<br>متولدان ایران در استرالیا</b>"),
@@ -458,7 +458,7 @@ STR <- list(
     fa = "منبع: %s — سرشماری جمعیت و مسکن 2021<br>جمعیت متولد ایران بر پایه پرسش کشور محل تولد شمارش شده است."),
   au_src_waterfall = list(
     en = "Source: %s — Census of Population and Housing, 2021. Cell counts are randomly adjusted by ABS to prevent identification of individuals; totals may not sum exactly.",
-    fa = "منبع: %s — سرشماری جمعیت و مسکن 2021. شمارش سلول‌ها توسط ABS به‌طور تصادفی تعدیل می‌شود تا افراد شناسایی نشوند؛ ممکن است مجموع‌ها دقیقاً برابر نباشند."),
+    fa = "منبع: %s — سرشماری جمعیت و مسکن 2021. ABS ارقام جدول‌ها را برای جلوگیری از شناسایی افراد به‌طور تصادفی اندکی تغییر می‌دهد؛ ممکن است مجموع‌ها دقیقاً برابر نباشند."),
   au_src_genboxes = list(
     en = "Source: %s &mdash; Census 2021, ancestry by country of birth.",
     fa = "منبع: %s &mdash; سرشماری 2021، اصالت به تفکیک کشور محل تولد."),

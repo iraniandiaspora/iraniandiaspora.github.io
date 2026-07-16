@@ -27,7 +27,7 @@ STR <- list(
     fa = "برآورد جمعیت ایرانی‌تبار در نروژ"),
   no_pop_headline_caption = list(
     en = "Based on population registers maintained by %s, %s",
-    fa = "بر پایه سامانه ثبت جمعیت نگهداری‌شده توسط %s، %s"),
+    fa = "بر پایه سامانه ثبت جمعیت %s، %s"),
 
   # --- identification box ------------------------------------------------------
   no_pop_idbox_intro = list(
@@ -136,7 +136,7 @@ STR <- list(
     fa = "منبع: %s &mdash; ثبت جمعیت، 2026"),
   no_src_ssb_emp = list(
     en = "Source: %s &mdash; Employed immigrants, fourth quarter, 2001–2025",
-    fa = "منبع: %s &mdash; مهاجران شاغل، فصل چهارم، 2001–2025"),
+    fa = "منبع: %s &mdash; مهاجران شاغل، سه‌ماهه چهارم، 2001–2025"),
 
   # --- axis affix --------------------------------------------------------------
   no_axis_pct_suffix = list(

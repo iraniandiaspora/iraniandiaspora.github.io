@@ -48,7 +48,7 @@ US_WATERFALL_FA <- c(
 
 # US-IMMIGRATION: citizenship status (chart x-axis + hover).
 US_CITIZEN_FA <- c(
-  "Naturalized citizen" = "شهروند تابعیت‌یافته",
+  "Naturalized citizen" = "شهروند با تابعیت اکتسابی",
   "Born in the US"      = "متولد آمریکا",
   "Not a citizen"       = "غیرشهروند"
 )
@@ -211,7 +211,7 @@ STR <- list(
     fa = "<b>%s</b><br>%s ورود<br>تجمعی: %s درصد"),
   us_immig_hover_line = list(
     en = "<b>%s</b><br>%s%% of today's Iran-born population had arrived",
-    fa = "<b>%s</b><br>%s درصد از جمعیت امروز متولدان ایران تا این سال وارد شده بودند"),
+    fa = "<b>%s</b><br>%s درصد از جمعیت کنونی متولدان ایران تا این سال وارد شده بودند"),
   us_citizen_title = list(
     en = "<b>Iranian-Americans by<br>Citizenship Status</b>",
     fa = "<b>ایرانی‌آمریکایی‌ها به تفکیک<br>وضعیت تابعیت</b>"),
@@ -228,7 +228,7 @@ STR <- list(
     fa = "تقریباً 9 از هر 10"),
   us_immig_c2_primary = list(
     en = "Iranian-Americans are U.S. citizens &mdash; %s%% naturalized and %s%% born in the United States.",
-    fa = "ایرانی‌آمریکایی‌ها شهروند آمریکا هستند &mdash; %s درصد تابعیت‌یافته و %s درصد متولد آمریکا."),
+    fa = "ایرانی‌آمریکایی‌ها شهروند آمریکا هستند &mdash; %s درصد با تابعیت اکتسابی و %s درصد متولد آمریکا."),
 
   # ===========================================================================
   # US-ADMISSIONS (INS/DHS history)
@@ -285,7 +285,7 @@ STR <- list(
     fa = "<b>پناهنده/پناهجو</b> — وضعیت پیشین پناهندگی یا پناهجویی"),
   us_adm_c2_b4 = list(
     en = "<b>Diversity</b> — annual visa lottery for countries with low U.S. immigration",
-    fa = "<b>تنوع (لاتاری)</b> — قرعه‌کشی سالانه ویزا برای کشورهای با مهاجرت کم به آمریکا"),
+    fa = "<b>تنوع (لاتاری)</b> — قرعه‌کشی سالانه ویزا برای کشورهایی که مهاجرت کمی به آمریکا دارند"),
   us_adm_c2_b5 = list(
     en = "Family has been the largest category throughout",
     fa = "مهاجرت خانوادگی در سراسر این دوره بزرگ‌ترین نوع بوده است"),
@@ -317,13 +317,13 @@ STR <- list(
   # --- text cards ------------------------------------------------------------
   us_educ_c1_primary = list(
     en = "of first-generation Iranian-American women ages 25&ndash;34 hold a bachelor&rsquo;s degree or higher &mdash; now ahead of men (%s%%).",
-    fa = "از زنان ایرانی‌آمریکایی نسل اول در سن 25&ndash;34 دارای مدرک لیسانس یا بالاتر هستند &mdash; اکنون جلوتر از مردان (%s درصد)."),
+    fa = "از زنان ایرانی‌آمریکایی نسل اول در گروه سنی 25&ndash;34 دارای مدرک لیسانس یا بالاتر هستند &mdash; اکنون از مردان (%s درصد) پیشی گرفته‌اند."),
   us_educ_c1_b1 = list(
     en = "Among older first-generation (ages 75&ndash;84), %s%% of men hold a bachelor&rsquo;s degree or higher, vs only %s%% of women",
-    fa = "در میان نسل اول مسن‌تر (سن 75&ndash;84)، %s درصد مردان مدرک لیسانس یا بالاتر دارند، در برابر تنها %s درصد زنان"),
+    fa = "در میان نسل اول مسن‌تر (گروه سنی 75&ndash;84)، %s درصد مردان مدرک لیسانس یا بالاتر دارند، در برابر تنها %s درصد زنان"),
   us_educ_c2_primary = list(
     en = "of second-generation Iranian-American women ages 35&ndash;44 hold a bachelor&rsquo;s degree or higher &mdash; vs %s%% of men.",
-    fa = "از زنان ایرانی‌آمریکایی نسل دوم در سن 35&ndash;44 دارای مدرک لیسانس یا بالاتر هستند &mdash; در برابر %s درصد مردان."),
+    fa = "از زنان ایرانی‌آمریکایی نسل دوم در گروه سنی 35&ndash;44 دارای مدرک لیسانس یا بالاتر هستند &mdash; در برابر %s درصد مردان."),
   us_educ_c2_b1 = list(
     en = "Both generations now show women outpacing men in higher education",
     fa = "در هر دو نسل اکنون زنان در آموزش عالی از مردان پیشی گرفته‌اند"),
@@ -356,10 +356,10 @@ STR <- list(
     fa = "<b>%s</b><br>%s درصد خوداشتغال"),
   us_bizind_title = list(
     en = "<b>Industries of<br>Iranian-Owned Businesses</b>",
-    fa = "<b>بخش‌های کسب‌وکارهای<br>ایرانی‌مالک</b>"),
+    fa = "<b>بخش‌های فعالیت<br>کسب‌وکارهای ایرانیان</b>"),
   us_bizind_hover = list(
     en = "<b>%s</b><br>%s%% of Iranian-owned businesses",
-    fa = "<b>%s</b><br>%s درصد از کسب‌وکارهای ایرانی‌مالک"),
+    fa = "<b>%s</b><br>%s درصد از کسب‌وکارهای متعلق به ایرانیان"),
   us_occ_title = list(
     en = "<b>Occupations of Employed<br>Iranian-Americans</b>",
     fa = "<b>مشاغل ایرانی‌آمریکایی‌های<br>شاغل</b>"),
@@ -422,7 +422,7 @@ STR <- list(
     fa = "از ایرانی‌آمریکایی‌های نسل دوم دارای شریک زندگی، شریکی ایرانی دارند."),
   us_marriage_c2_b1 = list(
     en = "%s%% partner with White, non-Hispanic Americans",
-    fa = "%s درصد با آمریکایی‌های سفیدپوست غیرلاتین‌تبار پیوند می‌بندند"),
+    fa = "%s درصد با آمریکایی‌های سفیدپوست غیرلاتین‌تبار ازدواج یا زندگی مشترک دارند"),
   us_marriage_c2_b2 = list(
     en = "Similar to <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/\" target=\"_blank\" style=\"color:#2774AE; text-decoration:none; border-bottom:1px solid rgba(39,116,174,0.4);\">other second-generation Asian Americans</a>",
     fa = "مشابه <a href=\"https://pmc.ncbi.nlm.nih.gov/articles/PMC8112448/\" target=\"_blank\" style=\"color:#2774AE; text-decoration:none; border-bottom:1px solid rgba(39,116,174,0.4);\">دیگر آمریکایی‌های آسیایی‌تبار نسل دوم</a>"),
@@ -435,13 +435,13 @@ STR <- list(
     fa = "آمریکا: درآمد"),
   us_income_chart_title = list(
     en = "<b>Position in US<br>Household Income Distribution:<br>%s (Ages 25–54)</b>",
-    fa = "<b>جایگاه در توزیع درآمد<br>خانوار در آمریکا:<br>%s (سن 25–54)</b>"),
+    fa = "<b>جایگاه در توزیع درآمد<br>خانوار در آمریکا:<br>%s (25 تا 54 سال)</b>"),
   us_income_xaxis = list(
     en = "Income Decile (Lowest to Highest)",
     fa = "دهک درآمدی (کمترین تا بیشترین)"),
   us_income_baseline_annot = list(
     en = "10% =<br>national<br>baseline",
-    fa = "10 درصد =<br>خط پایه<br>ملی"),
+    fa = "10 درصد =<br>سهم پایه<br>هر دهک"),
   us_income_hover = list(
     en = "<b>Decile:</b> %s<br><b>Households in sample:</b> %s<br><b>Share:</b> %s%%",
     fa = "<b>دهک:</b> %s<br><b>خانوارهای نمونه:</b> %s<br><b>سهم:</b> %s درصد"),
@@ -451,19 +451,19 @@ STR <- list(
   # --- text cards ------------------------------------------------------------
   us_income_c1_primary = list(
     en = "of first-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile.",
-    fa = "از خانوارهای ایرانی‌آمریکایی نسل اول (سن 25&ndash;54) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
+    fa = "از خانوارهای ایرانی‌آمریکایی نسل اول (25 تا 54 سال) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
   us_income_c1_b1 = list(
     en = "More than double the national baseline of 10%",
-    fa = "بیش از دو برابر خط پایه ملی 10 درصد"),
+    fa = "بیش از دو برابر سهم پایه هر دهک (10 درصد)"),
   us_income_c1_b2 = list(
     en = "Only %s%% fall in the lowest decile",
     fa = "تنها %s درصد در پایین‌ترین دهک قرار می‌گیرند"),
   us_income_c2_primary = list(
     en = "of second-generation Iranian-American households (ages 25&ndash;54) fall in the top U.S. income decile.",
-    fa = "از خانوارهای ایرانی‌آمریکایی نسل دوم (سن 25&ndash;54) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
+    fa = "از خانوارهای ایرانی‌آمریکایی نسل دوم (25 تا 54 سال) در بالاترین دهک درآمدی آمریکا قرار می‌گیرند."),
   us_income_c2_b1 = list(
     en = "Even more concentrated at the top than the first generation",
-    fa = "حتی بیش از نسل اول در بالای توزیع متمرکز هستند"),
+    fa = "تمرکز آنها در دهک‌های بالایی حتی از نسل اول بیشتر است"),
   us_income_c2_b2 = list(
     en = "Just %s%% fall in the lowest decile",
     fa = "تنها %s درصد در پایین‌ترین دهک قرار می‌گیرند"),
@@ -476,7 +476,7 @@ STR <- list(
     fa = "آمریکا: زبان"),
   us_lang_chart_title = list(
     en = "<b>Language at Home of Iranian-Americans:<br>%s</b>",
-    fa = "<b>زبان خانه ایرانی‌آمریکایی‌ها:<br>%s</b>"),
+    fa = "<b>زبان رایج در خانه ایرانی‌آمریکایی‌ها:<br>%s</b>"),
   us_lang_hover = list(
     en = "<b>%s</b><br>%s, Ages %s<br>%s%%",
     fa = "<b>%s</b><br>%s، سن %s<br>%s درصد"),
@@ -527,7 +527,7 @@ STR <- list(
     fa = "بر پایه <a href=\"https://www2.census.gov/programs-surveys/acs/methodology/questionnaires/2024/quest24.pdf\" style=\"color:#2774AE;\" target=\"_blank\">پیمایش جامعه آمریکا 2024</a>، پیمایشی سراسری از سوی اداره سرشماری آمریکا"),
   us_pop_idbox_intro = list(
     en = "A person is counted if they meet <em>at least one</em> of four survey questions:",
-    fa = "هر فرد در صورت داشتن <em>دست‌کم یکی</em> از این چهار پاسخ در پرسش‌های سرشماری شمرده می‌شود:"),
+    fa = "هر فرد در صورتی شمرده می‌شود که <em>دست‌کم یکی</em> از این چهار پرسش سرشماری در موردش صدق کند:"),
   us_pop_idbox_b1 = list(
     en = "<strong>Place of birth</strong> <span style=\"color:#6b6b6b;\">&mdash; &ldquo;Where was this person born?&rdquo;</span>",
     fa = "<strong>محل تولد</strong> <span style=\"color:#6b6b6b;\">&mdash; «این فرد کجا متولد شده است؟»</span>"),

@@ -27,7 +27,7 @@ STR <- list(
     fa = "برآورد جمعیت متولدان ایران در ایتالیا"),
   it_pop_headline_caption = list(
     en = "Based on population registers maintained by %s, %s",
-    fa = "بر پایه سامانه ثبت جمعیت نگهداری‌شده توسط %s، %s"),
+    fa = "بر پایه سامانه ثبت جمعیت %s، %s"),
 
   # --- identification box ------------------------------------------------------
   it_pop_idbox_intro = list(

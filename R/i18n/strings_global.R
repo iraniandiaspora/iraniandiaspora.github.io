@@ -35,7 +35,7 @@ STR <- list(
     fa = "%s میلیون"),
   gl_card1_primary = list(
     en = "Iran-born people live outside Iran as of 2024 &mdash; nearly three times the 1990 total.",
-    fa = "نفر متولد ایران تا سال ۲۰۲۴ در خارج از ایران زندگی می‌کنند &mdash; نزدیک به سه برابر رقم سال ۱۹۹۰."),
+    fa = "نفر متولد ایران بر پایه آمار سال ۲۰۲۴ در خارج از ایران زندگی می‌کنند &mdash; نزدیک به سه برابر رقم سال ۱۹۹۰."),
 
   # --- methodology text card ----------------------------------------------------
   gl_card2_heading = list(
