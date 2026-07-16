@@ -502,7 +502,7 @@
 // Cache-buster bumped with each release so the browser fetches the new
 // iframe pages instead of showing a stale cached copy. Bump on any
 // release that changes any docs/pages/*.html.
-var SITE_VERSION = 'v7.7';
+var SITE_VERSION = 'v7.8';
 function activateIframe(container) {
   if (!container) return;
   var iframe = container.querySelector('iframe');
@@ -755,13 +755,12 @@ window.addEventListener('hashchange', navigateToHash);
 </script>
 
 <script>
-// ---- Persian (fa) edition toggle — ALPHA, hidden unless URL has ?fa=1 ----
-// Inert for the public. With ?fa=1 a toggle appears; it re-points iframes to the
-// .fa.html twin for pages that have one (others stay English), sets dir=rtl, and
-// swaps the top-nav labels + title to Persian. localStorage remembers the choice.
+// ---- Persian (fa) edition toggle — LIVE (public, 2026-07-16) ----
+// The فا|EN toggle shows for everyone; the site defaults to English. Switching to
+// Persian re-points iframes to the .fa.html twin for pages that have one (others
+// stay English), sets dir=rtl, and swaps the top-nav labels + title to Persian.
+// localStorage remembers the choice. (Formerly gated behind ?fa=1.)
 (function(){
-  var FA_ENABLED = /(?:^|[?&])fa=1(?:&|$)/.test(location.search);
-  if (!FA_ENABLED) return;
   var FA_PAGES = ['global','nl-population','nl-workinc','am-population','fi-population','no-population','dk-population','dk-workinc','fr-population','it-population','at-population','ch-population','il-population','se-population','tr-population','tr-immigration','eu-overview','uk-population','uk-workedu','de-population','de-immigration','de-langedu','de-workinc','au-population','au-immigration','au-education','au-workinc','ca-population','ca-langrelig','ca-immigration','ca-education','ca-work','ca-income','us-population','us-immigration','us-admissions','us-marriage','us-language','us-education','us-work','us-income'];
   var NAV_FA = {'global':'جهان','united-states':'آمریکا','europe':'اروپا','canada':'کانادا',
     'turkey':'ترکیه','israel':'اسرائیل','australia':'استرالیا','armenia':'ارمنستان',
@@ -777,7 +776,7 @@ window.addEventListener('hashchange', navigateToHash);
     'Work':'کار','Income':'درآمد','Language & Religion':'زبان و دین','Education & Religion':'آموزش و دین',
     'Language & Education':'زبان و آموزش','Work & Income':'کار و درآمد','Work & Education':'کار و آموزش',
     'Work & Industry':'کار و صنعت','Iran-Born Across Europe':'متولدان ایران در اروپا'};
-  var currentLang = localStorage.getItem('idd_lang') || 'fa';
+  var currentLang = localStorage.getItem('idd_lang') || 'en';
 
   var st = document.createElement('style');
   st.textContent =
