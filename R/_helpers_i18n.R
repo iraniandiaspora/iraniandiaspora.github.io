@@ -169,9 +169,6 @@ pj <- function(p, inject_hoveron = FALSE) {
 # align those tokens so the subs apply (verify dir="rtl"/Vazirmatn present).
 fa_shell <- function(html) {
   html <- sub('<html lang="en">', '<html lang="fa" dir="rtl">', html, fixed = TRUE)
-  html <- sub('<meta charset="utf-8">',
-              '<meta charset="utf-8">\n<meta name="robots" content="noindex,nofollow">',
-              html, fixed = TRUE)
   html <- sub('</head>',
               paste0(FA_FONT_HEAD, "\n", FA_LOCALE_JS, "\n",
                      FA_RTL_OVERRIDES, "\n</head>"),
