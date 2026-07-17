@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://iraniandiaspora.github.io/sitemap.xml
