@@ -183,6 +183,17 @@ html, body {
   height: 50px;
 }
 
+/* Header stacks below ~1280px, where the 10-tab single row + title + toggle
+   stops fitting and the non-wrapping navbar would otherwise slide under the
+   language toggle. The .header.has-toggle{padding-right:120px} reservation is
+   kept in column mode on purpose: it insets the (right-aligned RTL) title by
+   120px so the absolutely-positioned toggle stays clear of it in both
+   directions. Finer phone tuning (padding/font/centering) stays at 900px. */
+@media (max-width: 1279px) {
+  .header { flex-direction: column; align-items: flex-start; height: auto; padding: 8px 20px; gap: 4px; }
+  .navbar { width: 100%; justify-content: flex-start; flex-wrap: wrap; gap: 2px; margin-top: 4px; padding-bottom: 4px; }
+}
+
 /* Responsive — tablet */
 @media (max-width: 900px) {
   /* App-bar: title flush to the start edge (left in LTR, right in RTL).
