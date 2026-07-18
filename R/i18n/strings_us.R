@@ -22,8 +22,11 @@
 #     ASCII digits baked into fa literals are Persian-ized at runtime by
 #     FA_NUM_SCRIPT (and by htxt() where the builder pre-digits assembled prose).
 #   * Official agency / dataset names stay Latin (U.S. Census Bureau, ACS,
-#     IPUMS, DHS, INS, PUMS, IRCA). US state / Census-region place names stay
-#     Latin. Language names are Persian.
+#     IPUMS, DHS, INS, PUMS, IRCA). Specific US state / city PROPER names stay
+#     Latin. But the four DIRECTIONAL Census regions (West/South/Northeast/
+#     Midwest) ARE translated (US_REGION_FA) — they're common direction words,
+#     not proper nouns, and every other fa category axis is Persian. Language
+#     names are Persian.
 #   * Prose / cards / hover use the WORD «درصد»; axis tick suffixes + on-bar %
 #     value labels use ٪ (handled in the builder, not here).
 #
@@ -92,6 +95,18 @@ US_LANGCAT_FA <- c(
   "Persian"        = "فارسی",
   "Other language" = "زبان‌های دیگر",
   "English only"   = "فقط انگلیسی"
+)
+
+# US-POPULATION: the four Census regions (population bar x-axis + hover).
+# These are DIRECTIONAL region names (not proper-noun state/city names), so —
+# unlike specific place names, which stay Latin per the header note — they take
+# their standard Persian equivalents, matching every other translated category
+# axis on the fa pages.
+US_REGION_FA <- c(
+  "West"      = "غرب",
+  "South"     = "جنوب",
+  "Northeast" = "شمال شرق",
+  "Midwest"   = "غرب میانه"
 )
 
 # US-LANGUAGE: top non-Persian, non-English languages (factoid list).

@@ -119,9 +119,20 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
   # Bar i (1-based, factor level order) sits at category-axis position i-1; its
   # top edge is half a bar-width above that. Put the label there so it clears the
   # bar regardless of thickness.
+  #
+  # xanchor is ALWAYS "left" — even on fa (RTL), where you'd expect "right".
+  # This is a Plotly RTL-annotation quirk, not a mistake: on a dir="rtl" page
+  # Plotly applies its own xanchor="right" width-shift AND the browser then
+  # right-aligns the RTL glyph run, so xanchor="right" double-shifts every label
+  # LEFT by its own text width (measured: gap-from-edge == text width exactly, so
+  # short labels floated far off the edge). With xanchor="left" Plotly applies no
+  # shift and the browser's RTL rendering lands each label's RIGHT edge on the
+  # anchor (x=1 = paper right edge) — uniformly, at any text length. Verified
+  # 2026-07-17 (us-work occupation chart: all labels' right edge coincided).
+  # `align` still flips (multi-line internal alignment), only `xanchor` does not.
   half_bar <- (1 - bargap) / 2
   lab_anns <- lapply(seq_len(n), function(i) list(
-    x = if (fa) 1 else 0, xref = "paper", xanchor = if (fa) "right" else "left",
+    x = if (fa) 1 else 0, xref = "paper", xanchor = "left",
     y = (i - 1) + half_bar, yref = "y", yanchor = "bottom", yshift = 2,
     text = wrapped[i], showarrow = FALSE, align = if (fa) "right" else "left",
     font = list(size = font_size, family = "Montserrat, sans-serif", color = "#333")))
@@ -133,7 +144,10 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
     for (i in seq_len(n)) {
       if (is.na(end_text[i]) || !nzchar(end_text[i])) next   # blank -> no value label
       val_anns[[length(val_anns) + 1L]] <- list(
-        x = ends[i], xref = "x", xanchor = if (fa) "right" else "left",
+        # xanchor always "left" — same Plotly RTL double-shift fix as the
+        # category labels above; xshift still flips (physical px nudge off the
+        # bar tip: +5 right on en, -5 left on fa).
+        x = ends[i], xref = "x", xanchor = "left",
         xshift = if (fa) -5 else 5, y = i - 1, yref = "y", yanchor = "middle",
         text = end_text[i], showarrow = FALSE,
         font = list(size = 11, family = "Montserrat, sans-serif", color = "#555"))
