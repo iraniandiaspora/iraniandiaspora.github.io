@@ -1371,10 +1371,19 @@ us_matrix_html <- criteria_table(list(
   list(label = tr("us_crit_parent"),   vals = wf$is_children)),
   n_cols = nrow(wf), label_px = US_LBL_PX, sym_px = 15)
 
+# fa: show the four Census regions in Persian (US_REGION_FA), English otherwise.
+# Keep the desc-pop order (so the fixed marker-colour vector stays aligned) by
+# reusing the same order for the display factor levels.
+region_disp_names <- as.character(region_dat$REGION)
+if (is_fa()) {
+  m <- US_REGION_FA[region_disp_names]
+  region_disp_names <- ifelse(is.na(m), region_disp_names, unname(m))
+}
+region_dat$REGION_disp <- factor(region_disp_names, levels = region_disp_names)
 region_dat$hover <- htxt(sprintf(tr("us_region_hover"),
-  as.character(region_dat$REGION), fmtv(region_dat$pop),
+  region_disp_names, fmtv(region_dat$pop),
   fa_num(round(region_dat$pop / total_pop * 100), 0)))
-p_region <- plot_ly(data = region_dat, x = ~REGION, y = ~pop, type = "bar",
+p_region <- plot_ly(data = region_dat, x = ~REGION_disp, y = ~pop, type = "bar",
     marker = list(color = c("#7b5ea7", "#d4a943", "#2ca089", "#e07b54")),
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%

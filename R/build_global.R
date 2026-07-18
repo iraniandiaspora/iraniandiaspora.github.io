@@ -258,15 +258,17 @@ for (LANG in c("en", "fa")) {
 
   total_label <- sprintf(tr("gl_total_label"), fa_num(total_2024 / 1e6, 2))
 
-  # Streamgraph fill-hover fix. Each filled trace keeps its ENGLISH `name` (the
-  # legend/highlight JS matches trace.name against data-lg). With hoveron="fills"
-  # and a per-point `text` ARRAY, Plotly falls back to that English name for the
-  # fill label — so the fa fill hover showed "United States of America" instead
-  # of the Persian country name already sitting in `text`. A `hovertemplate`
-  # overrides the name-box and renders the per-point Persian `text` (with
-  # <extra></extra> suppressing the trace-name secondary box). fa-only (NULL in
-  # en, which plotly_build drops), so the English page stays byte-identical.
-  stream_hovertmpl <- if (is_fa()) "%{text}<extra></extra>" else NULL
+  # Streamgraph fill-hover fix (BOTH languages). Each filled trace keeps its
+  # ENGLISH `name` (the legend/highlight JS matches trace.name against data-lg).
+  # With hoveron="fills" and a per-point `text` ARRAY, Plotly falls back to that
+  # trace name for the fill label — so hovering the band showed only the country
+  # name ("United States of America") instead of the per-point country + year +
+  # count already sitting in `text`. A `hovertemplate` overrides the name-box and
+  # renders the per-point `text` (with <extra></extra> suppressing the trace-name
+  # secondary box). Was fa-only originally (to keep en byte-identical), but that
+  # left the English fill hover showing just the country name — reported 2026-07,
+  # so it now applies to en too.
+  stream_hovertmpl <- "%{text}<extra></extra>"
 
   # Source-line link anchors are per-language: the fa anchors carry the Persian
   # agency gloss with the Latin acronym isolated in <bdi> (glossary rule); the
