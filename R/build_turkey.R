@@ -181,6 +181,13 @@ for (LANG in c("en", "fa")) {
                     traceorder = "reversed"),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the grouped horizontal bar (BBC Persian). Grouped (not a
+  # back-to-back butterfly), so both sexes grow from one right-hand baseline.
+  # fa-only. Native centered legend identifies colors, not positions — unchanged.
+  if (is_fa()) p_age <- p_age %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(t = 50, b = 30, l = 20, r = 70))
 
   # --- Sex breakdown boxes (from headline counts) --------------------------
   sex_boxes <- paste0(
@@ -286,6 +293,11 @@ for (LANG in c("en", "fa")) {
       margin = list(t = 55, b = 40, l = 140),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the ranked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_permits <- p_permits %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(t = 55, b = 40, l = 20, r = 140))
 
   # --- Assemble tr-immigration page ----------------------------------------
   imm_body <- paste0(

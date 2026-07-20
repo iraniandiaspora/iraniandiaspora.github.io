@@ -418,7 +418,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   </ul>
 </div>
 <div class="chart-card global-area" style="overflow:visible;">
-  <div class="chart-with-legend" style="display:flex; align-items:stretch;">
+  <div class="chart-with-legend" style="display:flex; align-items:stretch;', if (is_fa()) " flex-direction:row-reverse;" else "", '">
     <div style="flex:1; min-width:0;">',
       plotly_div("stock-area", pj(p_stock, inject_hoveron = !is_fa()), "500px"),
     '</div>

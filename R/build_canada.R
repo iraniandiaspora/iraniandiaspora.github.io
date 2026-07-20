@@ -947,6 +947,12 @@ for (LANG in c("en", "fa")) {
     margin = list(t = 55, b = 40, l = 120), showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
     config(displayModeBar = FALSE)
+  # fa/RTL: mirror the stacked horizontal bar (BBC Persian) — reverse the
+  # percent axis, generation labels to the right, swap l/r margins. fa-only.
+  if (is_fa()) p_lang <- p_lang %>% layout(
+    xaxis = list(range = c(105, 0)),
+    yaxis = list(side = "right"),
+    margin = list(t = 55, b = 40, l = 20, r = 120))
   lang_colors_disp <- setNames(unname(lang_colors[lang_cats]),
                                vapply(lang_cats, lang_cat_disp, character(1)))
   lang_leg <- make_html_legend_hover(lang_colors_disp, break_after = 3)
@@ -976,6 +982,11 @@ for (LANG in c("en", "fa")) {
     margin = list(t = 55, b = 40, l = 120), showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
     config(displayModeBar = FALSE)
+  # fa/RTL: mirror the stacked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_relig <- p_relig %>% layout(
+    xaxis = list(range = c(105, 0)),
+    yaxis = list(side = "right"),
+    margin = list(t = 55, b = 40, l = 20, r = 120))
   relig_colors_disp <- setNames(unname(relig_colors[relig_cats]),
                                 vapply(relig_cats, relig_cat_disp, character(1)))
   relig_leg <- make_html_legend_hover(relig_colors_disp, break_after = 3)
@@ -1307,6 +1318,11 @@ for (LANG in c("en", "fa")) {
     margin = list(t = 55, b = 40, l = 60), showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the stacked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_inc_age <- p_inc_age %>% layout(
+    xaxis = list(range = c(105, 0)),
+    yaxis = list(side = "right"),
+    margin = list(t = 55, b = 40, l = 20, r = 60))
   incband_colors_disp <- setNames(unname(age_band_colors[age_band_order]),
                                   vapply(age_band_order, incband_disp, character(1)))
   inc_age_leg <- make_html_legend_hover(incband_colors_disp, break_after = 3)

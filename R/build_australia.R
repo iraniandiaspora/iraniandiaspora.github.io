@@ -900,6 +900,11 @@ for (LANG in c("en", "fa")) {
     margin = list(t = 55, b = 40, l = 120), showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the stacked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_rel <- p_rel %>% layout(
+    xaxis = list(range = c(105, 0)),
+    yaxis = list(side = "right"),
+    margin = list(t = 55, b = 40, l = 20, r = 120))
 
   rel_leg_labels <- if (is_fa()) unname(AU_REL_FA[names(rel_colors)]) else names(rel_colors)
   rel_leg <- make_html_legend(rel_colors, labels = rel_leg_labels)
@@ -932,6 +937,15 @@ for (LANG in c("en", "fa")) {
     margin = list(l = 110, r = 20, t = 55, b = 50),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
     config(displayModeBar = FALSE)
+  # fa/RTL: mirror the stacked horizontal bar (BBC Persian). Unlike its HTML-
+  # legend siblings, this chart uses a NATIVE plotly legend that does NOT reflow
+  # under dir="rtl", so reverse the legend order to keep it aligned with the
+  # now-reversed segment order (first category rightmost). fa-only.
+  if (is_fa()) p_language <- p_language %>% layout(
+    xaxis = list(range = c(100, 0)),
+    yaxis = list(side = "right"),
+    legend = list(traceorder = "reversed"),
+    margin = list(l = 20, r = 110, t = 55, b = 50))
 
   ed1_big <- sprintf(tr("au_bignum_pct"), fa_num(bachelors_pct, 0))
   ed1_note <- htxt(sprintf(tr("au_ed_card1_note"), fa_num(postgrad_pct, 0)))
