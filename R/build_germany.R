@@ -977,6 +977,11 @@ for (LANG in c("en", "fa")) {
     margin = list(t = 55, b = 40, l = 140), showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
     config(displayModeBar = FALSE)
+  # fa/RTL: mirror the stacked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_lang <- p_lang %>% layout(
+    xaxis = list(range = c(105, 0)),
+    yaxis = list(side = "right"),
+    margin = list(t = 55, b = 40, l = 20, r = 140))
 
   lang_colors_disp <- setNames(unname(lang_colors[lang_cat_order]),
                                vapply(lang_cat_order, cat_disp, character(1)))

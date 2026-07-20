@@ -413,6 +413,11 @@ for (LANG in c("en", "fa")) {
       margin = list(l = 120, r = 20, t = 55, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the ranked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_relig <- p_relig %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(l = 20, r = 120, t = 55, b = 30))
 
   # --- Assemble uk-population -------------------------------------------------
   pop_body <- paste0(
@@ -486,6 +491,11 @@ for (LANG in c("en", "fa")) {
       margin = list(l = 100, r = 20, t = 55, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the ranked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_econ <- p_econ %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(l = 20, r = 100, t = 55, b = 30))
 
   # --- Qualification horizontal bar (label-above; RTL-mirrored on fa) ----------
   qual_labels_disp <- if (is_fa()) fa_digits(unname(UK_QUAL_FA[levels(qual$category)])) else levels(qual$category)

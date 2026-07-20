@@ -795,7 +795,7 @@ make_lang_stack <- function(gen_value, cohort_levels, gen_label) {
       hoverinfo = "text", textposition = "none",
       orientation = "h", showlegend = FALSE, legendgroup = lc)
   }
-  p %>% layout(
+  p <- p %>% layout(
     barmode = "stack",
     title = list(
       text = htxt(sprintf(tr("us_lang_chart_title"), gen_label)),
@@ -810,6 +810,13 @@ make_lang_stack <- function(gen_value, cohort_levels, gen_label) {
     showlegend = FALSE,
     plot_bgcolor = "white", paper_bgcolor = "white"
   ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the stacked horizontal bar (BBC Persian). This helper builds
+  # both generation charts, so one fa-only branch covers both.
+  if (is_fa()) p <- p %>% layout(
+    xaxis = list(range = c(100, 0)),
+    yaxis = list(side = "right"),
+    margin = list(t = 55, b = 40, l = 20, r = 70))
+  p
 }
 
 # =============================================================================

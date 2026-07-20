@@ -314,6 +314,16 @@ for (LANG in c("en", "fa")) {
     ) %>%
     config(displayModeBar = FALSE)
 
+  # fa/RTL: mirror the horizontal ranking bar (BBC Persian convention — all
+  # horizontal bars grow right-to-left from a right-hand baseline, category
+  # labels on the right). Reverse the value axis, move y tick-labels to the
+  # right, and swap the l/r label margins. fa-only, so EN stays byte-identical.
+  # The descending-by-count y order is unaffected (x reversal doesn't touch it).
+  if (is_fa()) p_bar <- p_bar %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(t = 45, b = 30, l = 20, r = 120))
+
   # ---------- CHART 2: Time series (countries with continuous coverage) ----
   # Direct-label each line at its rightmost point instead of using a legend.
   # Build the line traces first, then a single text trace per label.

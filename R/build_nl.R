@@ -233,6 +233,12 @@ for (LANG in c("en", "fa")) {
         margin = list(l = 130, r = 20, t = 10, b = 20),
         plot_bgcolor = "white", paper_bgcolor = "white"
       ) %>% config(displayModeBar = FALSE)
+    # fa/RTL: mirror the ranked horizontal bar (BBC Persian). fa-only. (This is
+    # the GeoJSON-missing fallback path; normally the map renders instead.)
+    if (is_fa()) p_nl_bar <- p_nl_bar %>% layout(
+      xaxis = list(autorange = "reversed"),
+      yaxis = list(side = "right"),
+      margin = list(l = 20, r = 130, t = 10, b = 20))
     map_html <- plotly_div("nl-prov-bar", pj(p_nl_bar), "500px",
       source = cbs_src)
   }

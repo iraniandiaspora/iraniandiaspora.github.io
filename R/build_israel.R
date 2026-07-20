@@ -169,6 +169,11 @@ for (LANG in c("en", "fa")) {
       margin = list(t = 50, b = 30, l = 60),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the grouped horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_age <- p_age %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(t = 50, b = 30, l = 20, r = 60))
 
   age_legend <- make_html_legend(setNames(c("#1a4e72", "#5a9bd5"),
     c(tr("il_leg_gen1"), tr("il_leg_gen2"))))
@@ -191,6 +196,11 @@ for (LANG in c("en", "fa")) {
       margin = list(t = 50, b = 30, l = 60),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the ranked horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_gen1_detail <- p_gen1_detail %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(t = 50, b = 30, l = 20, r = 60))
 
   # --- Iran-born population over time (UN Migrant Stock 1990–2024) ------------
   p_un_trend <- plot_ly(un_trend, x = ~year, y = ~iran_born,
@@ -231,6 +241,11 @@ for (LANG in c("en", "fa")) {
       margin = list(t = 40, b = 30, l = 130),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+  # fa/RTL: mirror the ranked comparison horizontal bar (BBC Persian). fa-only.
+  if (is_fa()) p_comp <- p_comp %>% layout(
+    xaxis = list(autorange = "reversed"),
+    yaxis = list(side = "right"),
+    margin = list(t = 40, b = 30, l = 20, r = 130))
 
   # --- Generation boxes -------------------------------------------------------
   gen_boxes <- paste0(
