@@ -766,10 +766,16 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
       y_pos <- val + 1
     }
     lbl <- if (is_fa()) paste0(fa_num(val, 1), "٪") else sprintf("%.1f%%", val)
-    p <- p %>% add_annotations(
-      x = d$label[i], y = y_pos,
-      text = lbl,
-      showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
+    if (is_fa()) {
+      # fa/RTL: pin xanchor="center" explicitly. The default "auto" resolves to
+      # an edge anchor under dir="rtl" (offsetting each label off its point);
+      # explicit "center" centers it above/below the point, matching EN.
+      p <- p %>% add_annotations(x = d$label[i], y = y_pos, text = lbl,
+        xanchor = "center", showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
+    } else {
+      p <- p %>% add_annotations(x = d$label[i], y = y_pos, text = lbl,
+        showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
+    }
   }
 
   plotly_div(id_prefix, pj(p), "500px", source = SRC_INCOME)

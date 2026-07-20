@@ -1290,10 +1290,17 @@ for (LANG in c("en", "fa")) {
       y_pos <- val - 1.5
     }
     lab_txt <- if (is_fa()) paste0(fa_num(val, 1), "٪") else sprintf("%.1f%%", val)
-    p_inc_decile <- p_inc_decile %>% add_annotations(
-      x = inc1$short_label_disp[i], y = y_pos,
-      text = lab_txt,
-      showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
+    if (is_fa()) {
+      # fa/RTL: pin xanchor="center" explicitly — default "auto" resolves to an
+      # edge anchor under dir="rtl", offsetting each label off its point.
+      p_inc_decile <- p_inc_decile %>% add_annotations(x = inc1$short_label_disp[i],
+        y = y_pos, text = lab_txt, xanchor = "center",
+        showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
+    } else {
+      p_inc_decile <- p_inc_decile %>% add_annotations(x = inc1$short_label_disp[i],
+        y = y_pos, text = lab_txt,
+        showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
+    }
   }
 
   incband_disp <- function(b) if (is_fa()) unname(CA_INCBAND_FA[b]) else b
