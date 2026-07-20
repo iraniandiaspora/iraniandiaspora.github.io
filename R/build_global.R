@@ -422,7 +422,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
     <div style="flex:1; min-width:0;">',
       plotly_div("stock-area", pj(p_stock, inject_hoveron = !is_fa()), "500px"),
     '</div>
-    <div class="chart-legend-sidebar" style="width:200px; flex-shrink:0; padding:40px 10px 0 5px; font-size:13px; line-height:2.2;">',
+    <div class="chart-legend-sidebar" style="width:200px; flex-shrink:0; padding:', if (is_fa()) "80px" else "40px", ' 10px 0 5px; font-size:13px; line-height:2.2;">',
       paste(sapply(legend_order, function(g) {
         html_g <- gsub("&", "&amp;", grp_label(g))
         sprintf("<div data-lg=\"%s\" style=\"display:flex; align-items:center; gap:8px; cursor:pointer; transition:opacity 0.2s;\" onmouseenter=\"var el=document.getElementById('stock-area');if(el&&el.__hlOn&&!el.__locked)el.__hlOn(this.getAttribute('data-lg'));\" onmouseleave=\"var el=document.getElementById('stock-area');if(el&&el.__hlOff&&!el.__locked)el.__hlOff();\" onclick=\"var el=document.getElementById('stock-area');if(el&&el.__toggle)el.__toggle(this.getAttribute('data-lg'));\"><div style=\"width:14px; height:14px; border-radius:50%%; background:%s; flex-shrink:0;\"></div> %s</div>", g, colors[g], html_g)
