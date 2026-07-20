@@ -760,7 +760,11 @@ window.addEventListener('hashchange', navigateToHash);
 // The فا|EN toggle shows for everyone; the site defaults to English. Switching to
 // Persian re-points iframes to the .fa.html twin for pages that have one (others
 // stay English), sets dir=rtl, and swaps the top-nav labels + title to Persian.
-// localStorage remembers the choice. (Formerly gated behind ?fa=1.)
+// The bare URL ALWAYS lands in English (2026-07-20): the choice is per-session
+// only, not persisted across visits — so an English visitor can never land on a
+// Persian page they can't read their way out of. Persian is opt-in each fresh
+// load; in-session tab navigation keeps فا once toggled (no reload between tabs).
+// (Formerly gated behind ?fa=1; localStorage persistence removed 2026-07-20.)
 (function(){
   var FA_PAGES = ['global','nl-population','nl-workinc','am-population','fi-population','no-population','dk-population','dk-workinc','fr-population','it-population','at-population','ch-population','il-population','se-population','tr-population','tr-immigration','eu-overview','uk-population','uk-workedu','de-population','de-immigration','de-langedu','de-workinc','au-population','au-immigration','au-education','au-workinc','ca-population','ca-langrelig','ca-immigration','ca-education','ca-work','ca-income','us-population','us-immigration','us-admissions','us-marriage','us-language','us-education','us-work','us-income'];
   var NAV_FA = {'global':'جهان','united-states':'آمریکا','europe':'اروپا','canada':'کانادا',
@@ -777,7 +781,7 @@ window.addEventListener('hashchange', navigateToHash);
     'Work':'کار','Income':'درآمد','Language & Religion':'زبان و دین','Education & Religion':'آموزش و دین',
     'Language & Education':'زبان و آموزش','Work & Income':'کار و درآمد','Work & Education':'کار و آموزش',
     'Work & Industry':'کار و صنعت','Iran-Born Across Europe':'متولدان ایران در اروپا'};
-  var currentLang = localStorage.getItem('idd_lang') || 'en';
+  var currentLang = 'en';  // Always land in English; Persian is opt-in per session (see header note).
 
   var st = document.createElement('style');
   st.textContent =
@@ -859,7 +863,7 @@ window.addEventListener('hashchange', navigateToHash);
     _langCounted[p]=true;
     if(window.goatcounter && typeof window.goatcounter.count==='function'){ window.goatcounter.count({path:p}); }
   }
-  function setLang(l){ currentLang=l; try{localStorage.setItem('idd_lang',l);}catch(e){} updateChrome(); reloadLoaded(); countLang(l); }
+  function setLang(l){ currentLang=l; updateChrome(); reloadLoaded(); countLang(l); }
 
   // Apply now, at parse time — before DOMContentLoaded→navigateToHash activates iframes,
   // so the first load is already in the right language.
@@ -877,11 +881,11 @@ window.addEventListener('hashchange', navigateToHash);
   // is why this replaced the old location.pathname passthrough. This fires once
   // automatically on load with the landing language; setLang()'s countLang()
   // adds one count if the visitor switches to the other language in-session.
+  // Landing is always English now, so the automatic pageview is always /lang/en.
+  // A visitor who toggles to Persian in-session is counted separately by
+  // setLang()'s countLang('fa'), so the en-vs-fa split still holds.
   window.goatcounter = {
-    path: function() {
-      try { return '/lang/' + (localStorage.getItem('idd_lang') || 'en'); }
-      catch(e) { return '/lang/en'; }
-    }
+    path: function() { return '/lang/en'; }
   };
 </script>
 <script data-goatcounter="https://iraniandiaspora.goatcounter.com/count"
