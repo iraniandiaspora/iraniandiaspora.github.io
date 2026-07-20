@@ -445,7 +445,7 @@ make_ca_educ_butterfly <- function(df, gen_label, id_prefix, height = "450px", s
   }
   p_men <- p_men %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(105, 0), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = TRUE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = list(title = "", showticklabels = !is_fa(), categoryorder = "array", categoryarray = age_levels))
 
   p_women <- plot_ly()
   for (ed in educ_levels) {
@@ -460,9 +460,9 @@ make_ca_educ_butterfly <- function(df, gen_label, id_prefix, height = "450px", s
   }
   p_women <- p_women %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = FALSE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = c(list(title = "", showticklabels = is_fa(), categoryorder = "array", categoryarray = age_levels), if (is_fa()) list(side = "right", automargin = TRUE)))
 
-  p <- subplot(p_men, p_women, shareY = TRUE, titleX = TRUE, margin = 0) %>%
+  p <- subplot(p_men, p_women, shareY = !is_fa(), titleX = TRUE, margin = 0) %>%
     layout(
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
@@ -472,7 +472,7 @@ make_ca_educ_butterfly <- function(df, gen_label, id_prefix, height = "450px", s
         list(text = tr("ca_women"), x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 50, b = 40),
+      margin = list(l = if (is_fa()) 20 else 60, r = if (is_fa()) 60 else 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -509,7 +509,7 @@ make_fos_butterfly <- function(fos_data, gen_label, id_prefix, height = "350px",
   }
   p_men <- p_men %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(105, 0), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = TRUE, categoryorder = "array", categoryarray = y_levels))
+    yaxis = list(title = "", showticklabels = !is_fa(), categoryorder = "array", categoryarray = y_levels))
 
   p_women <- plot_ly()
   for (fc in field_cats) {
@@ -525,9 +525,9 @@ make_fos_butterfly <- function(fos_data, gen_label, id_prefix, height = "350px",
   }
   p_women <- p_women %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = FALSE, categoryorder = "array", categoryarray = y_levels))
+    yaxis = c(list(title = "", showticklabels = is_fa(), categoryorder = "array", categoryarray = y_levels), if (is_fa()) list(side = "right", automargin = TRUE)))
 
-  p <- subplot(p_men, p_women, shareY = TRUE, titleX = TRUE, margin = 0) %>%
+  p <- subplot(p_men, p_women, shareY = !is_fa(), titleX = TRUE, margin = 0) %>%
     layout(
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
@@ -537,7 +537,7 @@ make_fos_butterfly <- function(fos_data, gen_label, id_prefix, height = "350px",
         list(text = tr("ca_women"), x = 0.78, y = 1.05, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 40, b = 40),
+      margin = list(l = if (is_fa()) 20 else 60, r = if (is_fa()) 60 else 20, t = 40, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -593,7 +593,7 @@ make_employment_butterfly <- function(df, gen_val, gen_label, id_prefix, height 
   }
   p_men <- p_men %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(105, 0), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = TRUE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = list(title = "", showticklabels = !is_fa(), categoryorder = "array", categoryarray = age_levels))
 
   p_women <- plot_ly()
   for (cat_name in emp_cats) {
@@ -608,9 +608,9 @@ make_employment_butterfly <- function(df, gen_val, gen_label, id_prefix, height 
   }
   p_women <- p_women %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = FALSE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = c(list(title = "", showticklabels = is_fa(), categoryorder = "array", categoryarray = age_levels), if (is_fa()) list(side = "right", automargin = TRUE)))
 
-  p <- subplot(p_men, p_women, shareY = TRUE, titleX = TRUE, margin = 0) %>%
+  p <- subplot(p_men, p_women, shareY = !is_fa(), titleX = TRUE, margin = 0) %>%
     layout(
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
@@ -620,7 +620,7 @@ make_employment_butterfly <- function(df, gen_val, gen_label, id_prefix, height 
         list(text = tr("ca_women"), x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 50, b = 40),
+      margin = list(l = if (is_fa()) 20 else 60, r = if (is_fa()) 60 else 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -657,7 +657,7 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
   }
   p_men <- p_men %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(105, 0), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = TRUE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = list(title = "", showticklabels = !is_fa(), categoryorder = "array", categoryarray = age_levels))
 
   p_women <- plot_ly()
   for (cat_name in ind_cats) {
@@ -672,9 +672,9 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
   }
   p_women <- p_women %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = FALSE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = c(list(title = "", showticklabels = is_fa(), categoryorder = "array", categoryarray = age_levels), if (is_fa()) list(side = "right", automargin = TRUE)))
 
-  p <- subplot(p_men, p_women, shareY = TRUE, titleX = TRUE, margin = 0) %>%
+  p <- subplot(p_men, p_women, shareY = !is_fa(), titleX = TRUE, margin = 0) %>%
     layout(
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
@@ -684,7 +684,7 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
         list(text = tr("ca_women"), x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 50, b = 40),
+      margin = list(l = if (is_fa()) 20 else 60, r = if (is_fa()) 60 else 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 

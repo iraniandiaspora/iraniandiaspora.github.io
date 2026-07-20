@@ -513,7 +513,7 @@ make_butterfly_educ <- function(df_raw, gen_label, age_collapse = FALSE, height 
   p_men <- p_men %>% layout(
     barmode = "stack",
     xaxis = list(title = "", range = c(105, 0), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = TRUE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = list(title = "", showticklabels = !is_fa(), categoryorder = "array", categoryarray = age_levels))
 
   p_women <- plot_ly()
   for (ed in educ_levels) {
@@ -528,9 +528,9 @@ make_butterfly_educ <- function(df_raw, gen_label, age_collapse = FALSE, height 
   p_women <- p_women %>% layout(
     barmode = "stack",
     xaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = FALSE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = c(list(title = "", showticklabels = is_fa(), categoryorder = "array", categoryarray = age_levels), if (is_fa()) list(side = "right", automargin = TRUE)))
 
-  p <- subplot(p_men, p_women, shareY = TRUE, titleX = TRUE, margin = 0) %>%
+  p <- subplot(p_men, p_women, shareY = !is_fa(), titleX = TRUE, margin = 0) %>%
     layout(
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
@@ -540,7 +540,7 @@ make_butterfly_educ <- function(df_raw, gen_label, age_collapse = FALSE, height 
         list(text = tr("us_women"), x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 50, b = 40),
+      margin = list(l = if (is_fa()) 20 else 60, r = if (is_fa()) 60 else 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -594,7 +594,7 @@ make_butterfly_work <- function(df, gen_val, gen_label, age_collapse = FALSE, he
   }
   p_men <- p_men %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(105, 0), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = TRUE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = list(title = "", showticklabels = !is_fa(), categoryorder = "array", categoryarray = age_levels))
 
   p_women <- plot_ly()
   for (cat_name in cat_order) {
@@ -609,9 +609,9 @@ make_butterfly_work <- function(df, gen_val, gen_label, age_collapse = FALSE, he
   }
   p_women <- p_women %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = FALSE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = c(list(title = "", showticklabels = is_fa(), categoryorder = "array", categoryarray = age_levels), if (is_fa()) list(side = "right", automargin = TRUE)))
 
-  p <- subplot(p_men, p_women, shareY = TRUE, titleX = TRUE, margin = 0) %>%
+  p <- subplot(p_men, p_women, shareY = !is_fa(), titleX = TRUE, margin = 0) %>%
     layout(
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
@@ -621,7 +621,7 @@ make_butterfly_work <- function(df, gen_val, gen_label, age_collapse = FALSE, he
         list(text = tr("us_women"), x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 50, b = 40),
+      margin = list(l = if (is_fa()) 20 else 60, r = if (is_fa()) 60 else 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
@@ -681,7 +681,7 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
   }
   p_men <- p_men %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(105, 0), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = TRUE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = list(title = "", showticklabels = !is_fa(), categoryorder = "array", categoryarray = age_levels))
 
   p_women <- plot_ly()
   for (sp_name in sp_order) {
@@ -697,9 +697,9 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
   }
   p_women <- p_women %>% layout(barmode = "stack",
     xaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
-    yaxis = list(title = "", showticklabels = FALSE, categoryorder = "array", categoryarray = age_levels))
+    yaxis = c(list(title = "", showticklabels = is_fa(), categoryorder = "array", categoryarray = age_levels), if (is_fa()) list(side = "right", automargin = TRUE)))
 
-  p <- subplot(p_men, p_women, shareY = TRUE, titleX = TRUE, margin = 0) %>%
+  p <- subplot(p_men, p_women, shareY = !is_fa(), titleX = TRUE, margin = 0) %>%
     layout(
       showlegend = FALSE,
       hoverlabel = list(showarrow = FALSE),
@@ -709,7 +709,7 @@ make_butterfly_marriage <- function(df, gen_val, gen_label, age_collapse = FALSE
         list(text = tr("us_women"), x = 0.78, y = 1.08, xref = "paper", yref = "paper",
           showarrow = FALSE, font = list(size = 14, family = "Montserrat", color = "#555"))
       ),
-      margin = list(l = 60, r = 20, t = 50, b = 40),
+      margin = list(l = if (is_fa()) 20 else 60, r = if (is_fa()) 60 else 20, t = 50, b = 40),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
