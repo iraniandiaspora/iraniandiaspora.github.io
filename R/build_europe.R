@@ -498,7 +498,15 @@ for (LANG in c("en", "fa")) {
   ts_disp <- vapply(last_points$country, function(c) trimws(htxt(clab(c))), character(1))
   ts_label_map <- paste0("{", paste(sprintf('"%s":"%s"',
     gsub('"', '\\\\"', ts_disp), last_points$geo), collapse = ","), "}")
-  ts_hover_js <- sprintf('<script>(function(){var el=document.getElementById("eu-timeseries");if(!el)return;var M=%s;function look(e){return e.target&&e.target.closest?e.target.closest("text"):null;}el.addEventListener("mouseover",function(e){var t=look(e);if(t&&el.__hlOn){var g=M[t.textContent.trim()];if(g)el.__hlOn(g);}});el.addEventListener("mouseout",function(e){var t=look(e);if(t&&el.__hlOff&&M[t.textContent.trim()])el.__hlOff();});})();</script>', ts_label_map)
+  # Label-hover isolation. Plotly sets pointer-events:none on scatter text AND
+  # SVG text only hit-tests its glyph ink (gaps miss), so neither a DOM listener
+  # on the text nor re-enabling pointer-events is reliable. Instead, after render,
+  # drop a solid invisible <div> over each label's bounding box (they sit in the
+  # right margin, clear of the plot's drag layer) as a real HTML hover target,
+  # matched to its legendgroup, calling the highlight helpers (el.__hlOn/__hlOff
+  # from plotly_div(highlight_hover=TRUE)). Rebuilt on resize so it tracks the
+  # labels. `M` maps each label's rendered text to its geo/legendgroup.
+  ts_hover_js <- sprintf('<script>(function(){var el=document.getElementById("eu-timeseries");if(!el)return;var M=%s;function build(){el.querySelectorAll(".eu-hz").forEach(function(o){o.remove();});if(getComputedStyle(el).position==="static")el.style.position="relative";var er=el.getBoundingClientRect();el.querySelectorAll(".scatterlayer text").forEach(function(t){var g=M[t.textContent.trim()];if(!g)return;var r=t.getBoundingClientRect();if(!r.width)return;var z=document.createElement("div");z.className="eu-hz";z.style.cssText="position:absolute;cursor:pointer;z-index:5;left:"+(r.left-er.left-3)+"px;top:"+(r.top-er.top-2)+"px;width:"+(r.width+6)+"px;height:"+(r.height+4)+"px;";z.addEventListener("mouseenter",function(){if(el.__hlOn)el.__hlOn(g);});z.addEventListener("mouseleave",function(){if(el.__hlOff)el.__hlOff();});el.appendChild(z);});}setTimeout(build,500);window.addEventListener("resize",function(){setTimeout(build,400);});})();</script>', ts_label_map)
 
   # ---------- ASSEMBLE PAGE -------------------------------------------------
   # Map legend labels (names of the color vector ARE the display labels).
