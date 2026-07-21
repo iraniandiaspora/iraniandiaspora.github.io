@@ -462,10 +462,7 @@ for (LANG in c("en", "fa")) {
         size = 12,
         family = "Montserrat"
       ),
-      # "none" (not "skip") so hovering the LABEL still fires plotly_hover — the
-      # highlight_hover JS then isolates that country's line (dims the rest) by
-      # legendgroup. "skip" would suppress the event entirely.
-      hoverinfo = "none",
+      hoverinfo = "skip",
       showlegend = FALSE,
       cliponaxis = FALSE,
       legendgroup = lp$geo
@@ -490,6 +487,18 @@ for (LANG in c("en", "fa")) {
     showlegend = FALSE,
     hovermode = "closest"
   ) %>% config(displayModeBar = FALSE)
+
+  # Label-hover isolation. The country labels are plotly TEXT-only traces, which
+  # carry no hover geometry, so plotly_hover never fires for them (only the lines
+  # do). Instead wire a DOM listener on the chart div: match each label's rendered
+  # text to its legendgroup and call the highlight_hover helpers (el.__hlOn /
+  # el.__hlOff installed by plotly_div(highlight_hover = TRUE)). Delegated on the
+  # div so it survives Plotly resizes; the trimmed textContent match ignores the
+  # leading space and never matches axis ticks / title.
+  ts_disp <- vapply(last_points$country, function(c) trimws(htxt(clab(c))), character(1))
+  ts_label_map <- paste0("{", paste(sprintf('"%s":"%s"',
+    gsub('"', '\\\\"', ts_disp), last_points$geo), collapse = ","), "}")
+  ts_hover_js <- sprintf('<script>(function(){var el=document.getElementById("eu-timeseries");if(!el)return;var M=%s;function look(e){return e.target&&e.target.closest?e.target.closest("text"):null;}el.addEventListener("mouseover",function(e){var t=look(e);if(t&&el.__hlOn){var g=M[t.textContent.trim()];if(g)el.__hlOn(g);}});el.addEventListener("mouseout",function(e){var t=look(e);if(t&&el.__hlOff&&M[t.textContent.trim()])el.__hlOff();});})();</script>', ts_label_map)
 
   # ---------- ASSEMBLE PAGE -------------------------------------------------
   # Map legend labels (names of the color vector ARE the display labels).
@@ -527,6 +536,7 @@ for (LANG in c("en", "fa")) {
     plotly_div("eu-timeseries", pj(p_ts), "460px",
       source = sprintf(tr("eu_ts_src"), EUROSTAT_LINK),
       highlight_hover = TRUE),
+    ts_hover_js,
     '</div>',
     '</div>'
   )
