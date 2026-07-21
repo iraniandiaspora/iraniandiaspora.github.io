@@ -577,6 +577,13 @@ make_employment_butterfly <- function(df, gen_val, gen_label, id_prefix, height 
   cat_disp <- function(c) if (is_fa()) unname(CA_EMPCAT_FA[c]) else c
   gl <- gshort(gen_label)
   age_levels <- sort(unique(d$age_cohort))
+  # fa: the 2nd-gen combined cohort is the raw English "Ages 25+" from the CSV;
+  # translate it here (numeric ranges get digit-converted at runtime, so only
+  # this word-bearing label needs a lookup). EN unchanged (tr() en == "Ages 25+").
+  if (is_fa()) {
+    d$age_cohort <- ifelse(as.character(d$age_cohort) == "Ages 25+", tr("ca_ages_25plus"), as.character(d$age_cohort))
+    age_levels   <- ifelse(age_levels == "Ages 25+", tr("ca_ages_25plus"), age_levels)
+  }
   d_m <- d %>% filter(gender_label == "Men")
   d_f <- d %>% filter(gender_label == "Women")
 
@@ -641,6 +648,13 @@ make_industry_butterfly <- function(df, gen_val, gen_label, id_prefix, height = 
   cat_disp <- function(c) if (is_fa()) unname(CA_INDCAT_FA[c]) else c
   gl <- gshort(gen_label)
   age_levels <- sort(unique(d$age_cohort))
+  # fa: the 2nd-gen combined cohort is the raw English "Ages 25+" from the CSV;
+  # translate it here (numeric ranges get digit-converted at runtime, so only
+  # this word-bearing label needs a lookup). EN unchanged (tr() en == "Ages 25+").
+  if (is_fa()) {
+    d$age_cohort <- ifelse(as.character(d$age_cohort) == "Ages 25+", tr("ca_ages_25plus"), as.character(d$age_cohort))
+    age_levels   <- ifelse(age_levels == "Ages 25+", tr("ca_ages_25plus"), age_levels)
+  }
   d_m <- d %>% filter(gender_label == "Men")
   d_f <- d %>% filter(gender_label == "Women")
 
