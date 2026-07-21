@@ -433,23 +433,26 @@ for (LANG in c("en", "fa")) {
     stringsAsFactors = FALSE
   ))
 
-  # The Netherlands / Austria lines land close together at the right edge.
-  # Nudge overlapping labels vertically so they don't collide.
+  # Every label sits in ONE right-aligned column (LABEL_X below), so de-collide
+  # them vertically: sort by y and push overlapping labels apart by a gap that
+  # scales with the data range (~one label-height regardless of the counts).
   last_points <- last_points[order(last_points$y), ]
-  MIN_GAP <- 3500
+  MIN_GAP <- diff(range(last_points$y)) * 0.05
   for (i in seq_len(nrow(last_points))[-1]) {
-    gap <- last_points$y[i] - last_points$y[i - 1]
-    if (gap < MIN_GAP) {
+    if (last_points$y[i] - last_points$y[i - 1] < MIN_GAP) {
       last_points$y[i] <- last_points$y[i - 1] + MIN_GAP
     }
   }
 
-  # One text trace per country so each label can be paired with its line via
-  # legendgroup (hover dims the OTHER labels).
+  # All labels align at one x just past the data — a right-hand label column, not
+  # per-line-end. This puts a gap between each line's last dot and its label, and
+  # lifts the early-ending lines (UK 2021, France 2019) out from under the lines
+  # that run to 2025. Colour + vertical position pair each label to its line.
+  LABEL_X <- 2026
   for (i in seq_len(nrow(last_points))) {
     lp <- last_points[i, ]
     p_ts <- p_ts %>% add_trace(
-      x = lp$x, y = lp$y,
+      x = LABEL_X, y = lp$y,
       text = htxt(paste0(" ", clab(lp$country))),
       type = "scatter",
       mode = "text",
