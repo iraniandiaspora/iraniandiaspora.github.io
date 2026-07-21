@@ -448,7 +448,7 @@ for (LANG in c("en", "fa")) {
   # per-line-end. This puts a gap between each line's last dot and its label, and
   # lifts the early-ending lines (UK 2021, France 2019) out from under the lines
   # that run to 2025. Colour + vertical position pair each label to its line.
-  LABEL_X <- 2026
+  LABEL_X <- 2025.7
   for (i in seq_len(nrow(last_points))) {
     lp <- last_points[i, ]
     p_ts <- p_ts %>% add_trace(
@@ -462,7 +462,10 @@ for (LANG in c("en", "fa")) {
         size = 12,
         family = "Montserrat"
       ),
-      hoverinfo = "skip",
+      # "none" (not "skip") so hovering the LABEL still fires plotly_hover — the
+      # highlight_hover JS then isolates that country's line (dims the rest) by
+      # legendgroup. "skip" would suppress the event entirely.
+      hoverinfo = "none",
       showlegend = FALSE,
       cliponaxis = FALSE,
       legendgroup = lp$geo
@@ -474,12 +477,14 @@ for (LANG in c("en", "fa")) {
         fa_num(1999, 0, big = FALSE), fa_num(2025, 0, big = FALSE))),
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10), dtick = 5,
-      # Range starts at 1998 — earliest year any series in the chart has data
-      # (France 1999 census, Sweden/Eurostat from 1999). Extends past 2025 so
-      # the right-edge country labels render without clipping.
-      range = c(1998, 2033)),
+      # Last TICK is 2025 (every series ends there) — no 2030 tick, no long empty
+      # tail. Range reaches a hair past 2025 so the label points (x = LABEL_X,
+      # just inside) actually render — plotly culls points outside the range —
+      # and cliponaxis = FALSE lets their text spill into the right-margin white
+      # space (the wide r below). Next tick (2030) is outside the range, so hidden.
+      range = c(1998, 2026)),
     yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
-    margin = list(t = 45, b = 30, l = 60, r = 15),
+    margin = list(t = 45, b = 30, l = 60, r = 120),
     plot_bgcolor = "white",
     paper_bgcolor = "white",
     showlegend = FALSE,
