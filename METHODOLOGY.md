@@ -2,6 +2,8 @@
 
 This page describes how the Iranian Diaspora Dashboard identifies and counts Iranian-origin populations in each country, what data sources are used, and what methodological choices were made.
 
+The dashboard is published in English and Persian (فارسی). Both editions are built from the same data; the English edition is the reference version.
+
 ## Global
 
 Global figures are drawn primarily from the [UN International Migrant Stock](https://www.un.org/development/desa/pd/content/international-migrant-stock) database (2024 revision), which counts people born in Iran who reside in another country. Estimates are based on each country's most recent census or population register. For countries where UN coverage is incomplete, the data are supplemented by [Eurostat](https://ec.europa.eu/eurostat) population-by-country-of-birth tables. For Israel, the 2024 figure uses the CBS register count (38,200) instead of the UN estimate; see the Israel section below for details. The headline total is computed dynamically from the combined data.

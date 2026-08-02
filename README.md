@@ -9,7 +9,7 @@
 
 # Iranian Diaspora Dashboard
 
-Interactive data dashboard comparing Iranian diaspora populations across 17 countries and worldwide.
+Interactive data dashboard comparing Iranian diaspora populations across 17 countries and worldwide. Available in English and Persian (فارسی) — use the language toggle on the site.
 
 **[iraniandiaspora.github.io](https://iraniandiaspora.github.io)**
 
@@ -37,7 +37,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 17 coun
 | Europe overview | Eurostat migr_pop3ctb (19 countries) + Destatis (Germany) + ONS/NRS/NISRA (UK) + BFS (Switzerland) + INSEE (France) | 1998–2025 |
 | Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2025; 1991–2024 |
 | United Kingdom | ONS Census 2021 (England &amp; Wales); Scotland's Census 2022; NISRA Census 2021; ONS custom dataset | 2021–2022 |
-| Netherlands | CBS StatLine population register, Labour Force Survey, household income | 1999–2025 |
+| Netherlands | CBS StatLine population register, Labour Force Survey, household income | 1999–2026 |
 | Sweden | Statistics Sweden (SCB) population register; Eurostat | 1998–2025 |
 | Denmark | Statistics Denmark (DST) population register; Register-based Labour Force Statistics (RAS) | 1980–2026 |
 | Norway | Statistics Norway (SSB) population register; employed immigrants statistics | 1970–2026 |
