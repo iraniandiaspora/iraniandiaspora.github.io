@@ -476,13 +476,17 @@ for (LANG in c("en", "fa")) {
     title = list(text = htxt(sprintf(tr("eu_ts_title"),
         fa_num(1999, 0, big = FALSE), fa_num(2026, 0, big = FALSE))),
       font = list(size = 14, family = "Montserrat")),
-    xaxis = list(title = "", tickfont = list(size = 10), dtick = 5,
-      # Last TICK is 2025 (Denmark's DST line runs to 2026, everything else ends
-      # 2025) — no 2030 tick, no long empty tail. Range reaches a hair past the
-      # last data year so the label points (x = LABEL_X, just inside) actually
-      # render — plotly culls points outside the range — and cliponaxis = FALSE
-      # lets their text spill into the right-margin white space (the wide r
-      # below). Next tick (2030) is outside the range, so hidden.
+    xaxis = list(title = "", tickfont = list(size = 10),
+      # Explicit ticks: 5-year cadence, then the FINAL tick anchored at 2026 —
+      # the newest data year (Denmark's DST line; everything else ends 2025).
+      # A 2025+2026 tick pair collides at this width, and a 2030 tick leaves a
+      # long empty tail, so the last interval is 6 years by design. No ticktext:
+      # plotly's fa locale still Persian-izes the labels on the fa pass. Range
+      # reaches a hair past the last tick so the label points (x = LABEL_X,
+      # just inside) actually render — plotly culls points outside the range —
+      # and cliponaxis = FALSE lets their text spill into the right-margin
+      # white space (the wide r below).
+      tickvals = c(2000, 2005, 2010, 2015, 2020, 2026),
       range = c(1998, 2027)),
     yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
     margin = list(t = 45, b = 30, l = 60, r = 120),
