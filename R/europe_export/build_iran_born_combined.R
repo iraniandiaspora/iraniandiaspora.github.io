@@ -36,13 +36,16 @@ out_csv      <- "data/europe/iran_born_combined.csv"
 #   TR  - Türkiye is its own top-level tab, not in Europe
 #   UK  - added below from the 2021/22 census; Eurostat only has stale pre-Brexit UK
 #   LI  - Liechtenstein microstate (n=22), too small to map
+#   DK  - added below from the DST register; Eurostat's Denmark series ends 2022
+#   CH  - added below from the BFS register; Eurostat's Switzerland series ends
+#         2021 and is the SAME series shifted one year (Eurostat 1-Jan labels)
 # Recency filter (max year >= 2020) drops countries whose only Eurostat data is
 # stale single-year snapshots: Ireland (2011) and Poland (2009). The surviving
 # set is the 9 established countries plus the 11 smaller reporters added
 # 2026-05-31 so visitors from those countries can find themselves on the map:
 # BG, CZ, EE, HU, IS, LT, LU, LV, RO, SI, SK.
 euro <- read_csv(eurostat_csv, show_col_types = FALSE) %>%
-  filter(!geo %in% c("FR", "TR", "UK", "LI")) %>%
+  filter(!geo %in% c("FR", "TR", "UK", "LI", "DK", "CH")) %>%
   group_by(geo) %>%
   filter(max(year) >= 2020) %>%
   ungroup() %>%
@@ -79,6 +82,45 @@ de_data <- tibble(
   source = "Destatis Mikrozensus 2025, Table 12211-53"
 )
 
+# Denmark (Statistics Denmark register) -------------------------------------
+# Eurostat's Denmark Iran-born series ends at 2022: the live migr_pop3ctb API
+# returns nulls for DK 2023-2025 (verified 2026-08-02 —
+# curl '.../migr_pop3ctb?format=JSON&c_birth=IR&sex=T&age=TOTAL&geo=DK&sinceTimePeriod=2020').
+# DST publishes annually, so Denmark uses the national register instead, same
+# pattern as DE/UK/FR. dk_trend.csv gen1 = immigrants ("indvandrere") of
+# Iranian origin; for immigrants DST origin is in practice own country of
+# birth, and the two series agree within ~1.2% in every overlap year
+# 2011-2022 (2022: DST 18,044 vs Eurostat 17,838). The WHOLE series comes
+# from DST (1998+, matching the Eurostat window) rather than splicing, so the
+# line keeps one definition and matches the dk-population page.
+dk_trend <- read_csv("data/denmark/dk_trend.csv", show_col_types = FALSE) %>%
+  filter(year >= 1998)
+dk_data <- tibble(
+  geo = "DK",
+  country = "Denmark",
+  year = dk_trend$year,
+  value = dk_trend$gen1,
+  source = "Statistics Denmark (DST) population register"
+)
+
+# Switzerland (BFS STATPOP register) ----------------------------------------
+# Eurostat's Switzerland series ends at 2021 and is the SAME series as BFS
+# STATPOP with labels shifted one year — Eurostat's 1-Jan-Y figure equals the
+# BFS end-of-(Y-1) stock, digit-for-digit in all 11 overlap years (verified
+# 2026-08-02: join of data/switzerland/ch_trend.csv vs the old Eurostat CH
+# rows; e.g. BFS 2020 = Eurostat 2021 = 14,241). Using ch_trend.csv (2010-2024)
+# keeps one labeling convention, matches the ch-population page, and makes the
+# time-chart footnote ("BFS register, 2010-2024") true — the footnote already
+# claimed BFS while the data was still the stale Eurostat rows.
+ch_trend <- read_csv("data/switzerland/ch_trend.csv", show_col_types = FALSE)
+ch_data <- tibble(
+  geo = "CH",
+  country = "Switzerland",
+  year = ch_trend$year,
+  value = ch_trend$total,
+  source = "BFS STATPOP register"
+)
+
 # UK (ONS Census 2021 + Scotland Census 2022 + NI 2021) --------------------
 # 114,432 = sum of Iran-born across the four UK nations.
 #   England 106,801 + Wales 2,367 + Scotland 4,803 + NI 461 = 114,432
@@ -91,7 +133,7 @@ uk_data <- tibble(
 )
 
 # Combine ------------------------------------------------------------------
-combined <- bind_rows(euro, de_data, uk_data, fr_data) %>%
+combined <- bind_rows(euro, de_data, dk_data, ch_data, uk_data, fr_data) %>%
   arrange(geo, year)
 
 # Write --------------------------------------------------------------------

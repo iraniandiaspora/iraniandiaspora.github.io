@@ -183,7 +183,9 @@ top_eurostat <- head(eurostat_only, 7)
 ts_data <- combined %>% filter(geo %in% top_eurostat$geo)
 
 # Colour each country with a distinct but complementary hue; the seven
-# Eurostat-continuous countries are SE, NL, AT, IT, NO, DK, FI.
+# continuous-series solid lines are SE, NL, AT, IT, NO, DK, FI. Six are
+# Eurostat; Denmark is the DST register (Eurostat's DK series ends 2022 —
+# see build_iran_born_combined.R), so its line runs one year further (2026).
 ts_colors <- c(
   "SE" = "#1a4e72",   # Sweden — dark blue
   "NL" = "#c4793a",   # Netherlands — orange
@@ -236,9 +238,10 @@ for (LANG in c("en", "fa")) {
   NRS_LINK <- sprintf("<a href='https://www.scotlandscensus.gov.uk/' target='_blank' style='color:#2774AE;'>%s</a>", tr("eu_link_nrs"))
   NISRA_LINK <- sprintf("<a href='https://www.nisra.gov.uk/statistics/census/2021-census' target='_blank' style='color:#2774AE;'>%s</a>", tr("eu_link_nisra"))
   BFS_LINK <- sprintf("<a href='https://www.bfs.admin.ch/bfs/en/home/statistics/population.html' target='_blank' style='color:#2774AE;'>%s</a>", tr("eu_link_bfs"))
+  DST_LINK <- sprintf("<a href='https://www.statbank.dk/' target='_blank' style='color:#2774AE;'>%s</a>", tr("eu_link_dst"))
   UK_COMBINED_LINK <- sprintf(tr("eu_uk_combined"), ONS_LINK, NRS_LINK, NISRA_LINK)
 
-  source_note <- sprintf(tr("eu_src_note"), EUROSTAT_LINK, MIKRO_LINK, UK_COMBINED_LINK)
+  source_note <- sprintf(tr("eu_src_note"), EUROSTAT_LINK, MIKRO_LINK, UK_COMBINED_LINK, DST_LINK)
 
   # ---------- CHART 1: Europe choropleth map (top-right) -------------------
   # Uses plotly's built-in country boundaries — no GeoJSON needed.
@@ -448,7 +451,7 @@ for (LANG in c("en", "fa")) {
   # per-line-end. This puts a gap between each line's last dot and its label, and
   # lifts the early-ending lines (UK 2021, France 2019) out from under the lines
   # that run to 2025. Colour + vertical position pair each label to its line.
-  LABEL_X <- 2025.7
+  LABEL_X <- 2026.7
   for (i in seq_len(nrow(last_points))) {
     lp <- last_points[i, ]
     p_ts <- p_ts %>% add_trace(
@@ -471,15 +474,16 @@ for (LANG in c("en", "fa")) {
 
   p_ts <- p_ts %>% layout(
     title = list(text = htxt(sprintf(tr("eu_ts_title"),
-        fa_num(1999, 0, big = FALSE), fa_num(2025, 0, big = FALSE))),
+        fa_num(1999, 0, big = FALSE), fa_num(2026, 0, big = FALSE))),
       font = list(size = 14, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10), dtick = 5,
-      # Last TICK is 2025 (every series ends there) — no 2030 tick, no long empty
-      # tail. Range reaches a hair past 2025 so the label points (x = LABEL_X,
-      # just inside) actually render — plotly culls points outside the range —
-      # and cliponaxis = FALSE lets their text spill into the right-margin white
-      # space (the wide r below). Next tick (2030) is outside the range, so hidden.
-      range = c(1998, 2026)),
+      # Last TICK is 2025 (Denmark's DST line runs to 2026, everything else ends
+      # 2025) — no 2030 tick, no long empty tail. Range reaches a hair past the
+      # last data year so the label points (x = LABEL_X, just inside) actually
+      # render — plotly culls points outside the range — and cliponaxis = FALSE
+      # lets their text spill into the right-margin white space (the wide r
+      # below). Next tick (2030) is outside the range, so hidden.
+      range = c(1998, 2027)),
     yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
     margin = list(t = 45, b = 30, l = 60, r = 120),
     plot_bgcolor = "white",

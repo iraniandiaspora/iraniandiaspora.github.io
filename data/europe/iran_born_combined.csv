@@ -44,18 +44,21 @@ BG,Bulgaria,2012,256,Eurostat migr_pop3ctb
 BG,Bulgaria,2023,549,Eurostat migr_pop3ctb
 BG,Bulgaria,2024,682,Eurostat migr_pop3ctb
 BG,Bulgaria,2025,853,Eurostat migr_pop3ctb
-CH,Switzerland,2001,5284,Eurostat migr_pop3ctb
-CH,Switzerland,2011,8030,Eurostat migr_pop3ctb
-CH,Switzerland,2012,8521,Eurostat migr_pop3ctb
-CH,Switzerland,2013,9091,Eurostat migr_pop3ctb
-CH,Switzerland,2014,9615,Eurostat migr_pop3ctb
-CH,Switzerland,2015,9854,Eurostat migr_pop3ctb
-CH,Switzerland,2016,10142,Eurostat migr_pop3ctb
-CH,Switzerland,2017,11932,Eurostat migr_pop3ctb
-CH,Switzerland,2018,12584,Eurostat migr_pop3ctb
-CH,Switzerland,2019,13035,Eurostat migr_pop3ctb
-CH,Switzerland,2020,13657,Eurostat migr_pop3ctb
-CH,Switzerland,2021,14241,Eurostat migr_pop3ctb
+CH,Switzerland,2010,8030,BFS STATPOP register
+CH,Switzerland,2011,8521,BFS STATPOP register
+CH,Switzerland,2012,9091,BFS STATPOP register
+CH,Switzerland,2013,9615,BFS STATPOP register
+CH,Switzerland,2014,9854,BFS STATPOP register
+CH,Switzerland,2015,10142,BFS STATPOP register
+CH,Switzerland,2016,11932,BFS STATPOP register
+CH,Switzerland,2017,12584,BFS STATPOP register
+CH,Switzerland,2018,13035,BFS STATPOP register
+CH,Switzerland,2019,13657,BFS STATPOP register
+CH,Switzerland,2020,14241,BFS STATPOP register
+CH,Switzerland,2021,14852,BFS STATPOP register
+CH,Switzerland,2022,15545,BFS STATPOP register
+CH,Switzerland,2023,16556,BFS STATPOP register
+CH,Switzerland,2024,17213,BFS STATPOP register
 CZ,Czechia,2009,283,Eurostat migr_pop3ctb
 CZ,Czechia,2010,310,Eurostat migr_pop3ctb
 CZ,Czechia,2011,370,Eurostat migr_pop3ctb
@@ -74,28 +77,35 @@ CZ,Czechia,2023,1200,Eurostat migr_pop3ctb
 CZ,Czechia,2024,1307,Eurostat migr_pop3ctb
 CZ,Czechia,2025,1354,Eurostat migr_pop3ctb
 DE,Germany,2025,267000,"Destatis Mikrozensus 2025, Table 12211-53"
-DK,Denmark,2000,11085,Eurostat migr_pop3ctb
-DK,Denmark,2001,11291,Eurostat migr_pop3ctb
-DK,Denmark,2003,11584,Eurostat migr_pop3ctb
-DK,Denmark,2004,11691,Eurostat migr_pop3ctb
-DK,Denmark,2005,11649,Eurostat migr_pop3ctb
-DK,Denmark,2006,11637,Eurostat migr_pop3ctb
-DK,Denmark,2007,11637,Eurostat migr_pop3ctb
-DK,Denmark,2008,11746,Eurostat migr_pop3ctb
-DK,Denmark,2009,11791,Eurostat migr_pop3ctb
-DK,Denmark,2010,11984,Eurostat migr_pop3ctb
-DK,Denmark,2011,12363,Eurostat migr_pop3ctb
-DK,Denmark,2012,12756,Eurostat migr_pop3ctb
-DK,Denmark,2013,13164,Eurostat migr_pop3ctb
-DK,Denmark,2014,13952,Eurostat migr_pop3ctb
-DK,Denmark,2015,14726,Eurostat migr_pop3ctb
-DK,Denmark,2016,15416,Eurostat migr_pop3ctb
-DK,Denmark,2017,15832,Eurostat migr_pop3ctb
-DK,Denmark,2018,16610,Eurostat migr_pop3ctb
-DK,Denmark,2019,16893,Eurostat migr_pop3ctb
-DK,Denmark,2020,16998,Eurostat migr_pop3ctb
-DK,Denmark,2021,17367,Eurostat migr_pop3ctb
-DK,Denmark,2022,17838,Eurostat migr_pop3ctb
+DK,Denmark,1998,10686,Statistics Denmark (DST) population register
+DK,Denmark,1999,10969,Statistics Denmark (DST) population register
+DK,Denmark,2000,11112,Statistics Denmark (DST) population register
+DK,Denmark,2001,11348,Statistics Denmark (DST) population register
+DK,Denmark,2002,11425,Statistics Denmark (DST) population register
+DK,Denmark,2003,11634,Statistics Denmark (DST) population register
+DK,Denmark,2004,11730,Statistics Denmark (DST) population register
+DK,Denmark,2005,11687,Statistics Denmark (DST) population register
+DK,Denmark,2006,11689,Statistics Denmark (DST) population register
+DK,Denmark,2007,11761,Statistics Denmark (DST) population register
+DK,Denmark,2008,11853,Statistics Denmark (DST) population register
+DK,Denmark,2009,11904,Statistics Denmark (DST) population register
+DK,Denmark,2010,12098,Statistics Denmark (DST) population register
+DK,Denmark,2011,12477,Statistics Denmark (DST) population register
+DK,Denmark,2012,12883,Statistics Denmark (DST) population register
+DK,Denmark,2013,13306,Statistics Denmark (DST) population register
+DK,Denmark,2014,14083,Statistics Denmark (DST) population register
+DK,Denmark,2015,14857,Statistics Denmark (DST) population register
+DK,Denmark,2016,15550,Statistics Denmark (DST) population register
+DK,Denmark,2017,15970,Statistics Denmark (DST) population register
+DK,Denmark,2018,16781,Statistics Denmark (DST) population register
+DK,Denmark,2019,17075,Statistics Denmark (DST) population register
+DK,Denmark,2020,17195,Statistics Denmark (DST) population register
+DK,Denmark,2021,17571,Statistics Denmark (DST) population register
+DK,Denmark,2022,18044,Statistics Denmark (DST) population register
+DK,Denmark,2023,19127,Statistics Denmark (DST) population register
+DK,Denmark,2024,20881,Statistics Denmark (DST) population register
+DK,Denmark,2025,22937,Statistics Denmark (DST) population register
+DK,Denmark,2026,23477,Statistics Denmark (DST) population register
 EE,Estonia,2014,44,Eurostat migr_pop3ctb
 EE,Estonia,2015,47,Eurostat migr_pop3ctb
 EE,Estonia,2016,93,Eurostat migr_pop3ctb

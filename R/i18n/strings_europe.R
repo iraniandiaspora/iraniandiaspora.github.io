@@ -48,8 +48,8 @@ STR <- list(
     en = "A person is counted if their country of birth is Iran, as recorded in each country\u2019s census or population register.",
     fa = "هر فرد در صورتی شمرده می‌شود که کشور محل تولدش ایران باشد، بر پایهٔ سرشماری یا سامانهٔ ثبت جمعیت هر کشور."),
   eu_idbox_sources = list(
-    en = "Most figures come from Eurostat; Germany, the United Kingdom, and Switzerland use their national statistics.",
-    fa = "بیشتر ارقام از Eurostat گرفته شده و برای آلمان، بریتانیا و سوئیس از آمار ملی آن کشورها استفاده شده است."),
+    en = "Most figures come from Eurostat; Germany, the United Kingdom, Denmark, and Switzerland use their national statistics.",
+    fa = "بیشتر ارقام از Eurostat گرفته شده و برای آلمان، بریتانیا، دانمارک و سوئیس از آمار ملی آن کشورها استفاده شده است."),
   eu_idbox_b1_span = list(
     en = "&mdash; %s European countries (country-of-birth tables)",
     fa = "&mdash; %s کشور اروپایی (جدول‌های کشور محل تولد)"),
@@ -82,20 +82,23 @@ STR <- list(
   eu_link_bfs = list(
     en = "Swiss Federal Statistical Office (BFS)",
     fa = "اداره فدرال آمار سوئیس (<bdi>BFS</bdi>)"),
+  eu_link_dst = list(
+    en = "Statistics Denmark (DST) population register",
+    fa = "سامانه ثبت جمعیت اداره آمار دانمارک (<bdi>DST</bdi>)"),
 
   # --- source lines ------------------------------------------------------------
   eu_uk_combined = list(
     en = "%s (England &amp; Wales), %s, and %s",
     fa = "%s (انگلستان و ولز)، %s و %s"),
   eu_src_note = list(
-    en = "Source: %s population by country of birth. Germany from %s. United Kingdom combined from %s.",
-    fa = "منبع: %s جمعیت به تفکیک کشور محل تولد. آلمان از %s. بریتانیا به‌صورت ترکیبی از %s."),
+    en = "Source: %s population by country of birth. Germany from %s. United Kingdom combined from %s. Denmark from the %s.",
+    fa = "منبع: %s جمعیت به تفکیک کشور محل تولد. آلمان از %s. بریتانیا به‌صورت ترکیبی از %s. دانمارک از %s."),
   eu_bar_src_extra = list(
     en = " Countries with fewer than 10,000 Iran-born residents are shown on the map but omitted from this ranking.",
     fa = " کشورهایی با کمتر از 10,000 نفر متولد ایران روی نقشه نشان داده می‌شوند اما از این رتبه‌بندی کنار گذاشته شده‌اند."),
   eu_ts_src = list(
-    en = "Source: %s for the seven solid lines (Sweden, Netherlands, Austria, Italy, Norway, Denmark, Finland). United Kingdom (dotted) is from ONS/NRS/NISRA census points 2001, 2011, and 2021/22. France (dashed) is from INSEE Recensement de la population — census snapshot 1999, then continuous 2006–2019. The INSEE “immigré” definition is narrower than Eurostat’s foreign-born. Switzerland (dashed) is from the BFS register, 2010–2024. Germany is omitted because Eurostat does not publish Iran-born counts for Germany; see the Germany pages.",
-    fa = "منبع: %s برای هفت خط توپُر (سوئد، هلند، اتریش، ایتالیا، نروژ، دانمارک، فنلاند). بریتانیا (خط‌چین نقطه‌ای) از نقاط سرشماری ONS/NRS/NISRA در سال‌های 2001، 2011 و 2021/22. فرانسه (خط‌چین) از Recensement de la population اداره آمار فرانسه — دادهٔ سرشماری 1999 و سپس پیوسته 2006–2019. تعریف “immigré” اداره آمار فرانسه (INSEE) محدودتر از تعریف «متولد خارج» Eurostat است. سوئیس (خط‌چین) از سامانه ثبت BFS، 2010–2024. آلمان کنار گذاشته شده است زیرا Eurostat شمار متولدان ایران را برای آلمان منتشر نمی‌کند؛ صفحه‌های آلمان را ببینید."),
+    en = "Source: %s for six solid lines (Sweden, Netherlands, Austria, Italy, Norway, Finland). Denmark (solid) is from the Statistics Denmark (DST) population register — Eurostat&rsquo;s Denmark series ends in 2022, so the DST register carries the line through 2026. United Kingdom (dotted) is from ONS/NRS/NISRA census points 2001, 2011, and 2021/22. France (dashed) is from INSEE Recensement de la population — census snapshot 1999, then continuous 2006–2019. The INSEE “immigré” definition is narrower than Eurostat’s foreign-born. Switzerland (dashed) is from the BFS register, 2010–2024. Germany is omitted because Eurostat does not publish Iran-born counts for Germany; see the Germany pages.",
+    fa = "منبع: %s برای شش خط توپُر (سوئد، هلند، اتریش، ایتالیا، نروژ، فنلاند). دانمارک (توپُر) از سامانه ثبت جمعیت اداره آمار دانمارک (<bdi>DST</bdi>) است — سری Eurostat برای دانمارک در سال 2022 پایان می‌یابد و سامانه ثبت DST این خط را تا 2026 ادامه می‌دهد. بریتانیا (خط‌چین نقطه‌ای) از نقاط سرشماری ONS/NRS/NISRA در سال‌های 2001، 2011 و 2021/22. فرانسه (خط‌چین) از Recensement de la population اداره آمار فرانسه — دادهٔ سرشماری 1999 و سپس پیوسته 2006–2019. تعریف “immigré” اداره آمار فرانسه (INSEE) محدودتر از تعریف «متولد خارج» Eurostat است. سوئیس (خط‌چین) از سامانه ثبت BFS، 2010–2024. آلمان کنار گذاشته شده است زیرا Eurostat شمار متولدان ایران را برای آلمان منتشر نمی‌کند؛ صفحه‌های آلمان را ببینید."),
 
   # --- map legend swatch labels -----------------------------------------------
   eu_leg_bin1 = list(

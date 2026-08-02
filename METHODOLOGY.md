@@ -49,10 +49,11 @@ The Language page reports the language spoken at home from the ACS Public Use Mi
 
 ## Europe Overview
 
-The Europe overview page combines five source families to show Iran-born populations across 23 countries:
+The Europe overview page combines six source families to show Iran-born populations across 23 countries:
 
-- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for nineteen countries (Austria, Belgium, Bulgaria, Czechia, Denmark, Estonia, Finland, Hungary, Iceland, Italy, Latvia, Lithuania, Luxembourg, Netherlands, Norway, Romania, Slovakia, Slovenia, Sweden), with annual data back to 1998.
+- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for eighteen countries (Austria, Belgium, Bulgaria, Czechia, Estonia, Finland, Hungary, Iceland, Italy, Latvia, Lithuania, Luxembourg, Netherlands, Norway, Romania, Slovakia, Slovenia, Sweden), with annual data back to 1998.
 - **Destatis Mikrozensus 2025** – for Germany, because Eurostat does not publish Iran-born counts for Germany.
+- **[Statistics Denmark (DST)](https://www.dst.dk/en/)** – for Denmark, using the population register, because Eurostat's Denmark series ends in 2022. The two sources agree within about 1% in their overlap years.
 - **National censuses** – for the United Kingdom (combined from ONS, NRS, and NISRA as described below).
 - **[Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html)** – for Switzerland, using the STATPOP register.
 - **[INSEE Recensement de la population](https://www.insee.fr/)** – for France, because INSEE uses a narrower "immigré" definition that is not directly comparable to Eurostat's foreign-born definition.
