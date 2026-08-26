@@ -527,6 +527,7 @@ page_template <- function(title, body_html, has_tabs = FALSE) {
 .tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
   font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
 .tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:focus-visible { outline:2px solid #1a4e72; outline-offset:2px; }
 .tab-btn:hover:not(.active) { background:#e0e0e0; }
 .tab-panel { display:none; }
 .tab-panel.active { display:block; }' else ''
@@ -547,12 +548,12 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .text-card { background:white; border-radius:8px; padding:20px; text-align:center;
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
-.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
-.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px;  display:flex; flex-direction:column; justify-content:center; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
-.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.headline .label { font-size:13px; color:#666; margin-top:4px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
 .pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }

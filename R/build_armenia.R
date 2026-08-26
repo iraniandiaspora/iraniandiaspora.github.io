@@ -48,7 +48,7 @@ body { font-family:"Montserrat",system-ui,sans-serif; color:#222; background:#f6
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; overflow:hidden; min-width:0; }
 .headline { background:white; border-radius:8px; padding:24px 22px; border:1px solid #e0e0e0; text-align:center; display:flex; flex-direction:column; justify-content:center; }
-.headline .label { font-size:14px; color:#555; margin-bottom:4px; }
+.headline .label { font-size:13px; color:#555; margin-bottom:4px; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 @media (max-width:900px) {
   .chart-row { grid-template-columns:1fr; }
@@ -167,7 +167,7 @@ for (LANG in c("en", "fa")) {
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("am_pop_headline_caption"),
       fa_num(am_year, 0, big = FALSE), lnk(ARMSTAT_LINK)), '</div>',
-    '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<div style="margin:16px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
     '<p style="margin-bottom:8px;">', tr("am_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("am_pop_idbox_bullet1"), '</li>',

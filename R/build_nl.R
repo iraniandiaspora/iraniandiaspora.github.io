@@ -318,7 +318,7 @@ for (LANG in c("en", "fa")) {
     '<div class="number">', fmtv(nl_total), '</div>',
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("nl_pop_headline_caption"), lnk(CBS_LINK)), '</div>',
-    '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<div style="margin:16px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
     '<p style="margin-bottom:8px;">', tr("nl_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("nl_pop_idbox_bullet1"), '</li>',
@@ -489,18 +489,18 @@ for (LANG in c("en", "fa")) {
   workinc_body <- paste0(
     '<div class="page-content">',
     sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
     </ul>
   </div>', p1_big, p1_prim, p1_perm, p1_flex, p1_self),
     sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%s</div>
+    <div style="font-size:13px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%s</div>
   </div>', p2_big, p2_prim, p2_sec),
 
     # Chart cell 1: tabbed (Participation | Employment Type)

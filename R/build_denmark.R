@@ -238,7 +238,7 @@ for (LANG in c("en", "fa")) {
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("dk_pop_headline_caption"), lnk(DST_LINK),
       htxt(fa_num(data_yr, 0, big = FALSE))), '</div>',
-    '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<div style="margin:16px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
     '<p style="margin-bottom:8px;">', tr("dk_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("dk_pop_idbox_bullet1"), '</li>',
@@ -310,10 +310,10 @@ for (LANG in c("en", "fa")) {
   workinc_body <- paste0(
     '<div class="chart-row">',
     sprintf('<div class="text-card pt1" style="text-align:center; display:flex; flex-direction:column; justify-content:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <div style="font-size:13.5px; color:#555; margin-top:14px; line-height:1.55; max-width:380px; margin-left:auto; margin-right:auto;">%s</div>
-    <ul style="margin:6px auto 0; padding-left:18px; max-width:380px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <div style="font-size:13px; color:#555; margin-top:14px; line-height:1.55; max-width:380px; margin-left:auto; margin-right:auto;">%s</div>
+    <ul style="margin:6px auto 0; padding-left:18px; max-width:380px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>

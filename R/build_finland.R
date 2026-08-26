@@ -62,12 +62,12 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .text-card { background:white; border-radius:8px; padding:20px; text-align:center;
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
-.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
-.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px;  display:flex; flex-direction:column; justify-content:center; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
-.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.headline .label { font-size:13px; color:#666; margin-top:4px; }
 @media (max-width:900px) {
   body { padding:10px 15px; }
   .chart-row, .text-row { grid-template-columns:1fr !important; }
@@ -228,7 +228,7 @@ for (LANG in c("en", "fa")) {
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("fi_pop_headline_caption"),
       lnk(STATFIN_LINK), fa_num(data_yr, 0, big = FALSE)), '</div>',
-    '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<div style="margin:16px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
     '<p style="margin-bottom:8px;">', tr("fi_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("fi_pop_idbox_bullet1"), '</li>',

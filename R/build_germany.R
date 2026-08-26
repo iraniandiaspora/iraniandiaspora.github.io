@@ -67,6 +67,7 @@ page_template <- function(title, body_html, has_tabs = FALSE, extra_head = "") {
 .tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
   font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
 .tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:focus-visible { outline:2px solid #1a4e72; outline-offset:2px; }
 .tab-btn:hover:not(.active) { background:#e0e0e0; }
 .tab-panel { display:none; }
 .tab-panel.active { display:block; }' else ''
@@ -88,12 +89,12 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
-.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
-.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px; }
+.section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px;  display:flex; flex-direction:column; justify-content:center; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
-.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.headline .label { font-size:13px; color:#666; margin-top:4px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
 .footnote { font-size:12px; color:#6b6b6b; text-align:center; margin:8px 0; font-style:italic; }
@@ -578,7 +579,7 @@ for (LANG in c("en", "fa")) {
     '<div class="number">', fmtv(hl_total), '</div>',
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("de_pop_headline_caption"), lnk(MZ_HEADLINE_LINK)), '</div>',
-    '<div style="margin:14px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<div style="margin:16px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
     '<p style="margin-bottom:8px;">', tr("de_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("de_pop_idbox_bullet1"), '</li>',
@@ -712,17 +713,17 @@ for (LANG in c("en", "fa")) {
   immig_body <- paste0(
     '<div class="page-content">',
     sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
   </div>', im1_big, im1_prim, im1_b1, im1_b2),
     sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
     </ul>
   </div>', im2_big, im2_prim, im2_b1),
@@ -900,10 +901,10 @@ for (LANG in c("en", "fa")) {
   workinc_body <- paste0(
     '<div class="page-content">',
     sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>',
       wi1_big, wi1_prim),
-    sprintf('    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    sprintf('    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
@@ -911,9 +912,9 @@ for (LANG in c("en", "fa")) {
   </div>',
       wi1_b1, wi1_b2, wi1_b3),
     sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1007,9 +1008,9 @@ for (LANG in c("en", "fa")) {
   langedu_body <- paste0(
     '<div class="page-content">',
     sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
@@ -1017,9 +1018,9 @@ for (LANG in c("en", "fa")) {
     </ul>
   </div>', le1_big, le1_prim, le1_b1, le1_b2, le1_b3, le1_b4),
     sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>

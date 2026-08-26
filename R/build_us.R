@@ -87,6 +87,7 @@ page_template <- function(title, body_html, has_tabs = FALSE) {
 .tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
   font-family:"Montserrat",sans-serif; font-size:13px; color:#333; border-radius:4px; margin:0 2px; transition:background 0.15s; white-space:nowrap; }
 .tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:focus-visible { outline:2px solid #1a4e72; outline-offset:2px; }
 .tab-btn:hover:not(.active) { background:#e0e0e0; }
 .tab-panel { display:none; }
 .tab-panel.active { display:block; }' else ''
@@ -108,7 +109,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
-.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
@@ -731,6 +732,17 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
   d$label <- factor(d$label, levels = decile_labels)
   d$hover <- htxt(sprintf(tr("us_income_hover"), d$label, fmtv(d$n), fa_num(d$share, 1)))
 
+  # The two generation charts sit side by side to be read across, so the y-axis
+  # is computed once over BOTH and handed to each. Sizing each to its own max
+  # drew 22.6% and 26.8% at 88% and 90% of their plots -- a four-point gap
+  # rendered as two pixels. Rounded up to a multiple of 5 so the tick set is
+  # identical in both and stays put when the ACS vintage moves.
+  y_top <- ceiling((max(df %>%
+    group_by(gen, decile) %>%
+    summarize(weighted = sum(HHWT, na.rm = TRUE), .groups = "drop_last") %>%
+    mutate(share = weighted / sum(weighted) * 100) %>%
+    ungroup() %>% pull(share)) + 3) / 5) * 5
+
   p <- plot_ly(data = d, x = ~label, y = ~share, type = "scatter", mode = "markers+lines",
     marker = list(color = "#4A90D9", size = 8),
     line = list(color = "#4A90D9", width = 1),
@@ -749,7 +761,7 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
         font = list(size = 15, family = "Montserrat")),
       xaxis = list(title = tr("us_income_xaxis"), titlefont = list(size = 11),
         categoryorder = "array", categoryarray = decile_labels),
-      yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, max(d$share) + 3)),
+      yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, y_top)),
       showlegend = FALSE,
       margin = list(t = 75, b = 70),
       plot_bgcolor = "white", paper_bgcolor = "white",
@@ -758,22 +770,29 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
           showarrow = FALSE, font = list(size = 8, color = "#cc0000"), xanchor = "center"))
     ) %>% config(displayModeBar = FALSE)
 
+  # Every value label sits ABOVE its marker so the row reads as a row. The old
+  # rule dropped labels in the 8-12% band BELOW to dodge the 10% baseline, which
+  # made the reader re-find each label and put one across the line it labels.
+  # The clearance is a PIXEL offset, not a data-space one, so it is unaffected
+  # by the shared y-range above. A label for a value near 10% still lands on the
+  # baseline rule, so each carries a translucent white ground -- that keeps it
+  # legible over the line WITHOUT sending it back below the marker.
   for (i in seq_len(nrow(d))) {
     val <- d$share[i]
-    if (val >= 8 && val <= 12) {
-      y_pos <- val - 3
-    } else {
-      y_pos <- val + 1
-    }
+    y_pos <- val
     lbl <- if (is_fa()) paste0(fa_num(val, 1), "٪") else sprintf("%.1f%%", val)
     if (is_fa()) {
       # fa/RTL: pin xanchor="center" explicitly. The default "auto" resolves to
       # an edge anchor under dir="rtl" (offsetting each label off its point);
       # explicit "center" centers it above/below the point, matching EN.
       p <- p %>% add_annotations(x = d$label[i], y = y_pos, text = lbl,
-        xanchor = "center", showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
+        xanchor = "center", yanchor = "bottom", yshift = 11,
+        bgcolor = "rgba(255,255,255,0.85)", borderpad = 1,
+        showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
     } else {
       p <- p %>% add_annotations(x = d$label[i], y = y_pos, text = lbl,
+        yanchor = "bottom", yshift = 11,
+        bgcolor = "rgba(255,255,255,0.85)", borderpad = 1,
         showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
     }
   }
@@ -905,12 +924,12 @@ p_citizen <- plot_ly(data = citizen, x = ~disp, y = ~n, type = "bar",
 immig_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
   </div>', htxt(as.character(fg_median_year)),
     htxt(sprintf(tr("us_immig_c1_primary"), fa_num(fg_median_year, 0, big = FALSE)))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
   </div>', tr("us_immig_c2_big"),
     htxt(sprintf(tr("us_immig_c2_primary"), fa_num(pct_nat, 0), fa_num(pct_usborn, 0)))),
@@ -994,9 +1013,9 @@ cat_leg <- make_html_legend(adm_cat_colors, labels = adm_leg_labels, keys = name
 adm_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
@@ -1006,13 +1025,13 @@ adm_body <- paste0(
     htxt(tr("us_adm_c1_b1")), htxt(tr("us_adm_c1_b2")), htxt(tr("us_adm_c1_b3"))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">%s</div>
-    <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.6;">
+    <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.6;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
     </ul>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1036,9 +1055,9 @@ cat("Building us-education...\n")
 educ_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
     </ul>
   </div>',
@@ -1046,9 +1065,9 @@ educ_body <- paste0(
     htxt(sprintf(tr("us_educ_c1_primary"), fa_num(g1_young_m, 0))),
     htxt(sprintf(tr("us_educ_c1_b1"), fa_num(g1_old_m, 0), fa_num(g1_old_f, 0)))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
     </ul>
   </div>',
@@ -1142,9 +1161,9 @@ p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h"
 work_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1154,9 +1173,9 @@ work_body <- paste0(
     htxt(sprintf(tr("us_work_c1_b1"), fa_num(cl_f$pub, 0), fa_num(cl_m$pub, 0), fa_num(cl_f$np, 0), fa_num(cl_m$np, 0))),
     htxt(sprintf(tr("us_work_c1_b2"), fa_num(cl_m$self, 0), fa_num(cl_f$self, 0), fa_num(cl_g1$self, 0), fa_num(cl_g2$self, 0)))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1217,13 +1236,13 @@ marriage_body <- paste0(
     g2_white <- round(sum(g2$PERWT[g2$spouse == "Other White"]) / sum(g2$PERWT) * 100)
     paste0(
       sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
   </div>', htxt(sprintf(tr("us_bignum_pct"), fa_num(g1_pct, 0))), htxt(tr("us_marriage_c1_primary"))),
       sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:10px auto 0; padding-left:18px; max-width:400px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:10px auto 0; padding-left:18px; max-width:400px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1253,9 +1272,9 @@ cat("Building us-income...\n")
 income_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1265,9 +1284,9 @@ income_body <- paste0(
     htxt(tr("us_income_c1_b1")),
     htxt(sprintf(tr("us_income_c1_b2"), fa_num(round(fg_d1), 0)))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1306,9 +1325,9 @@ lang_other_str <- paste(
 lang_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
@@ -1320,9 +1339,9 @@ lang_body <- paste0(
     sprintf(tr("us_lang_c1_b2"), lang_other_str),
     htxt(sprintf(tr("us_lang_c1_b3"), fa_num(g1_lpct$pct_english_only, 0)))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
@@ -1428,7 +1447,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
-.section-title { font-size:16px; font-weight:600; text-align:center; margin:16px 0 8px; }
+.section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
 @media (max-width:900px) {
@@ -1454,15 +1473,17 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .map-legend { position:relative; top:auto; right:auto; margin-top:8px; box-shadow:none; border:1px solid #e0e0e0; }
 }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center;
-  border:1px solid #e0e0e0; margin-bottom:20px; }
+  border:1px solid #e0e0e0; margin-bottom:20px;
+  display:flex; flex-direction:column; justify-content:center; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
-.headline .label { font-size:14px; color:#666; margin-top:4px; }
+.headline .label { font-size:13px; color:#666; margin-top:4px; }
 .tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
 .tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
   font-family:"Montserrat",sans-serif; font-size:13px; }
 .tab-btn.active { background:#2774AE; color:white; font-weight:600; border-color:#2774AE; }
+.tab-btn:focus-visible { outline:2px solid #1a4e72; outline-offset:2px; }
 .tab-panel { display:none; }
 .tab-panel.active { display:block; }
 .map-container { position:relative; width:100%; }
@@ -1484,7 +1505,7 @@ a:hover { color: #1a4e72 !important; text-decoration: underline; }
   <div class="label">', tr("us_pop_headline_label"), '</div>
   <div class="number">794,915</div>
   <div class="label" style="margin-top:6px; font-size:13px; color:#555;">', tr("us_pop_caption"), '</div>
-  <div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">
+  <div style="margin:16px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">
     <p style="margin-bottom:8px;">', tr("us_pop_idbox_intro"), '</p>
     <ul style="padding-left:20px; margin:0; line-height:1.5;">
       <li>', tr("us_pop_idbox_b1"), '</li>

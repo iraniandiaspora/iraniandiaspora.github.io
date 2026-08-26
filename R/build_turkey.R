@@ -212,7 +212,7 @@ for (LANG in c("en", "fa")) {
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("tr_pop_headline_caption"),
       lnk(TUIK_LINK), fa_num(data_yr, 0, big = FALSE)), '</div>',
-    '<div style="margin:14px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7;">',
+    '<div style="margin:16px auto 0; max-width:440px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
     '<p style="margin-bottom:8px;">', tr("tr_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("tr_pop_idbox_bullet1"), '</li>',
@@ -304,7 +304,7 @@ for (LANG in c("en", "fa")) {
     '<div class="page-content">',
     # pt1: factoid above pc1 (citizens trend). Iranian-citizen growth 2014→peak.
     sprintf('<div class="text-card pt1" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s×</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s×</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
   </div>',
       htxt(format(cit_growth)),
@@ -313,9 +313,9 @@ for (LANG in c("en", "fa")) {
         fa_num(cit_peak_yr, 0, big = FALSE), fmtv(cit_peak))),
     # pt2: factoid above pc2 (permits by type).
     sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:36px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
+    <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13.5px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
