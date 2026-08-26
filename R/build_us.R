@@ -1024,17 +1024,19 @@ adm_body <- paste0(
     fmtv(sum(lpr$total)), htxt(tr("us_adm_c1_primary")),
     htxt(tr("us_adm_c1_b1")), htxt(tr("us_adm_c1_b2")), htxt(tr("us_adm_c1_b3"))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">%s</div>
-    <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.6;">
+    <div style="margin:4px auto 0; max-width:460px; text-align:left; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">
+    <div style="font-size:13px; font-weight:700; color:#1a4e72; line-height:1.4; margin-bottom:9px;">%s</div>
+    <ul style="margin:0; padding-left:18px; font-size:13px; color:#555; line-height:1.6;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
     </ul>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
+    <ul style="margin:12px 0 0; padding-left:18px; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
+    </div>
   </div>', tr("us_adm_c2_head"), tr("us_adm_c2_b1"), tr("us_adm_c2_b2"),
     tr("us_adm_c2_b3"), tr("us_adm_c2_b4"), htxt(tr("us_adm_c2_b5")), htxt(tr("us_adm_c2_b6"))),
   '<div class="chart-card pc1">', plotly_div("lpr-total", pj(p_lpr_total), "450px", source = SRC_LPR), '</div>',
@@ -1455,7 +1457,8 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   .text-row, .chart-row { grid-template-columns:1fr !important; }
   .text-row-4 { grid-template-columns:1fr 1fr; }
   .text-row, .text-row-4 { order:1; }
-  .headline .number { font-size:28px; }
+  
+.headline .number { font-size:28px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
@@ -1474,7 +1477,10 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center;
   border:1px solid #e0e0e0; margin-bottom:20px;
-  display:flex; flex-direction:column; justify-content:center; }
+  display:flex; flex-direction:column; }
+.headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
+.headline::before { flex-grow:1; }
+.headline::after { flex-grow:1.35; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }

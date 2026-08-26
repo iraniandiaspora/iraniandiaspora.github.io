@@ -247,7 +247,7 @@ for (LANG in c("en", "fa")) {
     '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">', tr("dk_pop_thirdgen_note"), '</p>',
     '</div>',
     '</div>',
-    '<div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">',
+    '<div class="chart-card" style="display:flex; flex-direction:column;">',
     gen_boxes,
     sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0 0; padding-right:2px;">%s</p>', DST_SOURCE),
     '</div>',
@@ -309,7 +309,7 @@ for (LANG in c("en", "fa")) {
 
   workinc_body <- paste0(
     '<div class="chart-row">',
-    sprintf('<div class="text-card pt1" style="text-align:center; display:flex; flex-direction:column; justify-content:center;">
+    sprintf('<div class="text-card pt1" style="text-align:center; display:flex; flex-direction:column;">
     <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
     <div style="font-size:13px; color:#555; margin-top:14px; line-height:1.55; max-width:380px; margin-left:auto; margin-right:auto;">%s</div>

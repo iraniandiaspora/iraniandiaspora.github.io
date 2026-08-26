@@ -408,14 +408,16 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">', tr("gl_card1_primary"), '</div>
 </div>
 <div class="text-card global-text2" style="text-align:center;">
-  <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">', tr("gl_card2_heading"), '</div>
-  <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
+  <div style="margin:4px auto 0; max-width:460px; text-align:left; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">
+  <div style="font-size:13px; font-weight:700; color:#1a4e72; line-height:1.4; margin-bottom:9px;">', tr("gl_card2_heading"), '</div>
+  <ul style="margin:0; padding-left:18px; font-size:13px; color:#555; line-height:1.55;">
     <li>', tr("gl_card2_bullet1"), '</li>
     <li>', tr("gl_card2_bullet2"), '</li>
     <li>', tr("gl_card2_bullet3"), '</li>
     <li>', tr("gl_card2_bullet4"), '</li>
     <li style="margin-top:8px; font-weight:700; color:#333;">', tr("gl_card2_note"), '</li>
   </ul>
+  </div>
 </div>
 <div class="chart-card global-area" style="overflow:visible;">
   <div class="chart-with-legend" style="display:flex; align-items:stretch;', if (is_fa()) " flex-direction:row-reverse;" else "", '">

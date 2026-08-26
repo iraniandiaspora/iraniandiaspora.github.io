@@ -43,7 +43,8 @@ body { font-family:"Vazirmatn","Montserrat",sans-serif; background:#fafafa; colo
   .text-row, .chart-row { grid-template-columns:1fr !important; }
   .text-row-4 { grid-template-columns:1fr 1fr; }
   .text-row, .text-row-4 { order:1; }
-  .headline .number { font-size:28px; }
+  
+.headline .number { font-size:28px; }
   .headline { padding:20px 15px; }
   .section-title { font-size:14px; }
   .tab-bar { flex-wrap:wrap; gap:4px; }
@@ -62,7 +63,10 @@ body { font-family:"Vazirmatn","Montserrat",sans-serif; background:#fafafa; colo
 }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center;
   border:1px solid #e0e0e0; margin-bottom:20px;
-  display:flex; flex-direction:column; justify-content:center; }
+  display:flex; flex-direction:column; }
+.headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
+.headline::before { flex-grow:1; }
+.headline::after { flex-grow:1.35; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }

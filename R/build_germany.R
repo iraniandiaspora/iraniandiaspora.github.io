@@ -90,7 +90,10 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; }
 .section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
-.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px;  display:flex; flex-direction:column; justify-content:center; }
+.headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px;  display:flex; flex-direction:column; }
+.headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
+.headline::before { flex-grow:1; }
+.headline::after { flex-grow:1.35; }
 .headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
@@ -196,7 +199,7 @@ hl_for   <- hl$value_thousands[hl$category == "foreign_citizens"] * 1000
 # Takes a PRE-FORMATTED value string so the fa edition can pass Persian digits;
 # en passes fmtv() = format(val, big.mark=","), keeping the output byte-identical.
 make_mig_box <- function(val_str, pct, label, sublabel, color) {
-  sprintf('<div style="background:%s; border-radius:6px; padding:28px 18px; text-align:center; color:white; flex:1; min-width:0; display:flex; flex-direction:column; justify-content:center; min-height:170px;">
+  sprintf('<div style="background:%s; border-radius:6px; padding:28px 18px; text-align:center; color:white; flex:1; min-width:0; display:flex; flex-direction:column; min-height:170px;">
     <div class="measure-num" style="font-size:38px; font-weight:700; line-height:1.1;">%s</div>
     <div class="measure-label" style="font-size:14px; margin-top:6px; font-weight:600;">%s</div>
     <div style="font-size:12px; opacity:0.9; margin-top:3px;">%s</div>
@@ -1026,7 +1029,7 @@ for (LANG in c("en", "fa")) {
     </ul>
   </div>', le2_big, le2_prim, le2_b1, le2_b2),
     # LEFT: language chart (standalone, no persian sidebar)
-    '<div class="chart-card pc1" style="display:flex; flex-direction:column; justify-content:center;">',
+    '<div class="chart-card pc1" style="display:flex; flex-direction:column;">',
     plotly_div("de-lang", pj(p_lang), "320px",
       source = MZ_SIMPLE,
       legend_html = lang_leg, highlight_hover = TRUE),

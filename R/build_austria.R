@@ -169,7 +169,7 @@ for (LANG in c("en", "fa")) {
     '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">', tr("at_pop_thirdgen_note"), '</p>',
     '</div>',
     '</div>',
-    '<div class="chart-card" style="display:flex; flex-direction:column; justify-content:center;">',
+    '<div class="chart-card" style="display:flex; flex-direction:column;">',
     sex_boxes,
     sprintf('<p style="font-size:11px; color:#666; text-align:right; margin:10px 0 0 0; padding-right:2px;">%s</p>', CENSUS_SOURCE),
     '</div>',
