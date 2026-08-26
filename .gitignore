@@ -6,3 +6,16 @@
 *.Rproj
 .httr-oauth
 /.quarto/
+
+# Dropbox resolves a sync conflict by renaming a directory aside as "<name> 2",
+# and renv/.gitignore lists only the canonical names (library/, staging/, ...).
+# So a conflicted copy is git-VISIBLE, and `git add -A` would commit a
+# multi-megabyte dematerialised library. Patterns live here rather than in
+# renv/.gitignore because that file is renv-managed and gets rewritten.
+renv/library*/
+renv/staging*/
+renv/local*/
+renv/cellar*/
+renv/lock*/
+renv/python*/
+renv/sandbox*/
