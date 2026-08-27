@@ -27,7 +27,10 @@
 <style>
 body { font-family:"Vazirmatn","Montserrat",sans-serif; color:#222; background:#f6f7f9; margin:0; padding:16px 14px 28px; box-sizing:border-box; overflow-x:hidden; }
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
-.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; overflow:hidden; min-width:0; }
+.chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; overflow:hidden; min-width:0; display:flex; flex-direction:column; }
+.chart-card::before, .chart-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
+.chart-card::before { flex-grow:1; }
+.chart-card::after { flex-grow:1.35; }
 .headline { background:white; border-radius:8px; padding:24px 22px; border:1px solid #e0e0e0; text-align:center; display:flex; flex-direction:column; }
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
