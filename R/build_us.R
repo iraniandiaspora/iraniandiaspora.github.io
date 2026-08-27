@@ -1024,19 +1024,17 @@ adm_body <- paste0(
     fmtv(sum(lpr$total)), htxt(tr("us_adm_c1_primary")),
     htxt(tr("us_adm_c1_b1")), htxt(tr("us_adm_c1_b2")), htxt(tr("us_adm_c1_b3"))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="margin:4px auto 0; max-width:460px; text-align:left; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">
-    <div style="font-size:13px; font-weight:700; color:#1a4e72; line-height:1.4; margin-bottom:9px;">%s</div>
-    <ul style="margin:0; padding-left:18px; font-size:13px; color:#555; line-height:1.6;">
+    <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">%s</div>
+    <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.6;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
     </ul>
-    <ul style="margin:12px 0 0; padding-left:18px; font-size:13px; color:#555; line-height:1.55;">
+    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
     </ul>
-    </div>
   </div>', tr("us_adm_c2_head"), tr("us_adm_c2_b1"), tr("us_adm_c2_b2"),
     tr("us_adm_c2_b3"), tr("us_adm_c2_b4"), htxt(tr("us_adm_c2_b5")), htxt(tr("us_adm_c2_b6"))),
   '<div class="chart-card pc1">', plotly_div("lpr-total", pj(p_lpr_total), "450px", source = SRC_LPR), '</div>',

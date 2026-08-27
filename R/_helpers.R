@@ -144,10 +144,15 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
     for (i in seq_len(n)) {
       if (is.na(end_text[i]) || !nzchar(end_text[i])) next   # blank -> no value label
       val_anns[[length(val_anns) + 1L]] <- list(
-        # xanchor always "left" — same Plotly RTL double-shift fix as the
-        # category labels above; xshift still flips (physical px nudge off the
-        # bar tip: +5 right on en, -5 left on fa).
-        x = ends[i], xref = "x", xanchor = "left",
+        # xanchor DIFFERS from the category labels above, and the difference is
+        # real: those are xref="paper" and hit Plotly's RTL double-shift, so they
+        # need "left". These are xref="x" on a REVERSED axis and do NOT — with
+        # "left" the label starts at the bar tip and runs rightward INTO the bar.
+        # Measured on au-education.fa 2026-08-26: all 7 labels overlapped their
+        # bar by 8-11px (label left edge landed within 2px of the anchor, i.e.
+        # literal left), against 0 overlaps in en. "right" puts the label's right
+        # edge on the anchor so it extends away from the bar, matching en.
+        x = ends[i], xref = "x", xanchor = if (fa) "right" else "left",
         xshift = if (fa) -5 else 5, y = i - 1, yref = "y", yanchor = "middle",
         text = end_text[i], showarrow = FALSE,
         font = list(size = 11, family = "Montserrat, sans-serif", color = "#555"))
