@@ -169,7 +169,7 @@ for (LANG in c("en", "fa")) {
     '<p style="margin-bottom:8px;">', tr("fr_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("fr_pop_idbox_bullet1"), '</li>',
-    '</ul>',
+    '</ul></div><div style="margin:10px auto 0; max-width:440px; text-align:left;">',
     sprintf('<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">%s</p>',
       sprintf(tr("fr_pop_law_note"), fa_num(data_yr, 0, big = FALSE))),
     '</div>',

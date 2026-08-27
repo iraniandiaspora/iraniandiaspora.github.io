@@ -223,7 +223,7 @@ for (LANG in c("en", "fa")) {
     '<p style="margin-bottom:8px;">', tr("it_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("it_pop_idbox_bullet1"), '</li>',
-    '</ul>',
+    '</ul></div><div style="margin:10px auto 0; max-width:440px; text-align:left;">',
     '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">', tr("it_pop_thirdgen_note"), '</p>',
     '</div>',
     '</div>',

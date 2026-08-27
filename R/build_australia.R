@@ -695,7 +695,7 @@ for (LANG in c("en", "fa")) {
     '<li>', tr("au_pop_idbox_b2"), '</li>',
     '<li>', tr("au_pop_idbox_b3"), '</li>',
     '<li>', tr("au_pop_idbox_b4"), '</li>',
-    '</ul>',
+    '</ul></div><div style="margin:10px auto 0; max-width:440px; text-align:left;">',
     '<p style="margin-top:10px; font-size:11px; color:#999; line-height:1.5;">', tr("au_pop_idbox_note"), '</p>',
     '</div>',
     '</div>',
