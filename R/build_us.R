@@ -1027,14 +1027,14 @@ adm_body <- paste0(
     fmtv(sum(lpr$total)), htxt(tr("us_adm_c1_primary")),
     htxt(tr("us_adm_c1_b1")), htxt(tr("us_adm_c1_b2")), htxt(tr("us_adm_c1_b3"))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="font-size:15px; font-weight:700; color:#1a4e72; line-height:1.45;">%s</div>
-    <ul style="margin:10px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.6;">
+    <div style="margin:0 auto; max-width:420px; text-align:left; font-size:13px; font-weight:700; color:#1a4e72; line-height:1.4;">%s</div>
+    <ul style="margin:9px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.6;">
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
       <li>%s</li>
     </ul>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
+    <ul style="margin:13px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55; border-top:1px solid #dbe6f0; padding-top:13px;">
       <li>%s</li>
       <li>%s</li>
     </ul>
