@@ -244,7 +244,7 @@ for (LANG in c("en", "fa")) {
     county$county_name, fmtv(county$count), fa_num(county$pct, 1)))
 
   p_county <- plot_ly() %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = se_geojson,
       locations = county$join_name, z = county$count,
       featureidkey = "properties.name",
@@ -256,8 +256,8 @@ for (LANG in c("en", "fa")) {
       colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
       marker = list(line = list(color = "white", width = 1), opacity = 0.85)
     ) %>% layout(
-      mapbox = list(style = "white-bg",
-        center = list(lon = 17, lat = 62), zoom = 3.3),
+      geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
       margin = list(t = 10, b = 10, l = 0, r = 0),
       paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)

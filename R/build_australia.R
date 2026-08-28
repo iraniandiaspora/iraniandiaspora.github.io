@@ -586,7 +586,7 @@ for (LANG in c("en", "fa")) {
   state_hover <- htxt(sprintf(tr("au_map_hover"), state_data$NAME,
     fmtv(state_data$count), fa_num(state_data$pct, 1)))
   p_state_map <- plot_ly() %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = state_geojson,
       locations = state_data$NAME, z = state_data$count,
       featureidkey = "properties.NAME",
@@ -596,7 +596,8 @@ for (LANG in c("en", "fa")) {
       showscale = FALSE,
       marker = list(line = list(color = "white", width = 1), opacity = 0.85)
     ) %>% layout(
-      mapbox = list(style = "white-bg", center = list(lon = 134, lat = -28), zoom = 3),
+      geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
       margin = list(t = 10, b = 10, l = 0, r = 0), paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 

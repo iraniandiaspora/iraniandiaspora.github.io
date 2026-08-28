@@ -191,7 +191,7 @@ for (LANG in c("en", "fa")) {
 
   # --- Canton choropleth map -----------------------------------------------
   p_canton_map <- plot_ly() %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = ch_geojson,
       locations = canton$canton_name, z = canton$iran_born,
       featureidkey = "properties.name",
@@ -204,8 +204,8 @@ for (LANG in c("en", "fa")) {
       colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
       marker = list(line = list(color = "white", width = 1), opacity = 0.85)
     ) %>% layout(
-      mapbox = list(style = "white-bg",
-        center = list(lon = 8.2, lat = 46.8), zoom = 5.8),
+      geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
       margin = list(t = 10, b = 10, l = 0, r = 0),
       paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)

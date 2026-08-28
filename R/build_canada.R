@@ -832,7 +832,7 @@ for (LANG in c("en", "fa")) {
     prov_data$province, fmtv(round(prov_data$pop)),
     fa_num(prov_data$pop / prov_total * 100, 1)))
   p_prov_map <- plot_ly() %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = prov_geojson_url,
       locations = prov_data$province, z = prov_data$pop,
       featureidkey = "properties.name",
@@ -843,11 +843,8 @@ for (LANG in c("en", "fa")) {
       showscale = FALSE,
       marker = list(line = list(color = "white", width = 1), opacity = 0.85)
     ) %>% layout(
-      mapbox = list(
-        style = "white-bg",
-        center = list(lon = -96, lat = 55),
-        zoom = 2.5
-      ),
+      geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
       margin = list(t = 10, b = 10, l = 0, r = 0),
       paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
@@ -855,7 +852,7 @@ for (LANG in c("en", "fa")) {
   ont_hover <- htxt(sprintf(tr("ca_ont_hover"),
     ont_data$`Region Name`, fmtv(round(ont_data$pop))))
   p_ont_map <- plot_ly() %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = ont_geojson,
       locations = ont_data$GeoUID,
       z = ont_data$pop,
@@ -868,11 +865,8 @@ for (LANG in c("en", "fa")) {
       marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
     ) %>%
     layout(
-      mapbox = list(
-        style = "white-bg",
-        center = list(lon = -79.5, lat = 44),
-        zoom = 4.5
-      ),
+      geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
       margin = list(t = 10, b = 10, l = 0, r = 0),
       paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)

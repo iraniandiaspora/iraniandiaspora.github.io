@@ -173,7 +173,7 @@ for (LANG in c("en", "fa")) {
   # --- Regional choropleth map ------------------------------------------------
   if (has_geojson) {
     p_map <- plot_ly() %>%
-      add_trace(type = "choroplethmapbox",
+      add_trace(type = "choropleth",
         geojson = it_geojson,
         locations = region$region_code,
         z = region$iran_born,
@@ -189,8 +189,8 @@ for (LANG in c("en", "fa")) {
         colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
         marker = list(line = list(color = "white", width = 1), opacity = 0.85)
       ) %>% layout(
-        mapbox = list(style = "white-bg",
-          center = list(lon = 12.5, lat = 42.5), zoom = 4.5),
+        geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
         margin = list(t = 10, b = 10, l = 0, r = 0),
         paper_bgcolor = "white"
       ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)

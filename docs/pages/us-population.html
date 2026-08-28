@@ -173,8 +173,7 @@ const base = window.location.href.replace(/\/[^\/]*$/, "/");
 // --- State Map ---
 const stateMap = new maplibregl.Map({
   container: "state-map",
-  style: { version: 8, sources: {}, glyphs: null,
-           layers: [{ id: "bg", type: "background", paint: { "background-color": "#ffffff" } }] },
+  style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
   center: [-98.5, 39.8],
   zoom: window.innerWidth < 600 ? 2.1 : 2.8,
   minZoom: 2,
@@ -234,8 +233,7 @@ function initCountyMap() {
   countyMapInited = true;
   countyMap = new maplibregl.Map({
     container: "county-map",
-    style: { version: 8, sources: {}, glyphs: null,
-           layers: [{ id: "bg", type: "background", paint: { "background-color": "#ffffff" } }] },
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
     center: [-119.5, 37.5],
     zoom: 4.2,
     minZoom: 4,
@@ -297,8 +295,7 @@ function initLaMap() {
   laMapInited = true;
   laMap = new maplibregl.Map({
     container: "la-map",
-    style: { version: 8, sources: {}, glyphs: null,
-           layers: [{ id: "bg", type: "background", paint: { "background-color": "#ffffff" } }] },
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
     center: [-118.3, 34.05],
     zoom: 7.5,
     minZoom: 7,

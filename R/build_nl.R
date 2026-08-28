@@ -190,7 +190,7 @@ for (LANG in c("en", "fa")) {
   # --- Province choropleth map -----------------------------------------------
   if (has_geojson) {
     p_nl_map <- plot_ly() %>%
-      add_trace(type = "choroplethmapbox",
+      add_trace(type = "choropleth",
         geojson = nl_geojson,
         locations = prov$province_code,
         z = prov$count,
@@ -206,11 +206,8 @@ for (LANG in c("en", "fa")) {
         colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
         marker = list(line = list(color = "white", width = 1), opacity = 0.92)
       ) %>% layout(
-        mapbox = list(
-          style = "white-bg",
-          center = list(lon = 5.3, lat = 52.15),
-          zoom = 5.8
-        ),
+        geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
         margin = list(t = 10, b = 10, l = 0, r = 0),
         paper_bgcolor = "white"
       ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)

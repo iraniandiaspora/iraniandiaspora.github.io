@@ -303,7 +303,7 @@ for (LANG in c("en", "fa")) {
 
   # --- Choropleth map (region names stay Latin; only surrounding text fa) -----
   p_uk_map <- plot_ly() %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = uk_geojson,
       locations = region_df$region_code,
       z = region_df$iran_born,
@@ -319,8 +319,8 @@ for (LANG in c("en", "fa")) {
       colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
       marker = list(line = list(color = "white", width = 1), opacity = 0.92)
     ) %>% layout(
-      mapbox = list(style = "white-bg",
-        center = list(lon = -4.0, lat = 54.5), zoom = 4.2),
+      geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
       margin = list(t = 10, b = 10, l = 0, r = 0),
       paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)

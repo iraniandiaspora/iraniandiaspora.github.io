@@ -528,7 +528,7 @@ for (LANG in c("en", "fa")) {
     fmtv(bund_map_visible$value), fa_num(bund_map_visible$value / hl_total * 100, 1)))
 
   p_de_map <- plot_ly() %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = de_geojson,
       locations = bund_map_suppressed$land,
       z = rep(1, nrow(bund_map_suppressed)),
@@ -540,7 +540,7 @@ for (LANG in c("en", "fa")) {
       showscale = FALSE,
       marker = list(line = list(color = "white", width = 1), opacity = 0.7)
     ) %>%
-    add_trace(type = "choroplethmapbox",
+    add_trace(type = "choropleth",
       geojson = de_geojson,
       locations = bund_map_visible$land,
       z = bund_map_visible$value,
@@ -553,11 +553,8 @@ for (LANG in c("en", "fa")) {
       colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
       marker = list(line = list(color = "white", width = 1), opacity = 0.9)
     ) %>% layout(
-      mapbox = list(
-        style = "white-bg",
-        center = list(lon = 10.5, lat = 51.2),
-        zoom = 4.3
-      ),
+      geo = list(fitbounds = "locations", visible = FALSE, bgcolor = "white",
+        projection = list(type = "mercator")),
       margin = list(t = 10, b = 10, l = 0, r = 0),
       paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
