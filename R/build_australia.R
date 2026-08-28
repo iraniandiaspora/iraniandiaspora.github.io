@@ -691,7 +691,7 @@ for (LANG in c("en", "fa")) {
     '<div class="number">', fmtv(compound_total), '</div>',
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("au_pop_headline_caption"), lnk(L_ABS_FULL_HEAD)), '</div>',
-    '<div style="margin:16px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
+    '<div style="margin:18px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7; border-top:1px solid #dbe6f0; padding-top:13px;">',
     '<p style="margin-bottom:8px;">', tr("au_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("au_pop_idbox_b1"), '</li>',
@@ -958,7 +958,7 @@ for (LANG in c("en", "fa")) {
   ed1_note <- htxt(sprintf(tr("au_ed_card1_note"), fa_num(postgrad_pct, 0)))
   ed2_big <- sprintf(tr("au_bignum_pct"), fa_num(no_relig_pct, 0))
   ed2_islam <- htxt(sprintf(tr("au_ed_islam"), fa_num(islam_pct, 0)))
-  ed2_christ <- tr("au_ed_christ")
+  ed2_christ <- paste0(if (is_fa()) "\u060c " else ", ", htxt(tr("au_ed_christ")))
 
   edu_body <- paste0(
     '<div class="page-content">',
@@ -970,10 +970,7 @@ for (LANG in c("en", "fa")) {
     sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
-      <li>%s</li>
-      <li>%s</li>
-    </ul>
+    <div style="margin:14px auto 0; max-width:420px; font-size:13px; color:#555; line-height:1.55;">%s%s</div>
   </div>', ed2_big, tr("au_ed_card2_primary"), ed2_islam, ed2_christ),
     '<div class="chart-card pc1">',
     '<div class="tab-bar">',

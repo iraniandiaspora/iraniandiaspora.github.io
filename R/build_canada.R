@@ -884,7 +884,7 @@ for (LANG in c("en", "fa")) {
     sprintf('<div class="number">%s</div>', htxt(ca_pop_headline_number)),
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("ca_pop_headline_caption"), lnk(CA_CENSUS_LINK)), '</div>',
-    '<div style="margin:16px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:14px 18px;">',
+    '<div style="margin:18px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7; border-top:1px solid #dbe6f0; padding-top:13px;">',
     '<p style="margin-bottom:8px;">', tr("ca_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("ca_pop_idbox_bullet1"), '</li>',
@@ -1372,7 +1372,7 @@ for (LANG in c("en", "fa")) {
     sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
-    <div style="font-size:13px; color:#555; margin-top:14px; line-height:1.55; max-width:420px; margin-left:auto; margin-right:auto;">%s</div>
+    <div style="margin:18px auto 0; max-width:420px; font-size:13px; color:#444; text-align:left; line-height:1.7; border-top:1px solid #dbe6f0; padding-top:13px;">%s</div>
   </div>', inc2_big, inc2_sent, inc2_note),
     '<div class="chart-card pc1">', plotly_div("ca-inc1", pj(p_inc_decile), "500px", source = PUMF_SRC_INCOME), '</div>',
     '<div class="chart-card pc2">', plotly_div("ca-inc-age", pj(p_inc_age), "400px", source = PUMF_SRC_INCOME_AGE, legend_html = inc_age_leg, highlight_hover = TRUE), '</div>',
