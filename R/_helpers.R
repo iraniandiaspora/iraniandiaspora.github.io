@@ -130,6 +130,19 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
   # anchor (x=1 = paper right edge) — uniformly, at any text length. Verified
   # 2026-07-17 (us-work occupation chart: all labels' right edge coincided).
   # `align` still flips (multi-line internal alignment), only `xanchor` does not.
+  # A label that soft-wraps is TWO lines tall but is anchored to the bar's top
+  # edge, so the second line extends upward into the bar above. One row of
+  # bargap fits a single 17px line; a wrapped label needs roughly double.
+  # Persian hits this where English does not, because the translated category
+  # names are longer (uk-workedu: "Level 2 (five GCSEs or more / O level)").
+  # Widen the gap for every row when ANY label wraps, so the bars stay evenly
+  # spaced rather than one row being taller than the rest.
+  max_lines <- max(1L, vapply(wrapped, function(x) lengths(regmatches(x, gregexpr("<br>", x, fixed = TRUE))) + 1L, integer(1)))
+  if (max_lines > 1L) {
+    bargap  <- min(0.72, bargap + 0.13 * (max_lines - 1L))
+    row_px  <- row_px + 14 * (max_lines - 1L)
+  }
+
   half_bar <- (1 - bargap) / 2
   lab_anns <- lapply(seq_len(n), function(i) list(
     x = if (fa) 1 else 0, xref = "paper", xanchor = "left",

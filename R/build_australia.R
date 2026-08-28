@@ -692,7 +692,7 @@ for (LANG in c("en", "fa")) {
     '<div class="number">', fmtv(compound_total), '</div>',
     '<div class="label" style="margin-top:6px; font-size:13px; color:#555;">',
     sprintf(tr("au_pop_headline_caption"), lnk(L_ABS_FULL_HEAD)), '</div>',
-    '<div style="margin:18px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7; border-top:1px solid #dbe6f0; padding-top:13px;">',
+    '<div style="margin:18px auto 0; max-width:460px; font-size:13px; color:#444; text-align:left; line-height:1.7; background:#f5f8fb; border:1px solid #dbe6f0; border-radius:6px; padding:13px 16px;">',
     '<p style="margin-bottom:8px;">', tr("au_pop_idbox_intro"), '</p>',
     '<ul style="padding-left:20px; margin:0; line-height:1.5;">',
     '<li>', tr("au_pop_idbox_b1"), '</li>',
