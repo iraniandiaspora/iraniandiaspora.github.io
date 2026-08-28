@@ -844,7 +844,7 @@ for (LANG in c("en", "fa")) {
       marker = list(line = list(color = "white", width = 1), opacity = 0.85)
     ) %>% layout(
       mapbox = list(
-        style = "carto-positron",
+        style = "white-bg",
         center = list(lon = -96, lat = 55),
         zoom = 2.5
       ),
@@ -869,7 +869,7 @@ for (LANG in c("en", "fa")) {
     ) %>%
     layout(
       mapbox = list(
-        style = "carto-positron",
+        style = "white-bg",
         center = list(lon = -79.5, lat = 44),
         zoom = 4.5
       ),

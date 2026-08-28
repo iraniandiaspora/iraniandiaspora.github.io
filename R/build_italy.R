@@ -189,7 +189,7 @@ for (LANG in c("en", "fa")) {
         colorbar = list(title = "", tickformat = ",", len = 0.3, thickness = 10),
         marker = list(line = list(color = "white", width = 1), opacity = 0.85)
       ) %>% layout(
-        mapbox = list(style = "carto-positron",
+        mapbox = list(style = "white-bg",
           center = list(lon = 12.5, lat = 42.5), zoom = 4.5),
         margin = list(t = 10, b = 10, l = 0, r = 0),
         paper_bgcolor = "white"

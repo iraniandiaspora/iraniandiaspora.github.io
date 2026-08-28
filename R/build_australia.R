@@ -596,7 +596,7 @@ for (LANG in c("en", "fa")) {
       showscale = FALSE,
       marker = list(line = list(color = "white", width = 1), opacity = 0.85)
     ) %>% layout(
-      mapbox = list(style = "carto-positron", center = list(lon = 134, lat = -28), zoom = 3),
+      mapbox = list(style = "white-bg", center = list(lon = 134, lat = -28), zoom = 3),
       margin = list(t = 10, b = 10, l = 0, r = 0), paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 
@@ -614,7 +614,7 @@ for (LANG in c("en", "fa")) {
       showscale = FALSE,
       marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
     ) %>% layout(
-      mapbox = list(style = "carto-positron", center = list(lon = 151.0, lat = -33.85), zoom = 7),
+      mapbox = list(style = "white-bg", center = list(lon = 151.0, lat = -33.85), zoom = 7),
       margin = list(t = 10, b = 10, l = 0, r = 0), paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 
@@ -632,7 +632,7 @@ for (LANG in c("en", "fa")) {
       showscale = FALSE,
       marker = list(line = list(width = 1, color = "#999"), opacity = 0.85)
     ) %>% layout(
-      mapbox = list(style = "carto-positron", center = list(lon = 145.0, lat = -37.85), zoom = 6.8),
+      mapbox = list(style = "white-bg", center = list(lon = 145.0, lat = -37.85), zoom = 6.8),
       margin = list(t = 10, b = 10, l = 0, r = 0), paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE, scrollZoom = TRUE)
 
