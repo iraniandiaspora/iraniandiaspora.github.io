@@ -47,10 +47,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .text-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .text-card { background:white; border-radius:8px; padding:20px; text-align:center;
-  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; display:flex; flex-direction:column; }
-.text-card::before, .text-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
-.text-card::before { flex-grow:1; }
-.text-card::after { flex-grow:1.35; }
+  font-size:15px; line-height:1.6; border:1px solid #e0e0e0; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; display:flex; flex-direction:column; }
 .chart-card::before, .chart-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .chart-card::before { flex-grow:1; }

@@ -83,10 +83,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-card::before, .chart-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .chart-card::before { flex-grow:1; }
 .chart-card::after { flex-grow:1.35; }
-.text-card { background:white; border-radius:8px; padding:20px; border:1px solid #e0e0e0; font-size:14px; color:#444; line-height:1.7; display:flex; flex-direction:column; }
-.text-card::before, .text-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
-.text-card::before { flex-grow:1; }
-.text-card::after { flex-grow:1.35; }
+.text-card { background:white; border-radius:8px; padding:20px; border:1px solid #e0e0e0; font-size:14px; color:#444; line-height:1.7; }
 .section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px;  display:flex; flex-direction:column; }
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
