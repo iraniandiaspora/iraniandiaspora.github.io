@@ -410,7 +410,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 
 <div class="global-grid">
 <div class="text-card global-text1" style="text-align:center;">
-  <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">', total_label, '</div>
+  <div style="font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">', total_label, '</div>
   <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">', tr("gl_card1_primary"), '</div>
 </div>
 <div class="text-card global-text2" style="text-align:center;">
