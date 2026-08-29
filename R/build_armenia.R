@@ -55,7 +55,8 @@ body { font-family:"Montserrat",system-ui,sans-serif; color:#222; background:#f6
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
 .headline .label { font-size:13px; color:#555; margin-bottom:4px; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 @media (max-width:900px) {
   .chart-row { grid-template-columns:1fr; }
   .headline { padding:18px; }
@@ -155,7 +156,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("am_hist_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 5),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 55, b = 60, l = 60, r = 40),

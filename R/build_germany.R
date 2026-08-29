@@ -97,10 +97,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:4px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
 .footnote { font-size:12px; color:#6b6b6b; text-align:center; margin:8px 0; font-style:italic; }
@@ -515,7 +516,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_pop_bar_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickangle = -30, tickfont = list(size = 10)),
       yaxis = list(title = "", tickformat = ","),
       margin = list(t = 60, b = 100),
@@ -561,7 +562,7 @@ for (LANG in c("en", "fa")) {
 
   mig_grid <- paste0(
     '<div style="display:flex; flex-direction:column; gap:12px; width:100%;">',
-    '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">', tr("de_gen_box_title"), '</div>',
+    '<div style="font-size:18px; font-weight:600; color:#333; text-align:center;">', tr("de_gen_box_title"), '</div>',
     '<div style="display:flex; gap:12px;">',
     make_mig_box(fmtv(hl_fg),
       sprintf(tr("de_gen_pct_of_total"), fa_num(round(hl_fg / hl_total * 100), 0)),
@@ -628,7 +629,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_motive_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickangle = -45, tickfont = list(size = 11)),
       yaxis = list(title = "", tickformat = ","),
       margin = list(t = 65, b = 110),
@@ -645,7 +646,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_duration_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = tr("de_duration_xaxis"), tickfont = list(size = 11)),
       yaxis = list(title = "", tickformat = ","),
       margin = list(t = 65, b = 90),
@@ -672,7 +673,7 @@ for (LANG in c("en", "fa")) {
     ) %>%
     layout(
       title = list(text = htxt(tr("de_annual_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickfont = list(size = 10), dtick = 4),
       yaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
       margin = list(t = 55, b = 40, l = 55, r = 20),
@@ -696,7 +697,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_citizen_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickfont = list(size = 12)),
       yaxis = list(title = "", tickformat = ","),
       margin = list(t = 60, b = 60),
@@ -780,7 +781,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_school_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickangle = 0, tickfont = list(size = 10)),
       yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 60)),
       margin = list(t = 60, b = 70),
@@ -800,7 +801,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_prof_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickfont = list(size = 11)),
       yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 40)),
       margin = list(t = 60, b = 70),
@@ -824,7 +825,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_empstatus_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickfont = list(size = 11)),
       yaxis = list(title = "", tickformat = ","),
       margin = list(t = 55, b = 70),
@@ -850,7 +851,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_industry_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = de_ind_xrange),
       yaxis = ov_de_ind$yaxis,
       annotations = ov_de_ind$annotations, bargap = ov_de_ind$bargap,
@@ -877,7 +878,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("de_income_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickangle = -25, tickfont = list(size = 10)),
       yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 25)),
       margin = list(t = 65, b = 110),
@@ -973,7 +974,7 @@ for (LANG in c("en", "fa")) {
   p_lang <- p_lang %>% layout(
     barmode = "stack",
     title = list(text = htxt(tr("de_lang_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 105)),
     yaxis = list(title = "",
       categoryorder = "array", categoryarray = levels(lang_all$gen_disp),

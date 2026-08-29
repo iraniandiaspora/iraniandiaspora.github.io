@@ -761,7 +761,7 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
       hoverinfo = "skip", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(sprintf(tr("us_income_chart_title"), gen_label)),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = tr("us_income_xaxis"), titlefont = list(size = 11),
         categoryorder = "array", categoryarray = decile_labels),
       yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, y_top)),
@@ -827,7 +827,7 @@ make_lang_stack <- function(gen_value, cohort_levels, gen_label) {
     barmode = "stack",
     title = list(
       text = htxt(sprintf(tr("us_lang_chart_title"), gen_label)),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 100)),
     yaxis = list(title = "", showticklabels = TRUE,
                  categoryorder = "array", categoryarray = cohort_levels,
@@ -895,7 +895,7 @@ p_immig <- plot_ly() %>%
     hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = htxt(tr("us_immig_chart_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = ""), yaxis = list(title = "", tickformat = ","),
     yaxis2 = list(overlaying = "y", side = "right", showgrid = FALSE,
       range = c(0, max(immig$n) * 1.05),
@@ -918,7 +918,7 @@ p_citizen <- plot_ly(data = citizen, x = ~disp, y = ~n, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = htxt(tr("us_citizen_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = ""), yaxis = list(title = "", tickformat = ","),
     margin = list(t = 55, b = 60),
     plot_bgcolor = "white", paper_bgcolor = "white"
@@ -959,7 +959,7 @@ p_lpr_total <- plot_ly(data = lpr, x = ~year, y = ~total,
     text = ~hover_total, hoverinfo = "text", showlegend = FALSE) %>%
   layout(
     title = list(text = htxt(tr("us_lpr_total_title")),
-      font = list(size = 15, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ",", rangemode = "tozero",
@@ -995,7 +995,7 @@ p_lpr_cat <- p_lpr_cat %>%
     barmode = "overlay",
     hovermode = "x unified",
     title = list(text = htxt(tr("us_lpr_cat_title")),
-      font = list(size = 15, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", dtick = 5, range = c(1968.5, 2024.5),
       tickfont = list(size = 11)),
     yaxis = list(title = "", tickformat = ",", rangemode = "tozero",
@@ -1110,7 +1110,7 @@ p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation =
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(title = list(text = htxt(tr("us_bizrate_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE,
       fixedrange = TRUE, range = if (ov_br$xreversed) c(br_xmax, 0) else c(0, br_xmax)),
     yaxis = ov_br$yaxis,
@@ -1131,7 +1131,7 @@ p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(title = list(text = htxt(tr("us_bizind_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_bi$xreversed) c(bi_xmax, 0) else c(0, bi_xmax)),
     yaxis = ov_bi$yaxis,
@@ -1152,7 +1152,7 @@ p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h"
     text = ~hover,
     hoverinfo = "text", textposition = "none") %>%
   layout(title = list(text = htxt(tr("us_occ_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_oc$xreversed) c(oc_xmax, 0) else c(0, oc_xmax)),
     yaxis = ov_oc$yaxis,
@@ -1383,7 +1383,7 @@ p_waterfall <- plot_ly() %>%
     text = wf$hover, hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = htxt(tr("us_waterfall_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     # fa: the RTL document mirrors the criteria_table() below (label column on
     # the RIGHT, criterion columns right-to-left), so mirror the bars to match:
     # reversed x range, y ticks on the right, l/r margins swapped. Same plot-
@@ -1424,7 +1424,7 @@ p_region <- plot_ly(data = region_dat, x = ~REGION_disp, y = ~pop, type = "bar",
     hoverinfo = "text", textposition = "none") %>%
   layout(
     title = list(text = htxt(tr("us_region_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = ""), yaxis = list(title = "", tickformat = ","),
     margin = list(t = 60, b = 40),
     plot_bgcolor = "white", paper_bgcolor = "white"
@@ -1482,10 +1482,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:4px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 .tab-bar { display:flex; justify-content:center; gap:0; margin:12px 0 0; }
 .tab-btn { padding:6px 16px; border:1px solid #ddd; background:#f0f0f0; cursor:pointer;
   font-family:"Montserrat",sans-serif; font-size:13px; }

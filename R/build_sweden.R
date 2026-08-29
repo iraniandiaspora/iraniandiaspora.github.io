@@ -192,7 +192,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(tr("se_hist_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 2),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 40, b = 30),
@@ -224,7 +224,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(tr("se_yrs_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 10, range = c(1967, 2026),
         tickfont = list(size = 11)),
       yaxis = list(title = "", tickformat = ","),
@@ -264,7 +264,7 @@ for (LANG in c("en", "fa")) {
 
   # --- Generation boxes -------------------------------------------------------
   gen_boxes <- paste0(
-    '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">', tr("se_gen_box_title"), '</div>',
+    '<div style="font-size:18px; font-weight:600; color:#333; text-align:center;">', tr("se_gen_box_title"), '</div>',
     '<div style="display:flex; gap:12px; margin-top:12px;">',
     make_gen_box(fmtv(se_gen1),
       sprintf(tr("se_gen_pct_of_total"), fa_num(round(se_gen1 / se_total * 100), 0)),

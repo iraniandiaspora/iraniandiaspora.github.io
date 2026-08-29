@@ -58,10 +58,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:4px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
 .pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
@@ -151,7 +152,7 @@ for (LANG in c("en", "fa")) {
       title = list(
         text = htxt(sprintf(tr("fr_hist_title"),
           fa_num(fr_min_yr, 0, big = FALSE), fa_num(data_yr, 0, big = FALSE))),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 2),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 50, b = 30),

@@ -130,7 +130,7 @@ for (LANG in c("en", "fa")) {
       title = list(
         text = htxt(sprintf(tr("tr_hist_title"),
           fa_num(tr_min_yr, 0, big = FALSE), fa_num(data_yr, 0, big = FALSE))),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickmode = "array", tickvals = trend$year),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 50, b = 40),
@@ -170,7 +170,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("tr_age_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "", tickfont = list(size = 10),
                    ticks = "outside", ticklen = 8,
@@ -191,7 +191,7 @@ for (LANG in c("en", "fa")) {
 
   # --- Sex breakdown boxes (from headline counts) --------------------------
   sex_boxes <- paste0(
-    '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">',
+    '<div style="font-size:18px; font-weight:600; color:#333; text-align:center;">',
     tr("tr_sex_box_title"), '</div>',
     '<div style="display:flex; gap:12px; margin-top:12px;">',
     make_gen_box(tr_male,
@@ -259,7 +259,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("tr_cit_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickmode = "array", tickvals = cit$year),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 50, b = 40),
@@ -285,7 +285,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("tr_permits_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "", tickfont = list(size = 12),
                    ticks = "outside", ticklen = 8,

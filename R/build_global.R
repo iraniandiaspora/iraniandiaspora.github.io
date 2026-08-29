@@ -327,7 +327,7 @@ for (LANG in c("en", "fa")) {
 
   p_stock <- p_stock %>% layout(
     title = list(text = tr("gl_stream_title"),
-      font = list(size = 16, family = "Montserrat", color = "#333"), x = 0.5, xanchor = "center"),
+      font = list(size = 18, family = "Montserrat", color = "#333"), x = 0.5, xanchor = "center"),
     xaxis = list(title = "", dtick = 5, tickvals = yr_nums_orig,
       ticktext = htxt(as.character(yr_nums_orig)), tickfont = list(size = 12),
       showgrid = TRUE, gridcolor = "#e8e8e8"),

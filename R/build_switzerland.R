@@ -147,7 +147,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(tr("ch_trend_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 2),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       showlegend = FALSE,
@@ -176,7 +176,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("ch_arr_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 2, range = c(2010.5, 2024.5)),
       yaxis = list(title = "", tickformat = ","),
       yaxis2 = list(overlaying = "y", side = "right", showgrid = FALSE,

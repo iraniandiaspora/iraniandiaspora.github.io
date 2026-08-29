@@ -292,6 +292,15 @@ plotly_div <- function(id, json, height = "500px",
   init_js <- sprintf(
     'var c=Object.assign(%s,{responsive:true,scrollZoom:"geo+mapbox",showTips:true});var l=%s;Plotly.newPlot("%s",%s,l,c);',
     json$config, json$layout, id, json$data)
+  # Responsive chart titles. Titles are 18px to match .section-title, which is the
+  # site-wide largest treatment -- but plotly titles do NOT wrap, so at 18px eleven
+  # of them overflowed their plot at 390px (measured 2026-08-28; several already had
+  # a manual <br> and still clipped, so more breaks would have to fall mid-phrase).
+  # Mirrors the existing .section-title mobile shrink. Costs nothing on desktop: the
+  # first call computes 18, equals the baked-in size, and returns before relayout.
+  init_js <- paste0(init_js, sprintf(
+    '(function(){var d=document.getElementById("%s");if(!d)return;d._ts=18;var f=function(){var w=window.innerWidth,s=w<600?13:(w<900?15:18);if(d._ts===s)return;d._ts=s;Plotly.relayout(d,{"title.font.size":s});};f();var t;window.addEventListener("resize",function(){clearTimeout(t);t=setTimeout(f,150);});})();',
+    id))
   if (highlight_hover) {
     init_js <- paste0(init_js, sprintf('
 var el=document.getElementById("%s");
@@ -574,10 +583,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:4px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
 .pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }

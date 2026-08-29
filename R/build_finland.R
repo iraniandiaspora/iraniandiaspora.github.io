@@ -70,10 +70,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:4px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 @media (max-width:900px) {
   body { padding:10px 15px; }
   .chart-row, .text-row { grid-template-columns:1fr !important; }
@@ -183,7 +184,7 @@ for (LANG in c("en", "fa")) {
       title = list(
         text = htxt(sprintf(tr("fi_hist_title"),
           fa_num(fi_min_yr, 0, big = FALSE), fa_num(data_yr, 0, big = FALSE))),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 5),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 50, b = 50),
@@ -214,7 +215,7 @@ for (LANG in c("en", "fa")) {
 
   # --- Generation boxes ------------------------------------------------------
   gen_boxes <- paste0(
-    '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">', tr("fi_gen_box_title"), '</div>',
+    '<div style="font-size:18px; font-weight:600; color:#333; text-align:center;">', tr("fi_gen_box_title"), '</div>',
     '<div style="display:flex; gap:12px; margin-top:12px;">',
     make_gen_box(fmtv(fi_gen1),
       sprintf(tr("fi_gen_pct_of_total"), fa_num(round(fi_gen1 / fi_total * 100), 0)),

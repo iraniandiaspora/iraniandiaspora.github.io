@@ -72,10 +72,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:6px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 @media (max-width:900px) {
   body { padding:10px 15px; }
   .text-row, .chart-row { grid-template-columns:1fr !important; }
@@ -310,7 +311,7 @@ for (LANG in c("en", "fa")) {
     ) %>%
     layout(
       title = list(text = tr("eu_bar_title"),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ",", tickfont = list(size = 10)),
       yaxis = list(title = "", tickfont = list(size = 11),
                    ticks = "outside", ticklen = 8,
@@ -481,7 +482,7 @@ for (LANG in c("en", "fa")) {
   p_ts <- p_ts %>% layout(
     title = list(text = htxt(sprintf(tr("eu_ts_title"),
         fa_num(1999, 0, big = FALSE), fa_num(2026, 0, big = FALSE))),
-      font = list(size = 14, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10),
       # Explicit ticks: 5-year cadence, then the FINAL tick anchored at 2026 —
       # the newest data year (Denmark's DST line; everything else ends 2025).

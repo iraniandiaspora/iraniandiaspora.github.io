@@ -250,7 +250,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(tr("nl_hist_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 5),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 40, b = 30),
@@ -278,7 +278,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("nl_arrival_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickangle = -45, tickfont = list(size = 9),
         tickvals = arrival_agg$x_num[seq(1, nrow(arrival_agg), by = 5)],
         ticktext = disp_label[seq(1, nrow(arrival_agg), by = 5)]),
@@ -294,7 +294,7 @@ for (LANG in c("en", "fa")) {
 
   # --- Generation boxes ------------------------------------------------------
   gen_boxes <- paste0(
-    '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">', tr("nl_gen_box_title"), '</div>',
+    '<div style="font-size:18px; font-weight:600; color:#333; text-align:center;">', tr("nl_gen_box_title"), '</div>',
     '<div style="display:flex; gap:12px; margin-top:12px;">',
     make_gen_box(fmtv(nl_gen1),
       sprintf(tr("nl_gen_pct_of_total"), fa_num(round(nl_gen1 / nl_total * 100), 0)),
@@ -373,7 +373,7 @@ for (LANG in c("en", "fa")) {
     hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("nl_part_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickmode = "array", tickvals = lf$year, dtick = 1),
       yaxis = list(title = "", range = c(50, 70), ticksuffix = pct_suffix),
       margin = list(t = 40, b = 30),
@@ -397,7 +397,7 @@ for (LANG in c("en", "fa")) {
     layout(
       barmode = "stack",
       title = list(text = htxt(tr("nl_emp_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickmode = "array", tickvals = lf$year, dtick = 1),
       yaxis = list(title = "", range = c(0, 105), ticksuffix = pct_suffix),
       showlegend = FALSE,
@@ -430,7 +430,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("nl_inc_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 2),
       yaxis = list(title = "", tickprefix = euro_prefix, ticksuffix = k_suffix),
       showlegend = FALSE,
@@ -459,7 +459,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("nl_lowinc_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 2),
       yaxis = list(title = "", ticksuffix = pct_suffix),
       showlegend = FALSE,

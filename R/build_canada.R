@@ -102,10 +102,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:4px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
 .source a { color:#2774AE; }
 .footnote { font-size:12px; color:#6b6b6b; text-align:center; margin:8px 0; font-style:italic; }
@@ -789,7 +790,7 @@ for (LANG in c("en", "fa")) {
       text = wf$hover, hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("ca_wf_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       # fa: mirror the bars to match the RTL-mirrored criteria_table() below
       # (reversed x range, y ticks right, l/r margins swapped) — see build_us.R.
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE,
@@ -821,7 +822,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("ca_region_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = ""),
       yaxis = list(title = "", ticksuffix = pct_suffix),
       margin = list(t = 55, b = 50), showlegend = FALSE,
@@ -955,7 +956,7 @@ for (LANG in c("en", "fa")) {
     barmode = "stack",
     hoverlabel = list(showarrow = FALSE),
     title = list(text = htxt(tr("ca_lang_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 105)),
     yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_disp),
       ticklabelstandoff = 6),
@@ -990,7 +991,7 @@ for (LANG in c("en", "fa")) {
     barmode = "stack",
     hoverlabel = list(showarrow = FALSE),
     title = list(text = htxt(tr("ca_relig_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 105)),
     yaxis = list(title = "", categoryorder = "array", categoryarray = rev(lang_gen_disp),
       ticklabelstandoff = 6),
@@ -1059,7 +1060,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(tr("ca_immig_chart_title")),
-        font = list(size = 16, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickfont = list(size = 10), dtick = 5,
         range = c(1948, 2022)),
       yaxis = list(title = "", tickformat = ","),
@@ -1087,7 +1088,7 @@ for (LANG in c("en", "fa")) {
       text = ~hover,
       hoverinfo = "text", textposition = "none") %>%
     layout(
-      title = list(text = htxt(tr("ca_cit_title")), font = list(size = 16, family = "Montserrat")),
+      title = list(text = htxt(tr("ca_cit_title")), font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickfont = list(size = 10),
         categoryorder = "array", categoryarray = levels(cit1$short_label_disp)),
       yaxis = list(title = "", tickformat = ","),
@@ -1112,7 +1113,7 @@ for (LANG in c("en", "fa")) {
   p_ca_immtype <- p_ca_immtype %>% layout(
     barmode = "stack",
     title = list(text = htxt(tr("ca_immtype_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", tickfont = list(size = 10),
       categoryorder = "array", categoryarray = period_order_cat),
     yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 105)),
@@ -1285,7 +1286,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "skip", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(tr("ca_inc_decile_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = tr("ca_inc_decile_xaxis"), titlefont = list(size = 11),
         categoryorder = "array", categoryarray = inc1$short_label_disp),
       yaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, max(inc1$percentage) + 3)),
@@ -1334,7 +1335,7 @@ for (LANG in c("en", "fa")) {
   p_inc_age <- p_inc_age %>% layout(
     barmode = "stack",
     title = list(text = htxt(tr("ca_inc_age_title")),
-      font = list(size = 16, family = "Montserrat")),
+      font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 105)),
     yaxis = list(title = "", categoryorder = "array", categoryarray = rev(age_levels_inc)),
     margin = list(t = 55, b = 40, l = 60), showlegend = FALSE,

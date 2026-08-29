@@ -158,7 +158,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("il_age_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "", autorange = TRUE, categoryorder = "array",
         categoryarray = age_order,
@@ -187,7 +187,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("il_gen1_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "", categoryorder = "array", categoryarray = gen1_order,
                    ticks = "outside", ticklen = 8,
@@ -213,7 +213,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(
         text = htxt(tr("il_trend_title")),
-        font = list(size = 15, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 5),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 55, b = 40, l = 60, r = 15),
@@ -232,7 +232,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("il_comp_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "",
                    ticks = "outside", ticklen = 8,
@@ -249,7 +249,7 @@ for (LANG in c("en", "fa")) {
 
   # --- Generation boxes -------------------------------------------------------
   gen_boxes <- paste0(
-    '<div style="font-size:14px; font-weight:600; color:#333; text-align:center;">', tr("il_gen_box_title"), '</div>',
+    '<div style="font-size:18px; font-weight:600; color:#333; text-align:center;">', tr("il_gen_box_title"), '</div>',
     '<div style="display:flex; gap:12px; margin-top:12px;">',
     make_gen_box(fmtv(il_gen1),
       sprintf(tr("il_gen_pct_of_total"), fa_num(round(il_gen1 / il_total * 100), 0)),

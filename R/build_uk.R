@@ -89,10 +89,11 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .headline::before, .headline::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
 .headline::before { flex-grow:1; }
 .headline::after { flex-grow:1.35; }
-.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; }
+.headline .number { font-size:44px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em; margin-bottom:10px; }
 a { transition: color 0.15s; }
 a:hover { color: #1a4e72 !important; text-decoration: underline; }
 .headline .label { font-size:13px; color:#666; margin-top:4px; }
+.headline .label:first-child { font-size:18px; font-weight:600; color:#333; margin-top:0; margin-bottom:14px; }
 .page-content { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; }
 .page-content .chart-card { margin-bottom:0; }
 .pt1 { grid-area:1/1; } .pt2 { grid-area:1/2; }
@@ -348,7 +349,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("uk_age_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       barmode = "group",
       xaxis = age_xaxis,
       yaxis = list(title = "", tickformat = ","),
@@ -384,7 +385,7 @@ for (LANG in c("en", "fa")) {
       hoverinfo = "text", showlegend = FALSE) %>%
     layout(
       title = list(text = htxt(tr("uk_arrival_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 10, range = c(1939, 2024),
         tickfont = list(size = 11)),
       yaxis = list(title = "", tickformat = ","),
@@ -412,7 +413,7 @@ for (LANG in c("en", "fa")) {
     hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("uk_relig_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "", tickfont = list(size = 11),
                    ticks = "outside", ticklen = 8,
@@ -492,7 +493,7 @@ for (LANG in c("en", "fa")) {
     hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("uk_econ_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
       yaxis = list(title = "", tickfont = list(size = 11)),
       margin = list(l = 100, r = 20, t = 55, b = 30),
@@ -522,7 +523,7 @@ for (LANG in c("en", "fa")) {
     hoverinfo = "text", textposition = "none") %>%
     layout(
       title = list(text = htxt(tr("uk_qual_title")),
-        font = list(size = 14, family = "Montserrat")),
+        font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = qual_xrange),
       yaxis = ov_qual$yaxis,
       annotations = ov_qual$annotations, bargap = ov_qual$bargap,
