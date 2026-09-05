@@ -287,8 +287,8 @@ STR <- list(
     en = "Many recipients first entered on temporary visas (student, work) before receiving permanent residence in a subsequent year",
     fa = "بسیاری از دریافت‌کنندگان نخست با ویزای موقت (تحصیلی، کاری) وارد شده و در سالی بعد اقامت دائم گرفته‌اند"),
   us_adm_c2_head = list(
-    en = "Green card pathways",
-    fa = "مسیرهای گرین‌کارت"),
+    en = "Routes to Permanent Residence",
+    fa = "راه‌های دریافت اقامت دائم"),
   us_adm_c2_b1 = list(
     en = "<b>Family</b> — immediate relatives or family sponsorship",
     fa = "<b>خانوادگی</b> — بستگان درجه‌یک یا اسپانسر خانوادگی"),

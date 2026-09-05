@@ -71,19 +71,16 @@ cat_colors <- function(n) {
 #   row_px / min_height : the returned $height grows with row count so each bar
 #              gets a full row (bar + a gap above it for its label). Use $height
 #              for the plotly_div() so many-row charts don't cram labels onto bars.
-# Category labels are anchored to each bar's TOP EDGE (in category-axis units,
-# derived from bargap), NOT the bar centre — so they sit in the gap above the bar
-# at any bar thickness. Anchoring to the centre (the earlier bug) made labels
-# overlap thick bars.
-# Use ONLY for long-label CATEGORY bars (occupations, industries). Short-label
-# ranked GEOGRAPHIC bars (states, provinces, counties) keep conventional
-# left-axis tick labels — do not convert those.
+# Category labels sit directly above their own bars in alternating shaded rows.
+# The helper reserves font-line height, an 18px bar and a separate inter-row gap.
+# Use the returned shapes, yaxis, bargap and height together to retain grouping.
+# Short geographic labels normally keep conventional external axis labels.
 # pct_lab(): bar-end "N%" label, BLANKED when it would round to 0% — a sub-1%
 # sliver shows no number rather than a misleading "0%". Vectorized.
 pct_lab <- function(p) ifelse(is.na(p) | round(p) < 1, "", paste0(round(p), "%"))
 
 hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
-                             wrap_at = 34, font_size = 11, bargap = 0.42,
+                             wrap_at = 42, font_size = 11, bargap = 0.42,
                              row_px = 42, min_height = 360, margin_t = 88) {
   fa   <- exists("is_fa") && is_fa()
   # fa: the chart title is lifted out of the Plotly SVG into an HTML div above
@@ -116,39 +113,29 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
   # Zero-width controls; no visual change on engines that already render correctly.
   if (fa) wrapped <- paste0("\u2067", wrapped, "\u2069")
 
-  # Bar i (1-based, factor level order) sits at category-axis position i-1; its
-  # top edge is half a bar-width above that. Put the label there so it clears the
-  # bar regardless of thickness.
-  #
-  # xanchor is ALWAYS "left" — even on fa (RTL), where you'd expect "right".
-  # This is a Plotly RTL-annotation quirk, not a mistake: on a dir="rtl" page
-  # Plotly applies its own xanchor="right" width-shift AND the browser then
-  # right-aligns the RTL glyph run, so xanchor="right" double-shifts every label
-  # LEFT by its own text width (measured: gap-from-edge == text width exactly, so
-  # short labels floated far off the edge). With xanchor="left" Plotly applies no
-  # shift and the browser's RTL rendering lands each label's RIGHT edge on the
-  # anchor (x=1 = paper right edge) — uniformly, at any text length. Verified
-  # 2026-07-17 (us-work occupation chart: all labels' right edge coincided).
-  # `align` still flips (multi-line internal alignment), only `xanchor` does not.
-  # A label that soft-wraps is TWO lines tall but is anchored to the bar's top
-  # edge, so the second line extends upward into the bar above. One row of
-  # bargap fits a single 17px line; a wrapped label needs roughly double.
-  # Persian hits this where English does not, because the translated category
-  # names are longer (uk-workedu: "Level 2 (five GCSEs or more / O level)").
-  # Widen the gap for every row when ANY label wraps, so the bars stay evenly
-  # spaced rather than one row being taller than the rest.
-  max_lines <- max(1L, vapply(wrapped, function(x) lengths(regmatches(x, gregexpr("<br>", x, fixed = TRUE))) + 1L, integer(1)))
-  if (max_lines > 1L) {
-    bargap  <- min(0.72, bargap + 0.13 * (max_lines - 1L))
-    row_px  <- row_px + 14 * (max_lines - 1L)
-  }
-
+  # Each shaded row groups a category label with the bar immediately below it.
+  # Compact rows: use the rendered line-height rather than a 20px allowance.
+  # The background occupies the existing row; it needs no extra padding.
+  max_lines <- max(1L, vapply(strsplit(wrapped, "<br>", fixed = TRUE), length, integer(1)))
+  bar_px <- 16
+  line_px <- ceiling(font_size * 1.3)
+  row_px <- max(row_px, bar_px + line_px * max_lines + 10)
+  height_px <- max(min_height, margin_t + 42 + n * row_px)
+  pitch <- (height_px - margin_t - 42) / (n + 0.15)
+  bargap <- 1 - bar_px / pitch
   half_bar <- (1 - bargap) / 2
+  # Paper-edge RTL annotations require xanchor="left" to avoid a double shift;
+  # bar-end annotations below instead use the reversed data-axis anchor.
   lab_anns <- lapply(seq_len(n), function(i) list(
     x = if (fa) 1 else 0, xref = "paper", xanchor = "left",
-    y = (i - 1) + half_bar, yref = "y", yanchor = "bottom", yshift = 2,
+    xshift = if (fa) -4 else 4,
+    y = (i - 1) + half_bar, yref = "y", yanchor = "bottom", yshift = 1,
     text = wrapped[i], showarrow = FALSE, align = if (fa) "right" else "left",
     font = list(size = font_size, family = "Montserrat, sans-serif", color = "#333")))
+  bands <- lapply(seq(1L, n, by = 2L), function(i) list(
+    type = "rect", xref = "paper", x0 = 0, x1 = 1, yref = "y",
+    y0 = i - 1 - 0.32, y1 = i - 1 + 0.68,
+    fillcolor = "#f3f6f8", line = list(width = 0), layer = "below"))
 
   val_anns <- list()
   if (!is.null(ends)) {
@@ -175,10 +162,11 @@ hbar_over_labels <- function(cats, ends = NULL, end_text = NULL,
   # A generous top margin drops the first bar below the title with breathing
   # room, so a label-above chart doesn't start "higher" than a neighbour whose
   # own title/subtitle pushes its plot down. $height accounts for it.
-  list(annotations = c(lab_anns, val_anns), margin_l = 8, margin_t = margin_t,
-       yaxis = list(title = "", showticklabels = FALSE, ticks = "", fixedrange = TRUE),
+  list(annotations = c(lab_anns, val_anns), shapes = bands, margin_l = 8, margin_t = margin_t,
+       yaxis = list(title = "", showticklabels = FALSE, ticks = "", fixedrange = TRUE,
+                    range = c(-0.4, n - 0.25)),
        xreversed = fa, bargap = bargap,
-       height = paste0(max(min_height, round(margin_t + 42 + n * row_px)), "px"))
+       height = paste0(round(height_px), "px"))
 }
 
 # --- share_of -----------------------------------------------------------------
@@ -205,6 +193,30 @@ share_of <- function(df, col, levels, weight) {
   }
   w <- df[[weight]]
   sum(w[df[[col]] %in% levels]) / sum(w) * 100
+}
+
+# Plotly geo uses D3 spherical winding: small exterior rings are clockwise,
+# holes counterclockwise (opposite RFC 7946). Normalize a render-time copy;
+# leave source GeoJSON unchanged. Intended for these regional, non-dateline maps.
+plotly_geo_winding <- function(geojson) {
+  ring <- function(points, exterior) {
+    xy <- do.call(rbind, lapply(points, unlist))
+    j <- c(2:nrow(xy), 1L)
+    area <- sum(xy[, 1] * xy[j, 2] - xy[j, 1] * xy[, 2])
+    if ((exterior && area > 0) || (!exterior && area < 0)) rev(points) else points
+  }
+  polygon <- function(rings) lapply(seq_along(rings), function(i) ring(rings[[i]], i == 1L))
+  geometry <- function(g) {
+    if (g$type == "Polygon") g$coordinates <- polygon(g$coordinates)
+    if (g$type == "MultiPolygon") g$coordinates <- lapply(g$coordinates, polygon)
+    if (g$type == "GeometryCollection") g$geometries <- lapply(g$geometries, geometry)
+    g
+  }
+  geojson$features <- lapply(geojson$features, function(f) {
+    f$geometry <- geometry(f$geometry)
+    f
+  })
+  geojson
 }
 
 # --- strip_internal_classes ---------------------------------------------------
@@ -323,7 +335,7 @@ var _lastLg=null;
 el.on("plotly_click",function(d){var lg=d.points[0].data.legendgroup;if(_lastLg===lg){hlOff();_lastLg=null;}else{hlOn(lg);_lastLg=lg;}});', id))
   }
   chart <- sprintf(
-    '<div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
+    '<style>.tab-bar{margin-bottom:16px!important}.tab-panel>.fa-chart-title,.tab-panel>.section-title{margin-top:0!important}</style><div id="%s" style="width:100%%;height:%s;touch-action:manipulation;"></div>\n<script>(function(){%s})();</script>',
     id, height, init_js)
   # fa RTL titles: plotly_to_json(title_rtl=TRUE) lifts the chart title out of
   # the Plotly SVG (WebKit scrambles multi-line RTL SVG text) and hands it over

@@ -177,7 +177,7 @@ for (LANG in c("en", "fa")) {
       title = list(
         text = htxt(tr("ch_arr_title")),
         font = list(size = 18, family = "Montserrat")),
-      xaxis = list(title = "", dtick = 2, range = c(2010.5, 2024.5)),
+      xaxis = list(title = "", dtick = 1, tickangle = -30, range = c(2010.5, 2024.5)),
       yaxis = list(title = "", tickformat = ","),
       yaxis2 = list(overlaying = "y", side = "right", showgrid = FALSE,
         range = c(0, max_bar * 1.05),
@@ -192,7 +192,7 @@ for (LANG in c("en", "fa")) {
   # --- Canton choropleth map -----------------------------------------------
   p_canton_map <- plot_ly() %>%
     add_trace(type = "choropleth",
-      geojson = ch_geojson,
+      geojson = plotly_geo_winding(ch_geojson),
       locations = canton$canton_name, z = canton$iran_born,
       featureidkey = "properties.name",
       text = htxt(sprintf(tr("ch_map_hover"),
@@ -241,6 +241,11 @@ for (LANG in c("en", "fa")) {
     '<div class="chart-row">',
     '<div class="chart-card">',
     plotly_div("ch-arrivals", pj(p_arrivals), "430px", source = BFS_IMM_SOURCE),
+    '<script>(function(){var last=null;function fit(){var el=document.getElementById("ch-arrivals");
+    if(!el||!el.data)return;var narrow=el.clientWidth<450;if(narrow===last)return;last=narrow;
+    Plotly.relayout(el,{"xaxis.tickangle":narrow?-90:-30,"margin.b":narrow?65:45});}
+    window.addEventListener("load",fit);window.addEventListener("resize",fit);})();</script>',
+
     '</div>',
     '<div class="chart-card">',
     '<div class="section-title" style="margin-top:0;">', tr("ch_geo_section_title"), '</div>',

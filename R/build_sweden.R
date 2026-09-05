@@ -193,7 +193,7 @@ for (LANG in c("en", "fa")) {
     layout(
       title = list(text = htxt(tr("se_hist_title")),
         font = list(size = 18, family = "Montserrat")),
-      xaxis = list(title = "", dtick = 2),
+      xaxis = list(title = "", tickmode = "array", tickvals = sort(unique(c(seq(1990, max(euro_se$year), 5), max(euro_se$year)))), range = c(1989.5, max(euro_se$year) + 0.5)),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 40, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"

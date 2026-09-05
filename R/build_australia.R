@@ -87,7 +87,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:visible; min-width:0; display:flex; flex-direction:column; }
 .chart-card::before, .chart-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
-.chart-card::before { flex-grow:1; }
+.chart-card::before { flex-grow:0; }
 .chart-card::after { flex-grow:1.35; }
 .section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .headline { background:white; border-radius:8px; padding:30px; text-align:center; border:1px solid #e0e0e0; margin-bottom:20px;  display:flex; flex-direction:column; }
@@ -224,8 +224,10 @@ state_sf$count[is.na(state_sf$count)] <- 0
 state_sf$pct[is.na(state_sf$pct)] <- 0
 
 state_geojson_path <- file.path(DATA_DIR, "au_states.geojson")
-st_write(state_sf %>% select(NAME, count, geometry),
+if (!identical(Sys.getenv("IDD_SKIP_GEOMETRY"), "1")) {
+  st_write(state_sf %>% select(NAME, count, geometry),
   state_geojson_path, driver = "GeoJSON", delete_dsn = TRUE, quiet = TRUE)
+} else stopifnot(file.exists(state_geojson_path))
 state_geojson <- jsonlite::fromJSON(state_geojson_path, simplifyVector = FALSE)
 state_data <- state_sf %>% st_drop_geometry() %>% filter(NAME != "Other Territories")
 
@@ -242,8 +244,10 @@ sydney_lgas <- lga_sf %>%
     crs = 4326)))
 sydney_lgas <- sydney_lgas %>% filter(count >= 10) %>% arrange(desc(count))
 syd_geojson_path <- file.path(DATA_DIR, "au_sydney_lgas.geojson")
-st_write(sydney_lgas %>% select(clean_name, count, geometry),
+if (!identical(Sys.getenv("IDD_SKIP_GEOMETRY"), "1")) {
+  st_write(sydney_lgas %>% select(clean_name, count, geometry),
   syd_geojson_path, driver = "GeoJSON", delete_dsn = TRUE, quiet = TRUE)
+} else stopifnot(file.exists(syd_geojson_path))
 syd_geojson <- jsonlite::fromJSON(syd_geojson_path, simplifyVector = FALSE)
 syd_data <- sydney_lgas %>% st_drop_geometry()
 syd_data$pct <- round(syd_data$count / total_birthplace * 100, 1)
@@ -254,8 +258,10 @@ melb_lgas <- lga_sf %>%
     crs = 4326)))
 melb_lgas <- melb_lgas %>% filter(count >= 10) %>% arrange(desc(count))
 melb_geojson_path <- file.path(DATA_DIR, "au_melbourne_lgas.geojson")
-st_write(melb_lgas %>% select(clean_name, count, geometry),
+if (!identical(Sys.getenv("IDD_SKIP_GEOMETRY"), "1")) {
+  st_write(melb_lgas %>% select(clean_name, count, geometry),
   melb_geojson_path, driver = "GeoJSON", delete_dsn = TRUE, quiet = TRUE)
+} else stopifnot(file.exists(melb_geojson_path))
 melb_geojson <- jsonlite::fromJSON(melb_geojson_path, simplifyVector = FALSE)
 melb_data <- melb_lgas %>% st_drop_geometry()
 melb_data$pct <- round(melb_data$count / total_birthplace * 100, 1)
@@ -878,7 +884,7 @@ for (LANG in c("en", "fa")) {
         font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = edu_xrange),
       yaxis = ov_edu$yaxis,
-      annotations = ov_edu$annotations, bargap = ov_edu$bargap,
+      annotations = ov_edu$annotations, shapes = ov_edu$shapes, bargap = ov_edu$bargap,
       margin = list(l = ov_edu$margin_l, r = 20, t = ov_edu$margin_t, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
@@ -940,7 +946,8 @@ for (LANG in c("en", "fa")) {
     title = list(text = htxt(tr("au_lang_chart_title")),
       font = list(size = 18, family = "Montserrat")),
     xaxis = list(title = "", ticksuffix = pct_suffix, range = c(0, 100)),
-    yaxis = list(title = "", tickfont = list(size = 12)),
+    yaxis = list(title = "", tickfont = list(size = 12), automargin = TRUE,
+      ticks = "outside", ticklen = 8, tickcolor = "rgba(0,0,0,0)"),
     legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.18,
       font = list(size = 11)),
     margin = list(l = 110, r = 20, t = 55, b = 50),
@@ -1018,7 +1025,7 @@ for (LANG in c("en", "fa")) {
         font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = occ_xrange),
       yaxis = ov_occ$yaxis,
-      annotations = ov_occ$annotations, bargap = ov_occ$bargap,
+      annotations = ov_occ$annotations, shapes = ov_occ$shapes, bargap = ov_occ$bargap,
       margin = list(l = ov_occ$margin_l, r = 20, t = ov_occ$margin_t, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
@@ -1040,7 +1047,7 @@ for (LANG in c("en", "fa")) {
         font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = ind_xrange),
       yaxis = ov_ind$yaxis,
-      annotations = ov_ind$annotations, bargap = ov_ind$bargap,
+      annotations = ov_ind$annotations, shapes = ov_ind$shapes, bargap = ov_ind$bargap,
       margin = list(l = ov_ind$margin_l, r = 20, t = ov_ind$margin_t, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
@@ -1099,9 +1106,18 @@ for (LANG in c("en", "fa")) {
       margin = list(t = 75, b = 70),
       plot_bgcolor = "white", paper_bgcolor = "white",
       annotations = list(
-        list(text = htxt(tr("au_dec_annotation")), x = dec_lab_disp[5], y = 13,
+        list(text = htxt(tr("au_dec_annotation")), x = 4, y = 13,
           showarrow = FALSE, font = list(size = 8, color = "#cc0000"), xanchor = "center"))
     ) %>% config(displayModeBar = FALSE)
+
+  for (i in seq_len(nrow(dec_plot))) {
+    p_dec <- p_dec %>% add_annotations(
+      x = i - 1L, y = dec_plot$pct[i],
+      text = if (is_fa()) paste0(fa_num(dec_plot$pct[i], 1), "٪") else sprintf("%.1f%%", dec_plot$pct[i]),
+      xanchor = "center", yanchor = "bottom", yshift = 11,
+      bgcolor = "rgba(255,255,255,0.85)", borderpad = 1, showarrow = FALSE,
+      font = list(size = 10, color = "#00897b"))
+  }
 
   # --- Labour force status bar -----------------------------------------------
   lf_lab_disp <- if (is_fa()) unname(AU_LF_SHORT_FA[as.character(lf_chart$label)]) else as.character(lf_chart$label)

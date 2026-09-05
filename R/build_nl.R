@@ -191,7 +191,7 @@ for (LANG in c("en", "fa")) {
   if (has_geojson) {
     p_nl_map <- plot_ly() %>%
       add_trace(type = "choropleth",
-        geojson = nl_geojson,
+        geojson = plotly_geo_winding(nl_geojson),
         locations = prov$province_code,
         z = prov$count,
         featureidkey = "properties.statcode",
