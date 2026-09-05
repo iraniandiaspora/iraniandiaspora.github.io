@@ -57,16 +57,16 @@ STR <- list(
 
   # --- population trend chart --------------------------------------------------
   ch_trend_title = list(
-    en = "<b>Iran-Born Population in Switzerland,<br>2010–2024</b>",
-    fa = "<b>جمعیت متولدان ایران در سوئیس،<br>2010–2024</b>"),
+    en = "<b>Iran-Born Population in Switzerland,<br>2010–%s</b>",
+    fa = "<b>جمعیت متولدان ایران در سوئیس،<br>2010–%s</b>"),
   ch_trend_hover = list(
     en = "<b>%s</b><br>%s Iran-born",
     fa = "<b>%s</b><br>%s نفر متولد ایران"),
 
   # --- annual arrivals chart (hybrid: flow bars + stock-ratio line) -----------
   ch_arr_title = list(
-    en = "<b>Iran-Born Annual Immigration<br>to Switzerland, 2011–2024</b>",
-    fa = "<b>مهاجرت سالانه متولدان ایران<br>به سوئیس، 2011–2024</b>"),
+    en = "<b>Iran-Born Annual Immigration<br>to Switzerland, 2011–%s</b>",
+    fa = "<b>مهاجرت سالانه متولدان ایران<br>به سوئیس، 2011–%s</b>"),
   ch_arr_hover_bar = list(
     en = "<b>%s</b><br>%s arrivals",
     fa = "<b>%s</b><br>%s نفر واردشده"),
@@ -74,8 +74,8 @@ STR <- list(
     en = "Arrivals",
     fa = "واردشدگان"),
   ch_arr_hover_line = list(
-    en = "<b>By end of %s:</b> %s%% of the 2024 population already present",
-    fa = "<b>تا پایان %s:</b> %s درصد از جمعیت سال 2024 در سوئیس ساکن شده بودند"),
+    en = "<b>By end of %s:</b> %s%% of the %s population already present",
+    fa = "<b>تا پایان %s:</b> %s درصد از جمعیت سال %s در سوئیس ساکن شده بودند"),
   ch_arr_name_line = list(
     en = "Share of current stock",
     fa = "سهم از جمعیت کنونی"),
@@ -87,11 +87,11 @@ STR <- list(
 
   # --- source lines ------------------------------------------------------------
   ch_src_bfs = list(
-    en = "Source: %s &mdash; Population Register, 2024",
-    fa = "منبع: %s &mdash; ثبت جمعیت، 2024"),
+    en = "Source: %s &mdash; Population Register, %s",
+    fa = "منبع: %s &mdash; ثبت جمعیت، %s"),
   ch_src_bfs_imm = list(
-    en = "Source: %s &mdash; Immigration of permanent resident population, 2011–2024",
-    fa = "منبع: %s &mdash; مهاجرت جمعیت مقیم دائم، 2011–2024"),
+    en = "Source: %s &mdash; Immigration of permanent resident population, 2011–%s",
+    fa = "منبع: %s &mdash; مهاجرت جمعیت مقیم دائم، 2011–%s"),
 
   # --- axis affix --------------------------------------------------------------
   ch_axis_pct_suffix = list(

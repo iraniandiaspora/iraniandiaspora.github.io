@@ -81,7 +81,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; display:flex; flex-direction:column; }
 .chart-card::before, .chart-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
-.chart-card::before { flex-grow:1; }
+.chart-card::before { flex-grow:0; }
 .chart-card::after { flex-grow:1.35; }
 .text-card { background:white; border-radius:8px; padding:20px; border:1px solid #e0e0e0; font-size:14px; color:#444; line-height:1.7; }
 .section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
@@ -495,7 +495,8 @@ for (LANG in c("en", "fa")) {
       title = list(text = htxt(tr("uk_econ_title")),
         font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", tickformat = ","),
-      yaxis = list(title = "", tickfont = list(size = 11)),
+      yaxis = list(title = "", tickfont = list(size = 11), automargin = TRUE,
+        ticks = "outside", ticklen = 8, tickcolor = "rgba(0,0,0,0)"),
       margin = list(l = 100, r = 20, t = 55, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
@@ -510,6 +511,9 @@ for (LANG in c("en", "fa")) {
   qual_end_text <- pct_lab(qual$count[qual_ord] / qual_total * 100)
   if (is_fa()) qual_end_text <- gsub("%", "٪", fa_digits(qual_end_text))  # N% -> ۲۴٪ (axis-style suffix)
   ov_qual <- hbar_over_labels(qual_labels_disp,
+    # These short Persian qualification names fit the card without a forced
+    # 34-character break; keep the Latin exam name together as well.
+    wrap_at = if (is_fa()) 48 else 34,
     ends = qual$count[qual_ord],
     end_text = qual_end_text)
   qual_xrange <- if (isTRUE(ov_qual$xreversed)) c(qual_xmax, 0) else c(0, qual_xmax)
@@ -526,7 +530,7 @@ for (LANG in c("en", "fa")) {
         font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = qual_xrange),
       yaxis = ov_qual$yaxis,
-      annotations = ov_qual$annotations, bargap = ov_qual$bargap,
+      annotations = ov_qual$annotations, shapes = ov_qual$shapes, bargap = ov_qual$bargap,
       margin = list(l = ov_qual$margin_l, r = 20, t = ov_qual$margin_t, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)

@@ -7,8 +7,8 @@
 # Output: data/switzerland/
 #   ch_headline.csv  - total, male, female, swiss_citizen, iranian_citizen, foreign
 #   ch_canton.csv    - canton_name, canton_code, iran_born
-#   ch_trend.csv     - year, total (2010-2024)
-#   ch_arrivals.csv  - year, count (2011-2024 immigration flow)
+#   ch_trend.csv     - year, total (2010-LATEST_YEAR)
+#   ch_arrivals.csv  - year, count (2011-LATEST_YEAR immigration flow)
 #
 # Data source: BFS PX-Web API (no authentication needed)
 #   Base URL: https://www.pxweb.bfs.admin.ch/api/v1/en/
@@ -21,6 +21,8 @@ suppressPackageStartupMessages({
   library(httr)
   library(jsonlite)
 })
+
+LATEST_YEAR <- 2025L  # Single endpoint for headline, cantons, trend and arrivals.
 
 BASE    <- "https://www.pxweb.bfs.admin.ch/api/v1/en"
 OUT_DIR <- "data/switzerland"
@@ -106,12 +108,12 @@ write_csv <- function(filename, df) {
 }
 
 # =========================================================================
-# 1. Headline: total, male, female, Swiss citizen, Iranian citizen (2024)
+# 1. Headline: total, male, female, Swiss citizen, Iranian citizen (LATEST_YEAR)
 # =========================================================================
 cat("Pulling headline data...\n")
 d <- post_json("px-x-0103010000_499", list(
   query = list(
-    list(code = "Jahr",               selection = list(filter = "item", values = list("2024"))),
+    list(code = "Jahr",               selection = list(filter = "item", values = list(as.character(LATEST_YEAR)))),
     list(code = "Kanton",              selection = list(filter = "item", values = list("8100"))),
     list(code = "Bev\u00f6lkerungstyp", selection = list(filter = "item", values = list("1"))),
     list(code = "Geburtsstaat",        selection = list(filter = "item", values = list("8513"))),
@@ -138,7 +140,7 @@ headline <- data.frame(
   category = c("total", "male", "female", "swiss_citizen",
                "iranian_citizen", "foreign"),
   count = c(total, male, female, swiss_citizen, iranian_citizen, foreign),
-  year = 2024
+  year = LATEST_YEAR
 )
 write_csv("ch_headline.csv", headline)
 cat(sprintf("  Total: %s (M: %s, F: %s)\n",
@@ -151,12 +153,12 @@ cat(sprintf("  Swiss citizens: %s, Iranian citizens: %s, Other foreign: %s\n",
             format(total - swiss_citizen - iranian_citizen, big.mark = ",")))
 
 # =========================================================================
-# 2. Canton breakdown (2024)
+# 2. Canton breakdown (LATEST_YEAR)
 # =========================================================================
 cat("Pulling canton data...\n")
 d <- post_json("px-x-0103010000_499", list(
   query = list(
-    list(code = "Jahr",               selection = list(filter = "item", values = list("2024"))),
+    list(code = "Jahr",               selection = list(filter = "item", values = list(as.character(LATEST_YEAR)))),
     list(code = "Kanton",              selection = list(filter = "all",  values = list("*"))),
     list(code = "Bev\u00f6lkerungstyp", selection = list(filter = "item", values = list("1"))),
     list(code = "Geburtsstaat",        selection = list(filter = "item", values = list("8513"))),
@@ -188,12 +190,12 @@ for (i in seq_along(canton_labels)) {
 write_csv("ch_canton.csv", canton_df)
 
 # =========================================================================
-# 3. Time series 2010-2024 (national, total sex)
+# 3. Time series 2010-LATEST_YEAR (national, total sex)
 # =========================================================================
 cat("Pulling trend data...\n")
 d <- post_json("px-x-0103010000_499", list(
   query = list(
-    list(code = "Jahr",               selection = list(filter = "all",  values = list("*"))),
+    list(code = "Jahr",               selection = list(filter = "item", values = as.list(as.character(2010:LATEST_YEAR)))),
     list(code = "Kanton",              selection = list(filter = "item", values = list("8100"))),
     list(code = "Bev\u00f6lkerungstyp", selection = list(filter = "item", values = list("1"))),
     list(code = "Geburtsstaat",        selection = list(filter = "item", values = list("8513"))),
@@ -214,12 +216,12 @@ trend_df <- trend_df[order(trend_df$year), ]
 write_csv("ch_trend.csv", trend_df)
 
 # =========================================================================
-# 4. Immigration flow 2011-2024 (annual arrivals, national)
+# 4. Immigration flow 2011-LATEST_YEAR (annual arrivals, national)
 # =========================================================================
 cat("Pulling immigration arrivals...\n")
 d <- post_json("px-x-0103020200_103", list(
   query = list(
-    list(code = "Jahr",           selection = list(filter = "all",  values = list("*"))),
+    list(code = "Jahr",           selection = list(filter = "item", values = as.list(as.character(2011:LATEST_YEAR)))),
     list(code = "Kanton",          selection = list(filter = "item", values = list("0"))),
     list(code = "Staatsangeh\u00f6rigkeit (Kategorie)",
          selection = list(filter = "item", values = list("0"))),

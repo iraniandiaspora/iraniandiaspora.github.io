@@ -144,7 +144,7 @@ for (LANG in c("en", "fa")) {
       title = list(text = htxt(sprintf(tr("no_hist_title"),
           fa_num(no_hist_max, 0, big = FALSE))),
         font = list(size = 18, family = "Montserrat")),
-      xaxis = list(title = "", dtick = 10),
+      xaxis = list(title = "", tickmode = "array", tickvals = sort(unique(c(seq(min(hist_sex$year), no_hist_max, 10), no_hist_max))), range = c(min(hist_sex$year) - 0.5, no_hist_max + 0.5)),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       showlegend = FALSE,
       margin = list(t = 40, b = 30),

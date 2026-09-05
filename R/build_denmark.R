@@ -293,11 +293,27 @@ for (LANG in c("en", "fa")) {
       title = list(text = htxt(tr("dk_industry_title")),
         font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE, fixedrange = TRUE, range = dk_xrange),
-      yaxis = ov_dk$yaxis,
-      annotations = ov_dk$annotations, bargap = ov_dk$bargap,
-      margin = list(l = ov_dk$margin_l, r = 20, t = ov_dk$margin_t, b = 30),
+      yaxis = list(title = "", tickmode = "array", tickvals = levels(industry$sector_en),
+        ticktext = sector_disp, tickfont = list(size = 11), side = if (is_fa()) "right" else "left",
+        automargin = TRUE, ticks = "outside", ticklen = 8, tickcolor = "rgba(0,0,0,0)"),
+      annotations = Filter(function(a) identical(a$xref, "x"), ov_dk$annotations), bargap = 0.35,
+      margin = list(l = if (is_fa()) 45 else 280, r = if (is_fa()) 280 else 45, t = 65, b = 30),
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
+
+  # Keep useful bar width on phones; desktop keeps single-line external labels.
+  dk_narrow_labels <- vapply(sector_disp, function(x)
+    paste(strwrap(x, width = 20), collapse = "<br>"), character(1))
+  dk_responsive <- sprintf('<script>(function(){var last=null;function fit(){
+    var el=document.getElementById("dk-industry");if(!el||!el.data)return;
+    var narrow=el.clientWidth<600;if(narrow===last)return;last=narrow;
+    var left=%s?35:(narrow?145:280),right=%s?(narrow?145:280):35;
+    var height=narrow?780:600;el.style.height=height+"px";
+    Plotly.relayout(el,{"margin.l":left,"margin.r":right,"height":height,
+      "yaxis.ticktext":narrow?%s:%s}).then(function(){if(window.reportHeight)reportHeight();});
+    }window.addEventListener("load",fit);window.addEventListener("resize",fit);})();</script>',
+    if (is_fa()) "true" else "false", if (is_fa()) "true" else "false",
+    toJSON(unname(dk_narrow_labels)), toJSON(unname(sector_disp)))
 
   # --- Text card (precompute pieces so the HTML/CSS template stays identical) -
   w_big  <- sprintf(tr("dk_wi_bignum"), fa_num(top3$pct[1], 0))
@@ -308,7 +324,7 @@ for (LANG in c("en", "fa")) {
   w_foot <- tr("dk_wi_footnote")
 
   workinc_body <- paste0(
-    '<div class="chart-row">',
+    '<div class="chart-row" style="grid-template-columns:1fr;">',
     sprintf('<div class="text-card pt1" style="text-align:center; display:flex; flex-direction:column;">
     <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>
@@ -321,7 +337,7 @@ for (LANG in c("en", "fa")) {
   </div>',
       w_big, w_prim, w_next, w_b1, w_b2, w_foot),
     '<div class="chart-card">',
-    plotly_div("dk-industry", pj(p_industry), ov_dk$height, source = DST_EMP_SOURCE),
+    plotly_div("dk-industry", pj(p_industry), "600px", source = DST_EMP_SOURCE), dk_responsive,
     '</div>',
     '</div>'
   )

@@ -220,7 +220,7 @@ uk_ts <- data.frame(
 # France: INSEE annual "immigré" series, 2006-2019 (2018 not published).
 fr_ts <- combined %>% filter(geo == "FR", year >= 1999) %>% arrange(year)
 
-# Switzerland: BFS register, 2010-2024 (continuous, but not Eurostat).
+# Switzerland: BFS register, 2010 through its latest year (continuous, non-Eurostat).
 ch_ts <- combined %>% filter(geo == "CH") %>% arrange(year)
 
 n_countries <- nrow(latest)

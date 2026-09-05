@@ -91,9 +91,9 @@ STR <- list(
   nl_arrival_hover_cum = list(
     en = "<b>%s</b><br>%s%% of today's Iran-born population had arrived",
     fa = "<b>%s</b><br>%s درصد از جمعیت کنونی متولدان ایران تا این سال وارد شده بودند"),
-  nl_arrival_pre1965_label = list(
-    en = "≤1965",
-    fa = "تا 1965"),
+  nl_arrival_early_label = list(
+    en = "≤%s",
+    fa = "تا %s"),
   nl_axis_pct_0   = list(en = "0%",   fa = "0٪"),
   nl_axis_pct_25  = list(en = "25%",  fa = "25٪"),
   nl_axis_pct_50  = list(en = "50%",  fa = "50٪"),
@@ -104,9 +104,6 @@ STR <- list(
     fa = "<b>%s</b><br>%s نفر ایرانی‌تبار<br>%s درصد از کل"),
 
   # --- source lines ---------------------------------------------------------
-  nl_src_cbs_pop2025 = list(
-    en = "Source: %s &mdash; Statistics Netherlands, Population Register 2025",
-    fa = "منبع: %s &mdash; اداره آمار هلند، ثبت جمعیت 2025"),
   nl_src_cbs_pop2026 = list(
     en = "Source: %s &mdash; Statistics Netherlands, Population Register, January 2026",
     fa = "منبع: %s &mdash; اداره آمار هلند، ثبت جمعیت، ژانویه 2026"),
@@ -117,8 +114,8 @@ STR <- list(
     en = "Source: %s — Iran-born population stock, 1999–2025; 1990 and 1995 from UN DESA",
     fa = "منبع: %s — جمعیت متولدان ایران، 1999–2025؛ داده‌های 1990 و 1995 از UN DESA"),
   nl_src_cbs_duration = list(
-    en = "Source: %s &mdash; Statistics Netherlands, residence duration, January 2025",
-    fa = "منبع: %s &mdash; اداره آمار هلند، مدت اقامت، ژانویه 2025"),
+    en = "Source: %s &mdash; Statistics Netherlands, residence duration, January 2026",
+    fa = "منبع: %s &mdash; اداره آمار هلند، مدت اقامت، ژانویه 2026"),
   nl_src_cbs_income = list(
     en = "Source: %s &mdash; Statistics Netherlands, household income and wealth, 2011&ndash;2024",
     fa = "منبع: %s &mdash; اداره آمار هلند، درآمد و دارایی خانوار، 2011&ndash;2024"),

@@ -44,7 +44,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 17 coun
 | Austria | Statistik Austria / Eurostat population register | 1990–2025 |
 | Italy | ISTAT / Eurostat population register | 2002–2025 |
 | France | INSEE Recensement de la population (immigré series) | 2006–2019 |
-| Switzerland | Swiss Federal Statistical Office (BFS) population register | 2010–2024 |
+| Switzerland | Swiss Federal Statistical Office (BFS) population register | 2010–2025 |
 | Finland | Statistics Finland (StatFin) population register | 1990–2025 |
 | Türkiye | TÜİK address-based population register (ADNKS), via Eurostat | 2014–2025 |
 | Armenia | UN International Migrant Stock; Armstat Population Censuses | 1990–2024; 2011 and 2022 |

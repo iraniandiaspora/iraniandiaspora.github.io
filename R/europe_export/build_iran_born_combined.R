@@ -108,9 +108,9 @@ dk_data <- tibble(
 # STATPOP with labels shifted one year — Eurostat's 1-Jan-Y figure equals the
 # BFS end-of-(Y-1) stock, digit-for-digit in all 11 overlap years (verified
 # 2026-08-02: join of data/switzerland/ch_trend.csv vs the old Eurostat CH
-# rows; e.g. BFS 2020 = Eurostat 2021 = 14,241). Using ch_trend.csv (2010-2024)
+# rows; e.g. BFS 2020 = Eurostat 2021 = 14,241). Using the full ch_trend.csv series
 # keeps one labeling convention, matches the ch-population page, and makes the
-# time-chart footnote ("BFS register, 2010-2024") true — the footnote already
+# time-chart BFS attribution true — the footnote already
 # claimed BFS while the data was still the stale Eurostat rows.
 ch_trend <- read_csv("data/switzerland/ch_trend.csv", show_col_types = FALSE)
 ch_data <- tibble(

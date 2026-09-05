@@ -191,7 +191,7 @@ UK_ECON_FA <- c(
 UK_QUAL_FA <- c(
   "No qualifications"            = "بدون مدرک تحصیلی",
   "Level 1 (GCSEs)"              = "سطح 1 (GCSE)",
-  "Level 2 (5+ GCSEs / O levels)" = "سطح 2 (پنج GCSE یا بیشتر / O level)",
+  "Level 2 (5+ GCSEs / O levels)" = "سطح 2 (پنج GCSE یا بیشتر / O\u00a0level)",
   "Level 3 (A levels)"           = "سطح 3 (A level)",
   "Level 4+ (Degree or higher)"  = "سطح 4 به بالا (لیسانس یا بالاتر)",
   "Other qualifications"         = "مدارک دیگر"

@@ -414,7 +414,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
   <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">', tr("gl_card1_primary"), '</div>
 </div>
 <div class="text-card global-text2" style="text-align:center;">
-  <div style="margin:4px auto 0; max-width:460px; text-align:left; border-top:1px solid #dbe6f0; padding-top:13px;">
+  <div style="margin:4px auto 0; max-width:460px; text-align:start; border-top:1px solid #dbe6f0; padding-top:13px;">
   <div style="font-size:13px; font-weight:700; color:#1a4e72; line-height:1.4; margin-bottom:9px;">', tr("gl_card2_heading"), '</div>
   <ul style="margin:0; padding-left:18px; font-size:13px; color:#555; line-height:1.55;">
     <li>', tr("gl_card2_bullet1"), '</li>

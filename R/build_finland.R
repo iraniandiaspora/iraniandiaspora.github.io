@@ -185,7 +185,7 @@ for (LANG in c("en", "fa")) {
         text = htxt(sprintf(tr("fi_hist_title"),
           fa_num(fi_min_yr, 0, big = FALSE), fa_num(data_yr, 0, big = FALSE))),
         font = list(size = 18, family = "Montserrat")),
-      xaxis = list(title = "", dtick = 5),
+      xaxis = list(title = "", tickmode = "array", tickvals = sort(unique(c(seq(fi_min_yr, max(trend$year), 5), max(trend$year)))), range = c(fi_min_yr - 0.5, max(trend$year) + 0.5)),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
       margin = list(t = 50, b = 50),
       legend = list(orientation = "h", x = 0.5, xanchor = "center", y = -0.15),
@@ -195,7 +195,7 @@ for (LANG in c("en", "fa")) {
   # --- Region choropleth map (Iran-born by maakunta, 2025) -------------------
   p_map <- plot_ly() %>%
     add_trace(type = "choropleth",
-      geojson = fi_geojson,
+      geojson = plotly_geo_winding(fi_geojson),
       locations = region$geo_code, z = region$count,
       featureidkey = "properties.maakunta",
       text = htxt(sprintf(tr("fi_map_hover"),

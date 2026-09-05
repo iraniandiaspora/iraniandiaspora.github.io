@@ -84,9 +84,7 @@ nl_total <- hl$count[hl$category == "total"]
 nl_gen1  <- hl$count[hl$category == "gen1"]
 nl_gen2  <- hl$count[hl$category == "gen2"]
 
-# Province/map shares divide by the 2025 provincial total (the vintage the map
-# depicts), not the 2026 headline total, so hover percentages stay internally
-# consistent (the 12 provinces sum to the 2025 national figure).
+# Province/map shares use the matching provincial total; map and headline are 2026.
 prov_total <- sum(prov$count)
 
 # --- Historical Iran-born trend 1990-2025 (UN + Eurostat) --------------------
@@ -113,11 +111,13 @@ if (nrow(un_nl) > 0) {
 # --- Arrival year aggregation (from residence duration) ----------------------
 arrival <- read.csv(file.path(DATA_DIR, "nl_arrival_year.csv"),
                     stringsAsFactors = FALSE)
-arrival$label <- ifelse(arrival$arrival_year <= 1965,
-                        "≤1965", as.character(arrival$arrival_year))
+arrival_cutoff <- min(arrival$arrival_year)
+arrival_early_label <- paste0("≤", arrival_cutoff)
+arrival$label <- ifelse(arrival$arrival_year == arrival_cutoff,
+                        arrival_early_label, as.character(arrival$arrival_year))
 arrival_agg <- aggregate(count ~ label, data = arrival, FUN = sum)
-arrival_agg$year_num <- ifelse(arrival_agg$label == "≤1965", 1965L,
-                               as.integer(arrival_agg$label))
+arrival_agg$year_num <- ifelse(arrival_agg$label == arrival_early_label, arrival_cutoff,
+                               as.integer(sub("≤", "", arrival_agg$label)))
 arrival_agg <- arrival_agg[order(arrival_agg$year_num), ]
 total_arr <- sum(arrival_agg$count)
 arrival_agg$cumulative <- cumsum(arrival_agg$count)
@@ -162,7 +162,7 @@ for (LANG in c("en", "fa")) {
   cat(sprintf("=== Building Netherlands [%s] ===\n", LANG))
 
   # --- Source citation strings (per language) --------------------------------
-  cbs_src     <- sprintf(tr("nl_src_cbs_pop2025"),  lnk(CBS_LINK))
+  cbs_src     <- sprintf(tr("nl_src_cbs_pop2026"),  lnk(CBS_LINK))
   cbs_pop_src <- sprintf(tr("nl_src_cbs_pop2026"),  lnk(CBS_LINK))
   cbs_lf_src  <- sprintf(tr("nl_src_cbs_lf"),       lnk(CBS_LINK))
   hist_src    <- sprintf(tr("nl_src_hist"),         lnk(EURO_LINK))
@@ -177,9 +177,9 @@ for (LANG in c("en", "fa")) {
                         tr("nl_axis_pct_50"), tr("nl_axis_pct_75"),
                         tr("nl_axis_pct_100")))
 
-  # Arrival cohort display labels (pre-1965 relabel + Persian digits in fa).
-  disp_label <- ifelse(arrival_agg$label == "≤1965",
-                       tr("nl_arrival_pre1965_label"), arrival_agg$label)
+  # Arrival cohort display labels (open-ended earliest bucket + Persian digits in fa).
+  disp_label <- ifelse(arrival_agg$label == arrival_early_label,
+                       sprintf(tr("nl_arrival_early_label"), arrival_cutoff), arrival_agg$label)
   if (is_fa()) disp_label <- fa_digits(disp_label)
 
   # ===========================================================================
@@ -191,7 +191,7 @@ for (LANG in c("en", "fa")) {
   if (has_geojson) {
     p_nl_map <- plot_ly() %>%
       add_trace(type = "choropleth",
-        geojson = nl_geojson,
+        geojson = plotly_geo_winding(nl_geojson),
         locations = prov$province_code,
         z = prov$count,
         featureidkey = "properties.statcode",

@@ -152,7 +152,7 @@ French law (Loi Informatique et Libertés, Art. 8) prohibits collecting ethnicit
 
 ## Switzerland
 
-Iran-born residents are identified in the population register maintained by the [Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html). A person is counted as Iran-born based on their registered country of birth. The headline figure of 17,213 is the most recent annual stock (2024).
+Iran-born residents are identified in the population register maintained by the [Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html). A person is counted as Iran-born based on their registered country of birth. The headline figure of 17,774 is the most recent annual stock (2025).
 
 The register tracks country of birth but not parental birthplace; Swiss-born children of Iran-born parents are not counted. The geographic distribution covers all 26 cantons. The trend chart covers 2010–2024, with an additional chart showing annual immigration from Iran (2011–2024).
 

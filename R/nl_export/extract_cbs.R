@@ -9,9 +9,12 @@
 # Source tables:
 #   85384NED — Population by sex, age, marital status, herkomstland
 #   85458NED — Population by sex, age, herkomstland, region
+#   85371NED — Residence duration of foreign-born residents
 #   84729NED — Labour force by sex, characteristics, herkomstland
 
 suppressPackageStartupMessages(library(jsonlite))
+
+POP_YEAR <- 2026L  # Shared endpoint for region and residence-duration extracts.
 
 CBS_DIR <- "../_data/netherlands/cbs_api"
 OUT_DIR <- "data/netherlands"
@@ -45,6 +48,7 @@ headline <- data.frame(
   count = c(total_v, gen1_v, gen2_v),
   stringsAsFactors = FALSE
 )
+stopifnot(total_v == 65721L)  # Refresh guard: headline source is unchanged.
 write.csv(headline, file.path(OUT_DIR, "nl_headline.csv"), row.names = FALSE)
 cat("  nl_headline.csv\n")
 
@@ -64,8 +68,9 @@ trend <- data.frame(
 write.csv(trend, file.path(OUT_DIR, "nl_trend.csv"), row.names = FALSE)
 cat("  nl_trend.csv\n")
 
-# ---- 3. Province-level counts (85458NED, 2025) ----
-raw_reg <- fromJSON(file.path(CBS_DIR, "iran_by_region_2025.json"))$value
+# ---- 3. Province-level counts (85458NED, POP_YEAR) ----
+raw_reg <- fromJSON(file.path(CBS_DIR, sprintf("iran_by_region_%d.json", POP_YEAR)))$value
+stopifnot(all(raw_reg$Perioden == sprintf("%dJJ00", POP_YEAR)))
 raw_reg$RegioS   <- trimws(raw_reg$RegioS)
 raw_reg$Geslacht <- trimws(raw_reg$Geslacht)
 
@@ -125,7 +130,7 @@ if (!file.exists(geojson_path)) {
   cat("  nl_provinces.geojson (already exists)\n")
 }
 
-# ---- 7. Residence duration → implied arrival year (85371NED, 2025) ----
+# ---- 7. Residence duration → implied arrival year (85371NED, POP_YEAR) ----
 raw_rd <- fromJSON(file.path(CBS_DIR, "iran_residence_duration.json"))
 rd_rows <- raw_rd$value
 
@@ -142,18 +147,18 @@ dur_map <- setNames(
   trimws(dur_codes$Key)
 )
 
-# Filter: 2025, total sex/age, exclude total and unknown
-rd_2025 <- rd_rows[grepl("2025", rd_rows$Perioden), ]
-rd_2025$dur_code <- trimws(rd_2025$VerblijfsduurInNederland)
-rd_2025 <- rd_2025[!rd_2025$dur_code %in% c("T001129", "A028024"), ]
-rd_2025$dur_years <- dur_map[rd_2025$dur_code]
-rd_2025$arrival_year <- 2025L - rd_2025$dur_years
-rd_2025$count <- as.integer(rd_2025$BevolkingGeborenBuitenNederland_1)
+# Filter: shared population year, total sex/age, exclude total and unknown
+rd_latest <- rd_rows[rd_rows$Perioden == sprintf("%dJJ00", POP_YEAR), ]
+rd_latest$dur_code <- trimws(rd_latest$VerblijfsduurInNederland)
+rd_latest <- rd_latest[!rd_latest$dur_code %in% c("T001129", "A028024"), ]
+rd_latest$dur_years <- dur_map[rd_latest$dur_code]
+rd_latest$arrival_year <- POP_YEAR - rd_latest$dur_years
+rd_latest$count <- as.integer(rd_latest$BevolkingGeborenBuitenNederland_1)
 
-# The 60+ bucket maps to <=1965; label as 1965
+# The 60+ bucket maps to <= POP_YEAR - 60; the builder labels it as open-ended.
 arrival <- data.frame(
-  arrival_year = rd_2025$arrival_year,
-  count = rd_2025$count,
+  arrival_year = rd_latest$arrival_year,
+  count = rd_latest$count,
   stringsAsFactors = FALSE
 )
 arrival <- arrival[order(arrival$arrival_year), ]

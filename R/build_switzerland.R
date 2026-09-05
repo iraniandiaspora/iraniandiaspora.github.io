@@ -99,7 +99,7 @@ arrivals <- arrivals[order(arrivals$year), ]
 trend <- trend[order(trend$year), ]
 total_arr <- sum(arrivals$count)
 stock_final <- trend$total[trend$year == max(trend$year)]
-# Line is anchored at arrivals years (2011-2024). At year Y, value =
+# Line is anchored at arrivals years (2011 through the latest data year). At year Y, value =
 # stock[Y] / stock[latest] * 100 = "share of current stock already present
 # by end of year Y". The first point (2011) naturally lands above zero
 # because a substantial Iran-born community existed before the chart
@@ -127,8 +127,8 @@ for (LANG in c("en", "fa")) {
   cat(sprintf("=== Building Switzerland [%s] ===\n", LANG))
 
   # --- Source citation strings (per language) --------------------------------
-  BFS_SOURCE     <- sprintf(tr("ch_src_bfs"),     lnk(BFS_LINK))
-  BFS_IMM_SOURCE <- sprintf(tr("ch_src_bfs_imm"), lnk(BFS_LINK))
+  BFS_SOURCE     <- sprintf(tr("ch_src_bfs"),     lnk(BFS_LINK), fa_num(data_yr, 0, big = FALSE))
+  BFS_IMM_SOURCE <- sprintf(tr("ch_src_bfs_imm"), lnk(BFS_LINK), fa_num(max(arrivals$year), 0, big = FALSE))
 
   pct_suffix <- tr("ch_axis_pct_suffix")
 
@@ -137,7 +137,7 @@ for (LANG in c("en", "fa")) {
   # =========================================================================
   cat("Building ch-population...\n")
 
-  # --- Population trend 2010-2024 (line + markers) -------------------------
+  # --- Population trend 2010 through the latest data year (line + markers) -------------------------
   p_trend <- plot_ly(trend, x = ~year, y = ~total, type = "scatter",
       mode = "lines+markers",
       line = list(color = "#1a4e72", width = 2.5),
@@ -146,7 +146,7 @@ for (LANG in c("en", "fa")) {
         fa_num(trend$year, 0, big = FALSE), fmtv(trend$total))),
       hoverinfo = "text", showlegend = FALSE) %>%
     layout(
-      title = list(text = htxt(tr("ch_trend_title")),
+      title = list(text = htxt(sprintf(tr("ch_trend_title"), max(trend$year))),
         font = list(size = 18, family = "Montserrat")),
       xaxis = list(title = "", dtick = 2),
       yaxis = list(title = "", tickformat = ",", rangemode = "tozero"),
@@ -155,7 +155,7 @@ for (LANG in c("en", "fa")) {
       plot_bgcolor = "white", paper_bgcolor = "white"
     ) %>% config(displayModeBar = FALSE)
 
-  # --- Annual arrivals 2011-2024 (bars + stock-share % line) ---------------
+  # --- Annual arrivals 2011 through the latest data year (bars + stock-share % line) ---------------
   p_arrivals <- plot_ly() %>%
     add_bars(data = arrivals, x = ~year, y = ~count,
       marker = list(color = "#2774AE",
@@ -170,14 +170,14 @@ for (LANG in c("en", "fa")) {
       yaxis = "y2",
       line = list(color = "lightblue", width = 2),
       text = htxt(sprintf(tr("ch_arr_hover_line"),
-        fa_num(stock_line$year, 0, big = FALSE), fa_num(stock_line$cum_pct, 0))),
+        fa_num(stock_line$year, 0, big = FALSE), fa_num(stock_line$cum_pct, 0), fa_num(data_yr, 0, big = FALSE))),
       hoverinfo = "text", showlegend = FALSE, name = tr("ch_arr_name_line"),
       inherit = FALSE) %>%
     layout(
       title = list(
-        text = htxt(tr("ch_arr_title")),
+        text = htxt(sprintf(tr("ch_arr_title"), max(arrivals$year))),
         font = list(size = 18, family = "Montserrat")),
-      xaxis = list(title = "", dtick = 2, range = c(2010.5, 2024.5)),
+      xaxis = list(title = "", dtick = 1, tickangle = -30, range = c(min(arrivals$year) - 0.5, max(arrivals$year) + 0.5)),
       yaxis = list(title = "", tickformat = ","),
       yaxis2 = list(overlaying = "y", side = "right", showgrid = FALSE,
         range = c(0, max_bar * 1.05),
@@ -192,7 +192,7 @@ for (LANG in c("en", "fa")) {
   # --- Canton choropleth map -----------------------------------------------
   p_canton_map <- plot_ly() %>%
     add_trace(type = "choropleth",
-      geojson = ch_geojson,
+      geojson = plotly_geo_winding(ch_geojson),
       locations = canton$canton_name, z = canton$iran_born,
       featureidkey = "properties.name",
       text = htxt(sprintf(tr("ch_map_hover"),
@@ -241,6 +241,11 @@ for (LANG in c("en", "fa")) {
     '<div class="chart-row">',
     '<div class="chart-card">',
     plotly_div("ch-arrivals", pj(p_arrivals), "430px", source = BFS_IMM_SOURCE),
+    '<script>(function(){var last=null;function fit(){var el=document.getElementById("ch-arrivals");
+    if(!el||!el.data)return;var narrow=el.clientWidth<450;if(narrow===last)return;last=narrow;
+    Plotly.relayout(el,{"xaxis.tickangle":narrow?-90:-30,"margin.b":narrow?65:45});}
+    window.addEventListener("load",fit);window.addEventListener("resize",fit);})();</script>',
+
     '</div>',
     '<div class="chart-card">',
     '<div class="section-title" style="margin-top:0;">', tr("ch_geo_section_title"), '</div>',
@@ -267,4 +272,4 @@ cat(sprintf("Cantons: %d, Zurich share: %d%%\n", nrow(canton), zurich_pct))
 cat(sprintf("Trend: %s (%d) -> %s (%d)\n",
   format(trend$total[1], big.mark = ","), trend$year[1],
   format(trend$total[nrow(trend)], big.mark = ","), trend$year[nrow(trend)]))
-cat(sprintf("Total arrivals 2011-2024: %s\n", format(total_arr, big.mark = ",")))
+cat(sprintf("Total arrivals %d-%d: %s\n", min(arrivals$year), max(arrivals$year), format(total_arr, big.mark = ",")))

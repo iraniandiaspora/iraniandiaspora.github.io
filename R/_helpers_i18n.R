@@ -99,15 +99,13 @@ FA_FONT_HEAD <- paste0(
 FA_RTL_OVERRIDES <- paste0(
   '<style>',
   '[dir="rtl"] body{text-align:right;}',
-  '[dir="rtl"] .headline div[style*="text-align:left"]{text-align:right !important;}',
+  '[dir="rtl"] .text-card div[style*="text-align:left"],[dir="rtl"] .headline div[style*="text-align:left"]{text-align:right !important;}',
   '[dir="rtl"] .headline ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:20px !important;}',
   '[dir="rtl"] .text-card ul{direction:rtl !important;text-align:right !important;padding-left:0 !important;padding-right:18px !important;}',
   '[dir="rtl"] .headline ul li,[dir="rtl"] .text-card ul li{text-align:right !important;}',
-  # .fa-chart-title = the HTML chart title plotly_div() renders above each fa
-  # chart (inline default margin:0 0 2px). Inside a .tab-panel it sits directly
-  # under the tab-button bar, so give it top breathing room there; !important
-  # beats the inline margin shorthand (top only — bottom stays tight).
-  '[dir="rtl"] .tab-panel .fa-chart-title{margin-top:14px !important;}',
+  # The shared plotly_div() tab-bar bottom margin supplies title clearance.
+  # Reset the legacy extra RTL margin so it is not counted twice.
+  '[dir="rtl"] .tab-panel .fa-chart-title{margin-top:0 !important;}',
   '</style>')
 
 # --- FA_NUM_SCRIPT: universal Persian-digit pass ------------------------------

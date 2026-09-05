@@ -110,7 +110,7 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
 .chart-row { display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-bottom:20px; align-items:stretch; }
 .chart-card { background:white; border-radius:8px; padding:16px; border:1px solid #e0e0e0; margin-bottom:20px; overflow:hidden; min-width:0; display:flex; flex-direction:column; }
 .chart-card::before, .chart-card::after { content:""; display:block; flex-shrink:0; flex-basis:0; }
-.chart-card::before { flex-grow:1; }
+.chart-card::before { flex-grow:0; }
 .chart-card::after { flex-grow:1.35; }
 .section-title { font-size:18px; font-weight:600; text-align:center; margin:16px 0 8px; }
 .source { font-size:12px; color:#666; text-align:right; padding:4px 0; margin-top:10px; }
@@ -416,8 +416,11 @@ total_pop <- sum(region_dat$pop)
 
 # --- Generate PMTiles for maps (freestiler) — ONCE, language-independent -----
 has_freestiler <- requireNamespace("freestiler", quietly = TRUE)
-if (!has_freestiler) {
-  cat("  Skipping PMTiles (freestiler not installed) — using existing tiles\n")
+skip_tiles <- identical(Sys.getenv("IDD_SKIP_TILES"), "1")
+if (skip_tiles) stopifnot(all(file.exists(file.path("docs/pages/tiles",
+  c("us_states.pmtiles", "ca_counties.pmtiles", "la_pumas.pmtiles")))))
+if (skip_tiles || !has_freestiler) {
+  cat("  Skipping PMTiles (layout-only build or freestiler unavailable) — using existing tiles\n")
 } else {
 library(freestiler)
 library(sf)
@@ -769,7 +772,7 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
       margin = list(t = 75, b = 70),
       plot_bgcolor = "white", paper_bgcolor = "white",
       annotations = list(
-        list(text = htxt(tr("us_income_baseline_annot")), x = decile_labels[5], y = 13,
+        list(text = htxt(tr("us_income_baseline_annot")), x = 4, y = 13,
           showarrow = FALSE, font = list(size = 8, color = "#cc0000"), xanchor = "center"))
     ) %>% config(displayModeBar = FALSE)
 
@@ -788,12 +791,12 @@ make_income_chart <- function(df, gen_val, gen_label, id_prefix) {
       # fa/RTL: pin xanchor="center" explicitly. The default "auto" resolves to
       # an edge anchor under dir="rtl" (offsetting each label off its point);
       # explicit "center" centers it above/below the point, matching EN.
-      p <- p %>% add_annotations(x = d$label[i], y = y_pos, text = lbl,
+      p <- p %>% add_annotations(x = match(as.character(d$label[i]), decile_labels) - 1L, y = y_pos, text = lbl,
         xanchor = "center", yanchor = "bottom", yshift = 11,
         bgcolor = "rgba(255,255,255,0.85)", borderpad = 1,
         showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
     } else {
-      p <- p %>% add_annotations(x = d$label[i], y = y_pos, text = lbl,
+      p <- p %>% add_annotations(x = match(as.character(d$label[i]), decile_labels) - 1L, y = y_pos, text = lbl,
         yanchor = "bottom", yshift = 11,
         bgcolor = "rgba(255,255,255,0.85)", borderpad = 1,
         showarrow = FALSE, font = list(size = 10, color = "#4A90D9"))
@@ -1027,7 +1030,7 @@ adm_body <- paste0(
     fmtv(sum(lpr$total)), htxt(tr("us_adm_c1_primary")),
     htxt(tr("us_adm_c1_b1")), htxt(tr("us_adm_c1_b2")), htxt(tr("us_adm_c1_b3"))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
-    <div style="margin:0 auto; max-width:420px; text-align:left; font-size:13px; font-weight:700; color:#1a4e72; line-height:1.4;">%s</div>
+    <div style="margin:0 auto; max-width:420px; text-align:start; font-size:18px; font-weight:700; color:#1a4e72; line-height:1.4;">%s</div>
     <ul style="margin:9px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.6;">
       <li>%s</li>
       <li>%s</li>
@@ -1114,7 +1117,7 @@ p_bizrate <- plot_ly(br, x = ~rate_pct, y = ~origin, type = "bar", orientation =
     xaxis = list(title = "", showticklabels = FALSE, showgrid = FALSE, zeroline = FALSE,
       fixedrange = TRUE, range = if (ov_br$xreversed) c(br_xmax, 0) else c(0, br_xmax)),
     yaxis = ov_br$yaxis,
-    annotations = ov_br$annotations, bargap = ov_br$bargap,
+    annotations = ov_br$annotations, shapes = ov_br$shapes, bargap = ov_br$bargap,
     margin = list(t = ov_br$margin_t, b = 40, l = ov_br$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
@@ -1135,7 +1138,7 @@ p_bizind <- plot_ly(bi, x = ~share_pct, y = ~industry, type = "bar", orientation
     xaxis = list(title = "", ticksuffix = pct_suffix, zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_bi$xreversed) c(bi_xmax, 0) else c(0, bi_xmax)),
     yaxis = ov_bi$yaxis,
-    annotations = ov_bi$annotations, bargap = ov_bi$bargap,
+    annotations = ov_bi$annotations, shapes = ov_bi$shapes, bargap = ov_bi$bargap,
     margin = list(t = ov_bi$margin_t, b = 40, l = ov_bi$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
@@ -1156,7 +1159,7 @@ p_occ <- plot_ly(oc, x = ~share_pct, y = ~group, type = "bar", orientation = "h"
     xaxis = list(title = "", ticksuffix = pct_suffix, zeroline = FALSE, fixedrange = TRUE,
       range = if (ov_oc$xreversed) c(oc_xmax, 0) else c(0, oc_xmax)),
     yaxis = ov_oc$yaxis,
-    annotations = ov_oc$annotations, bargap = ov_oc$bargap,
+    annotations = ov_oc$annotations, shapes = ov_oc$shapes, bargap = ov_oc$bargap,
     margin = list(t = ov_oc$margin_t, b = 40, l = ov_oc$margin_l, r = 12),
     plot_bgcolor = "white", paper_bgcolor = "white") %>%
   config(displayModeBar = FALSE)
@@ -1208,13 +1211,13 @@ work_body <- paste0(
   '<button class="tab-btn" onclick="switchTab(\'bo-ind\',this,\'bo-tabs\')">', tr("us_tab_sectors"), '</button>',
   '</div>',
   '<div id="bo-occ" class="tab-panel active" data-group="bo-tabs">',
-  plotly_div("us-occ", pj(p_occ), "500px", source = SRC_OCC),
+  plotly_div("us-occ", pj(p_occ), ov_oc$height, source = SRC_OCC),
   '</div>',
   '<div id="bo-rate" class="tab-panel" data-group="bo-tabs">',
   plotly_div("biz-rate", pj(p_bizrate), ov_br$height, source = SRC_BIZ),
   '</div>',
   '<div id="bo-ind" class="tab-panel" data-group="bo-tabs">',
-  plotly_div("biz-ind", pj(p_bizind), "500px", source = SRC_BIZ),
+  plotly_div("biz-ind", pj(p_bizind), ov_bi$height, source = SRC_BIZ),
   '</div>',
   '</div>',
   '</div>'
