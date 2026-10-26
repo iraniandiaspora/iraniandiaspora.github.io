@@ -110,6 +110,13 @@ un_row <- un_csv[un_csv$destination == "Israel" &
 un_years <- as.integer(sub("^X", "", names(un_row)[grepl("^X", names(un_row))]))
 un_vals  <- as.integer(unlist(un_row[, grepl("^X", names(un_row))]))
 un_trend <- data.frame(year = un_years, iran_born = un_vals)
+# stocks_countries.csv carries the CBS 2024 count (38,200) in Israel's X2024
+# cell so the Global page uses the register figure. This chart is the UN
+# series, so restore the UN 2024 estimate (61,572; UN DESA International
+# Migrant Stock 2024, the value in that cell before commit 7aae31a).
+UN_ISRAEL_2024 <- 61572
+un_trend$iran_born[un_trend$year == 2024] <- UN_ISRAEL_2024
+stopifnot(sum(un_trend$year == 2024) == 1)
 
 # --- Comparison with other Asian-origin groups (colors — once) ----------------
 # Sort by total descending (already sorted in the CSV). Categorical colors per
