@@ -45,13 +45,13 @@ Prior to 1992, immigration law did not separate family and employment preference
 
 ### Language
 
-The Language page reports the language spoken at home from the ACS Public Use Microdata Sample variable LANP. Persian (Farsi) is code 1290. Respondents are recorded as "English only" when LANP is missing because no language other than English is reported. "Other language" combines every remaining LANP code; among first-generation Iranian-Americans, Armenian (code 1288) accounts for roughly two-thirds of this bucket.
+The Language page reports the language spoken at home, from the census language question in the ACS Public Use Microdata Sample. Persian/Farsi is shown as its own category. Respondents who report no language other than English are recorded as "English only." "Other language" combines every remaining language; among first-generation Iranian-Americans, Armenian accounts for roughly two-thirds of this group.
 
 ## Europe Overview
 
 The Europe overview page combines six source families to show Iran-born populations across 23 countries:
 
-- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for eighteen countries (Austria, Belgium, Bulgaria, Czechia, Estonia, Finland, Hungary, Iceland, Italy, Latvia, Lithuania, Luxembourg, Netherlands, Norway, Romania, Slovakia, Slovenia, Sweden), with annual data back to 1998.
+- **[Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table)** – population by country of birth for eighteen countries (Austria, Belgium, Bulgaria, Czechia, Estonia, Finland, Hungary, Iceland, Italy, Latvia, Lithuania, Luxembourg, Netherlands, Norway, Romania, Slovakia, Slovenia, Sweden), with annual data back to 1999.
 - **Destatis Mikrozensus 2025** – for Germany, because Eurostat does not publish Iran-born counts for Germany.
 - **[Statistics Denmark (DST)](https://www.dst.dk/en/)** – for Denmark, using the population register, because Eurostat's Denmark series ends in 2022. The two sources agree within about 1% in their overlap years.
 - **National censuses** – for the United Kingdom (combined from ONS, NRS, and NISRA as described below).
@@ -68,17 +68,17 @@ Persian language is not used as a counting criterion because the language catego
 
 Mikrozensus figures are rounded to the nearest thousand. State-level counts below 5,000 are suppressed by Destatis and appear as grey on the geography charts.
 
-The annual arrivals chart compiles Iranian arrivals from 1991 through 2023 using four editions of the BAMF *Migrationsbericht* (2005, 2015, 2020, 2023).
+The annual arrivals chart compiles Iranian arrivals from 1991 through 2024 using five editions of the BAMF *Migrationsbericht* (2005, 2015, 2020, 2023, 2024).
 
 **Data access:** Mikrozensus publications are available from [Destatis](https://www.destatis.de/DE/Themen/Gesellschaft-Umwelt/Bevoelkerung/Migration-Integration/Publikationen/_publikationen-innen-migrationshintergrund.html). BAMF publications are at [bamf.de](https://www.bamf.de/SharedDocs/Anlagen/DE/Statistik/BundesamtinZahlen/).
 
 ## Sweden
 
-Iranian-origin residents are identified in the population register maintained by [Statistics Sweden (SCB)](https://www.scb.se/en/). A person is classified as Iranian-origin if they were born in Iran (first generation) or were born in Sweden with at least one parent born in Iran (second generation). The headline figure of 135,704 includes both generations (2025). The second generation is further broken down by parental composition (both parents Iran-born, one parent Iran-born with mixed or Swedish-born co-parent).
+Iranian-origin residents are identified in the population register maintained by [Statistics Sweden (SCB)](https://www.scb.se/en/). A person is classified as Iranian-origin if they were born in Iran (first generation) or were born in Sweden with at least one parent born in Iran (second generation). The headline figure of 135,704 includes both generations (2025). The second generation includes children with one Swedish-born and one Iran-born parent.
 
 Third-generation residents (Swedish-born with Swedish-born parents) are not counted. Classification is from birth records, not self-reported ethnicity.
 
-The population-over-time chart uses Eurostat data (Iran-born stock, 1998–2024) for consistency with the Europe overview. The years-since-immigration chart uses SCB data on residence duration among Iran-born residents (2024).
+The population-over-time chart covers 1990–2025. It uses Eurostat data (Iran-born stock, 1999–2025) for consistency with the Europe overview, with missing years filled from SCB and the 1990 and 1995 points from the UN International Migrant Stock. The year-of-arrival chart converts SCB data on years since immigration among Iran-born residents (2024) into calendar year of arrival.
 
 **Data access:** SCB data are publicly available via the [PxWeb API](https://www.scb.se/en/services/open-data-api/api-for-the-statistical-database/).
 
@@ -88,11 +88,11 @@ The population-over-time chart uses Eurostat data (Iran-born stock, 1998–2024)
 
 Iran-born residents are identified in the 2021 Census of England and Wales (ONS), Scotland's Census 2022, and the 2021 Census of Northern Ireland (NISRA). All four nations ask the same place-of-birth question. The combined total is 114,432.
 
-The UK Census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not captured. The regional map aggregates local authorities into nine English regions plus Wales and Scotland. Northern Ireland (461 residents) is noted in the text but not shown on the map.
+The UK Census does not ask about ancestry or parental origin, so British-born children of Iran-born parents are not captured. The regional map aggregates local authorities into nine English regions plus Wales, Scotland, and Northern Ireland (12 regions; Northern Ireland has 461 Iran-born residents).
 
-### Work and Education
+### Cross-tabulations (Population and Work & Education pages)
 
-Age, sex, economic activity, highest qualification, year of arrival, and religion cross-tabulations for Iran-born residents in England and Wales are drawn from the ONS Census 2021 custom dataset tool. This tool allows cross-tabulation of country of birth with socioeconomic variables not available in pre-built tables. Data cover England and Wales only; Scotland and Northern Ireland do not publish comparable cross-tabulations by country of birth.
+Age, sex, economic activity, highest qualification, year of arrival, and religion cross-tabulations for Iran-born residents in England and Wales are drawn from the ONS Census 2021 custom dataset tool. Age and sex, year of arrival, and religion appear on the Population page; economic activity and qualification appear on the Work & Education page. This tool allows cross-tabulation of country of birth with socioeconomic variables not available in pre-built tables. Data cover England and Wales only; Scotland and Northern Ireland do not publish comparable cross-tabulations by country of birth.
 
 **Data access:** England and Wales data from [NOMIS](https://www.nomisweb.co.uk/sources/census_2021) and the [ONS custom dataset tool](https://www.ons.gov.uk/datasets/create). Scotland from [Scotland's Census](https://www.scotlandscensus.gov.uk/). Northern Ireland from [NISRA](https://www.nisra.gov.uk/statistics/census/2021-census).
 
@@ -102,7 +102,7 @@ Iranian-origin residents are identified in the population register maintained by
 
 Third-generation residents (Dutch-born with Dutch-born parents) are not counted as Iranian-origin. The classification is based on birth records, not self-reported ethnicity or language.
 
-The population-over-time chart uses Eurostat data (Iran-born stock, 1999–2025) because CBS only began publishing Iran-specific population counts in 2022. The year-of-arrival chart derives arrival timing from single-year residence duration in the population register; it shows who is currently present, not total historical arrivals.
+The population-over-time chart uses Eurostat data (Iran-born stock, 1999–2025), with 1990 and 1995 points from the UN International Migrant Stock, because CBS only began publishing Iran-specific population counts in 2022. The year-of-arrival chart derives arrival timing from single-year residence duration in the population register; it shows who is currently present, not total historical arrivals.
 
 Labor force participation and employment type come from the CBS Labour Force Survey (2021–2024). Income data come from the CBS household income and wealth tables (2011–2024). Average disposable income figures are in nominal euros. The low-income threshold is inflation-adjusted by CBS, so the low-income share is comparable across years.
 
@@ -114,7 +114,7 @@ Iranian-origin residents are identified in the population register maintained by
 
 The descendant category requires that neither parent is a Danish citizen born in Denmark. Third-generation residents (both parents Danish-born citizens) are not counted. The population chart shows both immigrants and descendants as a stacked area chart over time.
 
-Employment data come from the Register-based Labour Force Statistics (RAS), which provides a 19-sector industry breakdown for Iranian-origin full-time employees (Q4 2024).
+Employment data come from the Register-based Labour Force Statistics (RAS), which provides a 19-sector industry breakdown for Iranian-origin full-time employees (fourth quarter of 2024).
 
 **Data access:** DST data are publicly available via [StatBank Denmark](https://www.statbank.dk/statbank5a/default.asp?w=1920).
 
@@ -122,7 +122,7 @@ Employment data come from the Register-based Labour Force Statistics (RAS), whic
 
 Iranian-origin residents are identified in the population register maintained by [Statistics Norway (SSB)](https://www.ssb.no/en/). A person is classified as Iranian-origin if they are an *innvandrer* (immigrant: born in Iran with two foreign-born parents) or *norskfødt med innvandrerforeldre* (Norwegian-born to immigrant parents: born in Norway with two Iran-born parents). The headline figure of 26,497 includes both categories (2026).
 
-Children with one Norwegian-born parent are not counted as immigrants or Norwegian-born to immigrant parents. The population chart shows male and female immigrants as a stacked area chart over time. Employment rate data cover ages 20–66 from the annual labor force register published by SSB.
+Children with one Norwegian-born parent are not counted as immigrants or Norwegian-born to immigrant parents. The population page has two over-time tabs: the total Iran-born population (1970–2026) and a stacked area chart of immigrants and Norwegian-born to immigrant parents (2010–2026). Employment rate data cover ages 20–66 from the annual labor force register published by SSB.
 
 **Data access:** SSB data are publicly available via [StatBank](https://www.ssb.no/en/statbank).
 
@@ -146,7 +146,7 @@ Italian-born children of Iran-born parents are not counted. The geographic distr
 
 Iran-born residents are identified in the [INSEE](https://www.insee.fr/) Recensement de la population using the "immigré" definition: a person born abroad with foreign nationality at birth. This definition is narrower than Eurostat's foreign-born concept, so France's values are not strictly comparable with the other Eurostat-sourced European countries on the overview chart. The headline figure of 23,800 is the most recent published Iran-specific figure (2019).
 
-French law (Loi Informatique et Libertés, Art. 8) prohibits collecting ethnicity or ancestry statistics, so French-born children of Iran-born parents are not separately identifiable in published tables. INSEE publishes detailed country-of-birth tables with a multi-year lag; the next vintage (2021 reference year) is published but was not reachable at build time.
+French law (Loi Informatique et Libertés, Art. 8) prohibits collecting ethnicity or ancestry statistics, so French-born children of Iran-born parents are not separately identifiable in published tables. INSEE publishes detailed country-of-birth tables with a multi-year lag. The 2021 table has been withdrawn and replaced by the 2022 census tables, which group Iran with other Asian countries; 2019 is therefore the most recent published Iran-specific figure. The trend chart covers 1968–2019 (periodic censuses 1968–1999, annual from 2006).
 
 **Data access:** INSEE country-of-birth tables are linked from [insee.fr](https://www.insee.fr/fr/statistiques/6478089).
 
@@ -154,7 +154,7 @@ French law (Loi Informatique et Libertés, Art. 8) prohibits collecting ethnicit
 
 Iran-born residents are identified in the population register maintained by the [Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html). A person is counted as Iran-born based on their registered country of birth. The headline figure of 17,774 is the most recent annual stock (2025).
 
-The register tracks country of birth but not parental birthplace; Swiss-born children of Iran-born parents are not counted. The geographic distribution covers all 26 cantons. The trend chart covers 2010–2024, with an additional chart showing annual immigration from Iran (2011–2024).
+The register tracks country of birth but not parental birthplace; Swiss-born children of Iran-born parents are not counted. The geographic distribution covers all 26 cantons. The trend chart covers 2010–2025, with an additional chart showing annual immigration from Iran (2011–2025).
 
 **Data access:** BFS population data are publicly available from [bfs.admin.ch](https://www.bfs.admin.ch/bfs/en/home.html).
 
@@ -190,7 +190,7 @@ The PUMF reports household income in categorical bands rather than continuous do
 
 Iran-born residents are identified in the address-based population register (ADNKS) maintained by [TÜİK](https://data.tuik.gov.tr/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). Years follow Eurostat's convention: a figure labelled 2026 is the stock on 1 January 2026, which TÜİK reports as 31 December 2025. The headline figure of 131,957 is the most recent annual stock (2026), taken from TÜİK's population statistics portal ahead of its Eurostat release; it is down from a peak of 154,965 in 2022. The trend chart covers 2015–2026, using TÜİK's portal for years Eurostat does not report (2015–2018, 2021–2022 and 2026). Türkiye-born children of Iran-born parents are not counted.
 
-The Immigration page shows Iranian passport holders resident in Türkiye (2014–2026), which grew 7.7-fold between 2014 (16,834) and the 2022 peak (128,883) before easing to 91,672 in 2026. The difference between Iran-born and Iranian-citizen stock approximates — but does not exactly measure — naturalization to Turkish citizenship, because it also includes Iran-born non-Iranian nationals.
+The Immigration page shows Iranian passport holders resident in Türkiye (2014–2026), which grew 7.7-fold between 2014 (16,834) and the 2022 peak (128,883) before easing to 91,672 in 2026. The difference between Iran-born and Iranian-citizen stock approximates — but does not exactly measure — naturalization to Turkish citizenship, because it also includes Iran-born non-Iranian nationals. A second tab shows Iranian residence permits by type (short-term, student, family, and other long-term) from a Presidency of Migration Management (Göç İdaresi) snapshot dated 7 May 2026.
 
 Provincial (il-level) breakdowns, education, employment, and income cross-tabulations for Iran-born residents are not in public tables and would require custom data requests to TÜİK.
 
@@ -204,7 +204,7 @@ Third-generation residents (Israeli-born with an Israeli-born father) and matern
 
 The comparison chart shows the Iranian-origin group alongside other Asian-origin groups in Israel under the same definition. CBS does not publish geographic distribution by individual country of origin (only by continent), so a regional map is not included.
 
-The [UN International Migrant Stock 2024](https://www.un.org/development/desa/pd/content/international-migrant-stock) reports approximately 61,500 Iran-born residents in Israel, higher than the CBS figure of 38,200. The UN combines Israeli foreign-born data with UNHCR refugee additions and interpolates between reporting points; UN documentation does not specify which Israeli source it draws on. The dashboard uses the CBS register count as the primary figure on both the Israel page and the Global page.
+The [UN International Migrant Stock 2024](https://www.un.org/development/desa/pd/content/international-migrant-stock) reports approximately 61,500 Iran-born residents in Israel in 2024, higher than the CBS 2024 figure of 38,200. The UN combines Israeli foreign-born data with UNHCR refugee additions and interpolates between reporting points; UN documentation does not specify which Israeli source it draws on. The dashboard uses the CBS register count as the headline figure on the Israel page and as Israel's 2024 value on the Global page. The population-over-time tab on the Israel page uses the UN International Migrant Stock throughout (1990–2024).
 
 **Data access:** CBS data are publicly available from the [Israel Central Bureau of Statistics](https://www.cbs.gov.il/en).
 
@@ -229,22 +229,22 @@ Year of arrival is grouped into multi-year periods before 2016 and individual ye
 
 ### Income
 
-The income page compares Iran-born Australians to the national distribution using personal income rather than household income. The Australian Census does not allow cross-tabulating household income with country of birth, so personal weekly income is used instead. National decile thresholds are computed from all Australians aged 25–54, and Iran-born individuals in the same age range are placed into those decile bins. The chart uses a teal color gradient to distinguish it from the household income decile charts used for the United States and Canada.
+The income page compares Iran-born Australians to the national distribution using personal income rather than household income. The Australian Census does not allow cross-tabulating household income with country of birth, so personal weekly income is used instead. National decile thresholds are computed from all Australians aged 25–54, and Iran-born individuals in the same age range are placed into those decile bins. The chart uses a teal line to distinguish it from the household income decile charts used for the United States and Canada.
 
 **Data access:** Census tables are available from [ABS Census Data](https://www.abs.gov.au/census/find-census-data). Cross-tabulations by country of birth require [ABS TableBuilder](https://www.abs.gov.au/statistics/microdata-tablebuilder/tablebuilder) (free registration).
 
 ## Armenia
 
-The Armenia page combines two sources. The trend line uses the [UN International Migrant Stock 2024](https://www.un.org/development/desa/pd/content/international-migrant-stock) for Iran-born estimates at five-year intervals, 1990–2024. Two additional points come from the [Statistical Committee of the Republic of Armenia (Armstat)](https://armstat.am/en/) Population Censuses: the 2011 census recorded 10,532 Iran-born residents and the 2022 census recorded 5,470. Both census points are consistent with the UN estimates within a few percent, and the decline from roughly 22,000 in 1990 to under 7,000 in 2024 is corroborated by independent register counts.
+The Armenia page combines two sources. The trend line uses the [UN International Migrant Stock 2024](https://www.un.org/development/desa/pd/content/international-migrant-stock) for Iran-born estimates at five-year intervals, 1990–2024. Two additional points come from the [Statistical Committee of the Republic of Armenia (Armstat)](https://armstat.am/en/) Population Censuses: the 2011 census recorded 10,532 Iran-born residents and the 2022 census recorded 5,470. The 2011 census count is 5% below the UN 2010 estimate (11,117), and the 2022 census count is 10% below the UN 2020 estimate (6,065) and 19% below the UN 2024 estimate (6,793). Both sources show a decline from roughly 22,000 Iran-born residents in 1990 (UN) to 5,470 in the 2022 census.
 
 **Data access:** UN Migrant Stock data are at the [UN DESA Population Division](https://www.un.org/development/desa/pd/content/international-migrant-stock). Armstat census tables are at [armstat.am](https://armstat.am/en/).
 
 ## Data Reliability
 
-All estimates on the dashboard are descriptive. The underlying surveys support variance estimation through replicate weights, but the dashboard does not display standard errors or confidence intervals. This keeps the presentation consistent across countries whose surveys have different statistical frameworks.
+All estimates on the dashboard are descriptive. The dashboard does not display standard errors or confidence intervals. The U.S. ACS microdata include replicate weights that support variance estimation; the Canadian PUMF does not include replicate weights; the Australian Census and the population registers are full counts. Showing no intervals keeps the presentation consistent across countries whose sources have different statistical frameworks.
 
-For the Canadian PUMF (2.7% sample), small sub-groups may have few observations. For the German Mikrozensus (1% sample), state-level counts below 5,000 are suppressed by Destatis. The U.S. ACS and Australian Census have larger samples and fewer reliability concerns at the subgroup level. European population registers (Netherlands, Sweden, Denmark, Norway, Austria, Italy, Switzerland) and the Israeli population register are full-population counts without sampling error.
+For the Canadian PUMF (2.7% sample), small sub-groups may have few observations. For the German Mikrozensus (1% sample), state-level counts below 5,000 are suppressed by Destatis. The U.S. ACS has a large sample and fewer reliability concerns at the subgroup level. Population-register counts (Netherlands, Sweden, Denmark, Norway, Finland, Austria, Italy, Switzerland, Türkiye, and Israel) are full-population counts without sampling error. The Netherlands labour force and income figures come from the CBS Labour Force Survey and household income statistics, which are sample-based.
 
 ## Replication
 
-The R build scripts (`R/build_*.R`) regenerate every page from intermediate data committed under `data/`. The intermediate data files are produced by upstream extraction scripts under `R/<country>_export/` for European countries and Australia, and under a separate `pipelines/` directory for the U.S. and Canada. Some upstream pipelines require raw census microdata not included in this repository (not redistributable).
+The R build scripts (`R/build_*.R`) regenerate every page from intermediate data committed under `data/`. The intermediate data files are produced by upstream extraction scripts under `R/<country>_export/` for the European countries, Türkiye, Israel, Armenia, Australia, the Global page, and the U.S. business-ownership charts, and under a separate `pipelines/` directory for the U.S. and Canada. Some upstream pipelines require raw census microdata not included in this repository (not redistributable).

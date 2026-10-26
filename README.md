@@ -34,21 +34,21 @@ Interactive data dashboard comparing Iranian diaspora populations across 17 coun
 | United States | American Community Survey (ACS) PUMS; INS/DHS Yearbook of Immigration Statistics | 2020–2024; 1970–2024 |
 | Canada | Census Public Use Microdata File (PUMF) | 2021 |
 | Australia | Australian Bureau of Statistics (ABS) Census; ABS TableBuilder Pro | 2021 |
-| Europe overview | Eurostat migr_pop3ctb (18 countries) + Destatis (Germany) + DST (Denmark) + ONS/NRS/NISRA (UK) + BFS (Switzerland) + INSEE (France) | 1998–2026 |
+| Europe overview | Eurostat population by country of birth (18 countries) + Destatis (Germany) + DST (Denmark) + ONS/NRS/NISRA (UK) + BFS (Switzerland) + INSEE (France) | 1999–2026 |
 | Germany | Mikrozensus Erstergebnisse (Destatis); BAMF Migrationsberichte | 2025; 1991–2024 |
 | United Kingdom | ONS Census 2021 (England &amp; Wales); Scotland's Census 2022; NISRA Census 2021; ONS custom dataset | 2021–2022 |
 | Netherlands | CBS StatLine population register, Labour Force Survey, household income | 1999–2026 |
-| Sweden | Statistics Sweden (SCB) population register; Eurostat | 1998–2025 |
+| Sweden | Statistics Sweden (SCB) population register; Eurostat; UN International Migrant Stock (1990, 1995) | 1990–2025 |
 | Denmark | Statistics Denmark (DST) population register; Register-based Labour Force Statistics (RAS) | 1980–2026 |
 | Norway | Statistics Norway (SSB) population register; employed immigrants statistics | 1970–2026 |
 | Austria | Statistik Austria / Eurostat population register | 1990–2025 |
 | Italy | ISTAT / Eurostat population register | 2002–2025 |
-| France | INSEE Recensement de la population (immigré series) | 2006–2019 |
+| France | INSEE Recensement de la population (immigré series) | 1968–2019 |
 | Switzerland | Swiss Federal Statistical Office (BFS) population register | 2010–2025 |
 | Finland | Statistics Finland (StatFin) population register | 1990–2025 |
 | Türkiye | TÜİK address-based population register (ADNKS), via Eurostat and TÜİK | 2014–2026 |
 | Armenia | UN International Migrant Stock; Armstat Population Censuses | 1990–2024; 2011 and 2022 |
-| Israel | Israel Central Bureau of Statistics (CBS) Statistical Abstract | 2025 |
+| Israel | Israel Central Bureau of Statistics (CBS) Statistical Abstract; UN International Migrant Stock (trend) | 2025; 1990–2024 |
 
 ## Citation
 
@@ -58,7 +58,7 @@ If you use data, figures, or findings from this dashboard, please cite:
 
 ## License
 
-Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying data are subject to their original terms of use from the U.S. Census Bureau, the U.S. Department of Homeland Security (INS/DHS), Statistics Canada, the Australian Bureau of Statistics, CBS Statistics Netherlands, Destatis, BAMF, ONS, ISTAT, BFS, Statistik Austria, the Israel Central Bureau of Statistics, Eurostat, and the United Nations.
+Charts, text, and original analysis are licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You may share and adapt the material with appropriate credit. Underlying data are subject to their original terms of use from the U.S. Census Bureau, the U.S. Department of Homeland Security (INS/DHS), Statistics Canada, the Australian Bureau of Statistics, CBS Statistics Netherlands, Destatis, BAMF, ONS, National Records of Scotland (NRS), NISRA, Statistics Sweden (SCB), Statistics Denmark (DST), Statistics Norway (SSB), Statistics Finland, INSEE, ISTAT, BFS, Statistik Austria, TÜİK, the Presidency of Migration Management of Türkiye (Göç İdaresi), Armstat, the Israel Central Bureau of Statistics, Eurostat, and the United Nations.
 
 ## Credits
 

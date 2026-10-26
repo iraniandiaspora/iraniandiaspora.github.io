@@ -301,8 +301,10 @@ oc_xmax <- max(oc$share_pct) * 1.15
 biz_iran <- br$rate_pct[br$is_iran]
 biz_imm  <- br$rate_pct[br$is_benchmark]
 biz_top  <- round(max(bi$share_pct))
-occ_mbsa <- c("Management, business & finance", "Computer & engineering", "Science",
-              "Education, law, social & arts", "Health care")
+# Display labels (after the recode above), not the CSV labels.
+occ_mbsa <- c("Management & finance", "Computer & engineering", "Science",
+              "Education, law & arts", "Health care")
+stopifnot(all(occ_mbsa %in% oc$group))
 occ_prof <- round(100 * sum(oc$weighted_n[oc$group %in% occ_mbsa]) / sum(oc$weighted_n))
 
 # --- US-MARRIAGE -------------------------------------------------------------
