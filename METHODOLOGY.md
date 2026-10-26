@@ -58,7 +58,7 @@ The Europe overview page combines six source families to show Iran-born populati
 - **[Swiss Federal Statistical Office (BFS)](https://www.bfs.admin.ch/bfs/en/home.html)** – for Switzerland, using the STATPOP register.
 - **[INSEE Recensement de la population](https://www.insee.fr/)** – for France, because INSEE uses a narrower "immigré" definition that is not directly comparable to Eurostat's foreign-born definition.
 
-All figures on the overview page count people born in Iran. Second-generation European-born children are not included in the overview totals because Eurostat does not publish a harmonized second-generation count across countries. Türkiye is not part of the Europe overview; it has its own section below.
+All figures on the overview page count people born in Iran. Second-generation European-born children are not included in the overview totals because Eurostat does not publish a harmonized second-generation count across countries. Türkiye is not part of the Europe overview; it has its own section below. The over-time chart covers 1999–2026.
 
 ## Germany
 
@@ -112,7 +112,7 @@ Labor force participation and employment type come from the CBS Labour Force Sur
 
 Iranian-origin residents are identified in the population register maintained by [Statistics Denmark (DST)](https://www.dst.dk/en/). A person is classified as Iranian-origin if they are an *indvandrer* (immigrant: born in Iran, neither parent a Danish citizen born in Denmark) or an *efterkommer* (descendant: born in Denmark, neither parent a Danish citizen born in Denmark). The headline figure of 28,855 includes both categories (2026).
 
-The descendant category requires that neither parent is a Danish citizen born in Denmark. Third-generation residents (both parents Danish-born citizens) are not counted. The population chart shows both immigrants and descendants as a stacked area chart over time.
+The descendant category requires that neither parent is a Danish citizen born in Denmark. Third-generation residents (both parents Danish-born citizens) are not counted. The population chart shows both immigrants and descendants as a stacked area chart, 1980–2026.
 
 Employment data come from the Register-based Labour Force Statistics (RAS), which provides a 19-sector industry breakdown for Iranian-origin full-time employees (fourth quarter of 2024).
 
@@ -122,7 +122,7 @@ Employment data come from the Register-based Labour Force Statistics (RAS), whic
 
 Iranian-origin residents are identified in the population register maintained by [Statistics Norway (SSB)](https://www.ssb.no/en/). A person is classified as Iranian-origin if they are an *innvandrer* (immigrant: born in Iran with two foreign-born parents) or *norskfødt med innvandrerforeldre* (Norwegian-born to immigrant parents: born in Norway with two Iran-born parents). The headline figure of 26,497 includes both categories (2026).
 
-Children with one Norwegian-born parent are not counted as immigrants or Norwegian-born to immigrant parents. The population page has two over-time tabs: the total Iran-born population (1970–2026) and a stacked area chart of immigrants and Norwegian-born to immigrant parents (2010–2026). Employment rate data cover ages 20–66 from the annual labor force register published by SSB.
+Children with one Norwegian-born parent are not counted as immigrants or Norwegian-born to immigrant parents. The population page has two over-time tabs: the total Iran-born population (1970–2026) and a stacked area chart of immigrants and Norwegian-born to immigrant parents (2010–2026). Employment rate data cover ages 20–66, 2001–2025, from the annual labor force register published by SSB.
 
 **Data access:** SSB data are publicly available via [StatBank](https://www.ssb.no/en/statbank).
 
