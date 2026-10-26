@@ -3,7 +3,7 @@
 # Run from deployment repo root:
 #   Rscript R/australia_export/extract_tablebuilder.R
 #
-# Input:  _data/australia/abs_census_2021/tablebuilder/*.csv (9 files)
+# Input:  _data/australia/Australian_Bureau_of_Statistics_ABS_census_2021/tablebuilder/*.csv (9 files)
 # Output: data/australia/au_education.csv
 #         data/australia/au_religion.csv
 #         data/australia/au_income_weekly.csv
@@ -12,7 +12,7 @@
 #         data/australia/au_industry.csv
 #         data/australia/au_second_gen.csv
 
-TB_DIR <- "~/Library/CloudStorage/Dropbox/10_Coding/2025_06_IDD/_data/australia/abs_census_2021/tablebuilder"
+TB_DIR <- "~/Library/CloudStorage/Dropbox/10_Coding/2025_06_IDD/_data/australia/Australian_Bureau_of_Statistics_ABS_census_2021/tablebuilder"
 OUT_DIR <- "data/australia"
 dir.create(OUT_DIR, recursive = TRUE, showWarnings = FALSE)
 

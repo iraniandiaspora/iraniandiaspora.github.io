@@ -1,12 +1,12 @@
 # Extract Iran-origin population data from SCB (Statistics Sweden) API CSVs.
 #
-# Input:  ../_data/sweden/scb_api/*.csv (Dropbox raw data)
+# Input:  ../_data/sweden/Statistics_Sweden_SCB_api/*.csv (Dropbox raw data)
 # Output: data/sweden/*.csv (deployment repo, in git)
 #
 # Run from deployment repo root:
 #   Rscript R/se_export/extract_scb.R
 
-SCB_DIR <- "../_data/sweden/scb_api"
+SCB_DIR <- "../_data/sweden/Statistics_Sweden_SCB_api"
 OUT_DIR <- "data/sweden"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 

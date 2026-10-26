@@ -107,7 +107,7 @@ for (LANG in c("en", "fa")) {
   cat(sprintf("=== Building Türkiye [%s] ===\n", LANG))
 
   # --- Source citation strings (per language) --------------------------------
-  HEADLINE_SOURCE <- sprintf(tr("tr_src_headline"), lnk(EURO_LINK))
+  HEADLINE_SOURCE <- sprintf(tr("tr_src_headline"), lnk(TUIK_LINK))
   TREND_SOURCE    <- sprintf(tr("tr_src_trend"), lnk(EURO_LINK), lnk(TUIK_LINK))
   AGE_SOURCE      <- sprintf(tr("tr_src_age"), lnk(EURO_LINK))
   CIT_SOURCE      <- sprintf(tr("tr_src_citizens"), lnk(EURO_LINK), lnk(TUIK_LINK))

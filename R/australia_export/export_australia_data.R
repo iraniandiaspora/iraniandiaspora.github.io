@@ -10,7 +10,7 @@
 library(dplyr)
 library(readxl)
 
-DATA_SRC <- "~/Library/CloudStorage/Dropbox/10_Coding/2025_06_IDD/_data/australia/abs_census_2021"
+DATA_SRC <- "~/Library/CloudStorage/Dropbox/10_Coding/2025_06_IDD/_data/australia/Australian_Bureau_of_Statistics_ABS_census_2021"
 OUT_DIR  <- "data/australia"
 dir.create(OUT_DIR, recursive = TRUE, showWarnings = FALSE)
 

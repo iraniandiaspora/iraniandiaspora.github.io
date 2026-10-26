@@ -97,8 +97,8 @@ STR <- list(
 
   # --- Iranian citizens trend chart -------------------------------------------
   tr_cit_title = list(
-    en = "<b>Iranian Citizens Resident in Türkiye,<br>2014–2025</b>",
-    fa = "<b>شهروندان ایرانی مقیم ترکیه،<br>2014–2025</b>"),
+    en = "<b>Iranian Citizens Resident in Türkiye,<br>2014–2026</b>",
+    fa = "<b>شهروندان ایرانی مقیم ترکیه،<br>2014–2026</b>"),
   tr_cit_hover = list(
     en = "<b>%s</b><br>%s Iranian citizens",
     fa = "<b>%s</b><br>%s شهروند ایرانی"),
@@ -142,17 +142,17 @@ STR <- list(
 
   # --- source lines ------------------------------------------------------------
   tr_src_headline = list(
-    en = "Source: %s &mdash; Iran-born residents of Türkiye, 2025",
-    fa = "منبع: %s &mdash; متولدان ایران ساکن ترکیه، 2025"),
+    en = "Source: %s &mdash; Iran-born residents of Türkiye, 2026",
+    fa = "منبع: %s &mdash; متولدان ایران ساکن ترکیه، 2026"),
   tr_src_trend = list(
-    en = "Source: %s and %s &mdash; Iran-born residents of Türkiye, 2015–2025",
-    fa = "منبع: %s و %s &mdash; متولدان ایران ساکن ترکیه، 2015–2025"),
+    en = "Source: %s and %s &mdash; Iran-born residents of Türkiye, 2015–2026",
+    fa = "منبع: %s و %s &mdash; متولدان ایران ساکن ترکیه، 2015–2026"),
   tr_src_age = list(
     en = "Source: %s &mdash; Iran-born by age and sex, 2025",
     fa = "منبع: %s &mdash; متولدان ایران به تفکیک سن و جنسیت، 2025"),
   tr_src_citizens = list(
-    en = "Source: %s and %s &mdash; Iranian citizens in Türkiye, 2014–2025",
-    fa = "منبع: %s و %s &mdash; شهروندان ایرانی در ترکیه، 2014–2025"),
+    en = "Source: %s and %s &mdash; Iranian citizens in Türkiye, 2014–2026",
+    fa = "منبع: %s و %s &mdash; شهروندان ایرانی در ترکیه، 2014–2026"),
   tr_src_permits = list(
     en = "Source: %s &mdash; Residence permits by type and nationality, 7 May 2026",
     fa = "منبع: %s &mdash; اجازه‌های اقامت به تفکیک نوع و تابعیت، 7 مه 2026")

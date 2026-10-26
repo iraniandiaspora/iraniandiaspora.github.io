@@ -2,7 +2,7 @@
 # Run from deployment repo root:
 #   Rscript R/il_export/extract_cbs_israel.R
 #
-# Input:  ../_data/israel/cbs_statistical_abstract/st02_06x_2025.xlsx
+# Input:  ../_data/israel/cbs_statistical_abstract/st02_06x_2026.xlsx
 # Output: data/israel/il_headline.csv
 #         data/israel/il_age.csv
 #         data/israel/il_comparison.csv
@@ -17,7 +17,7 @@ OUT_DIR <- "data/israel"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
 # --- Read xlsx ----------------------------------------------------------------
-f <- file.path(RAW_DIR, "st02_06x_2025.xlsx")
+f <- file.path(RAW_DIR, "st02_06x_2026.xlsx")
 cat("Reading", f, "...\n")
 d <- read_excel(f, sheet = 1, col_names = FALSE)
 
@@ -50,8 +50,8 @@ cat(sprintf("Total: %s\n", format(grand_total, big.mark = ",")))
 headline <- data.frame(
   category = c("total", "gen1", "gen2"),
   count = c(grand_total, gen1_total, gen2_total),
-  year = 2024,
-  source = "CBS Statistical Abstract, 76th edition, Table 2.6"
+  year = 2025,
+  source = "CBS Statistical Abstract, 77th edition, Table 2.6"
 )
 write.csv(headline, file.path(OUT_DIR, "il_headline.csv"), row.names = FALSE)
 cat("  Wrote il_headline.csv\n")

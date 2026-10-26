@@ -188,9 +188,9 @@ The PUMF reports household income in categorical bands rather than continuous do
 
 ## Türkiye
 
-Iran-born residents are identified in the address-based population register (ADNKS) maintained by [TÜİK](https://data.tuik.gov.tr/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). The headline figure of 134,402 is the most recent annual stock (2025), down from a 2023 peak of 151,348. The trend chart covers 2019–2025; 2021–2022 figures are not published due to reporting delays during COVID, and that gap is rendered as a visible break in the chart. Türkiye-born children of Iran-born parents are not counted.
+Iran-born residents are identified in the address-based population register (ADNKS) maintained by [TÜİK](https://data.tuik.gov.tr/) and reported via [Eurostat](https://ec.europa.eu/eurostat/databrowser/view/migr_pop3ctb/default/table). Years follow Eurostat's convention: a figure labelled 2026 is the stock on 1 January 2026, which TÜİK reports as 31 December 2025. The headline figure of 131,957 is the most recent annual stock (2026), taken from TÜİK's population statistics portal ahead of its Eurostat release; it is down from a 2023 peak of 151,348. The trend chart covers 2015–2026, using TÜİK's portal for years Eurostat does not report (2015–2018, 2021–2022 and 2026). Türkiye-born children of Iran-born parents are not counted.
 
-The Immigration page shows Iranian passport holders resident in Türkiye (2014–2025), which grew roughly sevenfold between 2014 (17,000) and the 2023 peak (117,000) before easing to 95,924 in 2025. The difference between Iran-born and Iranian-citizen stock approximates — but does not exactly measure — naturalization to Turkish citizenship, because it also includes Iran-born non-Iranian nationals.
+The Immigration page shows Iranian passport holders resident in Türkiye (2014–2026), which grew roughly sevenfold between 2014 (17,000) and the 2023 peak (117,000) before easing to 91,672 in 2026. The difference between Iran-born and Iranian-citizen stock approximates — but does not exactly measure — naturalization to Turkish citizenship, because it also includes Iran-born non-Iranian nationals.
 
 Provincial (il-level) breakdowns, education, employment, and income cross-tabulations for Iran-born residents are not in public tables and would require custom data requests to TÜİK.
 
@@ -198,7 +198,7 @@ Provincial (il-level) breakdowns, education, employment, and income cross-tabula
 
 ## Israel
 
-Iranian-origin residents are identified in the population register maintained by the [Israel Central Bureau of Statistics (CBS)](https://www.cbs.gov.il/en). CBS uses a paternal-line, two-generation definition: a person is counted as Iranian-origin if they were born in Iran, or were born in Israel with a father born in Iran. The headline figure of 131,900 includes both generations (2024).
+Iranian-origin residents are identified in the population register maintained by the [Israel Central Bureau of Statistics (CBS)](https://www.cbs.gov.il/en). CBS uses a paternal-line, two-generation definition: a person is counted as Iranian-origin if they were born in Iran, or were born in Israel with a father born in Iran. The headline figure of 130,600 includes both generations (2025).
 
 Third-generation residents (Israeli-born with an Israeli-born father) and maternal-only lines are not counted. CBS publishes counts in thousands. The age chart presents both generations together using harmonized bins, since the Israeli-born column is open-ended above 55. A second tab shows the full age detail for the Iran-born population, including the 75+, 65–74, and 55–64 bins.
 

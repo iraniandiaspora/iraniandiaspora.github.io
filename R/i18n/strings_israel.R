@@ -31,8 +31,8 @@ STR <- list(
     en = "Estimated Iranian-Origin Population in Israel",
     fa = "برآورد جمعیت ایرانی‌تبار در اسرائیل"),
   il_pop_headline_caption = list(
-    en = "Based on population registers maintained by %s, 2024",
-    fa = "بر پایه سامانه ثبت جمعیت %s، 2024"),
+    en = "Based on population registers maintained by %s, 2025",
+    fa = "بر پایه سامانه ثبت جمعیت %s، 2025"),
 
   # --- identification box -----------------------------------------------------
   il_pop_idbox_intro = list(
@@ -145,8 +145,8 @@ STR <- list(
 
   # --- source lines -----------------------------------------------------------
   il_src_cbs = list(
-    en = "Source: %s &mdash; Statistical Abstract of Israel, 2024",
-    fa = "منبع: %s &mdash; سالنامه آماری اسرائیل، 2024"),
+    en = "Source: %s &mdash; Statistical Abstract of Israel, 2025",
+    fa = "منبع: %s &mdash; سالنامه آماری اسرائیل، 2025"),
   il_src_un = list(
     en = "Source: %s — International Migrant Stock 2024",
     fa = "منبع: %s — برآورد جمعیت مهاجران بین‌المللی 2024")

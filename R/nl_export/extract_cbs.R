@@ -1,6 +1,6 @@
 # Extract Iran-origin population data from CBS StatLine OData JSONs.
 #
-# Input:  ../_data/netherlands/cbs_api/*.json (Dropbox raw data)
+# Input:  ../_data/netherlands/Statistics_Netherlands_CBS_api/*.json (Dropbox raw data)
 # Output: data/netherlands/*.csv + GeoJSON (deployment repo, in git)
 #
 # Run from deployment repo root:
@@ -16,7 +16,7 @@ suppressPackageStartupMessages(library(jsonlite))
 
 POP_YEAR <- 2026L  # Shared endpoint for region and residence-duration extracts.
 
-CBS_DIR <- "../_data/netherlands/cbs_api"
+CBS_DIR <- "../_data/netherlands/Statistics_Netherlands_CBS_api"
 OUT_DIR <- "data/netherlands"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 

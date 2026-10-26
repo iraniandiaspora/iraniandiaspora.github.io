@@ -29,7 +29,7 @@ suppressPackageStartupMessages({
 OUT_DIR <- "data/france"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
-INSEE_LONG <- "../_data/france/insee/pays_naissance_detaille_1968_2019.xlsx"
+INSEE_LONG <- "../_data/france/French_National_Institute_of_Statistics_and_Economic_Studies_INSEE/pays_naissance_detaille_1968_2019.xlsx"
 
 # Generic reader: row 3 has year headers in cols 2..N, Iran row starts with "Iran".
 read_iran_row <- function(file, sheet) {

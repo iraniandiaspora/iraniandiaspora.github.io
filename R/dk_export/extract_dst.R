@@ -1,12 +1,12 @@
 # Extract Iran-origin population data from DST (Statistics Denmark) API CSVs.
 #
-# Input:  ../_data/denmark/dst_api/*.csv (Dropbox raw data, semicolon-delimited)
+# Input:  ../_data/denmark/Statistics_Denmark_DST_api/*.csv (Dropbox raw data, semicolon-delimited)
 # Output: data/denmark/*.csv (deployment repo, in git)
 #
 # Run from deployment repo root:
 #   Rscript R/dk_export/extract_dst.R
 
-DST_DIR <- "../_data/denmark/dst_api"
+DST_DIR <- "../_data/denmark/Statistics_Denmark_DST_api"
 OUT_DIR <- "data/denmark"
 dir.create(OUT_DIR, showWarnings = FALSE, recursive = TRUE)
 
