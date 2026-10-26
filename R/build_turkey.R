@@ -249,7 +249,7 @@ for (LANG in c("en", "fa")) {
   # =========================================================================
   cat("Building tr-immigration...\n")
 
-  # --- Figure 3: Iranian citizens 2014-2025 (bar) --------------------------
+  # --- Figure 3: Iranian citizens 2014-2026 (bar) --------------------------
   p_cit <- plot_ly(cit, x = ~year, y = ~iranian_citizens, type = "bar",
       marker = list(color = "#2774AE",
                     line = list(color = "#1a4e72", width = 0.4)),

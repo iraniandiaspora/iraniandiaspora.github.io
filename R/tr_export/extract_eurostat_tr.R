@@ -3,12 +3,12 @@
 #   Rscript R/tr_export/extract_eurostat_tr.R
 #
 # Inputs (cached in _data/turkey/eurostat/):
-#   iran_born_total.json       - Iran-born, T sex, TOTAL age, 2019-2025
+#   iran_born_total.json       - Iran-born, T sex, TOTAL age, 2019-2025 (+ TÜİK supplement rows)
 #   iran_born_male.json        - Iran-born, M sex, TOTAL age, same years
 #   iran_born_female.json      - same, F sex
 #   iran_born_age_male_2025.json   - Iran-born, M sex, all age bins, 2025
 #   iran_born_age_female_2025.json - same, F sex
-#   iran_citizens_total.json   - Iranian passport holders, 2014-2025
+#   iran_citizens_total.json   - Iranian passport holders, 2014-2025 (+ TÜİK supplement rows)
 #
 # Outputs (to data/turkey/):
 #   tr_trend.csv       - year, total, male, female
