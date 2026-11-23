@@ -1179,12 +1179,14 @@ work_body <- paste0(
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
+      <li>%s</li>
     </ul>
   </div>',
     htxt(sprintf(tr("us_bignum_pct"), fa_num(cl_all$priv, 0))),
     htxt(tr("us_work_c1_primary")),
-    htxt(sprintf(tr("us_work_c1_b1"), fa_num(cl_f$pub, 0), fa_num(cl_m$pub, 0), fa_num(cl_f$np, 0), fa_num(cl_m$np, 0))),
-    htxt(sprintf(tr("us_work_c1_b2"), fa_num(cl_m$self, 0), fa_num(cl_f$self, 0), fa_num(cl_g1$self, 0), fa_num(cl_g2$self, 0)))),
+    htxt(sprintf(tr("us_work_c1_b1"), fa_num(cl_f$pub, 0), fa_num(cl_m$pub, 0))),
+    htxt(sprintf(tr("us_work_c1_b2"), fa_num(cl_m$self, 0), fa_num(cl_f$self, 0))),
+    htxt(sprintf(tr("us_work_c1_b3"), fa_num(cl_g1$self, 0), fa_num(cl_g2$self, 0)))),
   sprintf('<div class="text-card pt2" style="text-align:center;">
     <div style="font-size:32px; font-weight:700; color:#1a4e72; line-height:1.1; letter-spacing:-0.02em;">%s</div>
     <div style="font-size:15px; font-weight:500; color:#333; margin-top:12px; line-height:1.45;">%s</div>

@@ -42,15 +42,12 @@ STR <- list(
     en = "How the United Nations counts Iranians abroad",
     fa = "سازمان ملل متحد ایرانیان خارج از کشور را چگونه می‌شمارد"),
   gl_card2_bullet1 = list(
-    en = "Each country&rsquo;s total includes only people born in Iran",
-    fa = "رقم هر کشور تنها افراد متولد ایران را در بر می‌گیرد"),
+    en = "Each country&rsquo;s total counts only people born in Iran; second-generation Iranians (children born abroad to Iran-born parents) are not included",
+    fa = "رقم هر کشور تنها افراد متولد ایران را در بر می‌گیرد؛ ایرانیان نسل دوم (فرزندانی که خارج از ایران از پدر و مادر متولد ایران به دنیا آمده‌اند) شمرده نمی‌شوند"),
   gl_card2_bullet2 = list(
     en = "Drawn from each country&rsquo;s census or population register, so definitions and reference years vary",
     fa = "داده‌ها از سرشماری یا سامانه ثبت جمعیت هر کشور گرفته شده‌اند و از این رو تعریف‌ها و سال‌های مرجع یکسان نیستند"),
   gl_card2_bullet3 = list(
-    en = "Second-generation Iranians (children born abroad to Iran-born parents) are not counted",
-    fa = "ایرانیان نسل دوم (فرزندانی که خارج از ایران از پدر و مادر متولد ایران به دنیا آمده‌اند) شمرده نمی‌شوند"),
-  gl_card2_bullet4 = list(
     en = "Some countries (notably the Persian Gulf states) do not publish country-of-birth statistics, so their Iranian populations are not reflected here",
     fa = "برخی کشورها (به‌ویژه کشورهای حاشیه خلیج فارس) آمار کشور محل تولد را منتشر نمی‌کنند و بنابراین جمعیت ایرانیان آنها در اینجا بازتاب نیافته است"),
   gl_card2_note = list(

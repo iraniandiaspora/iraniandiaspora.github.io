@@ -420,7 +420,6 @@ body { font-family:"Montserrat",sans-serif; background:#fafafa; color:#333; padd
     <li>', tr("gl_card2_bullet1"), '</li>
     <li>', tr("gl_card2_bullet2"), '</li>
     <li>', tr("gl_card2_bullet3"), '</li>
-    <li>', tr("gl_card2_bullet4"), '</li>
     <li style="margin-top:8px; font-weight:700; color:#333;">', tr("gl_card2_note"), '</li>
   </ul>
   </div>
