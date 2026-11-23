@@ -35,7 +35,7 @@ The Immigration History page shows all Iranians granted lawful permanent residen
 
 Sources by period:
 
-- **1970–1977:** U.S. Immigration and Naturalization Service, *Annual Report* (Washington, D.C.: U.S. Government Printing Office). Admission categories differ from later years and are shown as a single combined total.
+- **1970–1977:** U.S. Immigration and Naturalization Service, *Annual Report* (Washington, D.C.: U.S. Government Printing Office). The category definitions differ from later years, so these years are shown as a single combined total.
 - **1978–2004:** INS *Statistical Yearbook of the Immigration and Naturalization Service*.
 - **2005–2024:** Department of Homeland Security, Office of Immigration Statistics, [*Yearbook of Immigration Statistics*](https://ohss.dhs.gov/topics/immigration/yearbook).
 

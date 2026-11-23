@@ -16,7 +16,7 @@ Interactive data dashboard comparing Iranian diaspora populations across 17 coun
 ## Live Sections
 
 - **Global** – world map and stacked area chart (UN Migrant Stock 2024)
-- **United States** – population, immigration, admissions (1970–2024), marriage, education, work, income, language (8 pages)
+- **United States** – population, immigration, permanent residence grants (1970–2024), marriage, education, work, income, language (8 pages)
 - **Europe** – overview of 23 countries, plus individual pages for Germany (4), United Kingdom (2), Netherlands (2), Sweden (1), Denmark (2), Norway (1), Austria (1), Italy (1), France (1), Switzerland (1), Finland (1)
 - **Canada** – population, language/religion, immigration, education, work, income (6 pages)
 - **Türkiye** – population, immigration (2 pages)
