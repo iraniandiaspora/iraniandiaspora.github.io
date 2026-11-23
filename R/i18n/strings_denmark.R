@@ -90,8 +90,8 @@ STR <- list(
     en = "Source: %s &mdash; Population Register, 2026",
     fa = "منبع: %s &mdash; ثبت جمعیت، 2026"),
   dk_src_emp = list(
-    en = "Source: %s &mdash; Full-time employees, fourth quarter 2024",
-    fa = "منبع: %s &mdash; کارکنان تمام‌وقت، سه‌ماهه چهارم 2024"),
+    en = "Source: %s &mdash; Register-based Labour Force Statistics, full-time employees, fourth quarter 2024",
+    fa = "منبع: %s &mdash; آمار نیروی کار مبتنی بر ثبت (Register-based Labour Force Statistics)، کارکنان تمام‌وقت، سه‌ماهه چهارم 2024"),
 
   # --- workinc: page + industry chart --------------------------------------
   dk_workinc_title = list(
@@ -118,8 +118,8 @@ STR <- list(
     en = "%s (%s%%)",
     fa = "%s (%s درصد)"),
   dk_wi_footnote = list(
-    en = "Based on Register-based Labour Force Statistics (RAS). Self-employed are not included.",
-    fa = "بر پایه آمار نیروی کار مبتنی بر ثبت (Register-based Labour Force Statistics, RAS). خوداشتغالان در این آمار لحاظ نشده‌اند.")
+    en = "Self-employed workers are not included.",
+    fa = "خوداشتغالان در این آمار لحاظ نشده‌اند.")
 )
 
 # --- Industry sector display labels (fa) --------------------------------------

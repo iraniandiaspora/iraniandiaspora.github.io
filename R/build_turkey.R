@@ -318,14 +318,12 @@ for (LANG in c("en", "fa")) {
     <ul style="margin:12px auto 0; padding-left:18px; max-width:420px; text-align:left; font-size:13px; color:#555; line-height:1.55;">
       <li>%s</li>
       <li>%s</li>
-      <li>%s</li>
     </ul>
   </div>',
       fmtv(permit_total),
       tr("tr_imm_permits_sentence"),
       sprintf(tr("tr_imm_permits_bullet1"), fa_num(permit_short_pct, 0)),
-      sprintf(tr("tr_imm_permits_bullet2"), fa_num(permit_student_pct, 0)),
-      tr("tr_imm_permits_bullet3")),
+      sprintf(tr("tr_imm_permits_bullet2"), fa_num(permit_student_pct, 0))),
     # pc1: citizens trend (untabbed now that Iran-born trend lives on the pop page)
     '<div class="chart-card pc1">',
     plotly_div("tr-citizens", pj(p_cit), "430px", source = CIT_SOURCE),

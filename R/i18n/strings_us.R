@@ -293,8 +293,8 @@ STR <- list(
     en = "<b>Family</b> — immediate relatives or family sponsorship",
     fa = "<b>خانوادگی</b> — بستگان درجه‌یک یا اسپانسر خانوادگی"),
   us_adm_c2_b2 = list(
-    en = "<b>Employment</b> — employer or skill-based admission",
-    fa = "<b>کاری</b> — پذیرش بر پایه کارفرما یا مهارت"),
+    en = "<b>Employment</b> — employer sponsorship or skills",
+    fa = "<b>کاری</b> — بر پایه حمایت کارفرما یا مهارت"),
   us_adm_c2_b3 = list(
     en = "<b>Refugee/Asylee</b> — prior refugee or asylee status",
     fa = "<b>پناهنده/پناهجو</b> — وضعیت پیشین پناهندگی یا پناهجویی"),
@@ -305,8 +305,8 @@ STR <- list(
     en = "Family has been the largest category throughout",
     fa = "مهاجرت خانوادگی در سراسر این دوره بزرگ‌ترین نوع بوده است"),
   us_adm_c2_b6 = list(
-    en = "The 1989–91 surge includes a one-time program from a 1986 law (IRCA) that granted permanent residence to many previously undocumented immigrants",
-    fa = "جهش 1989–91 شامل برنامه‌ای یک‌باره از قانون 1986 (IRCA) است که به بسیاری از مهاجران پیش‌تر بدون‌مدرک اقامت دائم داد"),
+    en = "Grants of permanent residence were highest in 1989–91 (%s in %s)",
+    fa = "بیشترین شمار اعطای اقامت دائم در 1989–91 بوده است (%s مورد در %s)"),
 
   # ===========================================================================
   # US-EDUCATION

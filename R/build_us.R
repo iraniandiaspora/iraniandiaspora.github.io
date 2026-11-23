@@ -1018,6 +1018,11 @@ p_lpr_cat <- p_lpr_cat %>%
 adm_leg_labels <- if (is_fa()) unname(US_ADMCAT_FA[names(adm_cat_colors)]) else names(adm_cat_colors)
 cat_leg <- make_html_legend(adm_cat_colors, labels = adm_leg_labels, keys = names(adm_cat_colors))
 
+# Highest annual grant total; the card text says "1989–91", so fail loudly if the data stop agreeing.
+lpr_peak_yr <- lpr$year[which.max(lpr$total)]
+lpr_peak_n  <- max(lpr$total)
+stopifnot(setequal(lpr$year[order(-lpr$total)][1:3], 1989:1991))
+
 adm_body <- paste0(
   '<div class="page-content">',
   sprintf('<div class="text-card pt1" style="text-align:center;">
@@ -1044,7 +1049,7 @@ adm_body <- paste0(
       <li>%s</li>
     </ul>
   </div>', tr("us_adm_c2_head"), tr("us_adm_c2_b1"), tr("us_adm_c2_b2"),
-    tr("us_adm_c2_b3"), tr("us_adm_c2_b4"), htxt(tr("us_adm_c2_b5")), htxt(tr("us_adm_c2_b6"))),
+    tr("us_adm_c2_b3"), tr("us_adm_c2_b4"), htxt(tr("us_adm_c2_b5")), htxt(sprintf(tr("us_adm_c2_b6"), fmtv(lpr_peak_n), lpr_peak_yr))),
   '<div class="chart-card pc1">', plotly_div("lpr-total", pj(p_lpr_total), "450px", source = SRC_LPR), '</div>',
   '<div class="chart-card pc2">', plotly_div("lpr-cat", pj(p_lpr_cat), "450px", source = SRC_LPR, legend_html = cat_leg, highlight_hover = TRUE),
   '<script>(function(){var el=document.getElementById("lpr-cat");if(el){el.removeAllListeners("plotly_hover");el.removeAllListeners("plotly_unhover");el.removeAllListeners("plotly_click");}})();</script>',

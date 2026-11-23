@@ -136,9 +136,6 @@ STR <- list(
   tr_imm_permits_bullet2 = list(
     en = "About %s%% are student permits",
     fa = "حدود %s درصد اجازه‌های اقامت دانشجویی‌اند"),
-  tr_imm_permits_bullet3 = list(
-    en = "Iranian students are the second-largest foreign-student group in Türkiye",
-    fa = "دانشجویان ایرانی دومین گروه بزرگ دانشجویان خارجی در ترکیه‌اند"),
 
   # --- source lines ------------------------------------------------------------
   tr_src_headline = list(
